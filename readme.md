@@ -1,4 +1,4 @@
-# AI Meeting Assistant
+# Meetlytic
 
 Automate the transcription and summarization of virtual meetings
 

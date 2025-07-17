@@ -18,7 +18,7 @@ const serverApplication = new BaseServerApplication({
 	config,
 	database,
 	logger,
-	title: "AI Meeting Assistant",
+	title: "Meetlytic",
 });
 
 export { serverApplication };

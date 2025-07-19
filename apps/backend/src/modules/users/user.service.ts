@@ -1,8 +1,12 @@
+import Objection from "objection";
+
 import { type Service } from "~/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 
+import { hashPassword } from "./libs/hash/hash.js";
 import {
+	UserAttribute,
 	type UserGetAllResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
@@ -18,11 +22,12 @@ class UserService implements Service {
 	public async create(
 		payload: UserSignUpRequestDto,
 	): Promise<UserSignUpResponseDto> {
+		const { hash, salt } = await hashPassword(payload.password);
 		const item = await this.userRepository.create(
 			UserEntity.initializeNew({
 				email: payload.email,
-				passwordHash: "HASH", // TODO
-				passwordSalt: "SALT", // TODO
+				passwordHash: hash,
+				passwordSalt: salt,
 			}),
 		);
 
@@ -33,8 +38,19 @@ class UserService implements Service {
 		return Promise.resolve(true);
 	}
 
-	public find(): ReturnType<Service["find"]> {
-		return Promise.resolve(null);
+	public async find({
+		attribute,
+		value,
+	}: {
+		attribute: UserAttribute;
+		value: Objection.PrimitiveValue;
+	}): Promise<null | ReturnType<UserEntity["toNewObject"]>> {
+		const user = await this.userRepository.find({
+			attribute,
+			value,
+		});
+
+		return user ? user.toNewObject() : null;
 	}
 
 	public async findAll(): Promise<UserGetAllResponseDto> {

@@ -23,6 +23,12 @@ class AuthController extends BaseController {
 		this.authService = authService;
 
 		this.addRoute({
+			handler: (options) => this.getAuthenticatedUser(options),
+			method: "GET",
+			path: AuthApiPath.AUTHENTICATED_USER,
+		});
+
+		this.addRoute({
 			handler: (options) =>
 				this.signUp(
 					options as APIHandlerOptions<{
@@ -34,6 +40,35 @@ class AuthController extends BaseController {
 			validation: {
 				body: userSignUpValidationSchema,
 			},
+		});
+	}
+
+	/**
+	 * @swagger
+	 * /auth/authenticated-user:
+	 *    get:
+	 *      description: Get authenticated user's data
+	 *      responses:
+	 *        200:
+	 *          description: Successful operation
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: object
+	 *                    $ref: "#/components/schemas/User"
+	 */
+
+	private getAuthenticatedUser(
+		options: APIHandlerOptions,
+	): Promise<APIHandlerResponse> {
+		const { user } = options;
+
+		return Promise.resolve({
+			payload: user,
+			status: HTTPCode.OK,
 		});
 	}
 

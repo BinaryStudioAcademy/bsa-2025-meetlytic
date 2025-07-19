@@ -4,6 +4,8 @@ import {
 } from "~/modules/users/libs/types/types.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
+import { jwt } from "../../libs/modules/token/jwt.js";
+
 class AuthService {
 	private userService: UserService;
 
@@ -11,10 +13,13 @@ class AuthService {
 		this.userService = userService;
 	}
 
-	public signUp(
+	public async signUp(
 		userRequestDto: UserSignUpRequestDto,
-	): Promise<UserSignUpResponseDto> {
-		return this.userService.create(userRequestDto);
+	): Promise<{ token: string; user: UserSignUpResponseDto }> {
+		const user = await this.userService.create(userRequestDto);
+		const token = await jwt.sign({ userId: user.id });
+
+		return { token, user };
 	}
 }
 

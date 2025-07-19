@@ -1,4 +1,5 @@
 import {
+	type UserResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "~/modules/users/libs/types/types.js";
@@ -9,6 +10,10 @@ class AuthService {
 
 	public constructor(userService: UserService) {
 		this.userService = userService;
+	}
+
+	public async getAuthenticatedUser(userId: number): Promise<UserResponseDto> {
+		return await this.userService.find(userId);
 	}
 
 	public signUp(

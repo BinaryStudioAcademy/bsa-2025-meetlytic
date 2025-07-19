@@ -1,6 +1,10 @@
+import Objection from "objection";
+
 import { type Repository } from "~/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
+
+import { UserAttribute } from "./libs/types/types.js";
 
 class UserRepository implements Repository {
 	private userModel: typeof UserModel;
@@ -28,8 +32,15 @@ class UserRepository implements Repository {
 		return Promise.resolve(true);
 	}
 
-	public find(): ReturnType<Repository["find"]> {
-		return Promise.resolve(null);
+	public async find({
+		attribute,
+		value,
+	}: {
+		attribute: UserAttribute;
+		value: Objection.PrimitiveValue;
+	}): Promise<null | UserEntity> {
+		const [user] = await this.userModel.query().where(attribute, value);
+		return user ? UserEntity.initialize(user) : null;
 	}
 
 	public async findAll(): Promise<UserEntity[]> {

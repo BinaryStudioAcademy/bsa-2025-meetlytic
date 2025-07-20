@@ -31,7 +31,7 @@ class UserRepository implements Repository {
 	}
 
 	public async find(id: number): Promise<null | UserEntity> {
-		const [user] = await this.userModel.query().where(UserAttribute.ID, id);
+		const user = await this.userModel.query().findById(id);
 		return user ? UserEntity.initialize(user) : null;
 	}
 
@@ -42,9 +42,9 @@ class UserRepository implements Repository {
 	}
 
 	public async findByEmail(email: string): Promise<null | UserEntity> {
-		const [user] = await this.userModel
+		const user = await this.userModel
 			.query()
-			.where(UserAttribute.EMAIL, email);
+			.findOne(UserAttribute.EMAIL, email);
 		return user ? UserEntity.initialize(user) : null;
 	}
 

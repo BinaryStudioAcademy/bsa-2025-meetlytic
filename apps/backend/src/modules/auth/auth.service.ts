@@ -1,5 +1,4 @@
-import { HTTPCode, HTTPError } from "@meetlytic/shared";
-
+import { bcrypt } from "~/libs/modules/bcrypt/bcrypt.js";
 import { jwt } from "~/libs/modules/token/jwt.js";
 import {
 	type UserSignInRequestDto,
@@ -10,7 +9,7 @@ import {
 import { type UserService } from "~/modules/users/user.service.js";
 
 import { UserAttribute } from "../users/libs/enums/enums.js";
-import { verifyPassword } from "../users/libs/hash/hash.js";
+import { AuthError } from "./libs/exceptions/auth.error.js";
 
 class AuthService {
 	private userService: UserService;
@@ -27,24 +26,18 @@ class AuthService {
 			value: userRequestDto.email,
 		});
 		if (!user) {
-			throw new HTTPError({
-				message: `User with email ${userRequestDto.email} not found`,
-				status: HTTPCode.UNAUTHORIZED,
-			});
+			throw new AuthError();
 		}
-		const isValid = await verifyPassword(
+		const isValid = await bcrypt.verify(
 			userRequestDto.password,
 			user.passwordHash,
 		);
 		if (!isValid) {
-			throw new HTTPError({
-				message: "Not valid password",
-				status: HTTPCode.UNAUTHORIZED,
-			});
+			throw new AuthError();
 		}
 		return {
 			token: await jwt.sign({ userId: user.id }),
-			user: { email: user.email, id: user.id },
+			user,
 		};
 	}
 

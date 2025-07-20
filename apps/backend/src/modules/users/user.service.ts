@@ -1,10 +1,10 @@
 import Objection from "objection";
 
+import { bcrypt } from "~/libs/modules/bcrypt/bcrypt.js";
 import { type Service } from "~/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 
-import { hashPassword } from "./libs/hash/hash.js";
 import {
 	UserAttribute,
 	type UserGetAllResponseDto,
@@ -22,7 +22,7 @@ class UserService implements Service {
 	public async create(
 		payload: UserSignUpRequestDto,
 	): Promise<UserSignUpResponseDto> {
-		const { hash, salt } = await hashPassword(payload.password);
+		const { hash, salt } = await bcrypt.hash(payload.password);
 		const item = await this.userRepository.create(
 			UserEntity.initializeNew({
 				email: payload.email,

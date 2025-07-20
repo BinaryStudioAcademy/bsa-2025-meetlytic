@@ -22,16 +22,16 @@ class BaseToken<T extends JWTPayload> {
 		this.expirationTime = expirationTime;
 	}
 
-	public async sign(payload: T): Promise<string> {
-		return await new SignJWT(payload)
+	public sign(payload: T): Promise<string> {
+		return new SignJWT(payload)
 			.setProtectedHeader({ alg: this.algorithm })
 			.setIssuedAt()
 			.setExpirationTime(this.expirationTime)
 			.sign(this.secret);
 	}
 
-	public async verify(token: string): Promise<JWTVerifyResult<T>> {
-		return await jwtVerify<T>(token, this.secret);
+	public verify(token: string): Promise<JWTVerifyResult<T>> {
+		return jwtVerify<T>(token, this.secret);
 	}
 }
 

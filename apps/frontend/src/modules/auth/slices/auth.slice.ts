@@ -7,10 +7,14 @@ import { signUp } from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
+	isAuthenticated: boolean;
+	token: null | string;
 };
 
 const initialState: State = {
 	dataStatus: DataStatus.IDLE,
+	isAuthenticated: false,
+	token: null,
 };
 
 const { actions, name, reducer } = createSlice({

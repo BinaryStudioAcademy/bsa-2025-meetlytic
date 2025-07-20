@@ -1,1 +1,6 @@
-export { APIPath, AppEnvironment, ServerErrorType } from "@meetlytic/shared";
+export {
+	APIPath,
+	AppEnvironment,
+	HTTPCode,
+	ServerErrorType,
+} from "@meetlytic/shared";

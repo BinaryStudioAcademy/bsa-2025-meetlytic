@@ -1,1 +1,1 @@
-export { AuthApiPath } from "@meetlytic/shared";
+export { AuthApiPath, AuthStausMessage } from "@meetlytic/shared";

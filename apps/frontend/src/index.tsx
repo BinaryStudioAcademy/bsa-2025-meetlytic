@@ -11,27 +11,29 @@ import { AppRoute } from "~/libs/enums/enums.js";
 import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
 
+import { ProtectedRoute } from "./libs/components/router-provider/protected-route.js";
+
 createRoot(document.querySelector("#root") as HTMLElement).render(
 	<StrictMode>
 		<StoreProvider store={store.instance}>
 			<RouterProvider
 				routes={[
 					{
+						element: <Auth />,
+						path: AppRoute.SIGN_IN,
+					},
+					{
+						element: <Auth />,
+						path: AppRoute.SIGN_UP,
+					},
+					{
 						children: [
 							{
-								element: "Root",
+								element: <App />,
 								path: AppRoute.ROOT,
 							},
-							{
-								element: <Auth />,
-								path: AppRoute.SIGN_IN,
-							},
-							{
-								element: <Auth />,
-								path: AppRoute.SIGN_UP,
-							},
 						],
-						element: <App />,
+						element: <ProtectedRoute />,
 						path: AppRoute.ROOT,
 					},
 				]}

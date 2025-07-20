@@ -1,10 +1,9 @@
+import { jwt } from "~/libs/modules/token/token.js";
 import {
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "~/modules/users/libs/types/types.js";
 import { type UserService } from "~/modules/users/user.service.js";
-
-import { jwt } from "../../libs/modules/token/jwt.js";
 
 class AuthService {
 	private userService: UserService;

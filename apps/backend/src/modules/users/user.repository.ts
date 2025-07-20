@@ -1,10 +1,8 @@
-import Objection from "objection";
-
 import { type Repository } from "~/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
-import { UserAttribute } from "./libs/types/types.js";
+import { UserAttribute } from "./libs/enums/enums.js";
 
 class UserRepository implements Repository {
 	private userModel: typeof UserModel;
@@ -32,14 +30,8 @@ class UserRepository implements Repository {
 		return Promise.resolve(true);
 	}
 
-	public async find({
-		attribute,
-		value,
-	}: {
-		attribute: UserAttribute;
-		value: Objection.PrimitiveValue;
-	}): Promise<null | UserEntity> {
-		const [user] = await this.userModel.query().where(attribute, value);
+	public async find(id: number): Promise<null | UserEntity> {
+		const [user] = await this.userModel.query().where(UserAttribute.ID, id);
 		return user ? UserEntity.initialize(user) : null;
 	}
 
@@ -47,6 +39,13 @@ class UserRepository implements Repository {
 		const users = await this.userModel.query().execute();
 
 		return users.map((user) => UserEntity.initialize(user));
+	}
+
+	public async findByEmail(email: string): Promise<null | UserEntity> {
+		const [user] = await this.userModel
+			.query()
+			.where(UserAttribute.EMAIL, email);
+		return user ? UserEntity.initialize(user) : null;
 	}
 
 	public update(): ReturnType<Repository["update"]> {

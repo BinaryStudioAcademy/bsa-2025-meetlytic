@@ -1,12 +1,9 @@
-import Objection from "objection";
-
 import { bcrypt } from "~/libs/modules/bcrypt/bcrypt.js";
 import { type Service } from "~/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 
 import {
-	UserAttribute,
 	type UserGetAllResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
@@ -38,17 +35,10 @@ class UserService implements Service {
 		return Promise.resolve(true);
 	}
 
-	public async find({
-		attribute,
-		value,
-	}: {
-		attribute: UserAttribute;
-		value: Objection.PrimitiveValue;
-	}): Promise<null | ReturnType<UserEntity["toNewObject"]>> {
-		const user = await this.userRepository.find({
-			attribute,
-			value,
-		});
+	public async find(
+		id: number,
+	): Promise<null | ReturnType<UserEntity["toNewObject"]>> {
+		const user = await this.userRepository.find(id);
 
 		return user ? user.toNewObject() : null;
 	}
@@ -59,6 +49,14 @@ class UserService implements Service {
 		return {
 			items: items.map((item) => item.toObject()),
 		};
+	}
+
+	public async findByEmail(
+		email: string,
+	): Promise<null | ReturnType<UserEntity["toNewObject"]>> {
+		const user = await this.userRepository.findByEmail(email);
+
+		return user ? user.toNewObject() : null;
 	}
 
 	public update(): ReturnType<Service["update"]> {

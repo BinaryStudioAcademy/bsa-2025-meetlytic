@@ -8,7 +8,6 @@ import {
 } from "~/modules/users/libs/types/types.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
-import { UserAttribute } from "../users/libs/enums/enums.js";
 import { AuthError } from "./libs/exceptions/auth.error.js";
 
 class AuthService {
@@ -21,10 +20,7 @@ class AuthService {
 	public async signIn(
 		userRequestDto: UserSignInRequestDto,
 	): Promise<{ token: string; user: UserSignInResponseDto }> {
-		const user = await this.userService.find({
-			attribute: UserAttribute.EMAIL,
-			value: userRequestDto.email,
-		});
+		const user = await this.userService.findByEmail(userRequestDto.email);
 		if (!user) {
 			throw new AuthError();
 		}

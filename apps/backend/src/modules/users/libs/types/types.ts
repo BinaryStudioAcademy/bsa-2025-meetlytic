@@ -1,5 +1,3 @@
-export { type UserAttribute } from "./user-attribute.type.js";
-
 export {
 	type UserGetAllResponseDto,
 	type UserSignInRequestDto,

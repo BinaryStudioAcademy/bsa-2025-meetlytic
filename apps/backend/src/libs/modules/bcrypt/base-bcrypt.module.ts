@@ -1,4 +1,4 @@
-import * as bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 
 class BaseBcrypt {
 	async hash(password: string): Promise<{ hash: string; salt: string }> {
@@ -12,8 +12,7 @@ class BaseBcrypt {
 		plainPassword: string,
 		hashedPassword: string,
 	): Promise<boolean> {
-		const match = await bcrypt.compare(plainPassword, hashedPassword);
-		return match;
+		return await bcrypt.compare(plainPassword, hashedPassword);
 	}
 }
 

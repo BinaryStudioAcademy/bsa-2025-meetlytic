@@ -13,6 +13,7 @@ import {
 
 import { type AuthService } from "./auth.service.js";
 import { AuthApiPath } from "./libs/enums/enums.js";
+import { type AuthHandlerOptions } from "./libs/types/types.js";
 
 class AuthController extends BaseController {
 	private authService: AuthService;
@@ -23,7 +24,8 @@ class AuthController extends BaseController {
 		this.authService = authService;
 
 		this.addRoute({
-			handler: (options) => this.getAuthenticatedUser(options),
+			handler: (options) =>
+				this.getAuthenticatedUser(options as AuthHandlerOptions),
 			method: "GET",
 			path: AuthApiPath.AUTHENTICATED_USER,
 		});
@@ -46,23 +48,29 @@ class AuthController extends BaseController {
 	/**
 	 * @swagger
 	 * /auth/authenticated-user:
-	 *    get:
-	 *      description: Get authenticated user's data
-	 *      responses:
-	 *        200:
-	 *          description: Successful operation
-	 *          content:
-	 *            application/json:
-	 *              schema:
-	 *                type: object
-	 *                properties:
-	 *                  message:
-	 *                    type: object
-	 *                    $ref: "#/components/schemas/User"
+	 *   get:
+	 *     description: Get authenticated user's data
+	 *     responses:
+	 *       200:
+	 *         description: Successful operation
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 message:
+	 *                   type: object
+	 *                   $ref: "#/components/schemas/User"
+	 *       401:
+	 *         description: Unauthorized
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: "#/components/schemas/CommonErrorResponse"
 	 */
 
 	private getAuthenticatedUser(
-		options: APIHandlerOptions,
+		options: AuthHandlerOptions,
 	): Promise<APIHandlerResponse> {
 		const { user } = options;
 

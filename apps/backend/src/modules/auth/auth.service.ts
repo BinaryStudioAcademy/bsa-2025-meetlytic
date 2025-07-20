@@ -18,7 +18,7 @@ class AuthService {
 	): Promise<{ token: string; user: UserSignUpResponseDto }> {
 		const user = await this.userService.create(userRequestDto);
 
-		const token = await jwt.createToken({ userId: user.id });
+		const token = await jwt.sign({ userId: user.id });
 
 		return { token, user };
 	}

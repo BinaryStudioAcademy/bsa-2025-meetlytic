@@ -24,6 +24,7 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 		this.config = config;
 		this.routes = handlers.map((handler) => ({
 			...handler,
+			isPublic: handler.isPublic ?? false,
 			path: `/api/${this.version}${handler.path}`,
 		}));
 	}

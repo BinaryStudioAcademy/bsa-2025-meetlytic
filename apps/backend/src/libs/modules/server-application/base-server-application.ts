@@ -11,11 +11,15 @@ import { type Config } from "~/libs/modules/config/config.js";
 import { type Database } from "~/libs/modules/database/database.js";
 import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type BaseToken } from "~/libs/modules/token/base-token.module.js";
+import { type JwtPayload } from "~/libs/modules/token/libs/types/types.js";
+import { authorizationPlugin } from "~/libs/plugins/authorization/authorization.plugin.js";
 import {
 	type ServerCommonErrorResponse,
 	type ServerValidationErrorResponse,
 	type ValidationSchema,
 } from "~/libs/types/types.js";
+import { userService } from "~/modules/users/users.js";
 
 import {
 	type ServerApplication,
@@ -31,6 +35,7 @@ type Constructor = {
 	title: string;
 };
 
+const jwt: BaseToken<JwtPayload> = {} as BaseToken<JwtPayload>;
 class BaseServerApplication implements ServerApplication {
 	private apis: ServerApplicationApi[];
 
@@ -84,7 +89,7 @@ class BaseServerApplication implements ServerApplication {
 
 				if (error instanceof HTTPError) {
 					this.logger.error(
-						`[HTTP Error]: ${error.status.toString()} – ${error.message}`,
+						`[HTTP Error]: ${error.status.toString()} - ${error.message}`,
 					);
 
 					const response: ServerCommonErrorResponse = {
@@ -112,7 +117,6 @@ class BaseServerApplication implements ServerApplication {
 			path.dirname(fileURLToPath(import.meta.url)),
 			"../../../../public",
 		);
-
 		await this.app.register(fastifyStatic, {
 			prefix: "/",
 			root: staticPath,
@@ -142,7 +146,6 @@ class BaseServerApplication implements ServerApplication {
 			},
 			url: path,
 		});
-
 		this.logger.info(`Route: ${method} ${path} is registered`);
 	}
 
@@ -172,7 +175,6 @@ class BaseServerApplication implements ServerApplication {
 				host: this.config.ENV.APP.HOST,
 				port: this.config.ENV.APP.PORT,
 			});
-
 			this.logger.info(
 				`Application is listening on PORT – ${this.config.ENV.APP.PORT.toString()}, on ENVIRONMENT – ${
 					this.config.ENV.APP.ENVIRONMENT as string
@@ -211,6 +213,20 @@ class BaseServerApplication implements ServerApplication {
 				});
 			}),
 		);
+
+		const publicRoutes = this.apis.flatMap((api) =>
+			api.routes.filter((route) => route.isPublic).map((route) => route.path),
+		);
+
+		await this.app.register(authorizationPlugin, {
+			routesWhiteList: publicRoutes,
+			services: {
+				config: this.config,
+				jwt: jwt,
+				logger: this.logger,
+				userService: userService,
+			},
+		});
 	}
 
 	public initRoutes(): void {

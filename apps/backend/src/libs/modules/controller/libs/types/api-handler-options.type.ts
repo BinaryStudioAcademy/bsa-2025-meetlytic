@@ -1,17 +1,15 @@
 type APIHandlerOptions<
-	T extends DefaultApiHandlerOptions = DefaultApiHandlerOptions,
-> = {
+	T extends Partial<DefaultApiHandlerOptions> &
+		Record<string, unknown> = DefaultApiHandlerOptions,
+> = Omit<T, keyof DefaultApiHandlerOptions> & {
 	body: T["body"];
 	params: T["params"];
 	query: T["query"];
-	user?: T["user"];
 };
-
 type DefaultApiHandlerOptions = {
 	body?: unknown;
 	params?: unknown;
 	query?: unknown;
-	user?: unknown;
 };
 
 export { type APIHandlerOptions };

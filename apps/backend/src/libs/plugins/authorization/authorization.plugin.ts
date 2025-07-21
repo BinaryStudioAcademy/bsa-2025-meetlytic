@@ -4,7 +4,9 @@ import fp from "fastify-plugin";
 import { type Config } from "~/libs/modules/config/config.js";
 import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+// eslint-disable-next-line import/no-unresolved
 import { type BaseToken } from "~/libs/modules/token/base-token.module.js";
+// eslint-disable-next-line import/no-unresolved
 import { type JwtPayload } from "~/libs/modules/token/libs/types/types.js";
 import { type UserSignUpResponseDto } from "~/modules/users/libs/types/types.js";
 import { type UserService } from "~/modules/users/user.service.js";
@@ -60,13 +62,10 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 			}
 
 			try {
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				const { payload } = await jwt.verify(token);
 
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
 				const userId = payload.userId;
 
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 				const user = await userService.findById(userId);
 
 				if (!user) {

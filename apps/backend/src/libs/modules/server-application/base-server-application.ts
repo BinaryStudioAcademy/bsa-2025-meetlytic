@@ -11,8 +11,7 @@ import { type Config } from "~/libs/modules/config/config.js";
 import { type Database } from "~/libs/modules/database/database.js";
 import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import { type BaseToken } from "~/libs/modules/token/base-token.module.js";
-import { type JwtPayload } from "~/libs/modules/token/libs/types/types.js";
+import { jwt } from "~/libs/modules/token/token.js";
 import { authorizationPlugin } from "~/libs/plugins/authorization/authorization.plugin.js";
 import {
 	type ServerCommonErrorResponse,
@@ -35,7 +34,6 @@ type Constructor = {
 	title: string;
 };
 
-const jwt: BaseToken<JwtPayload> = {} as BaseToken<JwtPayload>;
 class BaseServerApplication implements ServerApplication {
 	private apis: ServerApplicationApi[];
 

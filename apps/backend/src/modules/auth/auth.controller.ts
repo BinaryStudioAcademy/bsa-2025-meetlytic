@@ -73,8 +73,15 @@ class AuthController extends BaseController {
 			body: UserSignUpRequestDto;
 		}>,
 	): Promise<APIHandlerResponse> {
+		const { token, user } = await this.authService.signUp(options.body);
+
 		return {
-			payload: await this.authService.signUp(options.body),
+			payload: {
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				token,
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				user,
+			},
 			status: HTTPCode.CREATED,
 		};
 	}

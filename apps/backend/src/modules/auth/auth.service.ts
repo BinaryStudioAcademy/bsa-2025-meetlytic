@@ -1,3 +1,4 @@
+import { jwt } from "~/libs/modules/token/token.js";
 import {
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
@@ -11,10 +12,14 @@ class AuthService {
 		this.userService = userService;
 	}
 
-	public signUp(
+	public async signUp(
 		userRequestDto: UserSignUpRequestDto,
-	): Promise<UserSignUpResponseDto> {
-		return this.userService.create(userRequestDto);
+	): Promise<{ token: string; user: UserSignUpResponseDto }> {
+		const user = await this.userService.create(userRequestDto);
+
+		const token = await jwt.sign({ userId: user.id });
+
+		return { token, user };
 	}
 }
 

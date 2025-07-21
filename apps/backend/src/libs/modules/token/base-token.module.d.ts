@@ -13,6 +13,5 @@ declare module "~/libs/modules/token/base-token.module.js" {
 		public verify(token: string): Promise<JWTVerifyResult<T>>;
 	}
 
-  export { BaseToken };
+	export { BaseToken };
 }
-

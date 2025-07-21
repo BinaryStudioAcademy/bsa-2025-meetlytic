@@ -33,9 +33,11 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 		fastify.decorateRequest("user", null);
 
 		fastify.addHook("preHandler", async (request) => {
-			const { url } = request;
+			const { method, url } = request;
 
-			if (routesWhiteList.includes(url)) {
+			const routeToCheck = `${method.toUpperCase()} ${url}`;
+
+			if (routesWhiteList.includes(routeToCheck)) {
 				return;
 			}
 

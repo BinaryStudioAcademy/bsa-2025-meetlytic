@@ -176,7 +176,7 @@ class BaseServerApplication implements ServerApplication {
 				port: this.config.ENV.APP.PORT,
 			});
 			this.logger.info(
-				`Application is listening on PORT – ${this.config.ENV.APP.PORT.toString()}, on ENVIRONMENT – ${
+				`Application is listening on PORT - ${this.config.ENV.APP.PORT.toString()}, on ENVIRONMENT - ${
 					this.config.ENV.APP.ENVIRONMENT as string
 				}.`,
 			);
@@ -215,7 +215,9 @@ class BaseServerApplication implements ServerApplication {
 		);
 
 		const publicRoutes = this.apis.flatMap((api) =>
-			api.routes.filter((route) => route.isPublic).map((route) => route.path),
+			api.routes
+				.filter((route) => route.isPublic)
+				.map((route) => `${route.method.toUpperCase()} ${route.path}`),
 		);
 
 		await this.app.register(authorizationPlugin, {

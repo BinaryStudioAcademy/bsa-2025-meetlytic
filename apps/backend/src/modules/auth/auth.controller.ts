@@ -6,6 +6,7 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type UserResponseDto } from "~/modules/users/libs/types/types.js";
 import {
 	type UserSignUpRequestDto,
 	userSignUpValidationSchema,
@@ -13,7 +14,6 @@ import {
 
 import { type AuthService } from "./auth.service.js";
 import { AuthApiPath } from "./libs/enums/enums.js";
-import { type AuthHandlerOptions } from "./libs/types/types.js";
 
 class AuthController extends BaseController {
 	private authService: AuthService;
@@ -25,7 +25,9 @@ class AuthController extends BaseController {
 
 		this.addRoute({
 			handler: (options) =>
-				this.getAuthenticatedUser(options as AuthHandlerOptions),
+				this.getAuthenticatedUser(
+					options as APIHandlerOptions & { user: UserResponseDto },
+				),
 			method: "GET",
 			path: AuthApiPath.AUTHENTICATED_USER,
 		});
@@ -70,14 +72,14 @@ class AuthController extends BaseController {
 	 */
 
 	private getAuthenticatedUser(
-		options: AuthHandlerOptions,
-	): Promise<APIHandlerResponse> {
+		options: APIHandlerOptions & { user: UserResponseDto },
+	): APIHandlerResponse {
 		const { user } = options;
 
-		return Promise.resolve({
+		return {
 			payload: user,
 			status: HTTPCode.OK,
-		});
+		};
 	}
 
 	/**

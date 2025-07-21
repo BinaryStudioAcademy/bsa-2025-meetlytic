@@ -1,4 +1,4 @@
-import { bcrypt } from "~/libs/modules/bcrypt/bcrypt.js";
+import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
 import { type Service } from "~/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
@@ -19,7 +19,7 @@ class UserService implements Service {
 	public async create(
 		payload: UserSignUpRequestDto,
 	): Promise<UserSignUpResponseDto> {
-		const { hash, salt } = await bcrypt.hash(payload.password);
+		const { hash, salt } = await encrypt.hash(payload.password);
 		const item = await this.userRepository.create(
 			UserEntity.initializeNew({
 				email: payload.email,

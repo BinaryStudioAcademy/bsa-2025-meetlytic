@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 
-class BaseBcrypt {
+class BaseEncrypt {
 	async hash(password: string): Promise<{ hash: string; salt: string }> {
 		const salt = await bcrypt.genSalt();
 		const hash = await bcrypt.hash(password, salt);
@@ -16,4 +16,4 @@ class BaseBcrypt {
 	}
 }
 
-export { BaseBcrypt };
+export { BaseEncrypt };

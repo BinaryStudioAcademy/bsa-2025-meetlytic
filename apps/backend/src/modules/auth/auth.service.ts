@@ -1,5 +1,5 @@
 import { AuthError } from "~/libs/exceptions/exceptions.js";
-import { bcrypt } from "~/libs/modules/bcrypt/bcrypt.js";
+import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
 import {
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
@@ -22,7 +22,7 @@ class AuthService {
 		if (!user) {
 			throw new AuthError();
 		}
-		const isValid = await bcrypt.verify(
+		const isValid = await encrypt.verify(
 			userRequestDto.password,
 			user.passwordHash,
 		);

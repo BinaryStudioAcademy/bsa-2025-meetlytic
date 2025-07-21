@@ -1,0 +1,60 @@
+.title {
+	margin-bottom: 20px;
+	font-size: 36px;
+	font-weight: 700;
+	color: #10add8;
+	text-align: center;
+}
+
+.login-form label {
+	display: block;
+	margin-top: 15px;
+	margin-bottom: 5px;
+	font-size: 14px;
+}
+
+.password-label {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.login-form input {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 8px 12px;
+	font-size: 14px;
+	border: 1px solid #dddddd;
+	border-radius: 4px;
+}
+
+.register {
+	position: absolute;
+	bottom: 63px;
+	margin-top: 20px;
+	font-size: 13px;
+	text-align: center;
+}
+
+.create-account {
+	font-weight: 600;
+	color: #58a4dc;
+	text-decoration: none;
+}
+
+.create-account:hover {
+	text-decoration: underline;
+}
+
+.sign-in-btn {
+	width: 420px;
+	padding: 12px 10px;
+	margin-top: 25px;
+	font-size: 16px;
+	font-weight: 700;
+	color: white;
+	cursor: pointer;
+	background-color: #10add8;
+	border: none;
+	border-radius: 6px;
+}

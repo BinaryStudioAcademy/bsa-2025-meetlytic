@@ -4,6 +4,8 @@ import { UserValidationMessage, UserValidationRule } from "../enums/enums.js";
 
 type UserSignUpRequestValidationDto = {
 	email: z.ZodString;
+	firstName: z.ZodString;
+	lastName: z.ZodString;
 	password: z.ZodString;
 };
 
@@ -17,6 +19,18 @@ const userSignUp = z
 			})
 			.email({
 				message: UserValidationMessage.EMAIL_WRONG,
+			}),
+		firstName: z
+			.string()
+			.trim()
+			.min(UserValidationRule.FIRST_NAME_MINIMUM_LENGTH, {
+				message: UserValidationMessage.FIRST_NAME_REQUIRE,
+			}),
+		lastName: z
+			.string()
+			.trim()
+			.min(UserValidationRule.LAST_NAME_MINIMUM_LENGTH, {
+				message: UserValidationMessage.LAST_NAME_REQUIRE,
 			}),
 		password: z.string().trim(),
 	})

@@ -6,8 +6,8 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import { type UserResponseDto } from "~/modules/users/libs/types/types.js";
 import {
+	type UserResponseDto,
 	type UserSignUpRequestDto,
 	userSignUpValidationSchema,
 } from "~/modules/users/users.js";
@@ -26,7 +26,7 @@ class AuthController extends BaseController {
 		this.addRoute({
 			handler: (options) =>
 				this.getAuthenticatedUser(
-					options as APIHandlerOptions & { user: UserResponseDto },
+					options as APIHandlerOptions<{ user: UserResponseDto }>,
 				),
 			method: "GET",
 			path: AuthApiPath.AUTHENTICATED_USER,
@@ -72,7 +72,7 @@ class AuthController extends BaseController {
 	 */
 
 	private getAuthenticatedUser(
-		options: APIHandlerOptions & { user: UserResponseDto },
+		options: APIHandlerOptions<{ user: UserResponseDto }>,
 	): APIHandlerResponse {
 		const { user } = options;
 

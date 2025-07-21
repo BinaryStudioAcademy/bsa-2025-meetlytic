@@ -33,8 +33,10 @@ class UserService implements Service {
 		return Promise.resolve(true);
 	}
 
-	public find(): Promise<null | UserSignUpResponseDto> {
-		return Promise.resolve(null);
+	public async find(id: number): Promise<null | UserSignUpResponseDto> {
+		const user = await this.userRepository.find(id);
+
+		return user ? user.toObject() : null;
 	}
 
 	public async findAll(): Promise<UserGetAllResponseDto> {
@@ -43,13 +45,6 @@ class UserService implements Service {
 		return {
 			items: items.map((item) => item.toObject()),
 		};
-	}
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public async findById(_id: number): Promise<null | UserSignUpResponseDto> {
-		// eslint-disable-next-line sonarjs/no-unused-vars, @typescript-eslint/no-unused-vars, sonarjs/no-dead-store
-		const user = await this.userRepository.find();
-		// eslint-disable-next-line @typescript-eslint/return-await, unicorn/no-useless-promise-resolve-reject
-		return Promise.resolve(null);
 	}
 
 	public update(): ReturnType<Service["update"]> {

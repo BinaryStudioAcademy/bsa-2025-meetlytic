@@ -4,9 +4,7 @@ import fp from "fastify-plugin";
 import { type Config } from "~/libs/modules/config/config.js";
 import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-// eslint-disable-next-line import/no-unresolved
 import { type BaseToken } from "~/libs/modules/token/base-token.module.js";
-// eslint-disable-next-line import/no-unresolved
 import { type JwtPayload } from "~/libs/modules/token/libs/types/types.js";
 import { type UserSignUpResponseDto } from "~/modules/users/libs/types/types.js";
 import { type UserService } from "~/modules/users/user.service.js";

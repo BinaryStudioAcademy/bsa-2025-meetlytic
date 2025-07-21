@@ -1,1 +1,1 @@
-export { HTTPError, ValidationError } from "@meetlytic/shared";
+export { AuthError, ValidationError } from "@meetlytic/shared";

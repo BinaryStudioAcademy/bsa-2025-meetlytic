@@ -1,3 +1,4 @@
+import { AuthError } from "~/libs/exceptions/exceptions.js";
 import { bcrypt } from "~/libs/modules/bcrypt/bcrypt.js";
 import {
 	type UserSignInRequestDto,
@@ -6,8 +7,6 @@ import {
 	type UserSignUpResponseDto,
 } from "~/modules/users/libs/types/types.js";
 import { type UserService } from "~/modules/users/user.service.js";
-
-import { AuthError } from "./libs/exceptions/auth.error.js";
 
 class AuthService {
 	private userService: UserService;

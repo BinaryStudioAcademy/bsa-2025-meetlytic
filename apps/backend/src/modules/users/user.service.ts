@@ -1,4 +1,6 @@
 import { type Service } from "~/libs/types/types.js";
+import { UserDetailsEntity } from "~/modules/users/user-details.entity.js";
+import { type UserDetailsRepository } from "~/modules/users/user-details.repository.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 
@@ -9,24 +11,37 @@ import {
 } from "./libs/types/types.js";
 
 class UserService implements Service {
+	private userDetailsRepository: UserDetailsRepository;
 	private userRepository: UserRepository;
 
-	public constructor(userRepository: UserRepository) {
+	public constructor(
+		userRepository: UserRepository,
+		userDetailsRepository: UserDetailsRepository,
+	) {
 		this.userRepository = userRepository;
+		this.userDetailsRepository = userDetailsRepository;
 	}
 
 	public async create(
 		payload: UserSignUpRequestDto,
 	): Promise<UserSignUpResponseDto> {
-		const item = await this.userRepository.create(
+		const user = await this.userRepository.create(
 			UserEntity.initializeNew({
 				email: payload.email,
-				passwordHash: "HASH", // TODO
-				passwordSalt: "SALT", // TODO
+				passwordHash: "HASH",
+				passwordSalt: "SALT",
 			}),
 		);
 
-		return item.toObject();
+		await this.userDetailsRepository.create(
+			UserDetailsEntity.initializeNew({
+				firstName: payload.firstName,
+				lastName: payload.lastName,
+				userId: user.toObject().id,
+			}),
+		);
+
+		return user.toObject();
 	}
 
 	public delete(): ReturnType<Service["delete"]> {

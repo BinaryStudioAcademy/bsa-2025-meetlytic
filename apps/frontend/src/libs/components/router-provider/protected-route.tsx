@@ -5,7 +5,7 @@ import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppSelector } from "~/libs/hooks/hooks.js";
 
 const ProtectedRoute: FC = () => {
-	const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+	const isAuthenticated = useAppSelector((state) => state.auth.user !== null);
 	const location = useLocation();
 
 	if (!isAuthenticated) {

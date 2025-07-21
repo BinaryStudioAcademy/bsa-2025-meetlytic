@@ -2,19 +2,23 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
+import { type UserSignUpResponseDto as User } from "~/modules/users/users.js";
 
 import { signUp } from "./actions.js";
 
+//TODO import User or what kind of object will be there to store user data
+// import { User } from "";
+
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
-	isAuthenticated: boolean;
 	token: null | string;
+	user: null | User;
 };
 
 const initialState: State = {
 	dataStatus: DataStatus.IDLE,
-	isAuthenticated: false,
 	token: null,
+	user: null,
 };
 
 const { actions, name, reducer } = createSlice({

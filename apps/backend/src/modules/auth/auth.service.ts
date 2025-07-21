@@ -1,5 +1,4 @@
 import { bcrypt } from "~/libs/modules/bcrypt/bcrypt.js";
-import { jwt } from "~/libs/modules/token/jwt.js";
 import {
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
@@ -32,7 +31,7 @@ class AuthService {
 			throw new AuthError();
 		}
 		return {
-			token: await jwt.sign({ userId: user.id }),
+			token: "token",
 			user,
 		};
 	}

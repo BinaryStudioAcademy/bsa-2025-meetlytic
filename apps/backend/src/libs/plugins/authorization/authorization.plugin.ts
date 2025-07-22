@@ -2,7 +2,6 @@ import { type FastifyPluginCallback } from "fastify";
 import fp from "fastify-plugin";
 
 import { type Config } from "~/libs/modules/config/config.js";
-import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type BaseToken } from "~/libs/modules/token/base-token.module.js";
 import { type JwtPayload } from "~/libs/modules/token/libs/types/types.js";
@@ -73,10 +72,7 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 					logger.error("[Authorization Error]: An unknown error occurred");
 				}
 
-				throw new HTTPError({
-					message: "Invalid token.",
-					status: HTTPCode.UNAUTHORIZED,
-				});
+				throw new AuthError();
 			}
 		});
 

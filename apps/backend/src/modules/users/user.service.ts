@@ -4,6 +4,7 @@ import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 
 import {
+	UserCredentials,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignUpRequestDto,
@@ -52,10 +53,7 @@ class UserService implements Service {
 		return user ? user.toObject() : null;
 	}
 
-	public async getCredentials(id: number): Promise<null | {
-		passwordHash: string;
-		passwordSalt: string;
-	}> {
+	public async getCredentials(id: number): Promise<null | UserCredentials> {
 		const credentials = await this.userRepository.getCredentials(id);
 		return credentials ?? null;
 	}

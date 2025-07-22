@@ -1,3 +1,4 @@
+export { UserCredentials } from "./user-credentials.type.js";
 export {
 	type AuthResponseDto,
 	type UserGetAllResponseDto,

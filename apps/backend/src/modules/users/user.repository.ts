@@ -3,6 +3,7 @@ import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
 import { UserAttribute } from "./libs/enums/enums.js";
+import { UserCredentials } from "./libs/types/types.js";
 
 class UserRepository implements Repository {
 	private userModel: typeof UserModel;
@@ -48,10 +49,7 @@ class UserRepository implements Repository {
 		return user ? UserEntity.initialize(user) : null;
 	}
 
-	public async getCredentials(id: number): Promise<null | {
-		passwordHash: string;
-		passwordSalt: string;
-	}> {
+	public async getCredentials(id: number): Promise<null | UserCredentials> {
 		const credentials = await this.userModel
 			.query()
 			.select(UserAttribute.PASSWORD_HASH, UserAttribute.PASSWORD_SALT)

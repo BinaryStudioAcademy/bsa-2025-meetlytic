@@ -64,13 +64,11 @@ class UserEntity implements Entity {
 
 	public toNewObject(): {
 		email: string;
-		id: number;
 		passwordHash: string;
 		passwordSalt: string;
 	} {
 		return {
 			email: this.email,
-			id: this.id as number,
 			passwordHash: this.passwordHash,
 			passwordSalt: this.passwordSalt,
 		};

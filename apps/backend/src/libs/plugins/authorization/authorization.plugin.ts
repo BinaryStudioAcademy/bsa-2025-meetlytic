@@ -45,19 +45,13 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 			const authorizationHeader = request.headers.authorization;
 
 			if (!authorizationHeader) {
-				throw new HTTPError({
-					message: "No authorization header.",
-					status: HTTPCode.UNAUTHORIZED,
-				});
+				throw new AuthError();
 			}
 
 			const [, token] = authorizationHeader.split(" ");
 
 			if (!token) {
-				throw new HTTPError({
-					message: "No token provided.",
-					status: HTTPCode.UNAUTHORIZED,
-				});
+				throw new AuthError();
 			}
 
 			try {

@@ -1,18 +1,15 @@
+import { UserResponseDto } from "@meetlytic/shared";
 import { createSlice } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
-import { type UserSignUpResponseDto as User } from "~/modules/users/users.js";
 
 import { signUp } from "./actions.js";
-
-//TODO import User or what kind of object will be there to store user data
-// import { User } from "";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
 	token: null | string;
-	user: null | User;
+	user: null | UserResponseDto;
 };
 
 const initialState: State = {

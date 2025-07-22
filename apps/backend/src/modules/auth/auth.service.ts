@@ -30,7 +30,7 @@ class AuthService {
 			throw new AuthError();
 		}
 		return {
-			token: "token",
+			token: await jwt.sign({ userId: user.id }),
 			user,
 		};
 	}

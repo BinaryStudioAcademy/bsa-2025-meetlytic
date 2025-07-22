@@ -1,0 +1,33 @@
+.navigation-link {
+	padding: 16px 0;
+	padding-left: 16px;
+	display: flex;
+	gap: 15px;
+	align-items: center;
+	text-decoration: none;
+	font-family: var(--font-family);
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 1.5;
+	color: #292d32;
+	border-radius: 10px;
+	transition: background-color 0.3s ease-in-out;
+}
+
+.navigation-link:hover {
+	background-color: #f6f5f55c;
+}
+
+.active {
+	background-color: #f6f5f5;
+}
+.navigation-link.active .navigation-link-icon-arrow {
+	display: flex;
+	opacity: 1;
+}
+.navigation-link-icon-arrow {
+	align-items: center;
+	margin-left: auto;
+	opacity: 0;
+	transition: opacity 0.3s ease-in-out;
+}

@@ -1,8 +1,8 @@
 type UserResponseDto = {
-	createdAt: string;
 	email: string;
+	firstName?: string;
 	id: number;
-	updatedAt: string;
+	lastName?: string;
 };
 
 export { type UserResponseDto };

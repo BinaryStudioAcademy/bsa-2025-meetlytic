@@ -15,18 +15,11 @@ const NavigationLink: React.FC<Properties> = ({
 		},
 		[],
 	);
-	const isPublic = href === "/";
 	return (
 		<li>
 			<NavLink className={getClassName} key={label} to={href}>
 				<>
-					<Icon
-						className={clsx(
-							styles["navigation-link-icon"],
-							isPublic && styles["public-icon"],
-						)}
-						name={icon}
-					/>
+					<Icon name={icon} />
 					<span>{label}</span>
 					<Icon
 						className={styles["navigation-link-icon-arrow"]}

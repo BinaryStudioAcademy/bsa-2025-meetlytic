@@ -14,7 +14,6 @@ const Navigation: React.FC<Properties> = ({ items }: Properties) => (
 				<NavigationLink key={item.label} {...item} />
 			))}
 		</ul>
-		;
 	</nav>
 );
 

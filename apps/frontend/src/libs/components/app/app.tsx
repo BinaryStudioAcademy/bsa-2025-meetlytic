@@ -19,8 +19,6 @@ const App: React.FC = () => {
 
 	const isRoot = pathname === AppRoute.ROOT;
 
-	const isLoading = false;
-
 	useEffect(() => {
 		if (isRoot) {
 			void dispatch(userActions.loadAll());
@@ -29,7 +27,7 @@ const App: React.FC = () => {
 
 	return (
 		<>
-			<Loader isLoading={isLoading} />
+			<Loader isLoading={false} withOverlay={true} />
 
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 

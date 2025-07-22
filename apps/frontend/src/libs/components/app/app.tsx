@@ -1,5 +1,11 @@
 import reactLogo from "~/assets/img/react.svg";
-import { Link, RouterOutlet } from "~/libs/components/components.js";
+import {
+	Link,
+	Navigation,
+	RouterOutlet,
+	Sidebar,
+} from "~/libs/components/components.js";
+import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -28,6 +34,10 @@ const App: React.FC = () => {
 	return (
 		<>
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
+
+			<Sidebar>
+				<Navigation items={NAVIGATION_ITEMS} />
+			</Sidebar>
 
 			<ul className="App-navigation-list">
 				<li>

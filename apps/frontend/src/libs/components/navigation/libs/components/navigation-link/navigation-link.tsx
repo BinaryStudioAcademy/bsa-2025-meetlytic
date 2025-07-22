@@ -1,4 +1,5 @@
-import { clsx, Icon, NavLink } from "~/libs/components/components.js";
+import { Icon, NavLink } from "~/libs/components/components.js";
+import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { useCallback } from "~/libs/hooks/hooks.js";
 import { type NavigationItem as Properties } from "~/libs/types/types.js";
 
@@ -11,7 +12,10 @@ const NavigationLink: React.FC<Properties> = ({
 }: Properties) => {
 	const getClassName = useCallback(
 		({ isActive }: { isActive: boolean }): string => {
-			return clsx(styles["navigation-link"], isActive && styles["active"]);
+			return getValidClassNames(
+				styles["navigation-link"],
+				isActive && styles["active"],
+			);
 		},
 		[],
 	);

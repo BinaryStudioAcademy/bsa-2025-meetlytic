@@ -4,7 +4,7 @@ import { jwt } from "~/libs/modules/token/token.js";
 import { type UserService } from "~/modules/users/user.service.js";
 import {
 	type AuthResponseDto,
-	UserSignInRequestDto,
+	type UserSignInRequestDto,
 	type UserSignUpRequestDto,
 } from "~/modules/users/users.js";
 

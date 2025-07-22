@@ -33,12 +33,10 @@ class UserService implements Service {
 		return Promise.resolve(true);
 	}
 
-	public async find(
-		id: number,
-	): Promise<null | ReturnType<UserEntity["toNewObject"]>> {
+	public async find(id: number): Promise<null | UserResponseDto> {
 		const user = await this.userRepository.find(id);
 
-		return user ? user.toNewObject() : null;
+		return user ? user.toObject() : null;
 	}
 
 	public async findAll(): Promise<UserGetAllResponseDto> {
@@ -48,13 +46,18 @@ class UserService implements Service {
 			items: items.map((item) => item.toObject()),
 		};
 	}
-
-	public async findByEmail(
-		email: string,
-	): Promise<null | ReturnType<UserEntity["toNewObject"]>> {
+	public async findByEmail(email: string): Promise<null | UserResponseDto> {
 		const user = await this.userRepository.findByEmail(email);
 
-		return user ? user.toNewObject() : null;
+		return user ? user.toObject() : null;
+	}
+
+	public async getCredentials(id: number): Promise<null | {
+		passwordHash: string;
+		passwordSalt: string;
+	}> {
+		const credentials = await this.userRepository.getCredentials(id);
+		return credentials ?? null;
 	}
 
 	public update(): ReturnType<Service["update"]> {

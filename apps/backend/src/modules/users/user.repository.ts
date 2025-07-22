@@ -48,6 +48,23 @@ class UserRepository implements Repository {
 		return user ? UserEntity.initialize(user) : null;
 	}
 
+	public async getCredentials(id: number): Promise<null | {
+		passwordHash: string;
+		passwordSalt: string;
+	}> {
+		const credentials = await this.userModel
+			.query()
+			.select(UserAttribute.PASSWORD_HASH, UserAttribute.PASSWORD_SALT)
+			.findById(id);
+
+		return credentials
+			? {
+					passwordHash: credentials.passwordHash,
+					passwordSalt: credentials.passwordSalt,
+				}
+			: null;
+	}
+
 	public update(): ReturnType<Repository["update"]> {
 		return Promise.resolve(null);
 	}

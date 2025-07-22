@@ -22,9 +22,13 @@ class AuthService {
 		if (!user) {
 			throw new AuthError();
 		}
+		const credentials = await this.userService.getCredentials(user.id);
+		if (!credentials) {
+			throw new AuthError();
+		}
 		const isValid = await encrypt.verify(
 			userRequestDto.password,
-			user.passwordHash,
+			credentials.passwordHash,
 		);
 		if (!isValid) {
 			throw new AuthError();

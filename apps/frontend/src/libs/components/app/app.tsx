@@ -1,5 +1,5 @@
 import reactLogo from "~/assets/img/react.svg";
-import { Link, RouterOutlet } from "~/libs/components/components.js";
+import { Link, Loader, RouterOutlet } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -19,6 +19,8 @@ const App: React.FC = () => {
 
 	const isRoot = pathname === AppRoute.ROOT;
 
+	const isLoading = false;
+
 	useEffect(() => {
 		if (isRoot) {
 			void dispatch(userActions.loadAll());
@@ -27,6 +29,8 @@ const App: React.FC = () => {
 
 	return (
 		<>
+			<Loader isLoading={isLoading} />
+
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 
 			<ul className="App-navigation-list">

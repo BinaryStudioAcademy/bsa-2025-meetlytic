@@ -4,8 +4,8 @@ import { type UserRepository } from "~/modules/users/user.repository.js";
 
 import {
 	type UserGetAllResponseDto,
+	type UserResponseDto,
 	type UserSignUpRequestDto,
-	type UserSignUpResponseDto,
 } from "./libs/types/types.js";
 
 class UserService implements Service {
@@ -15,9 +15,7 @@ class UserService implements Service {
 		this.userRepository = userRepository;
 	}
 
-	public async create(
-		payload: UserSignUpRequestDto,
-	): Promise<UserSignUpResponseDto> {
+	public async create(payload: UserSignUpRequestDto): Promise<UserResponseDto> {
 		const item = await this.userRepository.create(
 			UserEntity.initializeNew({
 				email: payload.email,
@@ -33,7 +31,7 @@ class UserService implements Service {
 		return Promise.resolve(true);
 	}
 
-	public async find(id: number): Promise<null | UserSignUpResponseDto> {
+	public async find(id: number): Promise<null | UserResponseDto> {
 		const user = await this.userRepository.find(id);
 
 		return user ? user.toObject() : null;

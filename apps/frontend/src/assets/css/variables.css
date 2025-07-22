@@ -1,0 +1,24 @@
+:root {
+	/* Background Colors */
+	--color-background-primary: #47333e;
+	--color-background-secondary: #f0ecec;
+	--color-background-third: #f6f5f5;
+	--color-background-white: #ffffff;
+
+	/* Typography Colors */
+	--color-text-primary: #292d32;
+	--color-text-secondary: #afafaf;
+
+	/* Brand Colors */
+	--color-brand-primary: #10add8;
+	--color-brand-hover: #0f8fb2;
+
+	/* State Colors */
+	--color-success: #aaeb98;
+	--color-danger: #ff5e5e;
+
+	/* Font Families */
+	--font-family: "Inter", sans-serif;
+	--second-family: "Nunito", sans-serif;
+	--third-family: "Poppins", sans-serif;
+}

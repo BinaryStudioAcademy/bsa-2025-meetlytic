@@ -3,5 +3,5 @@
 	height: 100%;
 	padding: 56px 16px;
 	overflow-y: auto;
-	background-color: #ffffff;
+	background-color: var(--color-background-white);
 }

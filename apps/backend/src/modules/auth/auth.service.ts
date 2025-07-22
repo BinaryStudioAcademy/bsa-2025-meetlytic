@@ -1,12 +1,12 @@
 import { AuthError } from "~/libs/exceptions/exceptions.js";
 import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
-import {
-	type UserSignInRequestDto,
-	type UserSignInResponseDto,
-	type UserSignUpRequestDto,
-	type UserSignUpResponseDto,
-} from "~/modules/users/libs/types/types.js";
+import { jwt } from "~/libs/modules/token/token.js";
 import { type UserService } from "~/modules/users/user.service.js";
+import {
+	type AuthResponseDto,
+	UserSignInRequestDto,
+	type UserSignUpRequestDto,
+} from "~/modules/users/users.js";
 
 class AuthService {
 	private userService: UserService;
@@ -17,7 +17,7 @@ class AuthService {
 
 	public async signIn(
 		userRequestDto: UserSignInRequestDto,
-	): Promise<{ token: string; user: UserSignInResponseDto }> {
+	): Promise<AuthResponseDto> {
 		const user = await this.userService.findByEmail(userRequestDto.email);
 		if (!user) {
 			throw new AuthError();
@@ -35,10 +35,14 @@ class AuthService {
 		};
 	}
 
-	public signUp(
+	public async signUp(
 		userRequestDto: UserSignUpRequestDto,
-	): Promise<UserSignUpResponseDto> {
-		return this.userService.create(userRequestDto);
+	): Promise<AuthResponseDto> {
+		const user = await this.userService.create(userRequestDto);
+
+		const token = await jwt.sign({ userId: user.id });
+
+		return { token, user };
 	}
 }
 

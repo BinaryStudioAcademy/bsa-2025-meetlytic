@@ -1,7 +1,7 @@
 export {
+	type AuthResponseDto,
 	type UserGetAllResponseDto,
+	type UserResponseDto,
 	type UserSignInRequestDto,
-	type UserSignInResponseDto,
 	type UserSignUpRequestDto,
-	type UserSignUpResponseDto,
 } from "@meetlytic/shared";

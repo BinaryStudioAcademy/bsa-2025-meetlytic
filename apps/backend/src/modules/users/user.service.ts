@@ -5,8 +5,8 @@ import { type UserRepository } from "~/modules/users/user.repository.js";
 
 import {
 	type UserGetAllResponseDto,
+	type UserResponseDto,
 	type UserSignUpRequestDto,
-	type UserSignUpResponseDto,
 } from "./libs/types/types.js";
 
 class UserService implements Service {
@@ -16,9 +16,7 @@ class UserService implements Service {
 		this.userRepository = userRepository;
 	}
 
-	public async create(
-		payload: UserSignUpRequestDto,
-	): Promise<UserSignUpResponseDto> {
+	public async create(payload: UserSignUpRequestDto): Promise<UserResponseDto> {
 		const { hash, salt } = await encrypt.hash(payload.password);
 		const item = await this.userRepository.create(
 			UserEntity.initializeNew({

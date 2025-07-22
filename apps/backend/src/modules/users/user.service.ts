@@ -1,14 +1,15 @@
+import { bcrypt } from "~/libs/modules/bcrypt/bcrypt.js";
 import { type Service } from "~/libs/types/types.js";
-import { UserDetailsEntity } from "~/modules/users/user-details.entity.js";
-import { type UserDetailsRepository } from "~/modules/users/user-details.repository.js";
-import { UserEntity } from "~/modules/users/user.entity.js";
-import { type UserRepository } from "~/modules/users/user.repository.js";
 
 import {
 	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignUpRequestDto,
 } from "./libs/types/types.js";
+import { UserDetailsEntity } from "./user-details.entity.js";
+import { type UserDetailsRepository } from "./user-details.repository.js";
+import { UserEntity } from "./user.entity.js";
+import { UserRepository } from "./user.repository.js";
 
 class UserService implements Service {
 	private userDetailsRepository: UserDetailsRepository;
@@ -23,11 +24,12 @@ class UserService implements Service {
 	}
 
 	public async create(payload: UserSignUpRequestDto): Promise<UserResponseDto> {
+		const { hash, salt } = await bcrypt.hash(payload.password);
 		const user = await this.userRepository.create(
 			UserEntity.initializeNew({
 				email: payload.email,
-				passwordHash: "HASH", // TODO
-				passwordSalt: "SALT", // TODO
+				passwordHash: hash,
+				passwordSalt: salt,
 			}),
 		);
 

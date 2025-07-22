@@ -3,6 +3,9 @@ import {
 	DatabaseTableName,
 } from "~/libs/modules/database/database.js";
 
+import { ColumnName } from "./libs/enums/column-name.enum.js";
+import { UserDetailsModel } from "./user-details.model.js";
+
 class UserModel extends AbstractModel {
 	public email!: string;
 
@@ -14,10 +17,10 @@ class UserModel extends AbstractModel {
 		return {
 			userDetails: {
 				join: {
-					from: `${this.tableName}.id`,
-					to: "user_details.user_id",
+					from: `${DatabaseTableName.USERS}.${ColumnName.ID}`,
+					to: `${DatabaseTableName.USER_DETAILS}.${ColumnName.USER_ID}`,
 				},
-				modelClass: "~/modules/users/user-details.model.js",
+				modelClass: UserDetailsModel,
 				relation: this.HasOneRelation,
 			},
 		};

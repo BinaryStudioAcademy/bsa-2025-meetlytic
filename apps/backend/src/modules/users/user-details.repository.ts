@@ -1,6 +1,9 @@
 import { type Repository } from "~/libs/types/types.js";
-import { UserDetailsEntity } from "~/modules/users/user-details.entity.js";
-import { type UserDetailsModel } from "~/modules/users/user-details.model.js";
+
+import { UserDetailsEntity } from "./user-details.entity.js";
+import { type UserDetailsModel } from "./user-details.model.js";
+
+const NO_ROWS_DELETED = 0;
 
 class UserDetailsRepository implements Repository {
 	private userDetailsModel: typeof UserDetailsModel;
@@ -25,12 +28,14 @@ class UserDetailsRepository implements Repository {
 		return UserDetailsEntity.initialize(userDetails);
 	}
 
-	public delete(): ReturnType<Repository["delete"]> {
-		return Promise.resolve(true);
+	public async delete(id: number): Promise<boolean> {
+		const deletedRows = await this.userDetailsModel.query().deleteById(id);
+		return deletedRows > NO_ROWS_DELETED;
 	}
 
-	public find(): ReturnType<Repository["find"]> {
-		return Promise.resolve(null);
+	public async find(id: number): Promise<null | UserDetailsEntity> {
+		const userDetails = await this.userDetailsModel.query().findById(id);
+		return userDetails ? UserDetailsEntity.initialize(userDetails) : null;
 	}
 
 	public async findAll(): Promise<UserDetailsEntity[]> {

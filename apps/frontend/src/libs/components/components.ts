@@ -6,6 +6,5 @@ export { Link } from "./link/link.js";
 export { Navigation } from "./navigation/navigation.js";
 export { RouterProvider } from "./router-provider/router-provider.js";
 export { Sidebar } from "./sidebar/sidebar.js";
-export { clsx } from "clsx";
 export { Provider as StoreProvider } from "react-redux";
 export { NavLink, Outlet as RouterOutlet } from "react-router-dom";

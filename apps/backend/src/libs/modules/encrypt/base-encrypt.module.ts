@@ -1,8 +1,10 @@
 import bcrypt from "bcrypt";
 
 class BaseEncrypt {
+	constructor(public saltRounds: number) {}
+
 	async hash(password: string): Promise<{ hash: string; salt: string }> {
-		const salt = await bcrypt.genSalt();
+		const salt = await bcrypt.genSalt(this.saltRounds);
 		const hash = await bcrypt.hash(password, salt);
 
 		return { hash, salt };

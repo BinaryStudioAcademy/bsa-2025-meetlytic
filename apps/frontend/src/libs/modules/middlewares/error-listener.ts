@@ -1,14 +1,12 @@
 import { createListenerMiddleware, isRejected } from "@reduxjs/toolkit";
 
-import { showToast } from "~/libs/helpers/toast.js";
+import { showToast } from "~/libs/modules/notifications/notifications.js";
 
 const errorListenerMiddleware = createListenerMiddleware();
 
 errorListenerMiddleware.startListening({
 	effect: (action) => {
-		const message =
-			(typeof action.error.message === "string" && action.error.message) ||
-			"Something went wrong";
+		const message = action.error.message ?? "Something went wrong";
 
 		showToast(message, "error");
 	},

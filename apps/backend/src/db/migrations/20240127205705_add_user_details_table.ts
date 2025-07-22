@@ -2,6 +2,13 @@ import { type Knex } from "knex";
 
 const TABLE_NAME = "user_details";
 
+const TableName = {
+	USER_DETAILS: "user_details",
+	USERS: "users",
+} as const;
+
+const DELETE_STRATEGY = "CASCADE";
+
 const ColumnName = {
 	CREATED_AT: "created_at",
 	FIRST_NAME: "first_name",
@@ -24,9 +31,9 @@ function up(knex: Knex): Promise<void> {
 			.integer(ColumnName.USER_ID)
 			.unsigned()
 			.notNullable()
-			.references("id")
-			.inTable("users")
-			.onDelete("CASCADE");
+			.references(ColumnName.ID)
+			.inTable(TableName.USERS)
+			.onDelete(DELETE_STRATEGY);
 		table
 			.dateTime(ColumnName.CREATED_AT)
 			.notNullable()

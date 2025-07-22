@@ -1,6 +1,7 @@
 import { type FastifyPluginCallback } from "fastify";
 import fp from "fastify-plugin";
 
+import { FastifyHook } from "~/libs/enums/enums.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type BaseToken } from "~/libs/modules/token/base-token.module.js";
@@ -32,7 +33,7 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 
 		fastify.decorateRequest("user", null);
 
-		fastify.addHook("preHandler", async (request) => {
+		fastify.addHook(FastifyHook.PRE_HANDLER, async (request) => {
 			const { method, url } = request;
 
 			const routeToCheck = `${method.toUpperCase()} ${url}`;
@@ -56,9 +57,7 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 			try {
 				const { payload } = await jwt.verify(token);
 
-				const userId = payload.userId;
-
-				const user = await userService.find(userId);
+				const user = await userService.find(payload.userId);
 
 				if (!user) {
 					throw new AuthError();

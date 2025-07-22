@@ -76,6 +76,26 @@ class BaseConfig implements Config {
 					format: Number,
 				},
 			},
+			TOKEN: {
+				ALGORITHM: {
+					default: null,
+					doc: "JWT signing algorithm",
+					env: "JWT_ALGORITHM",
+					format: String,
+				},
+				EXPIRES_IN: {
+					default: null,
+					doc: "Token expiration duration in a human-readable format",
+					env: "JWT_EXPIRES_IN",
+					format: String,
+				},
+				SECRET: {
+					default: null,
+					doc: "Secret key of JWT tokens",
+					env: "JWT_SECRET",
+					format: String,
+				},
+			},
 		});
 	}
 }

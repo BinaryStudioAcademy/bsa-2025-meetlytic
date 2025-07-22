@@ -23,11 +23,11 @@ class UserService implements Service {
 	}
 
 	public async create(payload: UserSignUpRequestDto): Promise<UserResponseDto> {
-		const item = await this.userRepository.create(
+		const user = await this.userRepository.create(
 			UserEntity.initializeNew({
 				email: payload.email,
-				passwordHash: "HASH",
-				passwordSalt: "SALT",
+				passwordHash: "HASH", // TODO
+				passwordSalt: "SALT", // TODO
 			}),
 		);
 

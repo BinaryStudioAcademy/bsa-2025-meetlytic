@@ -1,5 +1,9 @@
 const UserValidationRule = {
 	EMAIL_MINIMUM_LENGTH: 1,
+	FIRST_NAME_MAXIMUM_LENGTH: 50,
+	FIRST_NAME_MINIMUM_LENGTH: 1,
+	LAST_NAME_MAXIMUM_LENGTH: 50,
+	LAST_NAME_MINIMUM_LENGTH: 1,
 } as const;
 
 export { UserValidationRule };

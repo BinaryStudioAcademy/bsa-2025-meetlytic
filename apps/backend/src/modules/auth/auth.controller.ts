@@ -55,6 +55,19 @@ class AuthController extends BaseController {
 	 *                  format: email
 	 *                password:
 	 *                  type: string
+	 *                firstName:
+	 *                  type: string
+	 *                  minLength: 1
+	 *                  maxLength: 50
+	 *                lastName:
+	 *                  type: string
+	 *                  minLength: 1
+	 *                  maxLength: 50
+	 *              required:
+	 *                - email
+	 *                - password
+	 *                - firstName
+	 *                - lastName
 	 *      responses:
 	 *        201:
 	 *          description: Successful operation

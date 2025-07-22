@@ -6,6 +6,7 @@ import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type BaseToken } from "~/libs/modules/token/base-token.module.js";
 import { type JwtPayload } from "~/libs/modules/token/libs/types/types.js";
+import { AuthError } from "~/modules/auth/libs/exceptions/auth.error.js";
 import { type UserSignUpResponseDto } from "~/modules/users/libs/types/types.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
@@ -67,10 +68,7 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 				const user = await userService.find(userId);
 
 				if (!user) {
-					throw new HTTPError({
-						message: "User not found.",
-						status: HTTPCode.UNAUTHORIZED,
-					});
+					throw new AuthError();
 				}
 
 				request.user = user;

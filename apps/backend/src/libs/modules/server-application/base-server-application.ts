@@ -5,6 +5,7 @@ import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { RELATIVE_PUBLIC_ROUTES } from "~/libs/constants/relative-public-routes.constant.js";
 import { ServerErrorType } from "~/libs/enums/enums.js";
 import { type ValidationError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";
@@ -115,6 +116,7 @@ class BaseServerApplication implements ServerApplication {
 			path.dirname(fileURLToPath(import.meta.url)),
 			"../../../../public",
 		);
+
 		await this.app.register(fastifyStatic, {
 			prefix: "/",
 			root: staticPath,
@@ -174,7 +176,7 @@ class BaseServerApplication implements ServerApplication {
 				port: this.config.ENV.APP.PORT,
 			});
 			this.logger.info(
-				`Application is listening on PORT - ${this.config.ENV.APP.PORT.toString()}, on ENVIRONMENT - ${
+				`Application is listening on PORT – ${this.config.ENV.APP.PORT.toString()}, on ENVIRONMENT - ${
 					this.config.ENV.APP.ENVIRONMENT as string
 				}.`,
 			);
@@ -212,11 +214,11 @@ class BaseServerApplication implements ServerApplication {
 			}),
 		);
 
-		const publicRoutes = this.apis.flatMap((api) =>
-			api.routes
-				.filter((route) => route.isPublic)
-				.map((route) => `${route.method.toUpperCase()} ${route.path}`),
-		);
+		const publicRoutes = this.apis.flatMap((api) => {
+			return RELATIVE_PUBLIC_ROUTES.map((route) => {
+				return `${route.method.toUpperCase()} /api/${api.version}${route.path}`;
+			});
+		});
 
 		await this.app.register(authorizationPlugin, {
 			routesWhiteList: publicRoutes,

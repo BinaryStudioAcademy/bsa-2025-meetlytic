@@ -1,5 +1,6 @@
-import { clsx } from "clsx";
 import React from "react";
+
+import { getValidClassNames } from "~/libs/helpers/helpers.js";
 
 import styles from "./loader.module.css";
 
@@ -14,11 +15,15 @@ const Loader: React.FC<Properties> = ({ isLoading, withOverlay = true }) => {
 	}
 
 	return (
-		<div className={withOverlay ? styles["loaderOverlay"] : undefined}>
+		<div className={getValidClassNames(withOverlay && styles["loaderOverlay"])}>
 			<div className={styles["dotLoader"]}>
 				<span className={styles["dot"]} />
-				<span className={clsx(styles["dot"], styles["dotSecond"])} />
-				<span className={clsx(styles["dot"], styles["dotThird"])} />
+				<span
+					className={getValidClassNames(styles["dot"], styles["dotSecond"])}
+				/>
+				<span
+					className={getValidClassNames(styles["dot"], styles["dotThird"])}
+				/>
 			</div>
 		</div>
 	);

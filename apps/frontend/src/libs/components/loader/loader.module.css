@@ -1,4 +1,4 @@
-.loader-overlay {
+.loaderOverlay {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -12,12 +12,12 @@
 	backdrop-filter: blur(0);
 }
 
-.dot-loader {
+.dotLoader {
 	display: flex;
 	gap: 8px;
 }
 
-.dot-loader span {
+.dot {
 	width: 12px;
 	height: 12px;
 	background-color: #10add8;
@@ -25,11 +25,11 @@
 	animation: bounce 1.2s infinite ease-in-out both;
 }
 
-.dot-loader span:nth-child(2) {
+.dotSecond {
 	animation-delay: 0.2s;
 }
 
-.dot-loader span:nth-child(3) {
+.dotThird {
 	animation-delay: 0.4s;
 }
 

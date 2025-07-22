@@ -1,0 +1,40 @@
+.title {
+	width: 100%;
+	margin-block: 0 75px;
+	color: var(--color-brand);
+}
+
+.title ~ a {
+	text-decoration: none;
+}
+
+.link {
+	position: relative;
+	margin-block: 0 53px;
+	color: var(--color-text-1);
+}
+
+.link::before,
+.link::after {
+	position: absolute;
+	top: 50%;
+	width: 100%;
+	content: "";
+	border-bottom: 2px dashed var(--color-background-2);
+	transform: translateY(-50%);
+}
+
+.link::before {
+	left: -104%;
+}
+
+.link::after {
+	right: -104%;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	width: 100%;
+}

@@ -1,4 +1,5 @@
-import { Button, Input } from "~/libs/components/components.js";
+import { Button, Input, Link } from "~/libs/components/components.js";
+import { AppRoute } from "~/libs/enums/app-route.enum.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
 	type UserSignUpRequestDto,
@@ -6,6 +7,7 @@ import {
 } from "~/modules/users/users.js";
 
 import { DEFAULT_SIGN_UP_PAYLOAD } from "./libs/constants.js";
+import styles from "./styles.module.css";
 
 type Properties = {
 	onSubmit: (payload: UserSignUpRequestDto) => void;
@@ -26,49 +28,64 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 
 	return (
 		<>
-			<h3>Sign Up</h3>
-			<form onSubmit={handleFormSubmit}>
-				<p>
+			<h3 className={`${styles["title"] ?? ""} h3`}>Create an account</h3>
+			<Link to={AppRoute.SIGN_IN}>
+				<p className={`${styles["link"] ?? ""} caption`}>
+					or Sign in with Email
+				</p>
+			</Link>
+			<form className={styles["form"]} onSubmit={handleFormSubmit}>
+				<p className="field">
 					<Input
 						control={control}
 						errors={errors}
 						label="First name"
 						name="firstName"
-						placeholder="Enter your first name"
+						placeholder="First name"
 						type="text"
 					/>
 				</p>
-				<p>
+				<p className="field">
 					<Input
 						control={control}
 						errors={errors}
 						label="Last name"
 						name="lastName"
-						placeholder="Enter your last name"
+						placeholder="Last name"
 						type="text"
 					/>
 				</p>
-				<p>
+				<p className="field">
 					<Input
 						control={control}
 						errors={errors}
 						label="Email"
 						name="email"
-						placeholder="Enter your email"
+						placeholder="mail@abc.com"
 						type="text"
 					/>
 				</p>
-				<p>
+				<p className="field">
 					<Input
 						control={control}
 						errors={errors}
 						label="Password"
 						name="password"
-						placeholder="Enter your password"
+						placeholder="*************"
 						type="text"
 					/>
 				</p>
-				<Button label="Sign up" type="submit" />
+				<p className="field">
+					<Input
+						control={control}
+						errors={errors}
+						label="Confirm Password"
+						name="confirmPassword"
+						placeholder="*************"
+						type="text"
+					/>
+				</p>
+				<Button className="btn-primary" label="Sign up" type="submit" />
 			</form>
 		</>
 	);

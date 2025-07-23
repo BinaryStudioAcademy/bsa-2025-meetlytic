@@ -65,6 +65,41 @@ class AuthController extends BaseController {
 
 	/**
 	 * @swagger
+	 * /auth/authenticated-user:
+	 *   get:
+	 *     description: Get authenticated user's data
+	 *     responses:
+	 *       200:
+	 *         description: Successful operation
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 message:
+	 *                   type: object
+	 *                   $ref: "#/components/schemas/User"
+	 *       401:
+	 *         description: Unauthorized
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: "#/components/schemas/CommonErrorResponse"
+	 */
+
+	private getAuthenticatedUser(
+		options: APIHandlerOptions<{ user: UserResponseDto }>,
+	): APIHandlerResponse {
+		const { user } = options;
+
+		return {
+			payload: user,
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
 	 * /auth/sign-in:
 	 *    post:
 	 *      description: Sign in user into the system
@@ -113,41 +148,6 @@ class AuthController extends BaseController {
 	): Promise<APIHandlerResponse> {
 		return {
 			payload: await this.authService.signIn(options.body),
-			status: HTTPCode.OK,
-		};
-	}
-
-	/**
-	 * @swagger
-	 * /auth/authenticated-user:
-	 *   get:
-	 *     description: Get authenticated user's data
-	 *     responses:
-	 *       200:
-	 *         description: Successful operation
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               type: object
-	 *               properties:
-	 *                 message:
-	 *                   type: object
-	 *                   $ref: "#/components/schemas/User"
-	 *       401:
-	 *         description: Unauthorized
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               $ref: "#/components/schemas/CommonErrorResponse"
-	 */
-
-	private getAuthenticatedUser(
-		options: APIHandlerOptions<{ user: UserResponseDto }>,
-	): APIHandlerResponse {
-		const { user } = options;
-
-		return {
-			payload: user,
 			status: HTTPCode.OK,
 		};
 	}

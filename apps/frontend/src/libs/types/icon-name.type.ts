@@ -1,3 +1,3 @@
-type IconName = "arrowRight" | "integrations" | "meetings" | "settings";
+type IconName = "arrowRight" | "meetings" | "settings";
 
 export { type IconName };

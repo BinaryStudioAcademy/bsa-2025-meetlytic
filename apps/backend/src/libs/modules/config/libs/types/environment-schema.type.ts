@@ -13,6 +13,9 @@ type EnvironmentSchema = {
 		POOL_MAX: number;
 		POOL_MIN: number;
 	};
+	ENCRYPT: {
+		SALT_ROUNDS: number;
+	};
 	TOKEN: {
 		ALGORITHM: string;
 		EXPIRES_IN: string;

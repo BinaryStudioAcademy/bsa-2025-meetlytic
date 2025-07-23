@@ -76,6 +76,14 @@ class BaseConfig implements Config {
 					format: Number,
 				},
 			},
+			ENCRYPT: {
+				SALT_ROUNDS: {
+					default: null,
+					doc: "Salt rounds of bcrypt hashes",
+					env: "SALT_ROUNDS",
+					format: Number,
+				},
+			},
 			TOKEN: {
 				ALGORITHM: {
 					default: null,

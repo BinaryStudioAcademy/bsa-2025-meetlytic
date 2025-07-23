@@ -1,0 +1,48 @@
+.loaderOverlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgb(255 255 255 / 60%);
+	backdrop-filter: blur(0);
+}
+
+.dotLoader {
+	display: flex;
+	gap: 8px;
+}
+
+.dot {
+	width: 12px;
+	height: 12px;
+	background-color: #10add8;
+	border-radius: 50%;
+	animation: bounce 1.2s infinite ease-in-out both;
+}
+
+.dotSecond {
+	animation-delay: 0.2s;
+}
+
+.dotThird {
+	animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+	0%,
+	80%,
+	100% {
+		opacity: 0.3;
+		transform: scale(0);
+	}
+
+	40% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}

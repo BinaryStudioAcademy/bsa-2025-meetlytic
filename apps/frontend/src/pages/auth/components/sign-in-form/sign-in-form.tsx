@@ -66,26 +66,23 @@ const SignInForm: React.FC<Properties> = () => {
 			<h2 className="title">Login to your Account</h2>
 
 			<form className="login-form" onSubmit={handleFormSubmit}>
-				<p>
-					<Input
-						control={control}
-						errors={errors}
-						label="Email"
-						name="email"
-						placeholder="mail@abc.com"
-						type="text"
-					/>
-				</p>
-				<p>
-					<Input
-						control={control}
-						errors={errors}
-						label="Password"
-						name="password"
-						placeholder="********"
-						type="text"
-					/>
-				</p>
+				<Input
+					control={control}
+					errors={errors}
+					label="Email"
+					name="email"
+					placeholder="mail@abc.com"
+					type="text"
+				/>
+				<Input
+					control={control}
+					errors={errors}
+					label="Password"
+					name="password"
+					placeholder="********"
+					type="text"
+				/>
+
 				<Button className="sign-in-btn" label="Login" type="submit" />
 			</form>
 

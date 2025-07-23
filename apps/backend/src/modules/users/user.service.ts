@@ -1,4 +1,3 @@
-
 import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
 import { type Service } from "~/libs/types/types.js";
 
@@ -39,11 +38,11 @@ class UserService implements Service {
 			UserDetailsEntity.initializeNew({
 				firstName: payload.firstName,
 				lastName: payload.lastName,
-				userId: user.toObject().id,
+				userId: item.toObject().id,
 			}),
 		);
 
-		return user.toObject();
+		return item.toObject();
 	}
 
 	public delete(): ReturnType<Service["delete"]> {

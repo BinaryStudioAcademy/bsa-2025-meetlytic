@@ -3,7 +3,7 @@ import {
 	DatabaseTableName,
 } from "~/libs/modules/database/database.js";
 
-import { ColumnName } from "./libs/enums/column-name.enum.js";
+import { ColumnName } from "./libs/enums/enums.js";
 import { UserDetailsModel } from "./user-details.model.js";
 
 class UserModel extends AbstractModel {

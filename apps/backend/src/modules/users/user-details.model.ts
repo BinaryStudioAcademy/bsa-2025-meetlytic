@@ -3,7 +3,8 @@ import {
 	DatabaseTableName,
 } from "~/libs/modules/database/database.js";
 
-import { ColumnName } from "./libs/enums/column-name.enum.js";
+import { ColumnName } from "./libs/enums/enums.js";
+import { UserModel } from "./user.model.js";
 
 class UserDetailsModel extends AbstractModel {
 	public firstName!: string;
@@ -19,7 +20,7 @@ class UserDetailsModel extends AbstractModel {
 					from: `${this.tableName}.${ColumnName.USER_ID}`,
 					to: `${DatabaseTableName.USERS}.${ColumnName.ID}`,
 				},
-				modelClass: "./modules/users/user.model.js",
+				modelClass: UserModel,
 				relation: this.BelongsToOneRelation,
 			},
 		};

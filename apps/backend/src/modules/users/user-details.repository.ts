@@ -44,8 +44,15 @@ class UserDetailsRepository implements Repository {
 		return userDetails.map((detail) => UserDetailsEntity.initialize(detail));
 	}
 
-	public update(): ReturnType<Repository["update"]> {
-		return Promise.resolve(null);
+	public async update(
+		id: number,
+		payload: Partial<Record<string, unknown>>,
+	): Promise<UserDetailsEntity> {
+		const updated = await this.userDetailsModel
+			.query()
+			.patchAndFetchById(id, payload);
+
+		return UserDetailsEntity.initialize(updated);
 	}
 }
 

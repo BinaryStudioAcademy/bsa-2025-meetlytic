@@ -30,13 +30,19 @@ const userSignUp = z
 			.string()
 			.trim()
 			.min(UserValidationRule.FIRST_NAME_MINIMUM_LENGTH, {
-				message: UserValidationMessage.FIRST_NAME_REQUIRE,
+				message: UserValidationMessage.FIRST_NAME_MIN_LENGTH,
+			})
+			.max(UserValidationRule.FIRST_NAME_MAXIMUM_LENGTH, {
+				message: UserValidationMessage.FIRST_NAME_MAX_LENGTH,
 			}),
 		lastName: z
 			.string()
 			.trim()
 			.min(UserValidationRule.LAST_NAME_MINIMUM_LENGTH, {
-				message: UserValidationMessage.LAST_NAME_REQUIRE,
+				message: UserValidationMessage.LAST_NAME_MIN_LENGTH,
+			})
+			.max(UserValidationRule.LAST_NAME_MAXIMUM_LENGTH, {
+				message: UserValidationMessage.LAST_NAME_MAX_LENGTH,
 			}),
 		password: z.string().min(UserValidationRule.PASSWORD_MINIMUM_LENGTH, {
 			message: UserValidationMessage.PASSWORD_REQUIRE,

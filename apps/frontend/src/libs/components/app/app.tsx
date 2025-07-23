@@ -1,5 +1,10 @@
 import reactLogo from "~/assets/img/react.svg";
-import { Link, Loader, RouterOutlet } from "~/libs/components/components.js";
+import {
+	Header,
+	Link,
+	Loader,
+	RouterOutlet,
+} from "~/libs/components/components.js";
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -28,6 +33,10 @@ const App: React.FC = () => {
 	return (
 		<>
 			<Loader isLoading={dataStatus === DataStatus.PENDING} withOverlay />
+
+			{pathname !== AppRoute.SIGN_IN && pathname !== AppRoute.SIGN_UP && (
+				<Header />
+			)}
 
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 

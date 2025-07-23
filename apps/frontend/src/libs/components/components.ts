@@ -1,8 +1,11 @@
 export { App } from "./app/app.js";
+export { Avatar } from "./avatar/avatar.js";
 export { Button } from "./button/button.js";
+export { Header } from "./header/header.js";
 export { Input } from "./input/input.js";
 export { Link } from "./link/link.js";
 export { Loader } from "./loader/loader.js";
+export { Logo } from "./logo/logo.js";
 export { RouterProvider } from "./router-provider/router-provider.js";
 export { ToastProvider } from "./toast-provider/toast-provider.js";
 export { Provider as StoreProvider } from "react-redux";

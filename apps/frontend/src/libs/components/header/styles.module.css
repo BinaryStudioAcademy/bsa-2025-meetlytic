@@ -1,0 +1,14 @@
+.header {
+	position: sticky;
+	top: 0;
+	background-color: #47333e;
+}
+
+.headerInner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	max-width: 1440px;
+	padding: 15px 40px;
+	margin: 0 auto;
+}

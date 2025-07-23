@@ -128,6 +128,14 @@
 	border-color: var(--color-accent-1);
 }
 
+.field:has(.error) input {
+	border-color: var(--color-accent-1);
+}
+
+.field .error {
+	color: var(--color-accent-1);
+}
+
 .btn-primary {
 	display: flex;
 	align-items: center;

@@ -6,6 +6,7 @@ import {
 	userSignUpValidationSchema,
 } from "~/modules/users/users.js";
 
+import { AuthLayout } from "../auth-layout/auth-layout.js";
 import { DEFAULT_SIGN_UP_PAYLOAD } from "./libs/constants.js";
 import styles from "./styles.module.css";
 
@@ -27,13 +28,8 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 	);
 
 	return (
-		<>
+		<AuthLayout>
 			<h3 className={`${styles["title"] ?? ""} h3`}>Create an account</h3>
-			<Link to={AppRoute.SIGN_IN}>
-				<p className={`${styles["link"] ?? ""} caption`}>
-					or Sign in with Email
-				</p>
-			</Link>
 			<form className={styles["form"]} onSubmit={handleFormSubmit}>
 				<p className="field">
 					<Input
@@ -87,7 +83,13 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 				</p>
 				<Button className="btn-primary" label="Sign up" type="submit" />
 			</form>
-		</>
+			<h5 className={`${styles["link-container"] ?? ""} h5`}>
+				Already have an account?
+				<Link to={AppRoute.SIGN_IN}>
+					<p>Sign in</p>
+				</Link>
+			</h5>
+		</AuthLayout>
 	);
 };
 

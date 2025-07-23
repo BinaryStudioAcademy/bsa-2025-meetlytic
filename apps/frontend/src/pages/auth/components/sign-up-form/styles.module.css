@@ -1,35 +1,24 @@
 .title {
 	width: 100%;
-	margin-block: 0 75px;
+	max-width: 420px;
+	margin-block: 35px 45px;
 	color: var(--color-brand);
 }
 
-.title ~ a {
+.link-container {
+	display: flex;
+	gap: 10px;
+	max-width: 420px;
+	margin-block: 30px 10px;
+}
+
+.link-container a {
+	color: var(--color-brand);
 	text-decoration: none;
 }
 
-.link {
-	position: relative;
-	margin-block: 0 53px;
-	color: var(--color-text-1);
-}
-
-.link::before,
-.link::after {
-	position: absolute;
-	top: 50%;
-	width: 100%;
-	content: "";
-	border-bottom: 2px dashed var(--color-background-2);
-	transform: translateY(-50%);
-}
-
-.link::before {
-	left: -104%;
-}
-
-.link::after {
-	right: -104%;
+.link-container p {
+	margin-block: 0;
 }
 
 .form {
@@ -37,4 +26,5 @@
 	flex-direction: column;
 	gap: 24px;
 	width: 100%;
+	max-width: 420px;
 }

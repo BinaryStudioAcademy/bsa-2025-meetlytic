@@ -14,7 +14,6 @@ const userSignUp = z
 	.object<UserSignUpRequestValidationDto>({
 		confirmPassword: z
 			.string()
-			.trim()
 			.min(UserValidationRule.PASSWORD_MINIMUM_LENGTH, {
 				message: UserValidationMessage.PASSWORD_REQUIRE,
 			}),
@@ -39,13 +38,14 @@ const userSignUp = z
 			.min(UserValidationRule.LAST_NAME_MINIMUM_LENGTH, {
 				message: UserValidationMessage.LAST_NAME_REQUIRE,
 			}),
-		password: z
-			.string()
-			.trim()
-			.min(UserValidationRule.PASSWORD_MINIMUM_LENGTH, {
-				message: UserValidationMessage.PASSWORD_REQUIRE,
-			}),
+		password: z.string().min(UserValidationRule.PASSWORD_MINIMUM_LENGTH, {
+			message: UserValidationMessage.PASSWORD_REQUIRE,
+		}),
 	})
-	.required();
+	.required()
+	.refine((data) => data.password === data.confirmPassword, {
+		message: UserValidationMessage.PASSWORD_MATCH as string,
+		path: ["confirmPassword"],
+	});
 
 export { userSignUp };

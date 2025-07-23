@@ -3,7 +3,8 @@ const UserValidationMessage = {
 	EMAIL_WRONG: "Email is wrong",
 	FIRST_NAME_REQUIRE: "First name is required",
 	LAST_NAME_REQUIRE: "Last name is required",
-	PASSWORD_REQUIRE: "Last name is required",
+	PASSWORD_MATCH: "Passwords should match",
+	PASSWORD_REQUIRE: "Password is required",
 } as const;
 
 export { UserValidationMessage };

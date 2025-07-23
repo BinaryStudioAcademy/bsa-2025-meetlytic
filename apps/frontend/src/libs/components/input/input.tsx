@@ -34,7 +34,7 @@ const Input = <T extends FieldValues>({
 		<label>
 			<span>{label}</span>
 			<input {...field} placeholder={placeholder} type={type} />
-			{hasError && <span>{error as string}</span>}
+			{hasError && <span className="error">{error as string}</span>}
 		</label>
 	);
 };

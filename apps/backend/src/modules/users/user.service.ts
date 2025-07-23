@@ -1,7 +1,5 @@
 import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
 import { type Service } from "~/libs/types/types.js";
-import { UserEntity } from "~/modules/users/user.entity.js";
-import { type UserRepository } from "~/modules/users/user.repository.js";
 
 import {
 	UserCredentials,
@@ -9,12 +7,21 @@ import {
 	type UserResponseDto,
 	type UserSignUpRequestDto,
 } from "./libs/types/types.js";
+import { UserDetailsEntity } from "./user-details.entity.js";
+import { type UserDetailsRepository } from "./user-details.repository.js";
+import { UserEntity } from "./user.entity.js";
+import { UserRepository } from "./user.repository.js";
 
 class UserService implements Service {
+	private userDetailsRepository: UserDetailsRepository;
 	private userRepository: UserRepository;
 
-	public constructor(userRepository: UserRepository) {
+	public constructor(
+		userRepository: UserRepository,
+		userDetailsRepository: UserDetailsRepository,
+	) {
 		this.userRepository = userRepository;
+		this.userDetailsRepository = userDetailsRepository;
 	}
 
 	public async create(payload: UserSignUpRequestDto): Promise<UserResponseDto> {
@@ -24,6 +31,14 @@ class UserService implements Service {
 				email: payload.email,
 				passwordHash: hash,
 				passwordSalt: salt,
+			}),
+		);
+
+		await this.userDetailsRepository.create(
+			UserDetailsEntity.initializeNew({
+				firstName: payload.firstName,
+				lastName: payload.lastName,
+				userId: item.toObject().id,
 			}),
 		);
 

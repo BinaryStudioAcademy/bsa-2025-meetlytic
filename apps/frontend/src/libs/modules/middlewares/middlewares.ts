@@ -1,1 +1,1 @@
-export { errorListenerMiddleware } from "./error-listener.js";
+export { errorListenerMiddleware } from "./error-listener.middleware.js";

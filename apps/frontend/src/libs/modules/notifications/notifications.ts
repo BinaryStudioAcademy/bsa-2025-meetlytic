@@ -1,5 +1,5 @@
-import { Toast } from "./toast.module.js";
+import { Notification } from "./notification.module.js";
 
-const toast = new Toast();
+const notification = new Notification();
 
-export { toast };
+export { notification };

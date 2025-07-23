@@ -7,6 +7,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import { AppEnvironment } from "~/libs/enums/enums.js";
 import { type Config } from "~/libs/modules/config/config.js";
+import { errorListenerMiddleware } from "~/libs/modules/middlewares/middlewares.js";
 import { authApi, reducer as authReducer } from "~/modules/auth/auth.js";
 import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
 
@@ -37,7 +38,7 @@ class Store {
 					thunk: {
 						extraArgument: this.extraArguments,
 					},
-				});
+				}).prepend(errorListenerMiddleware.middleware);
 			},
 			reducer: {
 				auth: authReducer,

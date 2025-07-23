@@ -1,0 +1,23 @@
+.avatar {
+	border: 2px solid #10add8;
+	border-radius: 50%;
+}
+
+.avatarSmall {
+	width: 44px;
+	height: 44px;
+}
+
+.avatarLarge {
+	width: 88px;
+	height: 88px;
+}
+
+.avatarMain {
+	padding: 3px;
+	border-color: #10add8;
+}
+
+.avatarAlt {
+	border-color: white;
+}

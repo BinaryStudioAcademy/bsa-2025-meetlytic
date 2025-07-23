@@ -2,13 +2,13 @@ import { z } from "zod";
 
 import { UserValidationMessage, UserValidationRule } from "../enums/enums.js";
 
-type UserSignUpRequestValidationDto = {
+type UserSignInRequestValidationDto = {
 	email: z.ZodString;
 	password: z.ZodString;
 };
 
-const userSignUp = z
-	.object<UserSignUpRequestValidationDto>({
+const userSignIn = z
+	.object<UserSignInRequestValidationDto>({
 		email: z
 			.string()
 			.trim()
@@ -27,4 +27,4 @@ const userSignUp = z
 	})
 	.required();
 
-export { userSignUp };
+export { userSignIn };

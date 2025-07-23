@@ -4,7 +4,11 @@ export {
 	ContentType,
 	ServerErrorType,
 } from "./libs/enums/enums.js";
-export { HTTPError, ValidationError } from "./libs/exceptions/exceptions.js";
+export {
+	AuthError,
+	HTTPError,
+	ValidationError,
+} from "./libs/exceptions/exceptions.js";
 export { configureString } from "./libs/helpers/helpers.js";
 export { type Config } from "./libs/modules/config/config.js";
 export {
@@ -29,8 +33,10 @@ export {
 	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
+	type UserSignInRequestDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 	UsersApiPath,
+	userSignInValidationSchema,
 	userSignUpValidationSchema,
 } from "./modules/users/users.js";

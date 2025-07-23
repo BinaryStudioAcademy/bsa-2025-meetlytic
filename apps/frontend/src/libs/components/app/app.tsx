@@ -23,6 +23,7 @@ const App: React.FC = () => {
 	}));
 
 	const isRoot = pathname === AppRoute.ROOT;
+	const hiddenHeaderRoutes = [AppRoute.SIGN_IN, AppRoute.SIGN_UP] as string[];
 
 	useEffect(() => {
 		if (isRoot) {
@@ -34,9 +35,7 @@ const App: React.FC = () => {
 		<>
 			<Loader isLoading={dataStatus === DataStatus.PENDING} withOverlay />
 
-			{pathname !== AppRoute.SIGN_IN && pathname !== AppRoute.SIGN_UP && (
-				<Header />
-			)}
+			{!hiddenHeaderRoutes.includes(pathname) && <Header />}
 
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 

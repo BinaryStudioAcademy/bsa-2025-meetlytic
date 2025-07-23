@@ -12,8 +12,10 @@ const userApi = new UserApi({
 
 export { userApi };
 export {
+	type AuthResponseDto,
 	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
+	type UserResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "./libs/types/types.js";

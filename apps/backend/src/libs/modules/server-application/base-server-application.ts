@@ -5,8 +5,8 @@ import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { RELATIVE_PUBLIC_ROUTES } from "~/libs/constants/relative-public-routes.constant.js";
-import { ServerErrorType } from "~/libs/enums/enums.js";
+import { WHITE_ROUTES } from "~/libs/constants/white-routes.constant.js";
+import { FastifyDecorator, ServerErrorType } from "~/libs/enums/enums.js";
 import { type ValidationError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Database } from "~/libs/modules/database/database.js";
@@ -62,6 +62,8 @@ class BaseServerApplication implements ServerApplication {
 		this.app = Fastify({
 			ignoreTrailingSlash: true,
 		});
+
+		this.app.decorate(FastifyDecorator.API_VERSIONS, new Set<string>());
 	}
 
 	private initErrorHandler(): void {
@@ -88,7 +90,7 @@ class BaseServerApplication implements ServerApplication {
 
 				if (error instanceof HTTPError) {
 					this.logger.error(
-						`[HTTP Error]: ${error.status.toString()} - ${error.message}`,
+						`[HTTP Error]: ${error.status.toString()} – ${error.message}`,
 					);
 
 					const response: ServerCommonErrorResponse = {
@@ -176,7 +178,7 @@ class BaseServerApplication implements ServerApplication {
 				port: this.config.ENV.APP.PORT,
 			});
 			this.logger.info(
-				`Application is listening on PORT – ${this.config.ENV.APP.PORT.toString()}, on ENVIRONMENT - ${
+				`Application is listening on PORT – ${this.config.ENV.APP.PORT.toString()}, on ENVIRONMENT – ${
 					this.config.ENV.APP.ENVIRONMENT as string
 				}.`,
 			);
@@ -211,17 +213,13 @@ class BaseServerApplication implements ServerApplication {
 				await this.app.register(swaggerUi, {
 					routePrefix: `${api.version}/documentation`,
 				});
+
+				this.app[FastifyDecorator.API_VERSIONS].add(api.version);
 			}),
 		);
 
-		const publicRoutes = this.apis.flatMap((api) => {
-			return RELATIVE_PUBLIC_ROUTES.map((route) => {
-				return `${route.method.toUpperCase()} /api/${api.version}${route.path}`;
-			});
-		});
-
 		await this.app.register(authorizationPlugin, {
-			routesWhiteList: publicRoutes,
+			routesWhiteList: WHITE_ROUTES,
 			services: {
 				config: this.config,
 				jwt: jwt,

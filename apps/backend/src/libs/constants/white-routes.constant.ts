@@ -1,8 +1,10 @@
 import { APIPath, AuthApiPath } from "@meetlytic/shared";
 
-const RELATIVE_PUBLIC_ROUTES = [
+import { type WhiteRoute } from "./libs/types/types.js";
+
+const WHITE_ROUTES: WhiteRoute[] = [
 	{ method: "POST", path: `${APIPath.AUTH}${AuthApiPath.SIGN_UP}` },
 	{ method: "POST", path: `${APIPath.AUTH}${AuthApiPath.SIGN_IN}` },
 ];
 
-export { RELATIVE_PUBLIC_ROUTES };
+export { WHITE_ROUTES };

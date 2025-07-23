@@ -1,7 +1,9 @@
 import { type FastifyPluginCallback } from "fastify";
 import fp from "fastify-plugin";
 
+import { type WhiteRoute } from "~/libs/constants/libs/types/types.js";
 import { FastifyHook } from "~/libs/enums/enums.js";
+import { FastifyDecorator } from "~/libs/enums/fastify-decorator.enum.js";
 import { AuthError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
@@ -11,13 +13,16 @@ import { type UserResponseDto } from "~/modules/users/libs/types/types.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
 declare module "fastify" {
+	interface FastifyInstance {
+		apiVersions: Set<string>;
+	}
 	interface FastifyRequest {
 		user?: null | UserResponseDto;
 	}
 }
 
 type Options = {
-	routesWhiteList: string[];
+	routesWhiteList: WhiteRoute[];
 	services: {
 		config: Config;
 		jwt: BaseToken<JwtPayload>;
@@ -36,9 +41,19 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 		fastify.addHook(FastifyHook.PRE_HANDLER, async (request) => {
 			const { method, url } = request;
 
-			const routeToCheck = `${method.toUpperCase()} ${url}`;
+			const apiVersions = fastify[FastifyDecorator.API_VERSIONS];
 
-			if (routesWhiteList.includes(routeToCheck)) {
+			const isWhiteRoute = [...apiVersions].some((version) => {
+				return routesWhiteList.some((whiteRoute) => {
+					const expectedUrl = `/api/${version}${whiteRoute.path}`;
+					return (
+						method.toUpperCase() === whiteRoute.method.toUpperCase() &&
+						url === expectedUrl
+					);
+				});
+			});
+
+			if (isWhiteRoute) {
 				return;
 			}
 
@@ -78,7 +93,7 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 		done();
 	},
 	{
-		dependencies: ["config", "logger"],
+		dependencies: [],
 		name: "authorization",
 	},
 );

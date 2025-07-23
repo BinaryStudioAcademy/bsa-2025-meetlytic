@@ -54,13 +54,7 @@ class UserRepository implements Repository {
 			.query()
 			.select(UserAttribute.PASSWORD_HASH, UserAttribute.PASSWORD_SALT)
 			.findById(id);
-
-		return credentials
-			? {
-					passwordHash: credentials.passwordHash,
-					passwordSalt: credentials.passwordSalt,
-				}
-			: null;
+		return credentials ?? null;
 	}
 
 	public update(): ReturnType<Repository["update"]> {

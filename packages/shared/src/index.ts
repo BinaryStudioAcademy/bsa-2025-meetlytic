@@ -28,6 +28,18 @@ export {
 	type ValueOf,
 } from "./libs/types/types.js";
 export { AuthApiPath } from "./modules/auth/auth.js";
+export { MeetingsApiPath } from "./modules/meets/meets.js";
+export {
+	type MeetingCreateRequestDto,
+	type MeetingGetAllResponseDto,
+	type MeetingHostValue,
+	type MeetingResponseDto,
+	type MeetingUpdateRequestDto,
+} from "./modules/meets/meets.js";
+export {
+	meetingCreateValidationSchema,
+	meetingUpdateValidationSchema,
+} from "./modules/meets/meets.js";
 export {
 	type AuthResponseDto,
 	type UserGetAllItemResponseDto,

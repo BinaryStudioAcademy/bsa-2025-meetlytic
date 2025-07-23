@@ -2,11 +2,11 @@ import { type FastifyPluginCallback } from "fastify";
 import fp from "fastify-plugin";
 
 import { FastifyHook } from "~/libs/enums/enums.js";
+import { AuthError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type BaseToken } from "~/libs/modules/token/base-token.module.js";
 import { type JwtPayload } from "~/libs/modules/token/libs/types/types.js";
-import { AuthError } from "~/modules/auth/libs/exceptions/auth.error.js";
 import { type UserResponseDto } from "~/modules/users/libs/types/types.js";
 import { type UserService } from "~/modules/users/user.service.js";
 

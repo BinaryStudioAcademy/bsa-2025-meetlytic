@@ -1,8 +1,10 @@
+import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
 import { type Service } from "~/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 
 import {
+	UserCredentials,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignUpRequestDto,
@@ -16,11 +18,12 @@ class UserService implements Service {
 	}
 
 	public async create(payload: UserSignUpRequestDto): Promise<UserResponseDto> {
+		const { hash, salt } = await encrypt.hash(payload.password);
 		const item = await this.userRepository.create(
 			UserEntity.initializeNew({
 				email: payload.email,
-				passwordHash: "HASH", // TODO
-				passwordSalt: "SALT", // TODO
+				passwordHash: hash,
+				passwordSalt: salt,
 			}),
 		);
 
@@ -43,6 +46,16 @@ class UserService implements Service {
 		return {
 			items: items.map((item) => item.toObject()),
 		};
+	}
+	public async findByEmail(email: string): Promise<null | UserResponseDto> {
+		const user = await this.userRepository.findByEmail(email);
+
+		return user ? user.toObject() : null;
+	}
+
+	public async getCredentials(id: number): Promise<null | UserCredentials> {
+		const credentials = await this.userRepository.getCredentials(id);
+		return credentials ?? null;
 	}
 
 	public update(): ReturnType<Service["update"]> {

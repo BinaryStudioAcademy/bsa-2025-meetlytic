@@ -2,7 +2,7 @@ import React from "react";
 
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
 
-import styles from "./loader.module.css";
+import styles from "./styles.module.css";
 
 type Properties = {
 	isLoading: boolean;

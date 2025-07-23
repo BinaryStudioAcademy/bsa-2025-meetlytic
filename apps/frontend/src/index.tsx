@@ -6,6 +6,7 @@ import {
 	App,
 	RouterProvider,
 	StoreProvider,
+	ToastProvider,
 } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { store } from "~/libs/modules/store/store.js";
@@ -15,6 +16,7 @@ import { ProtectedRoute } from "./libs/components/router-provider/protected-rout
 
 createRoot(document.querySelector("#root") as HTMLElement).render(
 	<StrictMode>
+		<ToastProvider />
 		<StoreProvider store={store.instance}>
 			<RouterProvider
 				routes={[

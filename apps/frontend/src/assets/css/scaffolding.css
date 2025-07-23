@@ -69,7 +69,7 @@ body {
 	min-width: 320px;
 	min-height: 100vh;
 	margin: 0;
-	font-family: Inter, sans-serif;
+	font-family: var(--font-family);
 	font-size: 14px;
 	line-height: 1.5;
 }

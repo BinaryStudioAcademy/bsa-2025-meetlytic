@@ -7,13 +7,11 @@ import { signUp } from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
-	token: null | string;
 	user: null | UserResponseDto;
 };
 
 const initialState: State = {
 	dataStatus: DataStatus.IDLE,
-	token: null,
 	user: null,
 };
 

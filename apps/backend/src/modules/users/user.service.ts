@@ -1,7 +1,9 @@
-import { bcrypt } from "~/libs/modules/bcrypt/bcrypt.js";
+
+import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
 import { type Service } from "~/libs/types/types.js";
 
 import {
+	UserCredentials,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignUpRequestDto,
@@ -24,8 +26,8 @@ class UserService implements Service {
 	}
 
 	public async create(payload: UserSignUpRequestDto): Promise<UserResponseDto> {
-		const { hash, salt } = await bcrypt.hash(payload.password);
-		const user = await this.userRepository.create(
+		const { hash, salt } = await encrypt.hash(payload.password);
+		const item = await this.userRepository.create(
 			UserEntity.initializeNew({
 				email: payload.email,
 				passwordHash: hash,
@@ -48,8 +50,10 @@ class UserService implements Service {
 		return Promise.resolve(true);
 	}
 
-	public find(): ReturnType<Service["find"]> {
-		return Promise.resolve(null);
+	public async find(id: number): Promise<null | UserResponseDto> {
+		const user = await this.userRepository.find(id);
+
+		return user ? user.toObject() : null;
 	}
 
 	public async findAll(): Promise<UserGetAllResponseDto> {
@@ -58,6 +62,16 @@ class UserService implements Service {
 		return {
 			items: items.map((item) => item.toObject()),
 		};
+	}
+	public async findByEmail(email: string): Promise<null | UserResponseDto> {
+		const user = await this.userRepository.findByEmail(email);
+
+		return user ? user.toObject() : null;
+	}
+
+	public async getCredentials(id: number): Promise<null | UserCredentials> {
+		const credentials = await this.userRepository.getCredentials(id);
+		return credentials ?? null;
 	}
 
 	public update(): ReturnType<Service["update"]> {

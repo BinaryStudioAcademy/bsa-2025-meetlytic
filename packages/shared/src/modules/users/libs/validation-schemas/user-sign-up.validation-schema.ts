@@ -39,6 +39,12 @@ const userSignUp = z
 				message: UserValidationMessage.LAST_NAME_MAX_LENGTH,
 			}),
 		password: z.string().trim(),
+		password: z
+			.string()
+			.trim()
+			.min(UserValidationRule.PASSWORD_MINIMUM_LENGTH, {
+				message: UserValidationMessage.PASSWORD_REQUIRE,
+			}),
 	})
 	.required();
 

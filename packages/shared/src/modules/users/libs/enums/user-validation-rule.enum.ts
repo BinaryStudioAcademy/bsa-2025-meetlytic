@@ -4,6 +4,7 @@ const UserValidationRule = {
 	FIRST_NAME_MINIMUM_LENGTH: 1,
 	LAST_NAME_MAXIMUM_LENGTH: 50,
 	LAST_NAME_MINIMUM_LENGTH: 1,
+	PASSWORD_MINIMUM_LENGTH: 1,
 } as const;
 
 export { UserValidationRule };

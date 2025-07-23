@@ -1,6 +1,6 @@
 import reactLogo from "~/assets/img/react.svg";
-import { Link, RouterOutlet } from "~/libs/components/components.js";
-import { AppRoute } from "~/libs/enums/enums.js";
+import { Link, Loader, RouterOutlet } from "~/libs/components/components.js";
+import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -27,6 +27,8 @@ const App: React.FC = () => {
 
 	return (
 		<>
+			<Loader isLoading={dataStatus === DataStatus.PENDING} withOverlay />
+
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 
 			<ul className="App-navigation-list">

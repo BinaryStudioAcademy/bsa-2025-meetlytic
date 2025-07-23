@@ -1,0 +1,35 @@
+.navigation-link {
+	display: flex;
+	gap: 9px;
+	align-items: center;
+	padding: 16px 0;
+	padding-left: 16px;
+	font-family: var(--font-family);
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1.5;
+	color: var(--color-text-1);
+	text-decoration: none;
+	border-radius: 10px;
+	transition: background-color 0.3s ease-in-out;
+}
+
+.navigation-link:hover {
+	background-color: var(--color-background-3);
+}
+
+.active {
+	background-color: var(--color-background-2);
+}
+
+.navigation-link-icon-arrow {
+	align-items: center;
+	margin-left: auto;
+	opacity: 0;
+	transition: opacity 0.3s ease-in-out;
+}
+
+.navigation-link.active .navigation-link-icon-arrow {
+	display: flex;
+	opacity: 1;
+}

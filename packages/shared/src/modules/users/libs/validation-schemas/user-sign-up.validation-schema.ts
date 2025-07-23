@@ -38,7 +38,6 @@ const userSignUp = z
 			.max(UserValidationRule.LAST_NAME_MAXIMUM_LENGTH, {
 				message: UserValidationMessage.LAST_NAME_MAX_LENGTH,
 			}),
-		password: z.string().trim(),
 		password: z
 			.string()
 			.trim()

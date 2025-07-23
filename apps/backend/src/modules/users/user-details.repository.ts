@@ -47,7 +47,12 @@ class UserDetailsRepository implements Repository {
 	public async update(
 		id: number,
 		payload: Partial<Record<string, unknown>>,
-	): Promise<UserDetailsEntity> {
+	): Promise<null | UserDetailsEntity> {
+		const existing = await this.userDetailsModel.query().findById(id);
+		if (!existing) {
+			return null;
+		}
+
 		const updated = await this.userDetailsModel
 			.query()
 			.patchAndFetchById(id, payload);

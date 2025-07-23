@@ -35,7 +35,11 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 								path: AppRoute.ROOT,
 							},
 						],
-						element: <ProtectedRoute />,
+						element: (
+							<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
+								<App />
+							</ProtectedRoute>
+						),
 						path: AppRoute.ROOT,
 					},
 				]}

@@ -12,12 +12,14 @@ import {
 	NAVIGATION_ITEMS,
 } from "~/libs/constants/constants.js";
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
+import { isAppRoute } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppSelector,
 	useEffect,
 	useLocation,
 } from "~/libs/hooks/hooks.js";
+import { AppRouteValues } from "~/libs/types/types.js";
 import { actions as userActions } from "~/modules/users/users.js";
 
 const App: React.FC = () => {
@@ -40,7 +42,10 @@ const App: React.FC = () => {
 		<>
 			<Loader isLoading={dataStatus === DataStatus.PENDING} withOverlay />
 
-			{!HIDDEN_HEADER_ROUTES.includes(pathname) && <Header />}
+			{isAppRoute(pathname) &&
+				!HIDDEN_HEADER_ROUTES.includes(pathname as AppRouteValues) && (
+					<Header />
+				)}
 
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 

@@ -1,5 +1,5 @@
 import { Button, Input, Link } from "~/libs/components/components.js";
-import { AppRoute } from "~/libs/enums/app-route.enum.js";
+import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppForm,
@@ -9,8 +9,8 @@ import {
 import { notification } from "~/libs/modules/notifications/notifications.js";
 import { signIn } from "~/modules/auth/slices/actions.js";
 import { userSignInValidationSchema } from "~/modules/users/users.js";
-import { AuthLayout } from "~/pages/auth/components/auth-layout/auth-layout.js";
 
+import { AuthLayout } from "../auth-layout/auth-layout.js";
 import styles from "./styles.module.css";
 
 type FormValues = {

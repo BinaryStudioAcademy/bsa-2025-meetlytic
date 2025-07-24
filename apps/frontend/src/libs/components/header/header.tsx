@@ -6,8 +6,8 @@ const Header: React.FC = () => {
 	return (
 		<header className={styles["header"]}>
 			<div className={styles["headerInner"]}>
-				<Logo />
-				<Avatar />
+				<Logo hasLink={true} />
+				<Avatar size="avatarSmall" type="avatarMain" />
 			</div>
 		</header>
 	);

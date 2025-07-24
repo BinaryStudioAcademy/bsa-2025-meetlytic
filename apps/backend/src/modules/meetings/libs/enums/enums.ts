@@ -1,1 +1,5 @@
-export { MeetingsApiPath } from "@meetlytic/shared";
+export {
+	MeetingHost,
+	MeetingsApiPath,
+	MeetingStatusMessage,
+} from "@meetlytic/shared";

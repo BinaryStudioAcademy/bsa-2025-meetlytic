@@ -6,12 +6,14 @@ import templateJSON from "./libs/templates/ec2-instance-template.json" with { ty
 
 const {
 	ACCESS_KEY_ID: accessKeyId,
+	AMI_ID: imageId,
 	REGION,
 	SECRET_ACCESS_KEY: secretAccessKey,
 } = config.ENV.AWS;
 
 const ec2 = new CloudFormationEC2({
 	credentials: { accessKeyId, secretAccessKey },
+	imageId,
 	logger,
 	region: REGION,
 	templateBody: JSON.stringify(templateJSON),

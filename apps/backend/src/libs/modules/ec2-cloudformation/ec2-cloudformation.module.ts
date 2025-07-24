@@ -20,23 +20,27 @@ type Constructor = {
 		accessKeyId: string;
 		secretAccessKey: string;
 	};
+	imageId: string;
 	logger: Logger;
 	region: string;
 	templateBody: string;
 };
 
-type CreateEC2Parameters = {
-	imageId: string;
-	meetingId: string;
-};
-
 class CloudFormationEC2 {
 	private client: CloudFormationClient;
+	private imageId: string;
 	private logger: Logger;
 	private templateBody: string;
 
-	constructor({ credentials, logger, region, templateBody }: Constructor) {
+	constructor({
+		credentials,
+		imageId,
+		logger,
+		region,
+		templateBody,
+	}: Constructor) {
 		this.templateBody = templateBody;
+		this.imageId = imageId;
 		this.logger = logger;
 
 		this.client = new CloudFormationClient({
@@ -59,11 +63,11 @@ class CloudFormationEC2 {
 
 		return instanceId;
 	}
-	private getStackName(meetingId: string): string {
-		return `${StackPrefix.MEETLYTIC}-${meetingId}`;
+	private getStackName(meetingId: number): string {
+		return `${StackPrefix.MEETLYTIC}-${String(meetingId)}`;
 	}
 
-	async create({ imageId, meetingId }: CreateEC2Parameters): Promise<string> {
+	async create(meetingId: number): Promise<string> {
 		const stackName = this.getStackName(meetingId);
 
 		this.logger.info(`Creating stack: ${stackName}`);
@@ -71,7 +75,7 @@ class CloudFormationEC2 {
 		const command = new CreateStackCommand({
 			Capabilities: [Capability.NAMED_IAM],
 			Parameters: [
-				{ ParameterKey: ParameterKey.IMAGE_ID, ParameterValue: imageId },
+				{ ParameterKey: ParameterKey.IMAGE_ID, ParameterValue: this.imageId },
 			],
 			StackName: stackName,
 			TemplateBody: this.templateBody,
@@ -91,7 +95,7 @@ class CloudFormationEC2 {
 		return instanceId;
 	}
 
-	async delete(meetingId: string): Promise<void> {
+	async delete(meetingId: number): Promise<void> {
 		const stackName = this.getStackName(meetingId);
 		this.logger.info(`Deleting stack: ${stackName}`);
 
@@ -104,9 +108,6 @@ class CloudFormationEC2 {
 		);
 
 		this.logger.info(`Stack ${stackName} deleted`);
-	}
-	test() {
-		this.logger.info("test CloudFormation");
 	}
 }
 

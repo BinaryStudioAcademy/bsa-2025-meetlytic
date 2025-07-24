@@ -7,7 +7,10 @@ import {
 	RouterOutlet,
 	Sidebar,
 } from "~/libs/components/components.js";
-import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
+import {
+	HIDDEN_HEADER_ROUTES,
+	NAVIGATION_ITEMS,
+} from "~/libs/constants/constants.js";
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -26,7 +29,6 @@ const App: React.FC = () => {
 	}));
 
 	const isRoot = pathname === AppRoute.ROOT;
-	const hiddenHeaderRoutes = [AppRoute.SIGN_IN, AppRoute.SIGN_UP] as string[];
 
 	useEffect(() => {
 		if (isRoot) {
@@ -38,7 +40,7 @@ const App: React.FC = () => {
 		<>
 			<Loader isLoading={dataStatus === DataStatus.PENDING} withOverlay />
 
-			{!hiddenHeaderRoutes.includes(pathname) && <Header />}
+			{!HIDDEN_HEADER_ROUTES.includes(pathname) && <Header />}
 
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 

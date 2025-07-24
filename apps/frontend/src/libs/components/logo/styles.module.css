@@ -1,0 +1,19 @@
+.logo-text {
+	font-weight: 500;
+}
+
+.logo--small {
+	font-size: 23px;
+}
+
+.logo--large {
+	font-size: 85px;
+}
+
+.logo--light {
+	color: white;
+}
+
+.logo--dark {
+	color: var(--color-text-1);
+}

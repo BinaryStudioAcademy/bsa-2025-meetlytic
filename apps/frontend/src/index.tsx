@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import "~/assets/css/styles.css";
 import {
 	App,
+	ProtectedRoute,
 	RouterProvider,
 	StoreProvider,
 	ToastProvider,
@@ -11,8 +12,6 @@ import {
 import { AppRoute } from "~/libs/enums/enums.js";
 import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
-
-import { ProtectedRoute } from "./libs/components/router-provider/protected-route.js";
 
 createRoot(document.querySelector("#root") as HTMLElement).render(
 	<StrictMode>

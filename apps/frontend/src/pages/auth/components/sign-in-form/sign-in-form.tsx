@@ -1,7 +1,10 @@
-import { useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
-
-import { Button, Input } from "~/libs/components/components.js";
+import {
+	Button,
+	Input,
+	Link,
+	useCallback,
+	useNavigate,
+} from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/app-route.enum.js";
 import { useAppDispatch, useAppForm } from "~/libs/hooks/hooks.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
@@ -85,9 +88,9 @@ const SignInForm: React.FC<Properties> = () => {
 
 			<div className={styles["register"]}>
 				Not Registered Yet?{" "}
-				<Link className={styles["create-account"]} to={AppRoute.SIGN_UP}>
-					Create an account
-				</Link>
+				<span className={styles["create-account"]}>
+					<Link to={AppRoute.SIGN_UP}>Create an account</Link>
+				</span>
 			</div>
 		</AuthLayout>
 	);

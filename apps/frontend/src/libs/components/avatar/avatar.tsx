@@ -1,4 +1,4 @@
-import reactLogo from "~/assets/img/react.svg";
+import PlaceholderAvatar from "~/assets/img/icons/placeholder-avatar.svg";
 import { AvatarSize, AvatarType } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { type ValueOf } from "~/libs/types/types.js";
@@ -24,7 +24,7 @@ const Avatar: React.FC<Properties> = ({
 				styles[size],
 				styles[type],
 			)}
-			src={src ?? reactLogo}
+			src={src ?? PlaceholderAvatar}
 		/>
 	);
 };

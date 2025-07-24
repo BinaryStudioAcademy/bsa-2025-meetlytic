@@ -1,1 +1,7 @@
-export { APIPath, AppEnvironment, ServerErrorType } from "@meetlytic/shared";
+export { FastifyHook } from "./fastify-hook.enum.js";
+export {
+	APIPath,
+	AppEnvironment,
+	AuthApiPath,
+	ServerErrorType,
+} from "@meetlytic/shared";

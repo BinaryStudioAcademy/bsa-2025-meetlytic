@@ -1,5 +1,5 @@
 .avatar {
-	border: 2px solid #10add8;
+	border: 2px solid var(--color-brand);
 	border-radius: 50%;
 }
 
@@ -15,7 +15,7 @@
 
 .avatarMain {
 	padding: 3px;
-	border-color: #10add8;
+	border-color: var(--color-brand);
 }
 
 .avatarAlt {

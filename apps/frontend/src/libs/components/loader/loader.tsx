@@ -15,14 +15,16 @@ const Loader: React.FC<Properties> = ({ isLoading, withOverlay = true }) => {
 	}
 
 	return (
-		<div className={getValidClassNames(withOverlay && styles["loaderOverlay"])}>
-			<div className={styles["dotLoader"]}>
+		<div
+			className={getValidClassNames(withOverlay && styles["loader-overlay"])}
+		>
+			<div className={styles["dot-loader"]}>
 				<span className={styles["dot"]} />
 				<span
-					className={getValidClassNames(styles["dot"], styles["dotSecond"])}
+					className={getValidClassNames(styles["dot"], styles["dot-second"])}
 				/>
 				<span
-					className={getValidClassNames(styles["dot"], styles["dotThird"])}
+					className={getValidClassNames(styles["dot"], styles["dot-third"])}
 				/>
 			</div>
 		</div>

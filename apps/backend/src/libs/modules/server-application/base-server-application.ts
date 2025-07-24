@@ -5,7 +5,7 @@ import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { WHITE_ROUTES } from "~/libs/constants/white-routes.constant.js";
+import { WHITE_ROUTES } from "~/libs/constants/constants.js";
 import { ServerErrorType } from "~/libs/enums/enums.js";
 import { type ValidationError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";

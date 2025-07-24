@@ -1,8 +1,10 @@
 import { Avatar, Logo } from "~/libs/components/components.js";
-import { AvatarSize } from "~/libs/enums/avatar-size.enum.js";
-import { AvatarType } from "~/libs/enums/avatar-type.enum.js";
-import { LogoSize } from "~/libs/enums/logo-size.enum.js";
-import { LogoTheme } from "~/libs/enums/logo-theme.enum.js";
+import {
+	AvatarSize,
+	AvatarType,
+	LogoSize,
+	LogoTheme,
+} from "~/libs/enums/enums.js";
 
 import styles from "./styles.module.css";
 

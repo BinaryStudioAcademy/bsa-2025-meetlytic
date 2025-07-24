@@ -8,6 +8,7 @@ import { ec2 } from "~/libs/modules/ec2-cloudformation/ec2-cloudformation.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import {
+	type UserResponseDto,
 	type UserSignInRequestDto,
 	userSignInValidationSchema,
 	type UserSignUpRequestDto,
@@ -24,6 +25,15 @@ class AuthController extends BaseController {
 		super(logger, APIPath.AUTH);
 
 		this.authService = authService;
+
+		this.addRoute({
+			handler: (options) =>
+				this.getAuthenticatedUser(
+					options as APIHandlerOptions<{ user: UserResponseDto }>,
+				),
+			method: "GET",
+			path: AuthApiPath.AUTHENTICATED_USER,
+		});
 
 		this.addRoute({
 			handler: (options) =>
@@ -52,6 +62,41 @@ class AuthController extends BaseController {
 				body: userSignInValidationSchema,
 			},
 		});
+	}
+
+	/**
+	 * @swagger
+	 * /auth/authenticated-user:
+	 *   get:
+	 *     description: Get authenticated user's data
+	 *     responses:
+	 *       200:
+	 *         description: Successful operation
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 message:
+	 *                   type: object
+	 *                   $ref: "#/components/schemas/User"
+	 *       401:
+	 *         description: Unauthorized
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: "#/components/schemas/CommonErrorResponse"
+	 */
+
+	private getAuthenticatedUser(
+		options: APIHandlerOptions<{ user: UserResponseDto }>,
+	): APIHandlerResponse {
+		const { user } = options;
+
+		return {
+			payload: user,
+			status: HTTPCode.OK,
+		};
 	}
 
 	/**

@@ -1,4 +1,4 @@
-import styles from "./auth-layout.module.css";
+import styles from "./styles.module.css";
 
 interface AuthLayoutProperties {
 	children: React.ReactNode;
@@ -10,7 +10,7 @@ const AuthLayout = ({ children }: AuthLayoutProperties) => {
 			<div className={styles["auth-left"]}>
 				<div className={styles["auth-logo"]}>
 					<span className={styles["auth-logo-circle"]} />
-					<span className={styles["auth-logo-text"]}>LOGO</span>
+					<span className={styles["auth-logo-text"]}>Meetlytic</span>
 				</div>
 			</div>
 

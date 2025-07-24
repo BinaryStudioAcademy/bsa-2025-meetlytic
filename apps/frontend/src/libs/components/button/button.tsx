@@ -3,7 +3,7 @@ import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	disabled?: boolean;
+	isDisabled?: boolean;
 	label: string;
 	onClick?: React.MouseEventHandler<HTMLButtonElement>;
 	size?: "default" | "small";
@@ -12,7 +12,7 @@ type Properties = {
 };
 
 const Button: React.FC<Properties> = ({
-	disabled = false,
+	isDisabled,
 	label,
 	onClick,
 	size = "default",
@@ -22,11 +22,11 @@ const Button: React.FC<Properties> = ({
 	<button
 		className={getValidClassNames(
 			styles["button"],
-			styles[`button--${variant}`],
-			size === "small" && styles["button--small"],
-			disabled && styles["button--disabled"],
+			styles[`button-${variant}`],
+			size === "small" && styles["button-small"],
+			isDisabled && styles["button-disabled"],
 		)}
-		disabled={disabled}
+		disabled={isDisabled}
 		onClick={onClick}
 		type={type}
 	>

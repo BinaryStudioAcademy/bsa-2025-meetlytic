@@ -5,17 +5,21 @@ import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { WHITE_ROUTES } from "~/libs/constants/constants.js";
 import { ServerErrorType } from "~/libs/enums/enums.js";
 import { type ValidationError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Database } from "~/libs/modules/database/database.js";
 import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { jwt } from "~/libs/modules/token/token.js";
+import { authorizationPlugin } from "~/libs/plugins/authorization/authorization.plugin.js";
 import {
 	type ServerCommonErrorResponse,
 	type ServerValidationErrorResponse,
 	type ValidationSchema,
 } from "~/libs/types/types.js";
+import { userService } from "~/modules/users/users.js";
 
 import {
 	type ServerApplication,
@@ -142,7 +146,6 @@ class BaseServerApplication implements ServerApplication {
 			},
 			url: path,
 		});
-
 		this.logger.info(`Route: ${method} ${path} is registered`);
 	}
 
@@ -172,7 +175,6 @@ class BaseServerApplication implements ServerApplication {
 				host: this.config.ENV.APP.HOST,
 				port: this.config.ENV.APP.PORT,
 			});
-
 			this.logger.info(
 				`Application is listening on PORT – ${this.config.ENV.APP.PORT.toString()}, on ENVIRONMENT – ${
 					this.config.ENV.APP.ENVIRONMENT as string
@@ -211,6 +213,16 @@ class BaseServerApplication implements ServerApplication {
 				});
 			}),
 		);
+
+		await this.app.register(authorizationPlugin, {
+			routesWhiteList: WHITE_ROUTES,
+			services: {
+				config: this.config,
+				jwt,
+				logger: this.logger,
+				userService,
+			},
+		});
 	}
 
 	public initRoutes(): void {

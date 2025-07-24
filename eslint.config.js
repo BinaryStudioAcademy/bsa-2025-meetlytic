@@ -76,8 +76,12 @@ const importConfig = {
 		"import/exports-last": ["error"],
 		"import/extensions": [
 			"error",
+			"ignorePackages",
 			{
-				js: "ignorePackages",
+				js: "always",
+				json: "always",
+				ts: "never",
+				tsx: "never",
 			},
 		],
 		"import/newline-after-import": ["error"],

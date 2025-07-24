@@ -4,7 +4,7 @@
 	font-family: var(--font-family);
 }
 
-.auth__left {
+.authLeft {
 	display: flex;
 	flex: 1;
 	align-items: center;
@@ -12,7 +12,7 @@
 	background-color: var(--color-background-1);
 }
 
-.auth__logo {
+.authLogo {
 	display: flex;
 	gap: 10px;
 	align-items: center;
@@ -21,21 +21,21 @@
 	color: white;
 }
 
-.auth__logo-text {
+.authLogoText {
 	font-size: 85px;
 	font-weight: 600;
 	line-height: 1.4;
 	letter-spacing: 3.05px;
 }
 
-.auth__logo-circle {
+.authLogoCircle {
 	width: 67px;
 	height: 67px;
 	background-color: var(--color-brand);
 	border-radius: 50%;
 }
 
-.auth__right {
+.authRight {
 	display: flex;
 	flex: 1;
 	align-items: center;
@@ -44,7 +44,7 @@
 	background-color: var(--color-background-1);
 }
 
-.auth__form-wrapper {
+.authFormWrapper {
 	position: relative;
 	display: flex;
 	flex-direction: column;

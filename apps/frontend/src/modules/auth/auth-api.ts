@@ -5,6 +5,7 @@ import { type Storage } from "~/libs/modules/storage/storage.js";
 import {
 	type AuthResponseDto,
 	type UserSignUpRequestDto,
+	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
 
 import { AuthApiPath } from "./libs/enums/enums.js";
@@ -33,7 +34,9 @@ class AuthApi extends BaseHTTPApi {
 		return await response.json<AuthResponseDto>();
 	}
 
-	public async signUp(payload: UserSignUpRequestDto): Promise<AuthResponseDto> {
+	public async signUp(
+		payload: UserSignUpRequestDto,
+	): Promise<UserSignUpResponseDto> {
 		const response = await this.load(
 			this.getFullEndpoint(AuthApiPath.SIGN_UP, {}),
 			{
@@ -44,7 +47,7 @@ class AuthApi extends BaseHTTPApi {
 			},
 		);
 
-		return await response.json<AuthResponseDto>();
+		return await response.json<UserSignUpResponseDto>();
 	}
 }
 

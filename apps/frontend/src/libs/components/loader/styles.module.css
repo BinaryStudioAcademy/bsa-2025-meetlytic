@@ -1,4 +1,4 @@
-.loaderOverlay {
+.loader-overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -12,7 +12,7 @@
 	backdrop-filter: blur(0);
 }
 
-.dotLoader {
+.dot-loader {
 	display: flex;
 	gap: 8px;
 }
@@ -25,11 +25,11 @@
 	animation: bounce 1.2s infinite ease-in-out both;
 }
 
-.dotSecond {
+.dot-second {
 	animation-delay: 0.2s;
 }
 
-.dotThird {
+.dot-third {
 	animation-delay: 0.4s;
 }
 

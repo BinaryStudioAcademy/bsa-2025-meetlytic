@@ -1,0 +1,43 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Parameters": {
+		"ImageId": {
+			"Type": "String"
+		},
+		"SecurityGroupId": {
+			"Type": "String"
+		}
+	},
+	"Resources": {
+		"EC2Instance": {
+			"Type": "AWS::EC2::Instance",
+			"Properties": {
+				"ImageId": {
+					"Ref": "ImageId"
+				},
+				"InstanceType": "t3.micro",
+				"SecurityGroupIds": [
+					{
+						"Ref": "SecurityGroupId"
+					}
+				],
+				"Tags": [
+					{
+						"Key": "Name",
+						"Value": "MeetlyticEC2"
+					}
+				]
+			}
+		}
+	},
+	"Outputs": {
+		"InstanceId": {
+			"Value": {
+				"Ref": "EC2Instance"
+			},
+			"Export": {
+				"Name": "InstanceId"
+			}
+		}
+	}
+}

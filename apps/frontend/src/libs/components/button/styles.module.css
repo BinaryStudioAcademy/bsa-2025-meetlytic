@@ -1,5 +1,6 @@
 .button {
 	display: flex;
+	gap: 8px;
 	align-items: center;
 	justify-content: center;
 	width: 100%;
@@ -30,6 +31,7 @@
 }
 
 .button-small {
+	gap: 4px;
 	min-width: 123px;
 	height: 36px;
 	padding-block: 6.5px;

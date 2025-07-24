@@ -1,36 +1,48 @@
+import {
+	type ButtonSize,
+	ButtonSizeEnum,
+	type ButtonVariant,
+	ButtonVariantEnum,
+} from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
+	iconLeft?: React.ReactNode;
+	iconRight?: React.ReactNode;
 	isDisabled?: boolean;
 	label: string;
 	onClick?: React.MouseEventHandler<HTMLButtonElement>;
-	size?: "default" | "small";
+	size?: ButtonSize;
 	type?: "button" | "submit";
-	variant?: "outlined" | "primary";
+	variant?: ButtonVariant;
 };
 
 const Button: React.FC<Properties> = ({
-	isDisabled,
+	iconLeft,
+	iconRight,
+	isDisabled = false,
 	label,
 	onClick,
-	size = "default",
+	size = ButtonSizeEnum.DEFAULT,
 	type = "button",
-	variant = "primary",
+	variant = ButtonVariantEnum.PRIMARY,
 }: Properties) => (
 	<button
 		className={getValidClassNames(
 			styles["button"],
 			styles[`button-${variant}`],
-			size === "small" && styles["button-small"],
+			styles[`button-${size}`],
 			isDisabled && styles["button-disabled"],
 		)}
 		disabled={isDisabled}
 		onClick={onClick}
 		type={type}
 	>
-		{label}
+		{iconLeft}
+		<span>{label}</span>
+		{iconRight}
 	</button>
 );
 

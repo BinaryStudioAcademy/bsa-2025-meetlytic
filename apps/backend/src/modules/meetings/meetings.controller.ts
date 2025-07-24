@@ -18,11 +18,50 @@ import {
 } from "./libs/validation-schemas/validation-schemas.js";
 import { type MeetingService } from "./meeting.service.js";
 
-type ExtendedHandlerOptions<
-	T extends { body?: unknown; params?: unknown; query?: unknown },
-> = APIHandlerOptions<T> & {
-	user: { id: number };
-};
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Meeting:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *         host:
+ *           type: string
+ *         instanceId:
+ *           type: string
+ *           nullable: true
+ *         ownerId:
+ *           type: number
+ *     MeetingCreateRequest:
+ *       type: object
+ *       required:
+ *         - host
+ *         - ownerId
+ *       properties:
+ *         host:
+ *           type: string
+ *         instanceId:
+ *           type: string
+ *           nullable: true
+ *         ownerId:
+ *           type: number
+ *     MeetingUpdateRequest:
+ *       type: object
+ *       required:
+ *         - host
+ *         - instanceId
+ *         - ownerId
+ *       properties:
+ *         host:
+ *           type: string
+ *         instanceId:
+ *           type: string
+ *           nullable: true
+ *         ownerId:
+ *           type: number
+ */
 
 class MeetingsController extends BaseController {
 	private meetingService: MeetingService;
@@ -33,141 +72,210 @@ class MeetingsController extends BaseController {
 
 		this.addRoute({
 			handler: (options) =>
-				this.findAll(
-					options as unknown as ExtendedHandlerOptions<{
-						body?: undefined;
-						params?: undefined;
-						query?: undefined;
-					}>,
-				),
+				this.findAll(options as APIHandlerOptions & { user: { id: number } }),
 			method: "GET",
 			path: MeetingsApiPath.ROOT,
 		});
+		/**
+		 * @swagger
+		 * /meetings:
+		 *   get:
+		 *     summary: Get all meetings owned by the user
+		 *     responses:
+		 *       200:
+		 *         description: List of meetings
+		 *         content:
+		 *           application/json:
+		 *             schema:
+		 *               type: array
+		 *               items:
+		 *                 $ref: "#/components/schemas/Meeting"
+		 */
 
 		this.addRoute({
 			handler: (options) =>
 				this.find(
-					options as unknown as ExtendedHandlerOptions<{
-						body?: undefined;
-						params: { id: string };
-						query?: undefined;
-					}>,
+					options as APIHandlerOptions<{ params: { id: string } }> & {
+						user: { id: number };
+					},
 				),
 			method: "GET",
 			path: MeetingsApiPath.$ID,
 		});
+		/**
+		 * @swagger
+		 * /meetings/{id}:
+		 *   get:
+		 *     summary: Get a meeting by ID
+		 *     parameters:
+		 *       - in: path
+		 *         name: id
+		 *         schema:
+		 *           type: number
+		 *         required: true
+		 *     responses:
+		 *       200:
+		 *         description: Meeting data
+		 *         content:
+		 *           application/json:
+		 *             schema:
+		 *               $ref: "#/components/schemas/Meeting"
+		 */
 
 		this.addRoute({
 			handler: (options) =>
 				this.create(
-					options as unknown as ExtendedHandlerOptions<{
-						body: MeetingCreateRequestDto;
-						params?: undefined;
-						query?: undefined;
-					}>,
+					options as APIHandlerOptions<{ body: MeetingCreateRequestDto }> & {
+						user: { id: number };
+					},
 				),
 			method: "POST",
 			path: MeetingsApiPath.ROOT,
 			validation: { body: meetingCreateValidationSchema },
 		});
+		/**
+		 * @swagger
+		 * /meetings:
+		 *   post:
+		 *     summary: Create a new meeting
+		 *     requestBody:
+		 *       required: true
+		 *       content:
+		 *         application/json:
+		 *           schema:
+		 *             $ref: "#/components/schemas/MeetingCreateRequest"
+		 *     responses:
+		 *       201:
+		 *         description: Meeting created
+		 *         content:
+		 *           application/json:
+		 *             schema:
+		 *               $ref: "#/components/schemas/Meeting"
+		 */
 
 		this.addRoute({
 			handler: (options) =>
 				this.update(
-					options as unknown as ExtendedHandlerOptions<{
+					options as APIHandlerOptions<{
 						body: MeetingUpdateRequestDto;
 						params: { id: string };
-						query?: undefined;
-					}>,
+					}> & {
+						user: { id: number };
+					},
 				),
 			method: "PATCH",
 			path: MeetingsApiPath.$ID,
 			validation: { body: meetingUpdateValidationSchema },
 		});
+		/**
+		 * @swagger
+		 * /meetings/{id}:
+		 *   patch:
+		 *     summary: Update a meeting by ID
+		 *     parameters:
+		 *       - in: path
+		 *         name: id
+		 *         schema:
+		 *           type: number
+		 *         required: true
+		 *     requestBody:
+		 *       required: true
+		 *       content:
+		 *         application/json:
+		 *           schema:
+		 *             $ref: "#/components/schemas/MeetingUpdateRequest"
+		 *     responses:
+		 *       200:
+		 *         description: Meeting updated
+		 *         content:
+		 *           application/json:
+		 *             schema:
+		 *               $ref: "#/components/schemas/Meeting"
+		 */
 
 		this.addRoute({
 			handler: (options) =>
 				this.delete(
-					options as unknown as ExtendedHandlerOptions<{
-						body?: undefined;
-						params: { id: string };
-						query?: undefined;
-					}>,
+					options as APIHandlerOptions<{ params: { id: string } }> & {
+						user: { id: number };
+					},
 				),
 			method: "DELETE",
 			path: MeetingsApiPath.$ID,
 		});
+		/**
+		 * @swagger
+		 * /meetings/{id}:
+		 *   delete:
+		 *     summary: Delete a meeting by ID
+		 *     parameters:
+		 *       - in: path
+		 *         name: id
+		 *         schema:
+		 *           type: number
+		 *         required: true
+		 *     responses:
+		 *       204:
+		 *         description: Meeting deleted
+		 */
 	}
 
 	private async create(
-		options: ExtendedHandlerOptions<{ body: MeetingCreateRequestDto }>,
+		options: APIHandlerOptions<{ body: MeetingCreateRequestDto }> & {
+			user: { id: number };
+		},
 	): Promise<APIHandlerResponse> {
-		const created = await this.meetingService.create(options.body);
+		const created = await this.meetingService.create({
+			...options.body,
+			ownerId: options.user.id,
+		});
+
 		return { payload: created, status: HTTPCode.CREATED };
 	}
 
 	private async delete(
-		options: ExtendedHandlerOptions<{ params: { id: string } }>,
+		options: APIHandlerOptions<{ params: { id: string } }> & {
+			user: { id: number };
+		},
 	): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
-		const existing = await this.meetingService.find(id);
-
-		if (existing.ownerId !== options.user.id) {
-			return {
-				payload: { message: "Access denied" },
-				status: HTTPCode.FORBIDDEN,
-			};
-		}
-
-		await this.meetingService.delete(id);
+		await this.meetingService.delete(id, options.user.id);
 		return { payload: null, status: HTTPCode.NO_CONTENT };
 	}
 
 	private async find(
-		options: ExtendedHandlerOptions<{ params: { id: string } }>,
+		options: APIHandlerOptions<{ params: { id: string } }> & {
+			user: { id: number };
+		},
 	): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
-		const meeting = await this.meetingService.find(id);
-
-		if (meeting.ownerId !== options.user.id) {
-			return {
-				payload: { message: "Access denied" },
-				status: HTTPCode.FORBIDDEN,
-			};
-		}
+		const meeting = await this.meetingService["find"](id, options.user.id);
 
 		return { payload: meeting, status: HTTPCode.OK };
 	}
 
 	private async findAll(
-		options: ExtendedHandlerOptions<{
-			body?: undefined;
-			params?: undefined;
-			query?: undefined;
-		}>,
+		options: APIHandlerOptions & { user: { id: number } },
 	): Promise<APIHandlerResponse> {
-		const all = await this.meetingService.findAll();
-		const filtered = all.items.filter((m) => m.ownerId === options.user.id);
-		return { payload: { items: filtered }, status: HTTPCode.OK };
+		const all = await this.meetingService.findAll(options.user.id);
+		return { payload: all, status: HTTPCode.OK };
 	}
 
 	private async update(
-		options: ExtendedHandlerOptions<{
+		options: APIHandlerOptions<{
 			body: MeetingUpdateRequestDto;
 			params: { id: string };
-		}>,
+		}> & {
+			user: { id: number };
+		},
 	): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
-		const existing = await this.meetingService.find(id);
+		const payload = {
+			...options.body,
+			ownerId: options.user.id,
+		};
 
-		if (existing.ownerId !== options.user.id) {
-			return {
-				payload: { message: "Access denied" },
-				status: HTTPCode.FORBIDDEN,
-			};
-		}
-
-		const updated = await this.meetingService.update(id, options.body);
+		const updated = await this.meetingService.update(id, payload);
 		return { payload: updated, status: HTTPCode.OK };
 	}
 }

@@ -10,7 +10,7 @@
 	font-weight: 700;
 	line-height: 1;
 	cursor: pointer;
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius-sm);
 	transition:
 		background-color 0.3s ease-in-out,
 		border-color 0.3s ease-in-out,
@@ -33,7 +33,7 @@
 	min-width: 123px;
 	height: 36px;
 	padding-block: 6.5px;
-	border-radius: 8px;
+	border-radius: var(--border-radius-md);
 }
 
 .button-primary:hover {

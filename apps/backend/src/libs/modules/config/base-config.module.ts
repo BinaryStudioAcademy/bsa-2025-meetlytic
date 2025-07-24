@@ -50,6 +50,32 @@ class BaseConfig implements Config {
 					format: Number,
 				},
 			},
+			AWS: {
+				ACCESS_KEY_ID: {
+					default: null,
+					doc: "AWS Access Key ID",
+					env: "ACCESS_KEY_ID",
+					format: String,
+				},
+				AMI_ID: {
+					default: null,
+					doc: "AWS AMI ID",
+					env: "AMI_ID",
+					format: String,
+				},
+				SECRET_ACCESS_KEY: {
+					default: null,
+					doc: "AWS Secret Access Key",
+					env: "SECRET_ACCESS_KEY",
+					format: String,
+				},
+				SECURITY_GROUP_ID: {
+					default: null,
+					doc: "AWS Security Group ID",
+					env: "SECURITY_GROUP_ID",
+					format: String,
+				},
+			},
 			DB: {
 				CONNECTION_STRING: {
 					default: null,

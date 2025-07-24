@@ -7,6 +7,12 @@ type EnvironmentSchema = {
 		HOST: string;
 		PORT: number;
 	};
+	AWS: {
+		ACCESS_KEY_ID: string;
+		AMI_ID: string;
+		SECRET_ACCESS_KEY: string;
+		SECURITY_GROUP_ID: string;
+	};
 	DB: {
 		CONNECTION_STRING: string;
 		DIALECT: string;

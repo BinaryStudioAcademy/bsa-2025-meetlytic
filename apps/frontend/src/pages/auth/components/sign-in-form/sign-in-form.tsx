@@ -9,7 +9,7 @@ import { signIn } from "~/modules/auth/slices/actions.js";
 import { userSignInValidationSchema } from "~/modules/users/users.js";
 import { AuthLayout } from "~/pages/auth/components/auth-layout/auth-layout.js";
 
-import "./sign-in-form.css";
+import styles from "./sign-in-form.module.css";
 
 type FormValues = {
 	email: string;
@@ -56,9 +56,9 @@ const SignInForm: React.FC<Properties> = () => {
 
 	return (
 		<AuthLayout>
-			<h2 className="title">Login to your Account</h2>
+			<h2 className={styles["title"]}>Login to your Account</h2>
 
-			<form className="login-form" onSubmit={handleFormSubmit}>
+			<form className={styles["loginForm"]} onSubmit={handleFormSubmit}>
 				<Input
 					control={control}
 					errors={errors}
@@ -76,12 +76,16 @@ const SignInForm: React.FC<Properties> = () => {
 					type="password"
 				/>
 
-				<Button className="sign-in-btn" label="Login" type="submit" />
+				<Button
+					className={styles["signInBtn"] || ""}
+					label="Login"
+					type="submit"
+				/>
 			</form>
 
-			<div className="register">
+			<div className={styles["register"]}>
 				Not Registered Yet?{" "}
-				<Link className="create-account" to={AppRoute.SIGN_UP}>
+				<Link className={styles["createAccount"]} to={AppRoute.SIGN_UP}>
 					Create an account
 				</Link>
 			</div>

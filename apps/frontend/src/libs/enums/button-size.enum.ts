@@ -1,9 +1,9 @@
-const ButtonSizeEnum = {
+const BUTTON_SIZE = {
 	DEFAULT: "default",
 	SMALL: "small",
 } as const;
 
-type ButtonSize = (typeof ButtonSizeEnum)[keyof typeof ButtonSizeEnum];
+type ButtonSize = (typeof BUTTON_SIZE)[keyof typeof BUTTON_SIZE];
 
-export { ButtonSizeEnum };
+export { BUTTON_SIZE };
 export type { ButtonSize };

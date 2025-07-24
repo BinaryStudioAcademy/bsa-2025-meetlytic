@@ -1,8 +1,8 @@
 import {
+	BUTTON_SIZE,
+	BUTTON_VARIANT,
 	type ButtonSize,
-	ButtonSizeEnum,
 	type ButtonVariant,
-	ButtonVariantEnum,
 } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
 
@@ -25,9 +25,9 @@ const Button: React.FC<Properties> = ({
 	isDisabled = false,
 	label,
 	onClick,
-	size = ButtonSizeEnum.DEFAULT,
+	size = BUTTON_SIZE.DEFAULT,
 	type = "button",
-	variant = ButtonVariantEnum.PRIMARY,
+	variant = BUTTON_VARIANT.PRIMARY,
 }: Properties) => (
 	<button
 		className={getValidClassNames(

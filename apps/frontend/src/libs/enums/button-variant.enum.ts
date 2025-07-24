@@ -1,9 +1,9 @@
-const ButtonVariantEnum = {
+const BUTTON_VARIANT = {
 	OUTLINED: "outlined",
 	PRIMARY: "primary",
 } as const;
 
-type ButtonVariant = (typeof ButtonVariantEnum)[keyof typeof ButtonVariantEnum];
+type ButtonVariant = (typeof BUTTON_VARIANT)[keyof typeof BUTTON_VARIANT];
 
-export { ButtonVariantEnum };
+export { BUTTON_VARIANT };
 export type { ButtonVariant };

@@ -7,6 +7,7 @@ export {
 export {
 	AuthError,
 	HTTPError,
+	MeetingError,
 	ValidationError,
 } from "./libs/exceptions/exceptions.js";
 export { configureString } from "./libs/helpers/helpers.js";
@@ -28,11 +29,14 @@ export {
 	type ValueOf,
 } from "./libs/types/types.js";
 export { AuthApiPath } from "./modules/auth/auth.js";
-export { MeetingsApiPath } from "./modules/meetings/meetings.js";
+export {
+	MeetingHost,
+	MeetingsApiPath,
+	MeetingStatusMessage,
+} from "./modules/meetings/meetings.js";
 export {
 	type MeetingCreateRequestDto,
 	type MeetingGetAllResponseDto,
-	type MeetingHostValue,
 	type MeetingResponseDto,
 	type MeetingUpdateRequestDto,
 } from "./modules/meetings/meetings.js";

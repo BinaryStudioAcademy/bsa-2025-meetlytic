@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { WHITE_ROUTES } from "~/libs/constants/white-routes.constant.js";
-import { FastifyDecorator, ServerErrorType } from "~/libs/enums/enums.js";
+import { ServerErrorType } from "~/libs/enums/enums.js";
 import { type ValidationError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Database } from "~/libs/modules/database/database.js";
@@ -62,8 +62,6 @@ class BaseServerApplication implements ServerApplication {
 		this.app = Fastify({
 			ignoreTrailingSlash: true,
 		});
-
-		this.app.decorate(FastifyDecorator.API_VERSIONS, new Set<string>());
 	}
 
 	private initErrorHandler(): void {
@@ -213,8 +211,6 @@ class BaseServerApplication implements ServerApplication {
 				await this.app.register(swaggerUi, {
 					routePrefix: `${api.version}/documentation`,
 				});
-
-				this.app[FastifyDecorator.API_VERSIONS].add(api.version);
 			}),
 		);
 
@@ -222,9 +218,9 @@ class BaseServerApplication implements ServerApplication {
 			routesWhiteList: WHITE_ROUTES,
 			services: {
 				config: this.config,
-				jwt: jwt,
+				jwt,
 				logger: this.logger,
-				userService: userService,
+				userService,
 			},
 		});
 	}

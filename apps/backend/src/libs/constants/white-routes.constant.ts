@@ -1,4 +1,4 @@
-import { APIPath, AuthApiPath } from "@meetlytic/shared";
+import { APIPath, AuthApiPath } from "~/libs/enums/enums.js";
 
 import { type WhiteRoute } from "./libs/types/types.js";
 

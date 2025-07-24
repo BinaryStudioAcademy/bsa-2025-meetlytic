@@ -28,7 +28,6 @@ type Constructor = {
 type CreateEC2Parameters = {
 	imageId: string;
 	meetingId: string;
-	securityGroupId: string;
 };
 
 class CloudFormationEC2 {
@@ -64,11 +63,7 @@ class CloudFormationEC2 {
 		return `${StackPrefix.MEETLYTIC}-${meetingId}`;
 	}
 
-	async create({
-		imageId,
-		meetingId,
-		securityGroupId,
-	}: CreateEC2Parameters): Promise<string> {
+	async create({ imageId, meetingId }: CreateEC2Parameters): Promise<string> {
 		const stackName = this.getStackName(meetingId);
 
 		this.logger.info(`Creating stack: ${stackName}`);
@@ -77,10 +72,6 @@ class CloudFormationEC2 {
 			Capabilities: [Capability.NAMED_IAM],
 			Parameters: [
 				{ ParameterKey: ParameterKey.IMAGE_ID, ParameterValue: imageId },
-				{
-					ParameterKey: ParameterKey.SECURITY_GROUP_ID,
-					ParameterValue: securityGroupId,
-				},
 			],
 			StackName: stackName,
 			TemplateBody: this.templateBody,

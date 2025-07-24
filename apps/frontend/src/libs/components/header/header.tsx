@@ -10,7 +10,7 @@ const Header: React.FC = () => {
 	return (
 		<header className={styles["header"]}>
 			<div className={styles["header-inner"]}>
-				<Logo hasLink={true} size={LogoSize.SMALL} theme={LogoTheme.LIGHT} />
+				<Logo hasLink size={LogoSize.SMALL} theme={LogoTheme.LIGHT} />
 				<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
 			</div>
 		</header>

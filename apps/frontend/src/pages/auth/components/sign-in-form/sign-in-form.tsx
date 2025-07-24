@@ -1,12 +1,11 @@
+import { Button, Input, Link } from "~/libs/components/components.js";
+import { AppRoute } from "~/libs/enums/app-route.enum.js";
 import {
-	Button,
-	Input,
-	Link,
+	useAppDispatch,
+	useAppForm,
 	useCallback,
 	useNavigate,
-} from "~/libs/components/components.js";
-import { AppRoute } from "~/libs/enums/app-route.enum.js";
-import { useAppDispatch, useAppForm } from "~/libs/hooks/hooks.js";
+} from "~/libs/hooks/hooks.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
 import { signIn } from "~/modules/auth/slices/actions.js";
 import { userSignInValidationSchema } from "~/modules/users/users.js";
@@ -35,7 +34,7 @@ const SignInForm: React.FC<Properties> = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 
-	const submitHandler = useCallback(
+	const handleSignIn = useCallback(
 		async (data: FormValues) => {
 			await dispatch(signIn(data)).unwrap();
 			notification.success("Successfully signed in!");
@@ -43,18 +42,18 @@ const SignInForm: React.FC<Properties> = () => {
 		},
 		[dispatch, navigate],
 	);
-	const onFormSubmit = useCallback(
+	const handleSubmitForm = useCallback(
 		(data: FormValues) => {
-			void submitHandler(data);
+			void handleSignIn(data);
 		},
-		[submitHandler],
+		[handleSignIn],
 	);
 
 	const handleFormSubmit = useCallback(
 		(event: React.FormEvent<HTMLFormElement>) => {
-			void handleSubmit(onFormSubmit)(event);
+			void handleSubmit(handleSubmitForm)(event);
 		},
-		[handleSubmit, onFormSubmit],
+		[handleSubmit, handleSubmitForm],
 	);
 
 	return (

@@ -1,4 +1,4 @@
-import "./auth-layout.css";
+import styles from "./auth-layout.module.css";
 
 interface AuthLayoutProperties {
 	children: React.ReactNode;
@@ -6,16 +6,16 @@ interface AuthLayoutProperties {
 
 const AuthLayout = ({ children }: AuthLayoutProperties) => {
 	return (
-		<div className="auth">
-			<div className="auth__left">
-				<div className="auth__logo">
-					<span className="auth__logo-circle" />
-					<span className="auth__logo-text">LOGO</span>
+		<div className={styles["auth"]}>
+			<div className={styles["auth__left"]}>
+				<div className={styles["auth__logo"]}>
+					<span className={styles["auth__logo-circle"]} />
+					<span className={styles["auth__logo-text"]}>LOGO</span>
 				</div>
 			</div>
 
-			<div className="auth__right">
-				<div className="auth__form-wrapper">{children}</div>
+			<div className={styles["auth__right"]}>
+				<div className={styles["auth__form-wrapper"]}>{children}</div>
 			</div>
 		</div>
 	);

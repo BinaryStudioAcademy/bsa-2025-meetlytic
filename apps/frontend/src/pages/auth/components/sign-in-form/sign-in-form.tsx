@@ -1,10 +1,12 @@
 import { useCallback } from "react";
-import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Button, Input } from "~/libs/components/components.js";
-import { useAppDispatch } from "~/libs/hooks/hooks.js";
+import { AppRoute } from "~/libs/enums/app-route.enum.js";
+import { useAppDispatch, useAppForm } from "~/libs/hooks/hooks.js";
+import { notification } from "~/libs/modules/notifications/notifications.js";
 import { signIn } from "~/modules/auth/slices/actions.js";
+import { userSignInValidationSchema } from "~/modules/users/users.js";
 import { AuthLayout } from "~/pages/auth/components/auth-layout/auth-layout.js";
 
 import "./sign-in-form.css";
@@ -19,16 +21,12 @@ type Properties = {
 };
 
 const SignInForm: React.FC<Properties> = () => {
-	const {
-		control,
-		formState: { errors },
-		handleSubmit,
-	} = useForm<FormValues>({
+	const { control, errors, handleSubmit } = useAppForm<FormValues>({
 		defaultValues: {
 			email: "",
 			password: "",
 		},
-		mode: "onTouched",
+		validationSchema: userSignInValidationSchema,
 	});
 
 	const dispatch = useAppDispatch();
@@ -36,19 +34,14 @@ const SignInForm: React.FC<Properties> = () => {
 
 	const submitHandler = useCallback(
 		async (data: FormValues) => {
-			try {
-				await dispatch(signIn(data)).unwrap();
-				await navigate("/");
-			} catch (error) {
-				// eslint-disable-next-line no-console
-				console.error("Login failed:", error);
-			}
+			await dispatch(signIn(data)).unwrap();
+			notification.success("Successfully signed in!");
+			await navigate("/");
 		},
 		[dispatch, navigate],
 	);
 	const onFormSubmit = useCallback(
 		(data: FormValues) => {
-			// Явно позначаємо Promise як ignored з void
 			void submitHandler(data);
 		},
 		[submitHandler],
@@ -80,7 +73,7 @@ const SignInForm: React.FC<Properties> = () => {
 					label="Password"
 					name="password"
 					placeholder="********"
-					type="text"
+					type="password"
 				/>
 
 				<Button className="sign-in-btn" label="Login" type="submit" />
@@ -88,7 +81,7 @@ const SignInForm: React.FC<Properties> = () => {
 
 			<div className="register">
 				Not Registered Yet?{" "}
-				<Link className="create-account" to="/sign-up">
+				<Link className="create-account" to={AppRoute.SIGN_UP}>
 					Create an account
 				</Link>
 			</div>

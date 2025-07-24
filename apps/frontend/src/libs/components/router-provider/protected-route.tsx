@@ -1,16 +1,16 @@
-import { ValueOf } from "@meetlytic/shared";
 import { FC, ReactNode } from "react";
-import { Navigate, useLocation } from "react-router-dom";
 
+import { Navigate } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import { useAppSelector } from "~/libs/hooks/hooks.js";
+import { useAppSelector, useLocation } from "~/libs/hooks/hooks.js";
+import { ValueOf } from "~/libs/types/types.js";
 
-type Propertis = {
+type Properties = {
 	children: ReactNode;
 	redirectTo: ValueOf<typeof AppRoute>;
 };
 
-const ProtectedRoute: FC<Propertis> = ({
+const ProtectedRoute: FC<Properties> = ({
 	children,
 	redirectTo = AppRoute.SIGN_IN,
 }) => {

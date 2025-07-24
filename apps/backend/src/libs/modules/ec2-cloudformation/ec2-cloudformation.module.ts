@@ -16,10 +16,12 @@ import {
 } from "./libs/enums/enums.js";
 
 type Constructor = {
-	accessKeyId: string;
+	credentials: {
+		accessKeyId: string;
+		secretAccessKey: string;
+	};
 	logger: Logger;
 	region: string;
-	secretAccessKey: string;
 	templateBody: string;
 };
 
@@ -30,32 +32,23 @@ type CreateEC2Parameters = {
 };
 
 class CloudFormationEC2 {
-	#client: CloudFormationClient;
-	#logger: Logger;
-	#templateBody: string;
+	private client: CloudFormationClient;
+	private logger: Logger;
+	private templateBody: string;
 
-	constructor({
-		accessKeyId,
-		logger,
-		region,
-		secretAccessKey,
-		templateBody,
-	}: Constructor) {
-		this.#templateBody = templateBody;
-		this.#logger = logger;
+	constructor({ credentials, logger, region, templateBody }: Constructor) {
+		this.templateBody = templateBody;
+		this.logger = logger;
 
-		this.#client = new CloudFormationClient({
-			credentials: {
-				accessKeyId: accessKeyId,
-				secretAccessKey: secretAccessKey,
-			},
+		this.client = new CloudFormationClient({
+			credentials,
 			region,
 		});
 	}
 
-	async #getInstanceIdFromStack(stackName: string): Promise<string> {
+	private async getInstanceIdFromStack(stackName: string): Promise<string> {
 		const describeCommand = new DescribeStacksCommand({ StackName: stackName });
-		const { Stacks } = await this.#client.send(describeCommand);
+		const { Stacks } = await this.client.send(describeCommand);
 		const stack = Stacks?.find((stack) => stack.StackName === stackName);
 		const instanceId = stack?.Outputs?.find(
 			(output) => output.OutputKey === OutputKey.INSTANCE_ID,
@@ -67,7 +60,7 @@ class CloudFormationEC2 {
 
 		return instanceId;
 	}
-	#getStackName(meetingId: string): string {
+	private getStackName(meetingId: string): string {
 		return `${StackPrefix.MEETLYTIC}-${meetingId}`;
 	}
 
@@ -76,9 +69,9 @@ class CloudFormationEC2 {
 		meetingId,
 		securityGroupId,
 	}: CreateEC2Parameters): Promise<string> {
-		const stackName = this.#getStackName(meetingId);
+		const stackName = this.getStackName(meetingId);
 
-		this.#logger.info(`Creating stack: ${stackName}`);
+		this.logger.info(`Creating stack: ${stackName}`);
 
 		const command = new CreateStackCommand({
 			Capabilities: [Capability.NAMED_IAM],
@@ -90,17 +83,17 @@ class CloudFormationEC2 {
 				},
 			],
 			StackName: stackName,
-			TemplateBody: this.#templateBody,
+			TemplateBody: this.templateBody,
 		});
 
-		await this.#client.send(command);
+		await this.client.send(command);
 
 		await waitUntilStackCreateComplete(
-			{ client: this.#client, maxWaitTime: 300 },
+			{ client: this.client, maxWaitTime: 300 },
 			{ StackName: stackName },
 		);
-		const instanceId = await this.#getInstanceIdFromStack(stackName);
-		this.#logger.info(
+		const instanceId = await this.getInstanceIdFromStack(stackName);
+		this.logger.info(
 			`Stack ${stackName} created with InstanceId: ${instanceId}`,
 		);
 
@@ -108,21 +101,21 @@ class CloudFormationEC2 {
 	}
 
 	async delete(meetingId: string): Promise<void> {
-		const stackName = this.#getStackName(meetingId);
-		this.#logger.info(`Deleting stack: ${stackName}`);
+		const stackName = this.getStackName(meetingId);
+		this.logger.info(`Deleting stack: ${stackName}`);
 
 		const command = new DeleteStackCommand({ StackName: stackName });
-		await this.#client.send(command);
+		await this.client.send(command);
 
 		await waitUntilStackDeleteComplete(
-			{ client: this.#client, maxWaitTime: 300 },
+			{ client: this.client, maxWaitTime: 300 },
 			{ StackName: stackName },
 		);
 
-		this.#logger.info(`Stack ${stackName} deleted`);
+		this.logger.info(`Stack ${stackName} deleted`);
 	}
 	test() {
-		this.#logger.info("test CloudFormation");
+		this.logger.info("test CloudFormation");
 	}
 }
 

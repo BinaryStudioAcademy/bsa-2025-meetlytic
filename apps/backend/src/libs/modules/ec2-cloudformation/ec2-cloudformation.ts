@@ -2,18 +2,18 @@ import { config } from "~/libs/modules/config/config.js";
 import { logger } from "~/libs/modules/logger/logger.js";
 
 import { CloudFormationEC2 } from "./ec2-cloudformation.module.js";
-import templateJSON from "./ec2-instance-template.json" with { type: "json" };
-import { AWSRegion } from "./libs/enums/enums.js";
+import templateJSON from "./libs/templates/ec2-instance-template.json" with { type: "json" };
 
 const {
-	AWS: { ACCESS_KEY_ID, SECRET_ACCESS_KEY },
-} = config.ENV;
+	ACCESS_KEY_ID: accessKeyId,
+	REGION,
+	SECRET_ACCESS_KEY: secretAccessKey,
+} = config.ENV.AWS;
 
 const ec2 = new CloudFormationEC2({
-	accessKeyId: ACCESS_KEY_ID,
+	credentials: { accessKeyId, secretAccessKey },
 	logger,
-	region: AWSRegion.EU_NORTH_1,
-	secretAccessKey: SECRET_ACCESS_KEY,
+	region: REGION,
 	templateBody: JSON.stringify(templateJSON),
 });
 

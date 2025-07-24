@@ -8,9 +8,9 @@ type Properties = {
 };
 
 const Logo: React.FC<Properties> = ({ hasLink = true }: Properties) => {
-	const logoContent = <span className={styles["logoText"]}>Meetlytic</span>;
+	const logoContent = <span className={styles["logo-text"]}>Meetlytic</span>;
 	return hasLink ? (
-		<Link className={styles["logoLink"]} to={AppRoute.ROOT}>
+		<Link className={styles["logo-link"]} to={AppRoute.ROOT}>
 			{logoContent}
 		</Link>
 	) : (

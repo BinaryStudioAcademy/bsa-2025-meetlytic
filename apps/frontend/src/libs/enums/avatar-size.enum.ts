@@ -1,6 +1,6 @@
 const AvatarSize = {
-	LARGE: "avatarLarge",
-	SMALL: "avatarSmall",
+	LARGE: "avatar--large",
+	SMALL: "avatar--small",
 } as const;
 
 export { AvatarSize };

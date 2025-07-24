@@ -9,10 +9,11 @@ import {
 import { useFormController } from "~/libs/hooks/hooks.js";
 
 type Properties<T extends FieldValues> = {
-	className?: string;
+	className?: string | undefined;
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
 	label: string;
+	labelСlassName?: string | undefined;
 	name: FieldPath<T>;
 	placeholder?: string;
 	type?: "email" | "password" | "text";
@@ -23,6 +24,7 @@ const Input = <T extends FieldValues>({
 	control,
 	errors,
 	label,
+	labelСlassName,
 	name,
 	placeholder = "",
 	type = "text",
@@ -34,7 +36,7 @@ const Input = <T extends FieldValues>({
 
 	return (
 		<label>
-			<span>{label}</span>
+			<span className={labelСlassName}>{label}</span>
 			<input
 				{...field}
 				className={className}

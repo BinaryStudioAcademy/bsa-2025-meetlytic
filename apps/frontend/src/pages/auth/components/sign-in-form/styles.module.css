@@ -6,7 +6,12 @@
 	text-align: center;
 }
 
-.login-form label {
+.login-form {
+	width: 100%;
+	max-width: 420px;
+}
+
+.label-text {
 	display: block;
 	margin-top: 15px;
 	margin-bottom: 5px;
@@ -19,7 +24,7 @@
 	justify-content: space-between;
 }
 
-.login-form input {
+.input-field {
 	box-sizing: border-box;
 	width: 100%;
 	padding: 10px 13px;

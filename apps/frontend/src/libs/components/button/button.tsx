@@ -1,5 +1,5 @@
 type Properties = {
-	className?: string;
+	className?: string | undefined;
 	label: string;
 	type?: "button" | "submit";
 };

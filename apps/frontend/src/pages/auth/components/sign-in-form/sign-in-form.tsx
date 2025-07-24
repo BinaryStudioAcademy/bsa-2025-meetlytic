@@ -62,27 +62,27 @@ const SignInForm: React.FC<Properties> = () => {
 
 			<form className={styles["login-form"]} onSubmit={handleFormSubmit}>
 				<Input
+					className={styles["input-field"]}
 					control={control}
 					errors={errors}
 					label="Email"
+					labelСlassName={styles["label-text"]}
 					name="email"
 					placeholder="mail@abc.com"
 					type="text"
 				/>
 				<Input
+					className={styles["input-field"]}
 					control={control}
 					errors={errors}
 					label="Password"
+					labelСlassName={styles["label-text"]}
 					name="password"
 					placeholder="********"
 					type="password"
 				/>
 
-				<Button
-					className={styles["sign-in-btn"] || ""}
-					label="Login"
-					type="submit"
-				/>
+				<Button className={styles["sign-in-btn"]} label="Login" type="submit" />
 			</form>
 
 			<div className={styles["register"]}>

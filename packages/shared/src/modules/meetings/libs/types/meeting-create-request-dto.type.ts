@@ -1,7 +1,8 @@
-import { type MeetingHostValue } from "./types.js";
+import { ValueOf } from "../../../../index.js";
+import { MeetingHost } from "../enums/meetings-host.enum.js";
 
 type MeetingCreateRequestDto = {
-	host: MeetingHostValue;
+	host: ValueOf<typeof MeetingHost>;
 	instanceId: null | string;
 	ownerId: number;
 };

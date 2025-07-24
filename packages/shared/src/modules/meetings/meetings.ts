@@ -1,8 +1,11 @@
-export { MeetingsApiPath } from "./libs/enums/enums.js";
+export {
+	MeetingHost,
+	MeetingsApiPath,
+	MeetingStatusMessage,
+} from "./libs/enums/enums.js";
 export {
 	type MeetingCreateRequestDto,
 	type MeetingGetAllResponseDto,
-	type MeetingHostValue,
 	type MeetingResponseDto,
 	type MeetingUpdateRequestDto,
 } from "./libs/types/types.js";

@@ -10,10 +10,7 @@ type Properties = {
 	redirectTo: ValueOf<typeof AppRoute>;
 };
 
-const ProtectedRoute: FC<Properties> = ({
-	children,
-	redirectTo = AppRoute.SIGN_IN,
-}) => {
+const ProtectedRoute: FC<Properties> = ({ children, redirectTo }) => {
 	const isAuthenticated = useAppSelector((state) => state.auth.user !== null);
 	const location = useLocation();
 

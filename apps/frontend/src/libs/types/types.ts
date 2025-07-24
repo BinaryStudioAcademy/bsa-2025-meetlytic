@@ -4,6 +4,7 @@ export { type NavigationItem } from "./navigation-item.type.js";
 export {
 	type ServerErrorDetail,
 	type ServerErrorResponse,
+	type UserResponseDto,
 	type ValidationSchema,
 	type ValueOf,
 } from "@meetlytic/shared";

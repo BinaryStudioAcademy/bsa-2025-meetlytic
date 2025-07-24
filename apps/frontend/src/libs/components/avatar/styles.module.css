@@ -1,0 +1,23 @@
+.avatar {
+	border: 2px solid var(--color-brand);
+	border-radius: 50%;
+}
+
+.avatar--small {
+	width: 44px;
+	height: 44px;
+}
+
+.avatar--large {
+	width: 88px;
+	height: 88px;
+}
+
+.avatar--main {
+	padding: 3px;
+	border-color: var(--color-brand);
+}
+
+.avatar--alt {
+	border-color: white;
+}

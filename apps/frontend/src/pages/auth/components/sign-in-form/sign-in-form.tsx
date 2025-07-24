@@ -58,7 +58,7 @@ const SignInForm: React.FC<Properties> = () => {
 		<AuthLayout>
 			<h2 className={styles["title"]}>Login to your Account</h2>
 
-			<form className={styles["loginForm"]} onSubmit={handleFormSubmit}>
+			<form className={styles["login-form"]} onSubmit={handleFormSubmit}>
 				<Input
 					control={control}
 					errors={errors}
@@ -77,7 +77,7 @@ const SignInForm: React.FC<Properties> = () => {
 				/>
 
 				<Button
-					className={styles["signInBtn"] || ""}
+					className={styles["sign-in-btn"] || ""}
 					label="Login"
 					type="submit"
 				/>
@@ -85,7 +85,7 @@ const SignInForm: React.FC<Properties> = () => {
 
 			<div className={styles["register"]}>
 				Not Registered Yet?{" "}
-				<Link className={styles["createAccount"]} to={AppRoute.SIGN_UP}>
+				<Link className={styles["create-account"]} to={AppRoute.SIGN_UP}>
 					Create an account
 				</Link>
 			</div>

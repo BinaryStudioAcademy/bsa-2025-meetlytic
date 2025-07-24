@@ -7,15 +7,15 @@ interface AuthLayoutProperties {
 const AuthLayout = ({ children }: AuthLayoutProperties) => {
 	return (
 		<div className={styles["auth"]}>
-			<div className={styles["authLeft"]}>
-				<div className={styles["authLogo"]}>
-					<span className={styles["authLogoCircle"]} />
-					<span className={styles["authLogoText"]}>LOGO</span>
+			<div className={styles["auth-left"]}>
+				<div className={styles["auth-logo"]}>
+					<span className={styles["auth-logo-circle"]} />
+					<span className={styles["auth-logo-text"]}>LOGO</span>
 				</div>
 			</div>
 
-			<div className={styles["authRight"]}>
-				<div className={styles["authFormWrapper"]}>{children}</div>
+			<div className={styles["auth-right"]}>
+				<div className={styles["auth-form-wrapper"]}>{children}</div>
 			</div>
 		</div>
 	);

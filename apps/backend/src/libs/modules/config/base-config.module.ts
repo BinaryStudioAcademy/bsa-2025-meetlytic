@@ -63,6 +63,12 @@ class BaseConfig implements Config {
 					env: "AMI_ID",
 					format: String,
 				},
+				REGION: {
+					default: null,
+					doc: "AWS Region",
+					env: "REGION",
+					format: String,
+				},
 				SECRET_ACCESS_KEY: {
 					default: null,
 					doc: "AWS Secret Access Key",

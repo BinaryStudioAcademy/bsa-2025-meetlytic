@@ -5,7 +5,6 @@ import {
 	type MeetingCreateRequestDto,
 	type MeetingGetAllResponseDto,
 	type MeetingResponseDto,
-	type MeetingUpdateRequestDto,
 } from "./libs/types/types.js";
 import { MeetingEntity } from "./meeting.entity.js";
 import { type MeetingRepository } from "./meeting.repository.js";
@@ -67,7 +66,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 	public async update(
 		id: number,
-		payload: MeetingUpdateRequestDto,
+		payload: Partial<MeetingCreateRequestDto>,
 	): Promise<MeetingResponseDto> {
 		const existing = await this.meetingRepository.find(id);
 
@@ -76,7 +75,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		}
 
 		const updatedEntity = MeetingEntity.initialize({
-			host: payload.host,
+			host: payload.host as "zoom",
 			id,
 			instanceId: payload.instanceId ?? null,
 			ownerId: existing.toObject().ownerId,

@@ -1,5 +1,6 @@
 import { Button, Input, Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/app-route.enum.js";
+import { getValidClassNames } from "~/libs/helpers/get-valid-class-names.helper.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
 	type UserSignUpRequestDto,
@@ -29,7 +30,9 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 
 	return (
 		<AuthLayout>
-			<h3 className={`${styles["title"] ?? ""} h3`}>Create an account</h3>
+			<h3 className={getValidClassNames([styles["title"], "h3"])}>
+				Create an account
+			</h3>
 			<form className={styles["form"]} onSubmit={handleFormSubmit}>
 				<p className="field">
 					<Input
@@ -83,7 +86,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 				</p>
 				<Button className="btn-primary" label="Sign up" type="submit" />
 			</form>
-			<h5 className={`${styles["link-container"] ?? ""} h5`}>
+			<h5 className={getValidClassNames([styles["link-container"], "h5"])}>
 				Already have an account?
 				<Link to={AppRoute.SIGN_IN}>
 					<p>Sign in</p>

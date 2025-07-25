@@ -1,3 +1,4 @@
+import { ec2 } from "~/libs/modules/ec2-cloudformation/ec2-cloudformation.js";
 import { type Service } from "~/libs/types/types.js";
 
 import {
@@ -27,11 +28,23 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		const created = await this.meetingRepository.create(meeting);
 
-		return created.toObject();
+		const { id: meetingId } = created.toObject();
+		if (!meetingId) {
+			throw new Error("Failed to create meeting");
+		}
+		const instanceId = await ec2.create(meetingId);
+		const updated = await this.meetingRepository.update(meetingId, {
+			instanceId,
+		});
+		if (!updated) {
+			throw new Error("Failed to update meeting");
+		}
+		return updated.toObject();
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		return await this.meetingRepository.delete(id);
+		await this.meetingRepository.delete(id);
+		return true;
 	}
 
 	public async find(id: number): Promise<MeetingResponseDto> {

@@ -10,31 +10,34 @@ import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
 import { type IconName } from "~/libs/types/types.js";
 
-import { iconPositionToClass, inputPaddingToClass } from "./libs/maps/maps.js";
+import { iconPositionToClass } from "./libs/maps/icon-position-to-class.map.js";
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
+	className?: string;
 	className?: string;
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
 	hasLabel?: boolean;
 	iconClassName?: string;
-	iconName?: IconName;
-	iconPosition?: "left" | "right";
+	iconName?: "" | IconName;
+	iconPosition?: "" | "left" | "right";
 	label: string;
 	name: FieldPath<T>;
 	placeholder?: string;
+	type?: React.HTMLInputTypeAttribute;
 	type?: React.HTMLInputTypeAttribute;
 };
 
 const Input = <T extends FieldValues>({
 	className = "",
+	className = "",
 	control,
 	errors,
 	hasLabel = true,
 	iconClassName = "",
-	iconName,
-	iconPosition = iconName && "left",
+	iconName = "",
+	iconPosition = "left",
 	label,
 	name,
 	placeholder = "",
@@ -44,6 +47,7 @@ const Input = <T extends FieldValues>({
 
 	const error = errors[name]?.message;
 	const hasError = Boolean(error);
+	const isIconPadded = iconName && iconPosition === "left";
 
 	return (
 		<label className={styles["label-wrapper"]}>
@@ -53,17 +57,17 @@ const Input = <T extends FieldValues>({
 					<Icon
 						className={getValidClassNames(
 							styles["input-icon"],
-							iconPosition && iconPositionToClass[iconPosition],
 							iconClassName,
+							iconPosition && iconPositionToClass[iconPosition],
 						)}
 						name={iconName}
 					/>
 				)}
 				<input
 					className={getValidClassNames(
-						styles["input"],
-						iconName && iconPosition && inputPaddingToClass[iconPosition],
 						className,
+						styles["input"],
+						isIconPadded && styles["input--left-padding"],
 					)}
 					{...field}
 					placeholder={placeholder}

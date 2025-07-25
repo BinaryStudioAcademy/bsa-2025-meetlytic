@@ -19,12 +19,7 @@ class MeetingRepository implements Repository<MeetingEntity> {
 			.returning("*")
 			.execute();
 
-		return MeetingEntity.initialize({
-			host: meeting.host,
-			id: meeting.id,
-			instanceId: meeting.instanceId,
-			ownerId: meeting.ownerId,
-		});
+		return MeetingEntity.initialize(meeting);
 	}
 
 	public async delete(id: number): Promise<boolean> {
@@ -34,26 +29,12 @@ class MeetingRepository implements Repository<MeetingEntity> {
 
 	public async find(id: number): Promise<MeetingEntity | null> {
 		const meeting = await this.meetingModel.query().findById(id);
-		return meeting
-			? MeetingEntity.initialize({
-					host: meeting.host,
-					id: meeting.id,
-					instanceId: meeting.instanceId,
-					ownerId: meeting.ownerId,
-				})
-			: null;
+		return meeting ? MeetingEntity.initialize(meeting) : null;
 	}
 
 	public async findAll(): Promise<MeetingEntity[]> {
 		const meetings = await this.meetingModel.query().execute();
-		return meetings.map((meeting) =>
-			MeetingEntity.initialize({
-				host: meeting.host,
-				id: meeting.id,
-				instanceId: meeting.instanceId,
-				ownerId: meeting.ownerId,
-			}),
-		);
+		return meetings.map((meeting) => MeetingEntity.initialize(meeting));
 	}
 
 	public async update(
@@ -64,12 +45,7 @@ class MeetingRepository implements Repository<MeetingEntity> {
 			.query()
 			.patchAndFetchById(id, payload);
 
-		return MeetingEntity.initialize({
-			host: meeting.host,
-			id: meeting.id,
-			instanceId: meeting.instanceId,
-			ownerId: meeting.ownerId,
-		});
+		return MeetingEntity.initialize(meeting);
 	}
 }
 

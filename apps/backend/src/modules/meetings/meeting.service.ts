@@ -1,4 +1,4 @@
-import { ec2 } from "~/libs/modules/ec2-cloudformation/ec2-cloudformation.js";
+import { type CloudFormation } from "~/libs/modules/cloud-formation/cloud-formation.module.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
 
@@ -13,12 +13,18 @@ import { MeetingEntity } from "./meeting.entity.js";
 import { type MeetingRepository } from "./meeting.repository.js";
 
 class MeetingService implements Service<MeetingResponseDto> {
+	private cloudFormation: CloudFormation;
 	private meetingRepository: MeetingRepository;
 	private userId: number;
 
-	constructor(repo: MeetingRepository, userId: number) {
+	constructor(
+		repo: MeetingRepository,
+		userId: number,
+		cloudFormation: CloudFormation,
+	) {
 		this.meetingRepository = repo;
 		this.userId = userId;
+		this.cloudFormation = cloudFormation;
 	}
 
 	private getCurrentUserId(): number {
@@ -39,12 +45,12 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		if (!id) {
 			throw new MeetingError({
-				message: MeetingStatusMessage.MEETING_FAILD_TO_CREATE,
+				message: MeetingStatusMessage.MEETING_FAILED_TO_CREATE,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
-		const instanceId = await ec2.create(id);
+		const instanceId = await this.cloudFormation.create(id);
 		const updated = await this.meetingRepository.update(id, {
 			instanceId,
 		});

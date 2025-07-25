@@ -4,7 +4,6 @@ import {
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
-import { ec2 } from "~/libs/modules/ec2-cloudformation/ec2-cloudformation.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import {
@@ -147,7 +146,6 @@ class AuthController extends BaseController {
 			body: UserSignInRequestDto;
 		}>,
 	): Promise<APIHandlerResponse> {
-		ec2.test();
 		return {
 			payload: await this.authService.signIn(options.body),
 			status: HTTPCode.OK,

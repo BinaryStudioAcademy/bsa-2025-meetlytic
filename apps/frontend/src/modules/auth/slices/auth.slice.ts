@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
+import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { type UserResponseDto, type ValueOf } from "~/libs/types/types.js";
 
 import { signUp } from "./actions.js";
@@ -20,7 +21,9 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(signUp.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
 		});
-		builder.addCase(signUp.fulfilled, (state) => {
+		builder.addCase(signUp.fulfilled, (state, action) => {
+			localStorage.setItem(StorageKey.TOKEN, action.payload.token);
+			state.user = action.payload.user;
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(signUp.rejected, (state) => {

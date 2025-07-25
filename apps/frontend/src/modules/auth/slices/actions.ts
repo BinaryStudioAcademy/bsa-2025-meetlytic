@@ -20,6 +20,7 @@ const signIn = createAsyncThunk<
 
 	try {
 		const response = await authApi.signIn(signInPayload);
+		localStorage.setItem("token", response.token);
 		notification.success("Successfully signed in!");
 		return response;
 	} catch (error: unknown) {

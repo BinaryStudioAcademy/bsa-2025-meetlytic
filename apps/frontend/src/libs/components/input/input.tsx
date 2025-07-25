@@ -14,13 +14,12 @@ import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
 	className?: string;
-	className?: string;
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
 	hasVisuallyHiddenLabel?: boolean;
 	iconClassName?: string;
-	iconName?: "" | IconName;
-	iconPosition?: "" | "left" | "right";
+	iconName?: IconName;
+	iconPosition?: "left" | "right";
 	label: string;
 	name: FieldPath<T>;
 	onClickIcon?: () => void;

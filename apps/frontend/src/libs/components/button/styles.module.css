@@ -47,10 +47,17 @@
 	border-color: var(--color-brand-hover);
 }
 
-.button:disabled,
-.button-disabled {
+.button-primary:disabled,
+.button-primary-disabled {
 	color: var(--color-background-4);
 	cursor: not-allowed;
 	background-color: var(--color-text-2);
 	border-color: transparent;
+}
+
+.button-outlined:disabled,
+.button-outlined-disabled {
+	color: var(--color-text-2);
+	cursor: not-allowed;
+	border-color: var(--color-text-2);
 }

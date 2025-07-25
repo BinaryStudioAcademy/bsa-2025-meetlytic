@@ -8,6 +8,7 @@ import {
 } from "@aws-sdk/client-cloudformation";
 
 import { type Logger } from "../logger/logger.js";
+import { meetingService } from "~/modules/meetings/meeting.service.js";
 import {
 	Capability,
 	OutputKey,
@@ -113,6 +114,8 @@ class CloudFormationEC2 {
 			{ client: this.client, maxWaitTime: 300 },
 			{ StackName: stackName },
 		);
+
+		await meetingService.update(meetingId, { instanceId: null });
 
 		this.logger.info(`Stack ${stackName} deleted`);
 	}

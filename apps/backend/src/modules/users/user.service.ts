@@ -79,3 +79,4 @@ class UserService implements Service {
 }
 
 export { UserService };
+export { type UserResponseDto } from "./libs/types/types.js";

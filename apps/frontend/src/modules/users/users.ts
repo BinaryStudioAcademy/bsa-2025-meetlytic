@@ -15,7 +15,6 @@ export { DEFAULT_SIGN_IN_VALUES } from "./libs/default-values/sign-in.default-va
 export { userApi };
 export {
 	type AuthResponseDto,
-	type FormValues,
 	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
 	type UserSignInRequestDto,

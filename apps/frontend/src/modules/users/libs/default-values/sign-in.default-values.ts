@@ -1,6 +1,6 @@
-import { type FormValues } from "../../users.js";
+import { type UserSignInRequestDto } from "../../users.js";
 
-const DEFAULT_SIGN_IN_VALUES: FormValues = {
+const DEFAULT_SIGN_IN_VALUES: UserSignInRequestDto = {
 	email: "",
 	password: "",
 };

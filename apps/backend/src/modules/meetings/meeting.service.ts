@@ -1,5 +1,6 @@
-import { ec2 } from "~/libs/modules/ec2-cloudformation/ec2-cloudformation.js";
 import { MeetingError } from "@meetlytic/shared";
+
+import { ec2 } from "~/libs/modules/ec2-cloudformation/ec2-cloudformation.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
 
@@ -29,23 +30,42 @@ class MeetingService implements Service<MeetingResponseDto> {
 		});
 
 		const newMeeting = await this.meetingRepository.create(meeting);
-		return newMeeting.toObject();
+		const { id } = newMeeting.toObject();
+
+		if (!id) {
+			throw new MeetingError({
+				message: MeetingStatusMessage.MEETING_FAILD_TO_CREATE,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		const instanceId = await ec2.create(id);
+		const updated = await this.meetingRepository.update(id, {
+			instanceId,
+		});
+		if (!updated) {
+			throw new MeetingError({
+				message: MeetingStatusMessage.UPDATE_FAILED,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+		return updated.toObject();
 	}
 
 	public async delete(id: number, ownerId?: number): Promise<boolean> {
 		const meeting = await this.meetingRepository.find(id);
 		if (!meeting) {
-			throw new MeetingError(
-				MeetingStatusMessage.MEETING_NOT_FOUND,
-				HTTPCode.NOT_FOUND,
-			);
+			throw new MeetingError({
+				message: MeetingStatusMessage.MEETING_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
 		}
 
 		if (ownerId !== undefined && meeting.toObject().ownerId !== ownerId) {
-			throw new MeetingError(
-				MeetingStatusMessage.FORBIDDEN,
-				HTTPCode.FORBIDDEN,
-			);
+			throw new MeetingError({
+				message: MeetingStatusMessage.FORBIDDEN,
+				status: HTTPCode.FORBIDDEN,
+			});
 		}
 
 		return await this.meetingRepository.delete(id);
@@ -54,17 +74,17 @@ class MeetingService implements Service<MeetingResponseDto> {
 	public async find(id: number, userId?: number): Promise<MeetingResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
 		if (!meeting) {
-			throw new MeetingError(
-				MeetingStatusMessage.MEETING_NOT_FOUND,
-				HTTPCode.NOT_FOUND,
-			);
+			throw new MeetingError({
+				message: MeetingStatusMessage.MEETING_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
 		}
 
 		if (userId !== undefined && meeting.toObject().ownerId !== userId) {
-			throw new MeetingError(
-				MeetingStatusMessage.FORBIDDEN,
-				HTTPCode.FORBIDDEN,
-			);
+			throw new MeetingError({
+				message: MeetingStatusMessage.FORBIDDEN,
+				status: HTTPCode.FORBIDDEN,
+			});
 		}
 
 		return meeting.toObject();
@@ -84,27 +104,23 @@ class MeetingService implements Service<MeetingResponseDto> {
 	): Promise<MeetingResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
 		if (!meeting) {
-			throw new MeetingError(
-				MeetingStatusMessage.CANNOT_UPDATE_NON_EXISTENT,
-				HTTPCode.NOT_FOUND,
-			);
+			throw new MeetingError({
+				message: MeetingStatusMessage.CANNOT_UPDATE_NON_EXISTENT,
+				status: HTTPCode.NOT_FOUND,
+			});
 		}
 
-		if (
-			(payload as MeetingUpdateRequestDto).ownerId &&
-			(payload as MeetingUpdateRequestDto).ownerId !==
-				meeting.toObject().ownerId
-		) {
-			throw new MeetingError(
-				MeetingStatusMessage.FORBIDDEN,
-				HTTPCode.FORBIDDEN,
-			);
+		if (payload.ownerId && payload.ownerId !== meeting.toObject().ownerId) {
+			throw new MeetingError({
+				message: MeetingStatusMessage.FORBIDDEN,
+				status: HTTPCode.FORBIDDEN,
+			});
 		}
 
 		const updatedEntity = MeetingEntity.initialize({
-			host: (payload as MeetingUpdateRequestDto).host,
+			host: payload.host as "zoom",
 			id,
-			instanceId: (payload as MeetingUpdateRequestDto).instanceId ?? null,
+			instanceId: payload.instanceId ?? null,
 			ownerId: meeting.toObject().ownerId,
 		});
 
@@ -113,10 +129,10 @@ class MeetingService implements Service<MeetingResponseDto> {
 			updatedEntity.toNewObject(),
 		);
 		if (!updatedMeeting) {
-			throw new MeetingError(
-				MeetingStatusMessage.UPDATE_FAILED,
-				HTTPCode.BAD_REQUEST,
-			);
+			throw new MeetingError({
+				message: MeetingStatusMessage.UPDATE_FAILED,
+				status: HTTPCode.BAD_REQUEST,
+			});
 		}
 
 		return updatedMeeting.toObject();

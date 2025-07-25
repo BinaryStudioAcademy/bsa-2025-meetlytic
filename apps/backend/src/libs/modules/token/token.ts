@@ -12,3 +12,5 @@ const jwt = new BaseToken<JwtPayload>({
 });
 
 export { jwt };
+export { type BaseToken } from "./base-token.module.js";
+export { type JwtPayload } from "./libs/types/types.js";

@@ -1,12 +1,16 @@
 export { App } from "./app/app.js";
+export { Avatar } from "./avatar/avatar.js";
 export { Button } from "./button/button.js";
+export { Header } from "./header/header.js";
 export { Icon } from "./icon/icon.js";
 export { Input } from "./input/input.js";
 export { Link } from "./link/link.js";
 export { Loader } from "./loader/loader.js";
+export { Logo } from "./logo/logo.js";
 export { Navigation } from "./navigation/navigation.js";
+export { ProtectedRoute } from "./router-provider/protected-route.js";
 export { RouterProvider } from "./router-provider/router-provider.js";
 export { Sidebar } from "./sidebar/sidebar.js";
 export { ToastProvider } from "./toast-provider/toast-provider.js";
 export { Provider as StoreProvider } from "react-redux";
-export { NavLink, Outlet as RouterOutlet } from "react-router-dom";
+export { Navigate, NavLink, Outlet as RouterOutlet } from "react-router-dom";

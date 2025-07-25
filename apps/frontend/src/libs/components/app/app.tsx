@@ -5,6 +5,7 @@ import {
 	Loader,
 	Navigation,
 	RouterOutlet,
+	SearchInput,
 	Sidebar,
 } from "~/libs/components/components.js";
 import {
@@ -14,6 +15,7 @@ import {
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
+	useAppForm,
 	useAppSelector,
 	useEffect,
 	useLocation,
@@ -27,6 +29,15 @@ const App: React.FC = () => {
 		dataStatus: users.dataStatus,
 		users: users.users,
 	}));
+
+	{
+		/* TODO: Remove useAppForm call if it is no longer needed*/
+	}
+	const { control, errors } = useAppForm({
+		defaultValues: {
+			search: "",
+		},
+	});
 
 	const isRoot = pathname === AppRoute.ROOT;
 
@@ -77,6 +88,8 @@ const App: React.FC = () => {
 					</ul>
 				</>
 			)}
+			{/* TODO: Remove this component if it is no longer needed*/}
+			<SearchInput control={control} errors={errors} name="search" />
 		</>
 	);
 };

@@ -75,6 +75,12 @@ class BaseConfig implements Config {
 					env: "SECRET_ACCESS_KEY",
 					format: String,
 				},
+				SECURITY_GROUP_ID: {
+					default: null,
+					doc: "AWS security group id",
+					env: "SECURITY_GROUP_ID",
+					format: String,
+				},
 			},
 			DB: {
 				CONNECTION_STRING: {

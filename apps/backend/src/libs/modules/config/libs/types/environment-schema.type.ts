@@ -12,6 +12,7 @@ type EnvironmentSchema = {
 		AMI_ID: string;
 		REGION: string;
 		SECRET_ACCESS_KEY: string;
+		SECURITY_GROUP_ID: string;
 	};
 	DB: {
 		CONNECTION_STRING: string;

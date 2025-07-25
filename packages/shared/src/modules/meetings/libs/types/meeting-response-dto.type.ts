@@ -1,6 +1,6 @@
 type MeetingResponseDto = {
 	host: string;
-	id: null | number;
+	id: number;
 	instanceId: null | string;
 	ownerId: number;
 };

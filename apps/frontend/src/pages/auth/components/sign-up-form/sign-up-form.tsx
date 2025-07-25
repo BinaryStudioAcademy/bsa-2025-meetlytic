@@ -1,4 +1,4 @@
-import { Button, Input, SearchInput } from "~/libs/components/components.js";
+import { Button, Input } from "~/libs/components/components.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
 	type UserSignUpRequestDto,
@@ -49,7 +49,6 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					/>
 				</p>
 				<Button label="Sign up" type="submit" />
-				<SearchInput control={control} errors={errors} name="firstName" />
 			</form>
 		</>
 	);

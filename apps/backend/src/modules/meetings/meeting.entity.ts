@@ -1,9 +1,10 @@
 import { type Entity } from "~/libs/types/types.js";
+import { ValueOf } from "~/libs/types/types.js";
 
-import { type MeetingHostValue } from "./libs/types/types.js";
+import { MeetingHost } from "./libs/enums/enums.js";
 
 class MeetingEntity implements Entity {
-	private host: MeetingHostValue;
+	private host: ValueOf<typeof MeetingHost>;
 
 	private id: null | number;
 
@@ -17,7 +18,7 @@ class MeetingEntity implements Entity {
 		instanceId,
 		ownerId,
 	}: {
-		host: MeetingHostValue;
+		host: ValueOf<typeof MeetingHost>;
 		id: null | number;
 		instanceId: null | string;
 		ownerId: number;
@@ -34,7 +35,7 @@ class MeetingEntity implements Entity {
 		instanceId,
 		ownerId,
 	}: {
-		host: MeetingHostValue;
+		host: ValueOf<typeof MeetingHost>;
 		id: null | number;
 		instanceId: null | string;
 		ownerId: number;
@@ -52,7 +53,7 @@ class MeetingEntity implements Entity {
 		instanceId,
 		ownerId,
 	}: {
-		host: MeetingHostValue;
+		host: ValueOf<typeof MeetingHost>;
 		instanceId: null | string;
 		ownerId: number;
 	}): MeetingEntity {
@@ -65,7 +66,7 @@ class MeetingEntity implements Entity {
 	}
 
 	public toNewObject(): {
-		host: MeetingHostValue;
+		host: ValueOf<typeof MeetingHost>;
 		instanceId: null | string;
 		ownerId: number;
 	} {
@@ -77,7 +78,7 @@ class MeetingEntity implements Entity {
 	}
 
 	public toObject(): {
-		host: MeetingHostValue;
+		host: ValueOf<typeof MeetingHost>;
 		id: null | number;
 		instanceId: null | string;
 		ownerId: number;

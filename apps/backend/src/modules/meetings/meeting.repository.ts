@@ -1,6 +1,6 @@
-import { type Repository } from "~/libs/types/repository.type.js";
+import { DELETE_SUCCESS_THRESHOLD } from "~/libs/constants/constants.js";
+import { type Repository } from "~/libs/types/types.js";
 
-import { type MeetingHostValue } from "./libs/types/types.js";
 import { MeetingEntity } from "./meeting.entity.js";
 import { type MeetingModel } from "./meeting.model.js";
 
@@ -13,46 +13,45 @@ class MeetingRepository implements Repository<MeetingEntity> {
 
 	public async create(entity: MeetingEntity): Promise<MeetingEntity> {
 		const { host, instanceId, ownerId } = entity.toNewObject();
-		const meet = await this.meetingModel
+		const meeting = await this.meetingModel
 			.query()
 			.insert({ host, instanceId, ownerId })
 			.returning("*")
 			.execute();
 
 		return MeetingEntity.initialize({
-			host: meet.host as MeetingHostValue,
-			id: meet.id,
-			instanceId: meet.instanceId,
-			ownerId: meet.ownerId,
+			host: meeting.host,
+			id: meeting.id,
+			instanceId: meeting.instanceId,
+			ownerId: meeting.ownerId,
 		});
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		const meet = await this.meetingModel.query().deleteById(id);
-		const DELETE_SUCCESS_THRESHOLD = 0;
-		return meet > DELETE_SUCCESS_THRESHOLD;
+		const meeting = await this.meetingModel.query().deleteById(id);
+		return meeting > DELETE_SUCCESS_THRESHOLD;
 	}
 
 	public async find(id: number): Promise<MeetingEntity | null> {
-		const meet = await this.meetingModel.query().findById(id);
-		return meet
+		const meeting = await this.meetingModel.query().findById(id);
+		return meeting
 			? MeetingEntity.initialize({
-					host: meet.host as MeetingHostValue,
-					id: meet.id,
-					instanceId: meet.instanceId,
-					ownerId: meet.ownerId,
+					host: meeting.host,
+					id: meeting.id,
+					instanceId: meeting.instanceId,
+					ownerId: meeting.ownerId,
 				})
 			: null;
 	}
 
 	public async findAll(): Promise<MeetingEntity[]> {
-		const meets = await this.meetingModel.query().execute();
-		return meets.map((meet) =>
+		const meetings = await this.meetingModel.query().execute();
+		return meetings.map((meeting) =>
 			MeetingEntity.initialize({
-				host: meet.host as MeetingHostValue,
-				id: meet.id,
-				instanceId: meet.instanceId,
-				ownerId: meet.ownerId,
+				host: meeting.host,
+				id: meeting.id,
+				instanceId: meeting.instanceId,
+				ownerId: meeting.ownerId,
 			}),
 		);
 	}
@@ -61,13 +60,15 @@ class MeetingRepository implements Repository<MeetingEntity> {
 		id: number,
 		payload: Partial<Record<string, unknown>>,
 	): Promise<MeetingEntity | null> {
-		const meet = await this.meetingModel.query().patchAndFetchById(id, payload);
+		const meeting = await this.meetingModel
+			.query()
+			.patchAndFetchById(id, payload);
 
 		return MeetingEntity.initialize({
-			host: meet.host as MeetingHostValue,
-			id: meet.id,
-			instanceId: meet.instanceId,
-			ownerId: meet.ownerId,
+			host: meeting.host,
+			id: meeting.id,
+			instanceId: meeting.instanceId,
+			ownerId: meeting.ownerId,
 		});
 	}
 }

@@ -8,5 +8,6 @@ import { MeetingsController } from "./meetings.controller.js";
 const meetingRepository = new MeetingRepository(MeetingModel);
 const meetingService = new MeetingService(meetingRepository);
 const meetingsController = new MeetingsController(logger, meetingService);
+export { MeetingHost } from "./libs/enums/enums.js";
 
 export { meetingsController };

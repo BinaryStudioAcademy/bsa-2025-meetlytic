@@ -1,6 +1,11 @@
+type FormValues = {
+	email: string;
+	password: string;
+};
+
 type UserSignInRequestDto = {
 	email: string;
 	password: string;
 };
 
-export { type UserSignInRequestDto };
+export { type FormValues, type UserSignInRequestDto };

@@ -6,17 +6,15 @@ import {
 	useCallback,
 	useNavigate,
 } from "~/libs/hooks/hooks.js";
-import { notification } from "~/libs/modules/notifications/notifications.js";
 import { signIn } from "~/modules/auth/slices/actions.js";
-import { userSignInValidationSchema } from "~/modules/users/users.js";
+import {
+	DEFAULT_SIGN_IN_VALUES,
+	type FormValues,
+	userSignInValidationSchema,
+} from "~/modules/users/users.js";
 
 import { AuthLayout } from "../auth-layout/auth-layout.js";
 import styles from "./styles.module.css";
-
-type FormValues = {
-	email: string;
-	password: string;
-};
 
 type Properties = {
 	onSubmit?: (data: FormValues) => void;
@@ -24,10 +22,7 @@ type Properties = {
 
 const SignInForm: React.FC<Properties> = () => {
 	const { control, errors, handleSubmit } = useAppForm<FormValues>({
-		defaultValues: {
-			email: "",
-			password: "",
-		},
+		defaultValues: DEFAULT_SIGN_IN_VALUES,
 		validationSchema: userSignInValidationSchema,
 	});
 
@@ -37,7 +32,6 @@ const SignInForm: React.FC<Properties> = () => {
 	const handleSignIn = useCallback(
 		async (data: FormValues) => {
 			await dispatch(signIn(data)).unwrap();
-			notification.success("Successfully signed in!");
 			await navigate("/");
 		},
 		[dispatch, navigate],

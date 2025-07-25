@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+import { notification } from "~/libs/modules/notifications/notifications.js";
 import { type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
 	type AuthResponseDto,
@@ -14,9 +15,17 @@ const signIn = createAsyncThunk<
 	AuthResponseDto,
 	UserSignInRequestDto,
 	AsyncThunkConfig
->(`${sliceName}/sign-in`, async (signInPayload, { extra }) => {
+>(`${sliceName}/sign-in`, async (signInPayload, { extra, rejectWithValue }) => {
 	const { authApi } = extra;
-	return await authApi.signIn(signInPayload);
+
+	try {
+		const response = await authApi.signIn(signInPayload);
+		notification.success("Successfully signed in!");
+		return response;
+	} catch (error: unknown) {
+		notification.error("Failed to sign in.");
+		return rejectWithValue(error);
+	}
 });
 
 const signUp = createAsyncThunk<

@@ -7,8 +7,9 @@ import {
 	waitUntilStackDeleteComplete,
 } from "@aws-sdk/client-cloudformation";
 
+import { meetingService } from "~/modules/meetings/meetings.js";
+
 import { type Logger } from "../logger/logger.js";
-import { meetingService } from "~/modules/meetings/meeting.service.js";
 import {
 	Capability,
 	OutputKey,
@@ -24,8 +25,8 @@ type Constructor = {
 	imageId: string;
 	logger: Logger;
 	region: string;
-	templateBody: string;
 	securityGroupId: string;
+	templateBody: string;
 };
 
 class CloudFormationEC2 {

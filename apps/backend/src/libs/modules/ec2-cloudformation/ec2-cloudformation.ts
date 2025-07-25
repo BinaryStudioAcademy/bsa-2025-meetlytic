@@ -17,8 +17,8 @@ const ec2 = new CloudFormationEC2({
 	imageId,
 	logger,
 	region: REGION,
-	templateBody: JSON.stringify(templateJSON),
 	securityGroupId,
+	templateBody: JSON.stringify(templateJSON),
 });
 
 export { ec2 };

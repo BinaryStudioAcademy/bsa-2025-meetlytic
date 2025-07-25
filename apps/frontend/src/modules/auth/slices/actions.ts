@@ -34,9 +34,9 @@ const getAuthenticatedUser = createAsyncThunk<
 	}
 
 	try {
-		const response = await authApi.getAuthenticatedUser();
+		const user = await authApi.getAuthenticatedUser();
 
-		return response.user;
+		return user;
 	} catch {
 		await storage.drop(StorageKey.TOKEN);
 

@@ -1,5 +1,3 @@
-import { iconNameToSvg } from "~/libs/components/icon/libs/maps/maps.js";
-
-type IconName = keyof typeof iconNameToSvg;
+type IconName = "arrowRight" | "meetings" | "settings";
 
 export { type IconName };

@@ -1,4 +1,8 @@
-import { AppRoute } from "~/libs/enums/enums.js";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -17,6 +21,8 @@ const Auth: React.FC = () => {
 	}));
 	const { pathname } = useLocation();
 
+	const navigate = useNavigate();
+
 	const handleSignInSubmit = useCallback((): void => {
 		// handle sign in
 	}, []);
@@ -28,6 +34,18 @@ const Auth: React.FC = () => {
 		[dispatch],
 	);
 
+	useEffect(() => {
+		if (dataStatus === DataStatus.FULFILLED) {
+			const result = navigate(AppRoute.ROOT);
+
+			if (result instanceof Promise) {
+				result.catch((error: unknown) =>
+					toast.error(error instanceof Error ? error.message : String(error)),
+				);
+			}
+		}
+	}, [dataStatus, navigate]);
+
 	const getScreen = (screen: string): React.JSX.Element => {
 		if (screen === AppRoute.SIGN_UP) {
 			return <SignUpForm onSubmit={handleSignUpSubmit} />;
@@ -36,12 +54,7 @@ const Auth: React.FC = () => {
 		return <SignInForm onSubmit={handleSignInSubmit} />;
 	};
 
-	return (
-		<>
-			state: {dataStatus}
-			{getScreen(pathname)}
-		</>
-	);
+	return <>{getScreen(pathname)}</>;
 };
 
 export { Auth };

@@ -16,7 +16,8 @@ import {
 	meetingCreateValidationSchema,
 	meetingUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
-import { type MeetingService } from "./meeting.service.js";
+import { type MeetingRepository } from "./meeting.repository.js";
+import { MeetingService } from "./meeting.service.js";
 
 /**
  * @swagger
@@ -64,11 +65,11 @@ import { type MeetingService } from "./meeting.service.js";
  */
 
 class MeetingsController extends BaseController {
-	private meetingService: MeetingService;
+	private meetingRepository: MeetingRepository;
 
-	public constructor(logger: Logger, meetingService: MeetingService) {
+	public constructor(logger: Logger, meetingRepository: MeetingRepository) {
 		super(logger, APIPath.MEETINGS);
-		this.meetingService = meetingService;
+		this.meetingRepository = meetingRepository;
 
 		this.addRoute({
 			handler: (options) =>
@@ -76,21 +77,6 @@ class MeetingsController extends BaseController {
 			method: "GET",
 			path: MeetingsApiPath.ROOT,
 		});
-		/**
-		 * @swagger
-		 * /meetings:
-		 *   get:
-		 *     summary: Get all meetings owned by the user
-		 *     responses:
-		 *       200:
-		 *         description: List of meetings
-		 *         content:
-		 *           application/json:
-		 *             schema:
-		 *               type: array
-		 *               items:
-		 *                 $ref: "#/components/schemas/Meeting"
-		 */
 
 		this.addRoute({
 			handler: (options) =>
@@ -102,25 +88,6 @@ class MeetingsController extends BaseController {
 			method: "GET",
 			path: MeetingsApiPath.$ID,
 		});
-		/**
-		 * @swagger
-		 * /meetings/{id}:
-		 *   get:
-		 *     summary: Get a meeting by ID
-		 *     parameters:
-		 *       - in: path
-		 *         name: id
-		 *         schema:
-		 *           type: number
-		 *         required: true
-		 *     responses:
-		 *       200:
-		 *         description: Meeting data
-		 *         content:
-		 *           application/json:
-		 *             schema:
-		 *               $ref: "#/components/schemas/Meeting"
-		 */
 
 		this.addRoute({
 			handler: (options) =>
@@ -133,25 +100,6 @@ class MeetingsController extends BaseController {
 			path: MeetingsApiPath.ROOT,
 			validation: { body: meetingCreateValidationSchema },
 		});
-		/**
-		 * @swagger
-		 * /meetings:
-		 *   post:
-		 *     summary: Create a new meeting
-		 *     requestBody:
-		 *       required: true
-		 *       content:
-		 *         application/json:
-		 *           schema:
-		 *             $ref: "#/components/schemas/MeetingCreateRequest"
-		 *     responses:
-		 *       201:
-		 *         description: Meeting created
-		 *         content:
-		 *           application/json:
-		 *             schema:
-		 *               $ref: "#/components/schemas/Meeting"
-		 */
 
 		this.addRoute({
 			handler: (options) =>
@@ -167,31 +115,6 @@ class MeetingsController extends BaseController {
 			path: MeetingsApiPath.$ID,
 			validation: { body: meetingUpdateValidationSchema },
 		});
-		/**
-		 * @swagger
-		 * /meetings/{id}:
-		 *   patch:
-		 *     summary: Update a meeting by ID
-		 *     parameters:
-		 *       - in: path
-		 *         name: id
-		 *         schema:
-		 *           type: number
-		 *         required: true
-		 *     requestBody:
-		 *       required: true
-		 *       content:
-		 *         application/json:
-		 *           schema:
-		 *             $ref: "#/components/schemas/MeetingUpdateRequest"
-		 *     responses:
-		 *       200:
-		 *         description: Meeting updated
-		 *         content:
-		 *           application/json:
-		 *             schema:
-		 *               $ref: "#/components/schemas/Meeting"
-		 */
 
 		this.addRoute({
 			handler: (options) =>
@@ -203,64 +126,144 @@ class MeetingsController extends BaseController {
 			method: "DELETE",
 			path: MeetingsApiPath.$ID,
 		});
-		/**
-		 * @swagger
-		 * /meetings/{id}:
-		 *   delete:
-		 *     summary: Delete a meeting by ID
-		 *     parameters:
-		 *       - in: path
-		 *         name: id
-		 *         schema:
-		 *           type: number
-		 *         required: true
-		 *     responses:
-		 *       204:
-		 *         description: Meeting deleted
-		 */
 	}
 
+	/**
+	 * @swagger
+	 * /meetings:
+	 *   post:
+	 *     summary: Create a new meeting
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             $ref: "#/components/schemas/MeetingCreateRequest"
+	 *     responses:
+	 *       201:
+	 *         description: Meeting created
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: "#/components/schemas/Meeting"
+	 */
 	private async create(
 		options: APIHandlerOptions<{ body: MeetingCreateRequestDto }> & {
 			user: { id: number };
 		},
 	): Promise<APIHandlerResponse> {
-		const created = await this.meetingService.create({
+		const service = new MeetingService(this.meetingRepository, options.user.id);
+		const created = await service.create({
 			...options.body,
 			ownerId: options.user.id,
 		});
-
 		return { payload: created, status: HTTPCode.CREATED };
 	}
 
+	/**
+	 * @swagger
+	 * /meetings/{id}:
+	 *   delete:
+	 *     summary: Delete a meeting by ID
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: number
+	 *     responses:
+	 *       204:
+	 *         description: Meeting deleted
+	 */
 	private async delete(
 		options: APIHandlerOptions<{ params: { id: string } }> & {
 			user: { id: number };
 		},
 	): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
-		await this.meetingService.delete(id, options.user.id);
+		const service = new MeetingService(this.meetingRepository, options.user.id);
+		await service.delete(id);
 		return { payload: null, status: HTTPCode.NO_CONTENT };
 	}
 
+	/**
+	 * @swagger
+	 * /meetings/{id}:
+	 *   get:
+	 *     summary: Get a meeting by ID
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: number
+	 *     responses:
+	 *       200:
+	 *         description: Meeting data
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: "#/components/schemas/Meeting"
+	 */
 	private async find(
 		options: APIHandlerOptions<{ params: { id: string } }> & {
 			user: { id: number };
 		},
 	): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
-		const meeting = await this.meetingService["find"](id, options.user.id);
-
+		const service = new MeetingService(this.meetingRepository, options.user.id);
+		const meeting = await service.find(id);
 		return { payload: meeting, status: HTTPCode.OK };
 	}
 
+	/**
+	 * @swagger
+	 * /meetings:
+	 *   get:
+	 *     summary: Get all meetings owned by the user
+	 *     responses:
+	 *       200:
+	 *         description: List of meetings
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: array
+	 *               items:
+	 *                 $ref: "#/components/schemas/Meeting"
+	 */
 	private async findAll(
 		options: APIHandlerOptions & { user: { id: number } },
 	): Promise<APIHandlerResponse> {
-		const all = await this.meetingService.findAll(options.user.id);
+		const service = new MeetingService(this.meetingRepository, options.user.id);
+		const all = await service.findAll();
 		return { payload: all, status: HTTPCode.OK };
 	}
 
+	/**
+	 * @swagger
+	 * /meetings/{id}:
+	 *   patch:
+	 *     summary: Update a meeting by ID
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: number
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             $ref: "#/components/schemas/MeetingUpdateRequest"
+	 *     responses:
+	 *       200:
+	 *         description: Meeting updated
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: "#/components/schemas/Meeting"
+	 */
 	private async update(
 		options: APIHandlerOptions<{
 			body: MeetingUpdateRequestDto;
@@ -270,12 +273,12 @@ class MeetingsController extends BaseController {
 		},
 	): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
+		const service = new MeetingService(this.meetingRepository, options.user.id);
 		const payload = {
 			...options.body,
 			ownerId: options.user.id,
 		};
-
-		const updated = await this.meetingService.update(id, payload);
+		const updated = await service.update(id, payload);
 		return { payload: updated, status: HTTPCode.OK };
 	}
 }

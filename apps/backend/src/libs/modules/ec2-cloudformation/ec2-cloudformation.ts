@@ -9,6 +9,7 @@ const {
 	AMI_ID: imageId,
 	REGION,
 	SECRET_ACCESS_KEY: secretAccessKey,
+	SECURITY_GROUP_ID: securityGroupId,
 } = config.ENV.AWS;
 
 const ec2 = new CloudFormationEC2({
@@ -17,6 +18,7 @@ const ec2 = new CloudFormationEC2({
 	logger,
 	region: REGION,
 	templateBody: JSON.stringify(templateJSON),
+	securityGroupId,
 });
 
 export { ec2 };

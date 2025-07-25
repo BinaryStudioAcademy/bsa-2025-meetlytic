@@ -24,12 +24,14 @@ type Constructor = {
 	logger: Logger;
 	region: string;
 	templateBody: string;
+	securityGroupId: string;
 };
 
 class CloudFormationEC2 {
 	private client: CloudFormationClient;
 	private imageId: string;
 	private logger: Logger;
+	private securityGroupId: string;
 	private templateBody: string;
 
 	constructor({
@@ -37,16 +39,17 @@ class CloudFormationEC2 {
 		imageId,
 		logger,
 		region,
+		securityGroupId,
 		templateBody,
 	}: Constructor) {
 		this.templateBody = templateBody;
 		this.imageId = imageId;
 		this.logger = logger;
-
 		this.client = new CloudFormationClient({
 			credentials,
 			region,
 		});
+		this.securityGroupId = securityGroupId;
 	}
 
 	private async getInstanceIdFromStack(stackName: string): Promise<string> {
@@ -76,6 +79,10 @@ class CloudFormationEC2 {
 			Capabilities: [Capability.NAMED_IAM],
 			Parameters: [
 				{ ParameterKey: ParameterKey.IMAGE_ID, ParameterValue: this.imageId },
+				{
+					ParameterKey: ParameterKey.SECURITY_GROUP_ID,
+					ParameterValue: this.securityGroupId,
+				},
 			],
 			StackName: stackName,
 			TemplateBody: this.templateBody,

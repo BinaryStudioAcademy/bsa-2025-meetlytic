@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 import { Button, Input, Link } from "~/libs/components/components.js";
 import { AppRoute, ButtonVariant } from "~/libs/enums/enums.js";
-=======
-import { Button, Input, SearchInput } from "~/libs/components/components.js";
->>>>>>> 651d98f (feat: add SearchInput component ml-41)
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
 	type UserSignUpRequestDto,
@@ -32,7 +28,6 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 	);
 
 	return (
-<<<<<<< HEAD
 		<AuthLayout>
 			<h3 className={styles["title"]}>Create an account</h3>
 			<form className={styles["form"]} onSubmit={handleFormSubmit}>
@@ -91,33 +86,6 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					type="submit"
 					variant={ButtonVariant.PRIMARY}
 				/>
-=======
-		<>
-			<h3>Sign Up</h3>
-			<form onSubmit={handleFormSubmit}>
-				<p>
-					<Input
-						control={control}
-						errors={errors}
-						label="Email"
-						name="email"
-						placeholder="Enter your email"
-						type="text"
-					/>
-				</p>
-				<p>
-					<Input
-						control={control}
-						errors={errors}
-						label="Password"
-						name="password"
-						placeholder="Enter your password"
-						type="text"
-					/>
-				</p>
-				<Button label="Sign up" type="submit" />
-				<SearchInput control={control} errors={errors} name="firstName" />
->>>>>>> 651d98f (feat: add SearchInput component ml-41)
 			</form>
 			<h5 className={styles["link-container"]}>
 				Already have an account?

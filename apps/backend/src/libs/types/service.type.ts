@@ -1,8 +1,8 @@
 type Service<T = unknown> = {
 	create(payload: unknown): Promise<T>;
-	delete(id: number, authId?: number): Promise<boolean>;
+	delete(id: number): Promise<boolean>;
 	find(id: number): Promise<T>;
-	findAll(id?: number): Promise<{
+	findAll(): Promise<{
 		items: T[];
 	}>;
 	update(id: number, payload: Partial<T>): Promise<T>;

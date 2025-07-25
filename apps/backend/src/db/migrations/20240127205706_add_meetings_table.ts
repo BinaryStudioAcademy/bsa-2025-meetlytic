@@ -1,7 +1,13 @@
 import { type Knex } from "knex";
 
-const TABLE_NAME = "meetings";
+import { MeetingHost } from "~/modules/meetings/meetings.js";
 
+const TableName = {
+	MEETINGS: "meetings",
+	USERS: "users",
+} as const;
+
+const DELETE_STRATEGY = "CASCADE";
 const ColumnName = {
 	CREATED_AT: "created_at",
 	HOST: "host",
@@ -12,21 +18,20 @@ const ColumnName = {
 } as const;
 
 function down(knex: Knex): Promise<void> {
-	return knex.schema.dropTableIfExists(TABLE_NAME);
+	return knex.schema.dropTableIfExists(TableName.MEETINGS);
 }
 
 function up(knex: Knex): Promise<void> {
-	return knex.schema.createTable(TABLE_NAME, (table) => {
+	return knex.schema.createTable(TableName.MEETINGS, (table) => {
 		table.increments(ColumnName.ID).primary();
 		table.text(ColumnName.INSTANCE_ID).notNullable();
-		table.string(ColumnName.HOST).notNullable();
+		table.enu(ColumnName.HOST, Object.values(MeetingHost)).notNullable();
 		table
 			.integer(ColumnName.OWNER_ID)
-			.unsigned()
 			.notNullable()
-			.references("id")
-			.inTable("users")
-			.onDelete("CASCADE");
+			.references(ColumnName.ID)
+			.inTable(TableName.USERS)
+			.onDelete(DELETE_STRATEGY);
 		table
 			.dateTime(ColumnName.CREATED_AT)
 			.notNullable()

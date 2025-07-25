@@ -46,7 +46,7 @@ const Input = <T extends FieldValues>({
 	const hasError = Boolean(error);
 
 	return (
-		<label className={styles["lable-wrapper"]}>
+		<label className={styles["label-wrapper"]}>
 			{hasLabel && <span>{label}</span>}
 			<span className={styles["input-relative-wrapper"]}>
 				{iconName && (

@@ -1,9 +1,6 @@
-const BUTTON_VARIANT = {
+const ButtonVariant = {
 	OUTLINED: "outlined",
 	PRIMARY: "primary",
 } as const;
 
-type ButtonVariant = (typeof BUTTON_VARIANT)[keyof typeof BUTTON_VARIANT];
-
-export { BUTTON_VARIANT };
-export type { ButtonVariant };
+export { ButtonVariant };

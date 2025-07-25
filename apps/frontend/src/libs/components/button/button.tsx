@@ -1,10 +1,6 @@
-import {
-	BUTTON_SIZE,
-	BUTTON_VARIANT,
-	type ButtonSize,
-	type ButtonVariant,
-} from "~/libs/enums/enums.js";
+import { ButtonSize, ButtonVariant } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
+import { type Size, type Variant } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
@@ -14,9 +10,9 @@ type Properties = {
 	isDisabled?: boolean;
 	label: string;
 	onClick?: React.MouseEventHandler<HTMLButtonElement>;
-	size?: ButtonSize;
+	size?: Size;
 	type?: "button" | "submit";
-	variant?: ButtonVariant;
+	variant?: Variant;
 };
 
 const Button: React.FC<Properties> = ({
@@ -25,9 +21,9 @@ const Button: React.FC<Properties> = ({
 	isDisabled = false,
 	label,
 	onClick,
-	size = BUTTON_SIZE.DEFAULT,
+	size = ButtonSize.DEFAULT,
 	type = "button",
-	variant = BUTTON_VARIANT.PRIMARY,
+	variant = ButtonVariant.PRIMARY,
 }: Properties) => (
 	<button
 		className={getValidClassNames(

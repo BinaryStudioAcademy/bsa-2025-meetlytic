@@ -7,11 +7,12 @@ import {
 	waitUntilStackDeleteComplete,
 } from "@aws-sdk/client-cloudformation";
 
-import { meetingService } from "~/modules/meetings/meetings.js";
+import { type MeetingService } from "~/modules/meetings/meeting.service.js";
 
 import { type Logger } from "../logger/logger.js";
 import {
 	Capability,
+	ExceptionMessage,
 	OutputKey,
 	ParameterKey,
 	StackPrefix,
@@ -24,16 +25,16 @@ type Constructor = {
 	};
 	imageId: string;
 	logger: Logger;
+	meetingService: MeetingService;
 	region: string;
-	securityGroupId: string;
 	templateBody: string;
 };
 
-class CloudFormationEC2 {
+class CloudFormation {
 	private client: CloudFormationClient;
 	private imageId: string;
 	private logger: Logger;
-	private securityGroupId: string;
+	private meetingService: MeetingService;
 	private templateBody: string;
 
 	constructor({
@@ -41,17 +42,16 @@ class CloudFormationEC2 {
 		imageId,
 		logger,
 		region,
-		securityGroupId,
 		templateBody,
 	}: Constructor) {
 		this.templateBody = templateBody;
 		this.imageId = imageId;
 		this.logger = logger;
+		this.meetingService = meetingService;
 		this.client = new CloudFormationClient({
 			credentials,
 			region,
 		});
-		this.securityGroupId = securityGroupId;
 	}
 
 	private async getInstanceIdFromStack(stackName: string): Promise<string> {
@@ -63,7 +63,7 @@ class CloudFormationEC2 {
 		)?.OutputValue;
 
 		if (!instanceId) {
-			throw new Error("Failed to get InstanceId from CloudFormation output");
+			throw new Error(ExceptionMessage.FAILED_TO_GET_INSTANCE);
 		}
 
 		return instanceId;
@@ -81,10 +81,6 @@ class CloudFormationEC2 {
 			Capabilities: [Capability.NAMED_IAM],
 			Parameters: [
 				{ ParameterKey: ParameterKey.IMAGE_ID, ParameterValue: this.imageId },
-				{
-					ParameterKey: ParameterKey.SECURITY_GROUP_ID,
-					ParameterValue: this.securityGroupId,
-				},
 			],
 			StackName: stackName,
 			TemplateBody: this.templateBody,
@@ -116,10 +112,10 @@ class CloudFormationEC2 {
 			{ StackName: stackName },
 		);
 
-		await meetingService.update(meetingId, { instanceId: null });
+		await this.meetingService.update(meetingId, { instanceId: null });
 
 		this.logger.info(`Stack ${stackName} deleted`);
 	}
 }
 
-export { CloudFormationEC2 };
+export { CloudFormation };

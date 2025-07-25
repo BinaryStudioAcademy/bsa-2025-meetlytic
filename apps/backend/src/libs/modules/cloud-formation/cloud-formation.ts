@@ -1,7 +1,8 @@
 import { config } from "~/libs/modules/config/config.js";
 import { logger } from "~/libs/modules/logger/logger.js";
+import { meetingService } from "~/modules/meetings/meetings.js";
 
-import { CloudFormationEC2 } from "./ec2-cloudformation.module.js";
+import { CloudFormation } from "./cloud-formation.module.js";
 import templateJSON from "./libs/templates/ec2-instance-template.json" with { type: "json" };
 
 const {
@@ -9,16 +10,15 @@ const {
 	AMI_ID: imageId,
 	REGION,
 	SECRET_ACCESS_KEY: secretAccessKey,
-	SECURITY_GROUP_ID: securityGroupId,
 } = config.ENV.AWS;
 
-const ec2 = new CloudFormationEC2({
+const cloudFormation = new CloudFormation({
 	credentials: { accessKeyId, secretAccessKey },
 	imageId,
 	logger,
+	meetingService,
 	region: REGION,
-	securityGroupId,
 	templateBody: JSON.stringify(templateJSON),
 });
 
-export { ec2 };
+export { cloudFormation };

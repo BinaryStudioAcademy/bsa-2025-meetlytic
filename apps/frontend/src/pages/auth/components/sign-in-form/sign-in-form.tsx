@@ -1,15 +1,9 @@
 import { Button, Input, Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import {
-	useAppDispatch,
-	useAppForm,
-	useCallback,
-	useNavigate,
-} from "~/libs/hooks/hooks.js";
-import { signIn } from "~/modules/auth/slices/actions.js";
+import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
 	DEFAULT_SIGN_IN_VALUES,
-	type FormValues,
+	type UserSignInRequestDto,
 	userSignInValidationSchema,
 } from "~/modules/users/users.js";
 
@@ -17,37 +11,20 @@ import { AuthLayout } from "../auth-layout/auth-layout.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	onSubmit?: (data: FormValues) => void;
+	onSubmit: (data: UserSignInRequestDto) => void;
 };
 
-const SignInForm: React.FC<Properties> = () => {
-	const { control, errors, handleSubmit } = useAppForm<FormValues>({
+const SignInForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
+	const { control, errors, handleSubmit } = useAppForm<UserSignInRequestDto>({
 		defaultValues: DEFAULT_SIGN_IN_VALUES,
 		validationSchema: userSignInValidationSchema,
 	});
 
-	const dispatch = useAppDispatch();
-	const navigate = useNavigate();
-
-	const handleSignIn = useCallback(
-		async (data: FormValues) => {
-			await dispatch(signIn(data)).unwrap();
-			await navigate("/");
-		},
-		[dispatch, navigate],
-	);
-	const handleSubmitForm = useCallback(
-		(data: FormValues) => {
-			void handleSignIn(data);
-		},
-		[handleSignIn],
-	);
-
 	const handleFormSubmit = useCallback(
 		(event: React.FormEvent<HTMLFormElement>) => {
-			void handleSubmit(handleSubmitForm)(event);
+			void handleSubmit(onSubmit)(event);
 		},
-		[handleSubmit, handleSubmitForm],
+		[handleSubmit, onSubmit],
 	);
 
 	return (

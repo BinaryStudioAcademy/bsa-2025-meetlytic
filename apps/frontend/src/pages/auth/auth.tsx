@@ -28,9 +28,6 @@ const Auth: React.FC = () => {
 				.unwrap()
 				.then(() => {
 					navigate(AppRoute.ROOT);
-				})
-				.catch(() => {
-					// Error handling is already done in the action (notifications, etc.)
 				});
 		},
 		[dispatch, navigate],

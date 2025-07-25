@@ -13,7 +13,7 @@ type Properties<T extends FieldValues> = {
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
 	label: string;
-	labelСlassName?: string | undefined;
+	labelStyle?: string | undefined;
 	name: FieldPath<T>;
 	placeholder?: string;
 	type?: "email" | "password" | "text";
@@ -24,7 +24,7 @@ const Input = <T extends FieldValues>({
 	control,
 	errors,
 	label,
-	labelСlassName,
+	labelStyle,
 	name,
 	placeholder = "",
 	type = "text",
@@ -36,7 +36,7 @@ const Input = <T extends FieldValues>({
 
 	return (
 		<label>
-			<span className={labelСlassName}>{label}</span>
+			<span className={labelStyle}>{label}</span>
 			<input
 				{...field}
 				className={className}

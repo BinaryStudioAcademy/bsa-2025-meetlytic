@@ -37,7 +37,7 @@ const SignInForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					control={control}
 					errors={errors}
 					label="Email"
-					labelСlassName={styles["label-text"]}
+					labelStyle={styles["label-text"]}
 					name="email"
 					placeholder="mail@abc.com"
 					type="text"
@@ -47,7 +47,7 @@ const SignInForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					control={control}
 					errors={errors}
 					label="Password"
-					labelСlassName={styles["label-text"]}
+					labelStyle={styles["label-text"]}
 					name="password"
 					placeholder="********"
 					type="password"

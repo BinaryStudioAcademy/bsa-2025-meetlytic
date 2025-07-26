@@ -48,6 +48,7 @@ const Input = <T extends FieldValues>({
 	} = useFormController({ control, name });
 	const error = errors[name]?.message;
 	const hasError = Boolean(error);
+
 	return (
 		<span className={styles["input-wrapper"]}>
 			<label htmlFor={name}>
@@ -72,8 +73,8 @@ const Input = <T extends FieldValues>({
 						styles["input"],
 						iconName && iconPosition && inputPaddingToClass[iconPosition],
 						hasError
-							? styles["input--invalid"]
-							: isSubmitted && styles["input--valid"],
+							? styles["input-invalid"]
+							: isSubmitted && styles["input-valid"],
 						className,
 					)}
 					{...field}

@@ -14,11 +14,11 @@
 	height: 16px;
 }
 
-.input-icon--left {
+.input-icon-left {
 	left: 8px;
 }
 
-.input-icon--right {
+.input-icon-right {
 	right: 8px;
 }
 
@@ -26,21 +26,21 @@
 	width: 100%;
 	padding: 13px 10px;
 	border: 1px var(--color-background-2) solid;
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius-sm);
 }
 
-.input--valid {
+.input-valid {
 	border-color: var(--color-accent-2);
 }
 
-.input--invalid {
+.input-invalid {
 	border-color: var(--color-accent-1);
 }
 
-.input--left-padding {
+.input-left-padding {
 	padding-left: 30px;
 }
 
-.input--right-padding {
+.input-right-padding {
 	padding-right: 30px;
 }

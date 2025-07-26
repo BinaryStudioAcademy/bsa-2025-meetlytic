@@ -1,6 +1,5 @@
 import { APIPath } from "~/libs/enums/enums.js";
 import {
-	type APIHandlerOptions,
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
@@ -9,20 +8,24 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { MeetingsApiPath } from "./libs/enums/enums.js";
 import {
-	MeetingCreateRequestDto,
-	type MeetingUpdateRequestDto,
+	type CreateMeetingOptions,
+	type DeleteMeetingOptions,
+	type FindMeetingOptions,
+	type UpdateMeetingOptions,
 } from "./libs/types/types.js";
 import {
 	meetingCreateValidationSchema,
 	meetingUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
-import { type MeetingRepository } from "./meeting.repository.js";
 import { MeetingService } from "./meeting.service.js";
 
 /**
  * @swagger
  * components:
- *   schemas:
+ *   sAPIHandlerOptions<{
+			body: MeetingUpdateRequestDto;
+			params: { id: string };
+		}>,chemas:
  *     Meeting:
  *       type: object
  *       properties:
@@ -65,66 +68,42 @@ import { MeetingService } from "./meeting.service.js";
  */
 
 class MeetingsController extends BaseController {
-	private meetingRepository: MeetingRepository;
+	private meetingService: MeetingService;
 
-	public constructor(logger: Logger, meetingRepository: MeetingRepository) {
+	public constructor(logger: Logger, meetingService: MeetingService) {
 		super(logger, APIPath.MEETINGS);
-		this.meetingRepository = meetingRepository;
+		this.meetingService = meetingService;
 
 		this.addRoute({
-			handler: (options) =>
-				this.findAll(options as APIHandlerOptions & { user: { id: number } }),
-			method: "GET",
-			path: MeetingsApiPath.ROOT,
-		});
-
-		this.addRoute({
-			handler: (options) =>
-				this.find(
-					options as APIHandlerOptions<{ params: { id: string } }> & {
-						user: { id: number };
-					},
-				),
-			method: "GET",
-			path: MeetingsApiPath.$ID,
-		});
-
-		this.addRoute({
-			handler: (options) =>
-				this.create(
-					options as APIHandlerOptions<{ body: MeetingCreateRequestDto }> & {
-						user: { id: number };
-					},
-				),
+			handler: (options) => this.create(options as CreateMeetingOptions),
 			method: "POST",
 			path: MeetingsApiPath.ROOT,
 			validation: { body: meetingCreateValidationSchema },
 		});
 
 		this.addRoute({
-			handler: (options) =>
-				this.update(
-					options as APIHandlerOptions<{
-						body: MeetingUpdateRequestDto;
-						params: { id: string };
-					}> & {
-						user: { id: number };
-					},
-				),
+			handler: (options) => this.update(options as UpdateMeetingOptions),
 			method: "PATCH",
 			path: MeetingsApiPath.$ID,
 			validation: { body: meetingUpdateValidationSchema },
 		});
 
 		this.addRoute({
-			handler: (options) =>
-				this.delete(
-					options as APIHandlerOptions<{ params: { id: string } }> & {
-						user: { id: number };
-					},
-				),
+			handler: (options) => this.delete(options as DeleteMeetingOptions),
 			method: "DELETE",
 			path: MeetingsApiPath.$ID,
+		});
+
+		this.addRoute({
+			handler: (options) => this.find(options as FindMeetingOptions),
+			method: "GET",
+			path: MeetingsApiPath.$ID,
+		});
+
+		this.addRoute({
+			handler: () => this.findAll(),
+			method: "GET",
+			path: MeetingsApiPath.ROOT,
 		});
 	}
 
@@ -148,15 +127,9 @@ class MeetingsController extends BaseController {
 	 *               $ref: "#/components/schemas/Meeting"
 	 */
 	private async create(
-		options: APIHandlerOptions<{ body: MeetingCreateRequestDto }> & {
-			user: { id: number };
-		},
+		options: CreateMeetingOptions,
 	): Promise<APIHandlerResponse> {
-		const service = new MeetingService(this.meetingRepository, options.user.id);
-		const created = await service.create({
-			...options.body,
-			ownerId: options.user.id,
-		});
+		const created = await this.meetingService.create(options.body);
 		return { payload: created, status: HTTPCode.CREATED };
 	}
 
@@ -176,13 +149,10 @@ class MeetingsController extends BaseController {
 	 *         description: Meeting deleted
 	 */
 	private async delete(
-		options: APIHandlerOptions<{ params: { id: string } }> & {
-			user: { id: number };
-		},
+		options: DeleteMeetingOptions,
 	): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
-		const service = new MeetingService(this.meetingRepository, options.user.id);
-		await service.delete(id);
+		await this.meetingService.delete(id);
 		return { payload: null, status: HTTPCode.NO_CONTENT };
 	}
 
@@ -205,14 +175,9 @@ class MeetingsController extends BaseController {
 	 *             schema:
 	 *               $ref: "#/components/schemas/Meeting"
 	 */
-	private async find(
-		options: APIHandlerOptions<{ params: { id: string } }> & {
-			user: { id: number };
-		},
-	): Promise<APIHandlerResponse> {
+	private async find(options: FindMeetingOptions): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
-		const service = new MeetingService(this.meetingRepository, options.user.id);
-		const meeting = await service.find(id);
+		const meeting = await this.meetingService.find(id);
 		return { payload: meeting, status: HTTPCode.OK };
 	}
 
@@ -231,11 +196,8 @@ class MeetingsController extends BaseController {
 	 *               items:
 	 *                 $ref: "#/components/schemas/Meeting"
 	 */
-	private async findAll(
-		options: APIHandlerOptions & { user: { id: number } },
-	): Promise<APIHandlerResponse> {
-		const service = new MeetingService(this.meetingRepository, options.user.id);
-		const all = await service.findAll();
+	private async findAll(): Promise<APIHandlerResponse> {
+		const all = await this.meetingService.findAll();
 		return { payload: all, status: HTTPCode.OK };
 	}
 
@@ -265,20 +227,10 @@ class MeetingsController extends BaseController {
 	 *               $ref: "#/components/schemas/Meeting"
 	 */
 	private async update(
-		options: APIHandlerOptions<{
-			body: MeetingUpdateRequestDto;
-			params: { id: string };
-		}> & {
-			user: { id: number };
-		},
+		options: UpdateMeetingOptions,
 	): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
-		const service = new MeetingService(this.meetingRepository, options.user.id);
-		const payload = {
-			...options.body,
-			ownerId: options.user.id,
-		};
-		const updated = await service.update(id, payload);
+		const updated = await this.meetingService.update(id, options.body);
 		return { payload: updated, status: HTTPCode.OK };
 	}
 }

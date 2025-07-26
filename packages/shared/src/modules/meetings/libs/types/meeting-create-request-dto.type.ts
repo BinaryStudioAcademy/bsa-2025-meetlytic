@@ -1,4 +1,4 @@
-import { ValueOf } from "../../../../index.js";
+import { ValueOf } from "../../../../libs/types/types.js";
 import { MeetingHost } from "../enums/meetings-host.enum.js";
 
 type MeetingCreateRequestDto = {

@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { ValueOf } from "../../../../libs/types/types.js";
 import {
 	MeetingHost,
 	MeetingValidationMessage,
@@ -16,12 +17,8 @@ const meetingUpdate = z
 				message: MeetingValidationMessage.HOST_REQUIRE,
 			})
 			.refine(
-				(
-					value: string,
-				): value is (typeof MeetingHost)[keyof typeof MeetingHost] =>
-					allowedHosts.includes(
-						value as (typeof MeetingHost)[keyof typeof MeetingHost],
-					),
+				(value: string): boolean =>
+					allowedHosts.includes(value as ValueOf<typeof MeetingHost>),
 				{
 					message: MeetingValidationMessage.HOST_WRONG,
 				},

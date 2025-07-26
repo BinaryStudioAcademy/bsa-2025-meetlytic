@@ -1,0 +1,30 @@
+.title {
+	width: 100%;
+	max-width: 420px;
+	margin-block: 35px 45px;
+	color: var(--color-brand);
+}
+
+.link-container {
+	display: flex;
+	gap: 10px;
+	max-width: 420px;
+	margin-block: 30px 10px;
+}
+
+.link-container a {
+	color: var(--color-brand);
+	text-decoration: none;
+}
+
+.link-container p {
+	margin-block: 0;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	width: 100%;
+	max-width: 420px;
+}

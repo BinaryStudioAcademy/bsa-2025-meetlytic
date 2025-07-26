@@ -27,7 +27,11 @@ type Constructor = {
 	logger: Logger;
 	meetingService: MeetingService;
 	region: string;
-	templateBody: string;
+};
+
+type Create = {
+	id: number;
+	template: string;
 };
 
 class CloudFormation {
@@ -35,16 +39,8 @@ class CloudFormation {
 	private imageId: string;
 	private logger: Logger;
 	private meetingService: MeetingService;
-	private templateBody: string;
 
-	constructor({
-		credentials,
-		imageId,
-		logger,
-		region,
-		templateBody,
-	}: Constructor) {
-		this.templateBody = templateBody;
+	constructor({ credentials, imageId, logger, region }: Constructor) {
 		this.imageId = imageId;
 		this.logger = logger;
 		this.meetingService = meetingService;
@@ -72,8 +68,8 @@ class CloudFormation {
 		return `${StackPrefix.MEETLYTIC}-${String(meetingId)}`;
 	}
 
-	async create(meetingId: number): Promise<string> {
-		const stackName = this.getStackName(meetingId);
+	async create({ id, template }: Create): Promise<string> {
+		const stackName = this.getStackName(id);
 
 		this.logger.info(`Creating stack: ${stackName}`);
 
@@ -83,7 +79,7 @@ class CloudFormation {
 				{ ParameterKey: ParameterKey.IMAGE_ID, ParameterValue: this.imageId },
 			],
 			StackName: stackName,
-			TemplateBody: this.templateBody,
+			TemplateBody: template,
 		});
 
 		await this.client.send(command);

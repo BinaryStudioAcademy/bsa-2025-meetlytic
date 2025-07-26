@@ -84,7 +84,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 						type="text"
 					/>
 				</p>
-				<Button className="btn-primary" label="Sign up" type="submit" />
+				<Button label="Sign up" type="submit" />
 			</form>
 			<h5 className={getValidClassNames([styles["link-container"], "h5"])}>
 				Already have an account?

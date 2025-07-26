@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import stylistic from "@stylistic/eslint-plugin";
 import ts from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import { resolve as tsResolver } from "eslint-import-resolver-typescript";
@@ -60,6 +61,12 @@ const jsConfig = {
 			{
 				message: "TS features are forbidden",
 				selector: "TSEnumDeclaration,ClassDeclaration[abstract=true]",
+			},
+			{
+				message:
+					"Avoid import/export type { Type } from './module'. Prefer import/export { type Type } from './module'.",
+				selector:
+					"ImportDeclaration[importKind=type],ExportNamedDeclaration[exportKind=type]",
 			},
 		],
 		quotes: ["error", "double"],
@@ -187,6 +194,20 @@ const typescriptConfig = {
 	},
 	rules: {
 		...ts.configs["strict-type-checked"].rules,
+		"@typescript-eslint/consistent-type-exports": ["error"],
+		"@typescript-eslint/consistent-type-imports": [
+			"error",
+			{
+				fixStyle: "inline-type-imports",
+			},
+		],
+		"@typescript-eslint/explicit-function-return-type": [
+			"error",
+			{
+				allowTypedFunctionExpressions: true,
+			},
+		],
+		"@typescript-eslint/explicit-member-accessibility": ["error"],
 		"@typescript-eslint/no-magic-numbers": [
 			"error",
 			{
@@ -211,6 +232,34 @@ const jsdocConfig = {
 	},
 };
 
+/** @type {Config} */
+const stylisticConfig = {
+	files: ["**/*.ts", "**/*.tsx"],
+	plugins: {
+		"@stylistic": stylistic,
+	},
+	rules: {
+		"padding-line-between-statements": [
+			"error",
+			{
+				blankLine: "never",
+				next: "export",
+				prev: "export",
+			},
+			{
+				blankLine: "always",
+				next: "*",
+				prev: ["block-like", "throw"],
+			},
+			{
+				blankLine: "always",
+				next: ["return", "block-like", "throw"],
+				prev: "*",
+			},
+		],
+	},
+};
+
 /** @type {Config[]} */
 const overridesConfigs = [
 	{
@@ -227,6 +276,12 @@ const overridesConfigs = [
 			"import/no-default-export": ["off"],
 		},
 	},
+	{
+		files: ["*.js"],
+		rules: {
+			"@typescript-eslint/explicit-function-return-type": ["off"],
+		},
+	},
 ];
 
 /** @type {Config[]} */
@@ -240,6 +295,7 @@ const config = [
 	perfectionistConfig,
 	typescriptConfig,
 	jsdocConfig,
+	stylisticConfig,
 	...overridesConfigs,
 ];
 

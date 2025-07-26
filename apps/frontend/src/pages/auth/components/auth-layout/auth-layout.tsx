@@ -1,10 +1,12 @@
+import React from "react";
+
 import "./auth-layout.css";
 
 interface AuthLayoutProperties {
 	children: React.ReactNode;
 }
 
-const AuthLayout = ({ children }: AuthLayoutProperties) => {
+const AuthLayout = ({ children }: AuthLayoutProperties): React.JSX.Element => {
 	return (
 		<div className="auth">
 			<div className="auth__left">

@@ -1,3 +1,4 @@
+import React from "react";
 import {
 	type Control,
 	type FieldErrors,
@@ -22,10 +23,12 @@ type Properties<T extends FieldValues> = {
 	iconName?: IconName;
 	iconPosition?: "left" | "right";
 	label: string;
+	labelSuffix?: React.ReactNode;
 	name: FieldPath<T>;
 	onClickIcon?: () => void;
 	placeholder?: string;
 	type?: React.HTMLInputTypeAttribute;
+	wrapperClassName?: string;
 };
 
 const Input = <T extends FieldValues>({
@@ -37,10 +40,12 @@ const Input = <T extends FieldValues>({
 	iconName,
 	iconPosition = iconName && "left",
 	label,
+	labelSuffix,
 	name,
-	onClickIcon = () => {},
+	onClickIcon,
 	placeholder = "",
 	type = "text",
+	wrapperClassName = "",
 }: Properties<T>): React.JSX.Element => {
 	const {
 		field,
@@ -50,13 +55,17 @@ const Input = <T extends FieldValues>({
 	const hasError = Boolean(error);
 
 	return (
-		<span className={styles["input-wrapper"]}>
-			<label htmlFor={name}>
-				<span className={hasVisuallyHiddenLabel ? "visually-hidden" : ""}>
+		<div className={wrapperClassName}>
+			<div className={styles["label-wrapper"]}>
+				<label
+					className={hasVisuallyHiddenLabel ? "visually-hidden" : ""}
+					htmlFor={name}
+				>
 					{label}
-				</span>
-			</label>
-			<span className={styles["input-relative-inner-wrapper"]}>
+				</label>
+				{labelSuffix}
+			</div>
+			<div className={styles["input-relative-inner-wrapper"]}>
 				{iconName && (
 					<Icon
 						className={getValidClassNames(
@@ -82,9 +91,9 @@ const Input = <T extends FieldValues>({
 					placeholder={placeholder}
 					type={type}
 				/>
-			</span>
+			</div>
 			{hasError && <span>{error as string}</span>}
-		</span>
+		</div>
 	);
 };
 

@@ -1,3 +1,5 @@
+import { type RelationMappings } from "objection";
+
 import {
 	AbstractModel,
 	DatabaseTableName,
@@ -13,7 +15,7 @@ class UserModel extends AbstractModel {
 
 	public passwordSalt!: string;
 
-	public static get relationMappings() {
+	public static get relationMappings(): RelationMappings {
 		return {
 			userDetails: {
 				join: {

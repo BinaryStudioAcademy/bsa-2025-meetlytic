@@ -27,6 +27,7 @@ const Logo: React.FC<Properties> = ({
 			Meetlytic
 		</span>
 	);
+
 	return hasLink ? <Link to={AppRoute.ROOT}>{logoContent}</Link> : logoContent;
 };
 

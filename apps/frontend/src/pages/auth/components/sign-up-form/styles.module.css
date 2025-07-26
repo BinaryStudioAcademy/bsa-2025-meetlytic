@@ -2,6 +2,9 @@
 	width: 100%;
 	max-width: 420px;
 	margin-block: 35px 45px;
+	font-size: 36px;
+	font-weight: 700;
+	line-height: 23px;
 	color: var(--color-brand);
 }
 
@@ -10,6 +13,9 @@
 	gap: 10px;
 	max-width: 420px;
 	margin-block: 30px 10px;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 25px;
 }
 
 .link-container a {
@@ -27,4 +33,60 @@
 	gap: 24px;
 	width: 100%;
 	max-width: 420px;
+}
+
+.field {
+	width: 100%;
+	margin-block: 0;
+}
+
+.field label {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.field span {
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 18px;
+	color: var(--color-text-1);
+	letter-spacing: 0;
+}
+
+.field input {
+	width: 100%;
+	height: 44px;
+	padding-block: 13px;
+	padding-inline: 10px;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 18px;
+	color: var(--color-text-1);
+	letter-spacing: 0;
+	background-color: var(--color-background-4);
+	border: 1px solid var(--color-background-2);
+	border-radius: 5px;
+}
+
+.field input::placeholder {
+	color: var(--color-text-2);
+}
+
+.field:has(input ~ span) input {
+	border-color: var(--color-accent-1);
+}
+
+.field input:focus,
+.field input:focus-visible {
+	outline: unset;
+	border-color: var(--color-accent-2);
+}
+
+.field input ~ span {
+	color: var(--color-accent-1);
+}
+
+.form button[type="submit"] span {
+	text-transform: capitalize;
 }

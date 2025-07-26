@@ -1,6 +1,6 @@
 import { Button, Input, Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/app-route.enum.js";
-import { getValidClassNames } from "~/libs/helpers/get-valid-class-names.helper.js";
+import { ButtonVariant } from "~/libs/enums/button-variant.enum.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
 	type UserSignUpRequestDto,
@@ -30,11 +30,9 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 
 	return (
 		<AuthLayout>
-			<h3 className={getValidClassNames([styles["title"], "h3"])}>
-				Create an account
-			</h3>
+			<h3 className={styles["title"]}>Create an account</h3>
 			<form className={styles["form"]} onSubmit={handleFormSubmit}>
-				<p className="field">
+				<p className={styles["field"]}>
 					<Input
 						control={control}
 						errors={errors}
@@ -44,7 +42,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 						type="text"
 					/>
 				</p>
-				<p className="field">
+				<p className={styles["field"]}>
 					<Input
 						control={control}
 						errors={errors}
@@ -54,7 +52,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 						type="text"
 					/>
 				</p>
-				<p className="field">
+				<p className={styles["field"]}>
 					<Input
 						control={control}
 						errors={errors}
@@ -64,7 +62,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 						type="text"
 					/>
 				</p>
-				<p className="field">
+				<p className={styles["field"]}>
 					<Input
 						control={control}
 						errors={errors}
@@ -74,7 +72,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 						type="text"
 					/>
 				</p>
-				<p className="field">
+				<p className={styles["field"]}>
 					<Input
 						control={control}
 						errors={errors}
@@ -84,9 +82,13 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 						type="text"
 					/>
 				</p>
-				<Button label="Sign up" type="submit" />
+				<Button
+					label="Create an account"
+					type="submit"
+					variant={ButtonVariant.PRIMARY}
+				/>
 			</form>
-			<h5 className={getValidClassNames([styles["link-container"], "h5"])}>
+			<h5 className={styles["link-container"]}>
 				Already have an account?
 				<Link to={AppRoute.SIGN_IN}>
 					<p>Sign in</p>

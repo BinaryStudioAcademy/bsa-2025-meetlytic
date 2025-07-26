@@ -1,6 +1,6 @@
 const AvatarType = {
-	ALT: "avatar--alt",
-	MAIN: "avatar--main",
+	ALT: "avatar-alt",
+	MAIN: "avatar-main",
 } as const;
 
 export { AvatarType };

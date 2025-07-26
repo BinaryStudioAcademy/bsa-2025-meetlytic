@@ -6,12 +6,24 @@ type Properties = {
 	className?: string | undefined;
 	color?: string | undefined;
 	name: IconName;
+	onClick?: () => void;
 };
 
-const Icon: React.FC<Properties> = ({ className, color, name }: Properties) => {
+const Icon: React.FC<Properties> = ({
+	className,
+	color,
+	name,
+	onClick,
+}: Properties) => {
 	const Icon = iconNameToSvg[name];
 
-	return <Icon className={className} color={color} />;
+	return onClick ? (
+		<button type="button">
+			<Icon className={className} color={color} onClick={onClick} />
+		</button>
+	) : (
+		<Icon className={className} color={color} />
+	);
 };
 
 export { Icon };

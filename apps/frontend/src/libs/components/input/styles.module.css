@@ -1,9 +1,9 @@
-.label-wrapper {
+.input-wrapper {
 	display: flex;
 	flex-direction: column;
 }
 
-.input-relative-wrapper {
+.input-relative-inner-wrapper {
 	position: relative;
 }
 
@@ -26,14 +26,14 @@
 	width: 100%;
 	padding: 13px 10px;
 	border: 1px var(--color-background-2) solid;
-	border-radius: 5px;
+	border-radius: var(--border-radius);
 }
 
-.input:enabled:user-valid {
+.input--valid {
 	border-color: var(--color-accent-2);
 }
 
-.input:enabled:user-invalid {
+.input--invalid {
 	border-color: var(--color-accent-1);
 }
 

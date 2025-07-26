@@ -17,12 +17,13 @@ type Properties<T extends FieldValues> = {
 	className?: string;
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
-	hasLabel?: boolean;
+	hasVisuallyHiddenLabel?: boolean;
 	iconClassName?: string;
 	iconName?: IconName;
 	iconPosition?: "left" | "right";
 	label: string;
 	name: FieldPath<T>;
+	onClickIcon?: () => void;
 	placeholder?: string;
 	type?: React.HTMLInputTypeAttribute;
 };
@@ -31,24 +32,30 @@ const Input = <T extends FieldValues>({
 	className = "",
 	control,
 	errors,
-	hasLabel = true,
+	hasVisuallyHiddenLabel = false,
 	iconClassName = "",
 	iconName,
 	iconPosition = iconName && "left",
 	label,
 	name,
+	onClickIcon = () => {},
 	placeholder = "",
 	type = "text",
 }: Properties<T>): React.JSX.Element => {
-	const { field } = useFormController({ control, name });
-
+	const {
+		field,
+		formState: { isSubmitted },
+	} = useFormController({ control, name });
 	const error = errors[name]?.message;
 	const hasError = Boolean(error);
-
 	return (
-		<label className={styles["label-wrapper"]}>
-			{hasLabel && <span>{label}</span>}
-			<span className={styles["input-relative-wrapper"]}>
+		<span className={styles["input-wrapper"]}>
+			<label htmlFor={name}>
+				<span className={hasVisuallyHiddenLabel ? "visually-hidden" : ""}>
+					{label}
+				</span>
+			</label>
+			<span className={styles["input-relative-inner-wrapper"]}>
 				{iconName && (
 					<Icon
 						className={getValidClassNames(
@@ -57,21 +64,26 @@ const Input = <T extends FieldValues>({
 							iconClassName,
 						)}
 						name={iconName}
+						onClick={onClickIcon}
 					/>
 				)}
 				<input
 					className={getValidClassNames(
 						styles["input"],
 						iconName && iconPosition && inputPaddingToClass[iconPosition],
+						hasError
+							? styles["input--invalid"]
+							: isSubmitted && styles["input--valid"],
 						className,
 					)}
 					{...field}
+					id={name}
 					placeholder={placeholder}
 					type={type}
 				/>
 			</span>
 			{hasError && <span>{error as string}</span>}
-		</label>
+		</span>
 	);
 };
 

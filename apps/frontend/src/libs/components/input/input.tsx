@@ -1,3 +1,4 @@
+import React from "react";
 import {
 	type Control,
 	type FieldErrors,
@@ -21,6 +22,7 @@ type Properties<T extends FieldValues> = {
 	iconName?: IconName;
 	iconPosition?: "left" | "right";
 	label: string;
+	labelSuffix?: React.ReactNode;
 	name: FieldPath<T>;
 	onClickIcon?: () => void;
 	placeholder?: string;
@@ -37,6 +39,7 @@ const Input = <T extends FieldValues>({
 	iconName,
 	iconPosition = "left",
 	label,
+	labelSuffix,
 	name,
 	onClickIcon,
 	placeholder,

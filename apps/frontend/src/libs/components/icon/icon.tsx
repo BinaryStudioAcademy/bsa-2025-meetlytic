@@ -6,7 +6,7 @@ type Properties = {
 	className?: string | undefined;
 	color?: string | undefined;
 	name: IconName;
-	onClick?: () => void;
+	onClick?: (() => void) | undefined;
 };
 
 const Icon: React.FC<Properties> = ({

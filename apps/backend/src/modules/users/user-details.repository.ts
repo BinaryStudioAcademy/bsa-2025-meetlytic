@@ -30,11 +30,13 @@ class UserDetailsRepository implements Repository {
 
 	public async delete(id: number): Promise<boolean> {
 		const deletedRows = await this.userDetailsModel.query().deleteById(id);
+
 		return deletedRows > NO_ROWS_DELETED;
 	}
 
 	public async find(id: number): Promise<null | UserDetailsEntity> {
 		const userDetails = await this.userDetailsModel.query().findById(id);
+
 		return userDetails ? UserDetailsEntity.initialize(userDetails) : null;
 	}
 
@@ -49,6 +51,7 @@ class UserDetailsRepository implements Repository {
 		payload: Partial<Record<string, unknown>>,
 	): Promise<null | UserDetailsEntity> {
 		const existing = await this.userDetailsModel.query().findById(id);
+
 		if (!existing) {
 			return null;
 		}

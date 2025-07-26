@@ -16,7 +16,7 @@ class BaseToken<T extends JWTPayload> {
 	private expirationTime: string;
 	private secret: Uint8Array;
 
-	constructor({ algorithm, expirationTime, secret }: Constructor) {
+	public constructor({ algorithm, expirationTime, secret }: Constructor) {
 		this.secret = secret;
 		this.algorithm = algorithm;
 		this.expirationTime = expirationTime;

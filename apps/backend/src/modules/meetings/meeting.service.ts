@@ -1,3 +1,5 @@
+import { type CloudFormation } from "~/libs/modules/cloud-formation/cloud-formation.module.js";
+import template from "~/libs/modules/cloud-formation/libs/templates/ec2-instance-template.json" with { type: "json" };
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
 
@@ -7,18 +9,23 @@ import {
 	type MeetingCreateRequestDto,
 	type MeetingGetAllResponseDto,
 	type MeetingResponseDto,
-	type MeetingUpdateRequestDto,
 } from "./libs/types/types.js";
 import { MeetingEntity } from "./meeting.entity.js";
 import { type MeetingRepository } from "./meeting.repository.js";
 
 class MeetingService implements Service<MeetingResponseDto> {
+	private cloudFormation: CloudFormation;
 	private meetingRepository: MeetingRepository;
 	private userId: number;
 
-	constructor(repo: MeetingRepository, userId: number) {
+	constructor(
+		repo: MeetingRepository,
+		userId: number,
+		cloudFormation: CloudFormation,
+	) {
 		this.meetingRepository = repo;
 		this.userId = userId;
+		this.cloudFormation = cloudFormation;
 	}
 
 	private getCurrentUserId(): number {
@@ -35,7 +42,29 @@ class MeetingService implements Service<MeetingResponseDto> {
 		});
 
 		const newMeeting = await this.meetingRepository.create(meeting);
-		return newMeeting.toObject();
+		const { id } = newMeeting.toObject();
+
+		if (!id) {
+			throw new MeetingError({
+				message: MeetingStatusMessage.MEETING_FAILED_TO_CREATE,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		const instanceId = await this.cloudFormation.create({
+			id,
+			template: JSON.stringify(template),
+		});
+		const updated = await this.meetingRepository.update(id, {
+			instanceId,
+		});
+		if (!updated) {
+			throw new MeetingError({
+				message: MeetingStatusMessage.UPDATE_FAILED,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+		return updated.toObject();
 	}
 
 	public async delete(id: number): Promise<boolean> {

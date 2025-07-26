@@ -2,7 +2,7 @@ import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
 import { type Service } from "~/libs/types/types.js";
 
 import {
-	UserCredentials,
+	type UserCredentials,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignUpRequestDto,
@@ -10,7 +10,7 @@ import {
 import { UserDetailsEntity } from "./user-details.entity.js";
 import { type UserDetailsRepository } from "./user-details.repository.js";
 import { UserEntity } from "./user.entity.js";
-import { UserRepository } from "./user.repository.js";
+import { type UserRepository } from "./user.repository.js";
 
 class UserService implements Service {
 	private userDetailsRepository: UserDetailsRepository;
@@ -70,6 +70,7 @@ class UserService implements Service {
 
 	public async getCredentials(id: number): Promise<null | UserCredentials> {
 		const credentials = await this.userRepository.getCredentials(id);
+
 		return credentials ?? null;
 	}
 

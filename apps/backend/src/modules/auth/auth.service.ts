@@ -19,20 +19,26 @@ class AuthService {
 		userRequestDto: UserSignInRequestDto,
 	): Promise<AuthResponseDto> {
 		const user = await this.userService.findByEmail(userRequestDto.email);
+
 		if (!user) {
 			throw new AuthError();
 		}
+
 		const credentials = await this.userService.getCredentials(user.id);
+
 		if (!credentials) {
 			throw new AuthError();
 		}
+
 		const isValid = await encrypt.verify(
 			userRequestDto.password,
 			credentials.passwordHash,
 		);
+
 		if (!isValid) {
 			throw new AuthError();
 		}
+
 		return {
 			token: await jwt.sign({ userId: user.id }),
 			user,

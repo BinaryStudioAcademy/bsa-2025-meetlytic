@@ -19,6 +19,7 @@ const NavigationLink: React.FC<Properties> = ({
 		},
 		[],
 	);
+
 	return (
 		<li>
 			<NavLink className={getClassName} key={label} to={href}>

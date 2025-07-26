@@ -3,4 +3,4 @@ type UserCredentials = {
 	passwordSalt: string;
 };
 
-export { UserCredentials };
+export { type UserCredentials };

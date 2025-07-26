@@ -14,9 +14,15 @@ import { type MeetingRepository } from "./meeting.repository.js";
 
 class MeetingService implements Service<MeetingResponseDto> {
 	private meetingRepository: MeetingRepository;
+	private userId: number;
 
-	public constructor(meetingRepository: MeetingRepository) {
-		this.meetingRepository = meetingRepository;
+	constructor(repo: MeetingRepository, userId: number) {
+		this.meetingRepository = repo;
+		this.userId = userId;
+	}
+
+	private getCurrentUserId(): number {
+		return this.userId;
 	}
 
 	public async create(
@@ -41,10 +47,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		const ownerId = meeting.toObject().ownerId;
-		const requestOwnerId = meeting.toObject().ownerId;
-
-		if (ownerId !== requestOwnerId) {
+		if (meeting.toObject().ownerId !== this.getCurrentUserId()) {
 			throw new MeetingError({
 				message: MeetingStatusMessage.FORBIDDEN,
 				status: HTTPCode.FORBIDDEN,
@@ -63,20 +66,24 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
+		if (meeting.toObject().ownerId !== this.getCurrentUserId()) {
+			throw new MeetingError({
+				message: MeetingStatusMessage.FORBIDDEN,
+				status: HTTPCode.FORBIDDEN,
+			});
+		}
+
 		return meeting.toObject();
 	}
 
 	public async findAll(): Promise<MeetingGetAllResponseDto> {
-		const FIRST = 0;
 		const allMeetings = await this.meetingRepository.findAll();
-		const ownerId = allMeetings[FIRST]?.toObject().ownerId ?? FIRST;
-
-		const filteredMeetings = allMeetings.filter(
-			(m) => m.toObject().ownerId === ownerId,
-		);
+		const userId = this.getCurrentUserId();
 
 		return {
-			items: filteredMeetings.map((m) => m.toObject()),
+			items: allMeetings
+				.filter((m) => m.toObject().ownerId === userId)
+				.map((m) => m.toObject()),
 		};
 	}
 
@@ -92,10 +99,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		if (
-			payload.ownerId !== undefined &&
-			payload.ownerId !== meeting.toObject().ownerId
-		) {
+		if (meeting.toObject().ownerId !== this.getCurrentUserId()) {
 			throw new MeetingError({
 				message: MeetingStatusMessage.FORBIDDEN,
 				status: HTTPCode.FORBIDDEN,
@@ -103,25 +107,24 @@ class MeetingService implements Service<MeetingResponseDto> {
 		}
 
 		const updatedEntity = MeetingEntity.initialize({
-			host: (payload as MeetingUpdateRequestDto).host,
+			host: payload.host ?? meeting.toObject().host,
 			id,
-			instanceId: meeting.toObject().instanceId,
+			instanceId: payload.instanceId ?? meeting.toObject().instanceId,
 			ownerId: meeting.toObject().ownerId,
 		});
 
-		const updated = await this.meetingRepository.update(
+		const updatedMeeting = await this.meetingRepository.update(
 			id,
 			updatedEntity.toNewObject(),
 		);
-
-		if (!updated) {
+		if (!updatedMeeting) {
 			throw new MeetingError({
 				message: MeetingStatusMessage.UPDATE_FAILED,
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}
 
-		return updated.toObject();
+		return updatedMeeting.toObject();
 	}
 }
 

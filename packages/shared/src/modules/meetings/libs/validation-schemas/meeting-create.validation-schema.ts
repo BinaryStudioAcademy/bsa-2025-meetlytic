@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { ValueOf } from "../../../../libs/types/types.js";
+import { ValueOf } from "../../../../index.js";
 import {
 	MeetingHost,
 	MeetingValidationMessage,

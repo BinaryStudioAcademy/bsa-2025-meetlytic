@@ -6,7 +6,7 @@ import { MeetingHost } from "./libs/enums/enums.js";
 class MeetingEntity implements Entity {
 	private host: ValueOf<typeof MeetingHost>;
 
-	private id: null | number;
+	private id: number;
 
 	private instanceId: null | string;
 
@@ -19,7 +19,7 @@ class MeetingEntity implements Entity {
 		ownerId,
 	}: {
 		host: ValueOf<typeof MeetingHost>;
-		id: null | number;
+		id: number;
 		instanceId: null | string;
 		ownerId: number;
 	}) {
@@ -57,9 +57,10 @@ class MeetingEntity implements Entity {
 		instanceId: null | string;
 		ownerId: number;
 	}): MeetingEntity {
+		const TEMP_ID = -1;
 		return new MeetingEntity({
 			host,
-			id: null,
+			id: TEMP_ID,
 			instanceId,
 			ownerId,
 		});
@@ -79,7 +80,7 @@ class MeetingEntity implements Entity {
 
 	public toObject(): {
 		host: ValueOf<typeof MeetingHost>;
-		id: null | number;
+		id: number;
 		instanceId: null | string;
 		ownerId: number;
 	} {

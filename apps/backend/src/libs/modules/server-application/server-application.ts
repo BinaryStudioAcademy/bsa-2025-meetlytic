@@ -2,6 +2,7 @@ import { config } from "~/libs/modules/config/config.js";
 import { database } from "~/libs/modules/database/database.js";
 import { logger } from "~/libs/modules/logger/logger.js";
 import { authController } from "~/modules/auth/auth.js";
+import { meetingsController } from "~/modules/meetings/meetings.js";
 import { userController } from "~/modules/users/users.js";
 
 import { BaseServerApplicationApi } from "./base-server-application-api.js";
@@ -12,6 +13,7 @@ const apiV1 = new BaseServerApplicationApi(
 	config,
 	...authController.routes,
 	...userController.routes,
+	...meetingsController.routes,
 );
 const serverApplication = new BaseServerApplication({
 	apis: [apiV1],

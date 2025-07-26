@@ -10,12 +10,19 @@ const userApi = new UserApi({
 	storage,
 });
 
+export { DEFAULT_SIGN_IN_VALUES } from "./libs/default-values/sign-in.default-values.js";
+
 export { userApi };
 export {
 	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
+	type UserSignInRequestDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "./libs/types/types.js";
-export { userSignUpValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
+
+export {
+	userSignInValidationSchema,
+	userSignUpValidationSchema,
+} from "./libs/validation-schemas/validation-schemas.js";
 export { actions, reducer } from "./slices/users.js";

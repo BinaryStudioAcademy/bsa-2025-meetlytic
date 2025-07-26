@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { type AsyncThunkConfig } from "~/libs/types/types.js";
+import { type AuthResponseDto } from "~/modules/auth/auth.js";
 import {
-	type AuthResponseDto,
 	type UserSignInRequestDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,

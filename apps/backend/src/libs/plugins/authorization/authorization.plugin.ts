@@ -66,6 +66,14 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 				}
 
 				request.user = user;
+
+				if (
+					request.body &&
+					typeof request.body === "object" &&
+					!("ownerId" in request.body)
+				) {
+					(request.body as Record<string, unknown>)["ownerId"] = user.id;
+				}
 			} catch (error: unknown) {
 				if (error instanceof Error) {
 					logger.error(`[Authorization Error]: ${error.message}`);

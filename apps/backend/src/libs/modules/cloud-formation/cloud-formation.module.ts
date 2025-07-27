@@ -17,6 +17,9 @@ import {
 	ParameterKey,
 	StackPrefix,
 } from "./libs/enums/enums.js";
+import { CreateInstance } from "./libs/type/types.js";
+import { CloudFormationError } from "~/libs/exceptions/exceptions.js";
+import { HTTPCode } from "~/libs/modules/http/http.js";
 
 type Constructor = {
 	credentials: {
@@ -29,18 +32,19 @@ type Constructor = {
 	region: string;
 };
 
-type Create = {
-	id: number;
-	template: string;
-};
-
 class CloudFormation {
 	private client: CloudFormationClient;
 	private imageId: string;
 	private logger: Logger;
 	private meetingService: MeetingService;
 
-	constructor({ credentials, imageId, logger, region }: Constructor) {
+	constructor({
+		credentials,
+		imageId,
+		logger,
+		meetingService,
+		region,
+	}: Constructor) {
 		this.imageId = imageId;
 		this.logger = logger;
 		this.meetingService = meetingService;
@@ -59,7 +63,10 @@ class CloudFormation {
 		)?.OutputValue;
 
 		if (!instanceId) {
-			throw new Error(ExceptionMessage.FAILED_TO_GET_INSTANCE);
+			throw new CloudFormationError({
+				message: ExceptionMessage.FAILED_TO_GET_INSTANCE,
+				status: HTTPCode.INTERNAL_SERVER_ERROR,
+			});
 		}
 
 		return instanceId;
@@ -68,49 +75,65 @@ class CloudFormation {
 		return `${StackPrefix.MEETLYTIC}-${String(meetingId)}`;
 	}
 
-	async create({ id, template }: Create): Promise<string> {
+	async create({ id, template }: CreateInstance): Promise<string> {
 		const stackName = this.getStackName(id);
-
 		this.logger.info(`Creating stack: ${stackName}`);
+		try {
+			const command = new CreateStackCommand({
+				Capabilities: [Capability.NAMED_IAM],
+				Parameters: [
+					{ ParameterKey: ParameterKey.IMAGE_ID, ParameterValue: this.imageId },
+				],
+				StackName: stackName,
+				TemplateBody: template,
+			});
 
-		const command = new CreateStackCommand({
-			Capabilities: [Capability.NAMED_IAM],
-			Parameters: [
-				{ ParameterKey: ParameterKey.IMAGE_ID, ParameterValue: this.imageId },
-			],
-			StackName: stackName,
-			TemplateBody: template,
-		});
+			await this.client.send(command);
 
-		await this.client.send(command);
+			await waitUntilStackCreateComplete(
+				{ client: this.client, maxWaitTime: 300 },
+				{ StackName: stackName },
+			);
+			const instanceId = await this.getInstanceIdFromStack(stackName);
+			this.logger.info(
+				`Stack ${stackName} created with InstanceId: ${instanceId}`,
+			);
 
-		await waitUntilStackCreateComplete(
-			{ client: this.client, maxWaitTime: 300 },
-			{ StackName: stackName },
-		);
-		const instanceId = await this.getInstanceIdFromStack(stackName);
-		this.logger.info(
-			`Stack ${stackName} created with InstanceId: ${instanceId}`,
-		);
-
-		return instanceId;
+			return instanceId;
+		} catch (error) {
+			this.logger.error(`Failed to create stack ${stackName}`, error);
+			throw new CloudFormationError({
+				message: ExceptionMessage.FAILED_TO_CREATE_STACK,
+				status: HTTPCode.INTERNAL_SERVER_ERROR,
+				cause: error,
+			});
+		}
 	}
 
 	async delete(meetingId: number): Promise<void> {
 		const stackName = this.getStackName(meetingId);
 		this.logger.info(`Deleting stack: ${stackName}`);
+		try {
+			const command = new DeleteStackCommand({ StackName: stackName });
+			await this.client.send(command);
 
-		const command = new DeleteStackCommand({ StackName: stackName });
-		await this.client.send(command);
+			await waitUntilStackDeleteComplete(
+				{ client: this.client, maxWaitTime: 300 },
+				{ StackName: stackName },
+			);
 
-		await waitUntilStackDeleteComplete(
-			{ client: this.client, maxWaitTime: 300 },
-			{ StackName: stackName },
-		);
+			await this.meetingService.update(meetingId, { instanceId: null });
 
-		await this.meetingService.update(meetingId, { instanceId: null });
+			this.logger.info(`Stack ${stackName} deleted`);
+		} catch (error) {
+			this.logger.error(`Failed to delete stack ${stackName}:`, error);
 
-		this.logger.info(`Stack ${stackName} deleted`);
+			throw new CloudFormationError({
+				cause: error,
+				message: ExceptionMessage.FAILED_TO_DELETE_STACK,
+				status: HTTPCode.INTERNAL_SERVER_ERROR,
+			});
+		}
 	}
 }
 

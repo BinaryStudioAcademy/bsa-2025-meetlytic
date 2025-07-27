@@ -44,3 +44,8 @@
 .input-right-padding {
 	padding-right: 30px;
 }
+
+.input-error-label {
+	font-size: 10px;
+	color: var(--color-accent-1);
+}

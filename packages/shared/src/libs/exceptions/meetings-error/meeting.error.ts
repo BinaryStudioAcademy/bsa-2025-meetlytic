@@ -1,11 +1,11 @@
 import { type HTTPCode } from "../../../libs/modules/http/http.js";
-import { type MeetingStatusMessage } from "../../../modules/meetings/meetings.js";
+import { type MeetingErrorMessage } from "../../../modules/meetings/meetings.js";
 import { type ValueOf } from "../../types/types.js";
 import { HTTPError } from "../http-error/http-error.exception.js";
 
 type Constructor = {
 	cause?: unknown;
-	message: ValueOf<typeof MeetingStatusMessage>;
+	message: ValueOf<typeof MeetingErrorMessage>;
 	status: ValueOf<typeof HTTPCode>;
 };
 

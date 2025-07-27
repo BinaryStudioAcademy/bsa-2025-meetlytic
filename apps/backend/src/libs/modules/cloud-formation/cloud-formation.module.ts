@@ -12,11 +12,11 @@ import { type MeetingService } from "~/modules/meetings/meeting.service.js";
 import { type Logger } from "../logger/logger.js";
 import {
 	Capability,
-	ExceptionMessage,
 	OutputKey,
 	ParameterKey,
 	StackPrefix,
 } from "./libs/enums/enums.js";
+import { ExceptionMessage } from "~/libs/enums/enums.js";
 import { CreateInstance } from "./libs/type/types.js";
 import { CloudFormationError } from "~/libs/exceptions/exceptions.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";

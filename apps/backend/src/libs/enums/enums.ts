@@ -4,4 +4,5 @@ export {
 	AppEnvironment,
 	AuthApiPath,
 	ServerErrorType,
+	ExceptionMessage,
 } from "@meetlytic/shared";

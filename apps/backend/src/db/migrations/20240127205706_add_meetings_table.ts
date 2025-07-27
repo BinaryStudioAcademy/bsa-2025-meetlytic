@@ -15,7 +15,9 @@ const ColumnName = {
 	UPDATED_AT: "updated_at",
 } as const;
 
-const MEETING_HOST_VALUES = ["zoom"];
+const MeetingHost = {
+	ZOOM: "zoom",
+} as const;
 
 function down(knex: Knex): Promise<void> {
 	return knex.schema.dropTableIfExists(TableName.MEETINGS);
@@ -25,9 +27,7 @@ function up(knex: Knex): Promise<void> {
 	return knex.schema.createTable(TableName.MEETINGS, (table) => {
 		table.increments(ColumnName.ID).primary();
 		table.text(ColumnName.INSTANCE_ID).notNullable();
-		table
-			.enu(ColumnName.HOST, Object.values(MEETING_HOST_VALUES))
-			.notNullable();
+		table.enu(ColumnName.HOST, Object.values(MeetingHost)).notNullable();
 		table
 			.integer(ColumnName.OWNER_ID)
 			.notNullable()

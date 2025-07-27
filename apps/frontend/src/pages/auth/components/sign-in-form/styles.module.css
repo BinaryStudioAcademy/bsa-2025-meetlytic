@@ -7,13 +7,15 @@
 }
 
 .login-form {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
 	width: 100%;
 	max-width: 420px;
 }
 
 .label-text {
 	display: block;
-	margin-top: 15px;
 	margin-bottom: 5px;
 	font-size: 14px;
 }
@@ -54,7 +56,6 @@
 .sign-in-btn {
 	width: 420px;
 	padding: 12px 10px;
-	margin-top: 25px;
 	font-size: 16px;
 	font-weight: 700;
 	color: white;

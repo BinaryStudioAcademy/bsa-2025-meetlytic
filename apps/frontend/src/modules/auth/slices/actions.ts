@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { type AsyncThunkConfig } from "~/libs/types/types.js";
 import { type AuthResponseDto } from "~/modules/auth/auth.js";
+import { NotificationMessage } from "~/modules/auth/libs/enums/enums.js";
 import {
 	type UserSignInRequestDto,
 	type UserSignUpRequestDto,
@@ -20,10 +21,12 @@ const signIn = createAsyncThunk<
 	try {
 		const response = await authApi.signIn(signInPayload);
 		localStorage.setItem("token", response.token);
-		notification.success("Successfully signed in!");
+		notification.success(NotificationMessage.SIGN_IN_SUCCESS);
+
 		return response;
 	} catch (error: unknown) {
-		notification.error("Failed to sign in.");
+		notification.error(NotificationMessage.SIGN_IN_FAILURE);
+
 		return rejectWithValue(error);
 	}
 });

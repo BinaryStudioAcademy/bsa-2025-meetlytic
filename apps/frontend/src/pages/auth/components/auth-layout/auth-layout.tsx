@@ -4,7 +4,7 @@ interface AuthLayoutProperties {
 	children: React.ReactNode;
 }
 
-const AuthLayout = ({ children }: AuthLayoutProperties) => {
+const AuthLayout = ({ children }: AuthLayoutProperties): React.ReactElement => {
 	return (
 		<div className={styles["auth"]}>
 			<div className={styles["auth-left"]}>

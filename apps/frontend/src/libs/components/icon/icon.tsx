@@ -16,8 +16,9 @@ const Icon: React.FC<Properties> = ({
 	onClick,
 }: Properties) => {
 	const Icon = iconNameToSvg[name];
+	const isClickable = Boolean(onClick);
 
-	return onClick ? (
+	return isClickable ? (
 		<button type="button">
 			<Icon className={className} color={color} onClick={onClick} />
 		</button>

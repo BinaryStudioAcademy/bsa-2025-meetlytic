@@ -3,7 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const TOAST_AUTO_CLOSE_MS = 3000;
 
-const ToastProvider = () => {
+const ToastProvider: React.FC = () => {
 	return (
 		<ToastContainer
 			autoClose={TOAST_AUTO_CLOSE_MS}

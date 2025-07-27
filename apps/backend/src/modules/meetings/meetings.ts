@@ -6,15 +6,12 @@ import { MeetingRepository } from "./meeting.repository.js";
 import { MeetingService } from "./meeting.service.js";
 import { MeetingsController } from "./meetings.controller.js";
 
-const TEMPORARY_USER_ID = 1;
-
 const meetingRepository = new MeetingRepository(MeetingModel);
-const meetingService: MeetingService = new MeetingService(
-	meetingRepository,
-	TEMPORARY_USER_ID,
+const meetingService = new MeetingService({
 	cloudFormation,
-);
-const meetingsController = new MeetingsController(logger, meetingRepository);
+	meetingRepository,
+});
+const meetingsController = new MeetingsController(logger, meetingService);
 
-export { MeetingHost } from "./libs/enums/enums.js";
-export { meetingsController, meetingService };
+export { meetingRepository, meetingsController };
+export { MeetingRepository } from "./meeting.repository.js";

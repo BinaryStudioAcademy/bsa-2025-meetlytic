@@ -1,9 +1,10 @@
 import { type CloudFormation } from "~/libs/modules/cloud-formation/cloud-formation.module.js";
 import template from "~/libs/modules/cloud-formation/libs/templates/ec2-instance-template.json" with { type: "json" };
+
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
 
-import { MeetingStatusMessage } from "./libs/enums/enums.js";
+import { MeetingErrorMessage } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
 import {
 	type MeetingCreateRequestDto,
@@ -13,23 +14,18 @@ import {
 import { MeetingEntity } from "./meeting.entity.js";
 import { type MeetingRepository } from "./meeting.repository.js";
 
+type Constructor = {
+	cloudFormation: CloudFormation;
+	meetingRepository: MeetingRepository;
+};
+
 class MeetingService implements Service<MeetingResponseDto> {
 	private cloudFormation: CloudFormation;
 	private meetingRepository: MeetingRepository;
-	private userId: number;
 
-	constructor(
-		repo: MeetingRepository,
-		userId: number,
-		cloudFormation: CloudFormation,
-	) {
-		this.meetingRepository = repo;
-		this.userId = userId;
+	public constructor({ cloudFormation, meetingRepository }: Constructor) {
 		this.cloudFormation = cloudFormation;
-	}
-
-	private getCurrentUserId(): number {
-		return this.userId;
+		this.meetingRepository = meetingRepository;
 	}
 
 	public async create(
@@ -46,7 +42,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		if (!id) {
 			throw new MeetingError({
-				message: MeetingStatusMessage.MEETING_FAILED_TO_CREATE,
+				message: MeetingErrorMessage.MEETING_FAILED_TO_CREATE,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
@@ -60,7 +56,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		});
 		if (!updated) {
 			throw new MeetingError({
-				message: MeetingStatusMessage.UPDATE_FAILED,
+				message: MeetingErrorMessage.UPDATE_FAILED,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
@@ -68,18 +64,12 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		const meeting = await this.meetingRepository.find(id);
-		if (!meeting) {
-			throw new MeetingError({
-				message: MeetingStatusMessage.MEETING_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
+		const meetingToDelete = await this.meetingRepository.find(id);
 
-		if (meeting.toObject().ownerId !== this.getCurrentUserId()) {
+		if (!meetingToDelete) {
 			throw new MeetingError({
-				message: MeetingStatusMessage.FORBIDDEN,
-				status: HTTPCode.FORBIDDEN,
+				message: MeetingErrorMessage.MEETING_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
@@ -88,17 +78,11 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 	public async find(id: number): Promise<MeetingResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
+
 		if (!meeting) {
 			throw new MeetingError({
-				message: MeetingStatusMessage.MEETING_NOT_FOUND,
+				message: MeetingErrorMessage.MEETING_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		if (meeting.toObject().ownerId !== this.getCurrentUserId()) {
-			throw new MeetingError({
-				message: MeetingStatusMessage.FORBIDDEN,
-				status: HTTPCode.FORBIDDEN,
 			});
 		}
 
@@ -107,53 +91,45 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 	public async findAll(): Promise<MeetingGetAllResponseDto> {
 		const allMeetings = await this.meetingRepository.findAll();
-		const userId = this.getCurrentUserId();
 
 		return {
-			items: allMeetings
-				.filter((m) => m.toObject().ownerId === userId)
-				.map((m) => m.toObject()),
+			items: allMeetings.map((m) => m.toObject()),
 		};
 	}
 
 	public async update(
 		id: number,
-		payload: Partial<MeetingUpdateRequestDto>,
+		payload: Partial<MeetingCreateRequestDto>,
 	): Promise<MeetingResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
+
 		if (!meeting) {
 			throw new MeetingError({
-				message: MeetingStatusMessage.CANNOT_UPDATE_NON_EXISTENT,
+				message: MeetingErrorMessage.CANNOT_UPDATE_NON_EXISTENT,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
-		if (meeting.toObject().ownerId !== this.getCurrentUserId()) {
-			throw new MeetingError({
-				message: MeetingStatusMessage.FORBIDDEN,
-				status: HTTPCode.FORBIDDEN,
-			});
-		}
-
 		const updatedEntity = MeetingEntity.initialize({
-			host: payload.host ?? meeting.toObject().host,
+			host: (payload as MeetingCreateRequestDto).host,
 			id,
-			instanceId: payload.instanceId ?? meeting.toObject().instanceId,
+			instanceId: meeting.toObject().instanceId,
 			ownerId: meeting.toObject().ownerId,
 		});
 
-		const updatedMeeting = await this.meetingRepository.update(
+		const updated = await this.meetingRepository.update(
 			id,
 			updatedEntity.toNewObject(),
 		);
-		if (!updatedMeeting) {
+
+		if (!updated) {
 			throw new MeetingError({
-				message: MeetingStatusMessage.UPDATE_FAILED,
+				message: MeetingErrorMessage.UPDATE_FAILED,
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}
 
-		return updatedMeeting.toObject();
+		return updated.toObject();
 	}
 }
 

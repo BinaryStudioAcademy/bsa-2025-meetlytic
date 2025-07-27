@@ -31,9 +31,9 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath } from "./modules/auth/auth.js";
 export {
+	MeetingErrorMessage,
 	MeetingHost,
 	MeetingsApiPath,
-	MeetingStatusMessage,
 } from "./modules/meetings/meetings.js";
 export {
 	type MeetingCreateRequestDto,

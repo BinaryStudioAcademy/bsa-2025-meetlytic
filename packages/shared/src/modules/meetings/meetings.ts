@@ -1,7 +1,7 @@
 export {
+	MeetingErrorMessage,
 	MeetingHost,
 	MeetingsApiPath,
-	MeetingStatusMessage,
 } from "./libs/enums/enums.js";
 export {
 	type MeetingCreateRequestDto,

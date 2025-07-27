@@ -1,7 +1,5 @@
 import { type Knex } from "knex";
 
-import { MeetingHost } from "~/modules/meetings/meetings.js";
-
 const TableName = {
 	MEETINGS: "meetings",
 	USERS: "users",
@@ -15,6 +13,10 @@ const ColumnName = {
 	INSTANCE_ID: "instance_id",
 	OWNER_ID: "owner_id",
 	UPDATED_AT: "updated_at",
+} as const;
+
+const MeetingHost = {
+	ZOOM: "zoom",
 } as const;
 
 function down(knex: Knex): Promise<void> {

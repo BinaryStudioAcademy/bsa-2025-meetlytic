@@ -1,5 +1,5 @@
 export {
+	MeetingErrorMessage,
 	MeetingHost,
 	MeetingsApiPath,
-	MeetingStatusMessage,
 } from "@meetlytic/shared";

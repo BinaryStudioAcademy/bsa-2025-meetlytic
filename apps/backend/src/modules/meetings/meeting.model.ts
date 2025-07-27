@@ -4,7 +4,7 @@ import {
 } from "~/libs/modules/database/database.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
-import { MeetingHost } from "./libs/enums/enums.js";
+import { type MeetingHost } from "./libs/enums/enums.js";
 
 class MeetingModel extends AbstractModel {
 	public host!: ValueOf<typeof MeetingHost>;

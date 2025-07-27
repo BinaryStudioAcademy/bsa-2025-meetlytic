@@ -5,11 +5,11 @@ import { LogoSize } from "~/libs/enums/enums.js";
 
 import styles from "./styles.module.css";
 
-interface AuthLayoutProperties {
+type Properties = {
 	children: React.ReactNode;
-}
+};
 
-const AuthLayout = ({ children }: AuthLayoutProperties): React.JSX.Element => {
+const AuthLayout = ({ children }: Properties): React.JSX.Element => {
 	return (
 		<div className={styles["auth"]}>
 			<div className={styles["auth__left"]}>

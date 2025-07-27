@@ -79,7 +79,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 			</form>
 			<h5 className={styles["link-container"]}>
 				Already have an account?
-				<Link to={AppRoute.SIGN_IN}>
+				<Link className={styles["link"]} to={AppRoute.SIGN_IN}>
 					<p>Sign in</p>
 				</Link>
 			</h5>

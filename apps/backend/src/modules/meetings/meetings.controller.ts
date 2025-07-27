@@ -22,10 +22,7 @@ import { type MeetingService } from "./meeting.service.js";
 /**
  * @swagger
  * components:
- *   sAPIHandlerOptions<{
-			body: MeetingUpdateRequestDto;
-			params: { id: string };
-		}>,chemas:
+ *   schemas:
  *     Meeting:
  *       type: object
  *       properties:
@@ -38,33 +35,28 @@ import { type MeetingService } from "./meeting.service.js";
  *           nullable: true
  *         ownerId:
  *           type: number
+ *       required:
+ *         - id
+ *         - host
+ *         - instanceId
+ *         - ownerId
  *     MeetingCreateRequest:
  *       type: object
  *       required:
  *         - host
- *         - ownerId
  *       properties:
  *         host:
  *           type: string
  *         instanceId:
  *           type: string
  *           nullable: true
- *         ownerId:
- *           type: number
  *     MeetingUpdateRequest:
  *       type: object
  *       required:
  *         - host
- *         - instanceId
- *         - ownerId
  *       properties:
  *         host:
  *           type: string
- *         instanceId:
- *           type: string
- *           nullable: true
- *         ownerId:
- *           type: number
  */
 
 class MeetingsController extends BaseController {
@@ -112,6 +104,8 @@ class MeetingsController extends BaseController {
 	 * /meetings:
 	 *   post:
 	 *     summary: Create a new meeting
+	 *     tags:
+	 *       - Meetings
 	 *     requestBody:
 	 *       required: true
 	 *       content:
@@ -139,6 +133,8 @@ class MeetingsController extends BaseController {
 	 * /meetings/{id}:
 	 *   delete:
 	 *     summary: Delete a meeting by ID
+	 *     tags:
+	 *       - Meetings
 	 *     parameters:
 	 *       - in: path
 	 *         name: id
@@ -148,6 +144,8 @@ class MeetingsController extends BaseController {
 	 *     responses:
 	 *       204:
 	 *         description: Meeting deleted
+	 *       404:
+	 *         description: Meeting not found
 	 */
 	private async delete(
 		options: DeleteMeetingOptions,
@@ -163,6 +161,8 @@ class MeetingsController extends BaseController {
 	 * /meetings/{id}:
 	 *   get:
 	 *     summary: Get a meeting by ID
+	 *     tags:
+	 *       - Meetings
 	 *     parameters:
 	 *       - in: path
 	 *         name: id
@@ -176,6 +176,8 @@ class MeetingsController extends BaseController {
 	 *           application/json:
 	 *             schema:
 	 *               $ref: "#/components/schemas/Meeting"
+	 *       404:
+	 *         description: Meeting not found
 	 */
 	private async find(options: FindMeetingOptions): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
@@ -189,15 +191,20 @@ class MeetingsController extends BaseController {
 	 * /meetings:
 	 *   get:
 	 *     summary: Get all meetings owned by the user
+	 *     tags:
+	 *       - Meetings
 	 *     responses:
 	 *       200:
 	 *         description: List of meetings
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               type: array
-	 *               items:
-	 *                 $ref: "#/components/schemas/Meeting"
+	 *               type: object
+	 *               properties:
+	 *                 items:
+	 *                   type: array
+	 *                   items:
+	 *                     $ref: "#/components/schemas/Meeting"
 	 */
 	private async findAll(): Promise<APIHandlerResponse> {
 		const all = await this.meetingService.findAll();
@@ -210,6 +217,8 @@ class MeetingsController extends BaseController {
 	 * /meetings/{id}:
 	 *   patch:
 	 *     summary: Update a meeting by ID
+	 *     tags:
+	 *       - Meetings
 	 *     parameters:
 	 *       - in: path
 	 *         name: id
@@ -229,6 +238,8 @@ class MeetingsController extends BaseController {
 	 *           application/json:
 	 *             schema:
 	 *               $ref: "#/components/schemas/Meeting"
+	 *       404:
+	 *         description: Cannot update non-existent meeting
 	 */
 	private async update(
 		options: UpdateMeetingOptions,

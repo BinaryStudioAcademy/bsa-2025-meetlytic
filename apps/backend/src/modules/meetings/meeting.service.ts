@@ -1,7 +1,9 @@
+//mport { FIRST_ITEM_INDEX } from "@meetlytic/shared";
+
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
 
-import { MeetingStatusMessage } from "./libs/enums/enums.js";
+import { MeetingErrorMessage } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
 import {
 	type MeetingCreateRequestDto,
@@ -34,22 +36,12 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		const meeting = await this.meetingRepository.find(id);
+		const meetingToDelete = await this.meetingRepository.find(id);
 
-		if (!meeting) {
+		if (!meetingToDelete) {
 			throw new MeetingError({
-				message: MeetingStatusMessage.MEETING_NOT_FOUND,
+				message: MeetingErrorMessage.MEETING_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		const ownerId = meeting.toObject().ownerId;
-		const requestOwnerId = meeting.toObject().ownerId;
-
-		if (ownerId !== requestOwnerId) {
-			throw new MeetingError({
-				message: MeetingStatusMessage.FORBIDDEN,
-				status: HTTPCode.FORBIDDEN,
 			});
 		}
 
@@ -61,7 +53,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		if (!meeting) {
 			throw new MeetingError({
-				message: MeetingStatusMessage.MEETING_NOT_FOUND,
+				message: MeetingErrorMessage.MEETING_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
@@ -70,16 +62,10 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 
 	public async findAll(): Promise<MeetingGetAllResponseDto> {
-		const FIRST = 0;
 		const allMeetings = await this.meetingRepository.findAll();
-		const ownerId = allMeetings[FIRST]?.toObject().ownerId ?? FIRST;
-
-		const filteredMeetings = allMeetings.filter(
-			(m) => m.toObject().ownerId === ownerId,
-		);
 
 		return {
-			items: filteredMeetings.map((m) => m.toObject()),
+			items: allMeetings.map((m) => m.toObject()),
 		};
 	}
 
@@ -91,18 +77,8 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		if (!meeting) {
 			throw new MeetingError({
-				message: MeetingStatusMessage.CANNOT_UPDATE_NON_EXISTENT,
+				message: MeetingErrorMessage.CANNOT_UPDATE_NON_EXISTENT,
 				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		if (
-			payload.ownerId !== undefined &&
-			payload.ownerId !== meeting.toObject().ownerId
-		) {
-			throw new MeetingError({
-				message: MeetingStatusMessage.FORBIDDEN,
-				status: HTTPCode.FORBIDDEN,
 			});
 		}
 
@@ -120,7 +96,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		if (!updated) {
 			throw new MeetingError({
-				message: MeetingStatusMessage.UPDATE_FAILED,
+				message: MeetingErrorMessage.UPDATE_FAILED,
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}

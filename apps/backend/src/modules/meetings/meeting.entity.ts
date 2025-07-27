@@ -78,13 +78,13 @@ class MeetingEntity implements Entity {
 
 	public toObject(): {
 		host: ValueOf<typeof MeetingHost>;
-		id: null | number;
+		id: number;
 		instanceId: null | string;
 		ownerId: number;
 	} {
 		return {
 			host: this.host,
-			id: this.id,
+			id: this.id as number,
 			instanceId: this.instanceId,
 			ownerId: this.ownerId,
 		};

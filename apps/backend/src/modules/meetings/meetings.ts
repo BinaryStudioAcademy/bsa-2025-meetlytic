@@ -9,4 +9,5 @@ const meetingRepository = new MeetingRepository(MeetingModel);
 const meetingService = new MeetingService(meetingRepository);
 const meetingsController = new MeetingsController(logger, meetingService);
 
-export { meetingsController };
+export { meetingRepository, meetingsController };
+export { MeetingRepository } from "./meeting.repository.js";

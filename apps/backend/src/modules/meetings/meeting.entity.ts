@@ -1,7 +1,6 @@
-import { type Entity } from "~/libs/types/types.js";
-import { ValueOf } from "~/libs/types/types.js";
+import { type Entity, type ValueOf } from "~/libs/types/types.js";
 
-import { MeetingHost } from "./libs/enums/enums.js";
+import { type MeetingHost } from "./libs/enums/enums.js";
 
 class MeetingEntity implements Entity {
 	private host: ValueOf<typeof MeetingHost>;

@@ -17,7 +17,7 @@ import {
 	meetingCreateValidationSchema,
 	meetingUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
-import { MeetingService } from "./meeting.service.js";
+import { type MeetingService } from "./meeting.service.js";
 
 /**
  * @swagger
@@ -130,6 +130,7 @@ class MeetingsController extends BaseController {
 		options: CreateMeetingOptions,
 	): Promise<APIHandlerResponse> {
 		const created = await this.meetingService.create(options.body);
+
 		return { payload: created, status: HTTPCode.CREATED };
 	}
 
@@ -153,6 +154,7 @@ class MeetingsController extends BaseController {
 	): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
 		await this.meetingService.delete(id);
+
 		return { payload: null, status: HTTPCode.NO_CONTENT };
 	}
 
@@ -178,6 +180,7 @@ class MeetingsController extends BaseController {
 	private async find(options: FindMeetingOptions): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
 		const meeting = await this.meetingService.find(id);
+
 		return { payload: meeting, status: HTTPCode.OK };
 	}
 
@@ -198,6 +201,7 @@ class MeetingsController extends BaseController {
 	 */
 	private async findAll(): Promise<APIHandlerResponse> {
 		const all = await this.meetingService.findAll();
+
 		return { payload: all, status: HTTPCode.OK };
 	}
 
@@ -231,6 +235,7 @@ class MeetingsController extends BaseController {
 	): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
 		const updated = await this.meetingService.update(id, options.body);
+
 		return { payload: updated, status: HTTPCode.OK };
 	}
 }

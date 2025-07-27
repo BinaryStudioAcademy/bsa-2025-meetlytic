@@ -1,9 +1,9 @@
-import { APIHandlerOptions } from "~/libs/modules/controller/controller.js";
+import { type APIHandlerOptions } from "~/libs/modules/controller/controller.js";
 
-import { MeetingCreateRequestDto } from "./types.js";
+import { type MeetingCreateRequestDto } from "./types.js";
 
 type CreateMeetingOptions = APIHandlerOptions<{
 	body: MeetingCreateRequestDto;
 }>;
 
-export { CreateMeetingOptions };
+export { type CreateMeetingOptions };

@@ -24,16 +24,19 @@ class MeetingRepository implements Repository<MeetingEntity> {
 
 	public async delete(id: number): Promise<boolean> {
 		const meeting = await this.meetingModel.query().deleteById(id);
+
 		return meeting > DELETE_SUCCESS_THRESHOLD;
 	}
 
 	public async find(id: number): Promise<MeetingEntity | null> {
 		const meeting = await this.meetingModel.query().findById(id);
+
 		return meeting ? MeetingEntity.initialize(meeting) : null;
 	}
 
 	public async findAll(): Promise<MeetingEntity[]> {
 		const meetings = await this.meetingModel.query().execute();
+
 		return meetings.map((meeting) => MeetingEntity.initialize(meeting));
 	}
 

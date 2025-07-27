@@ -29,11 +29,13 @@ class MeetingService implements Service<MeetingResponseDto> {
 		});
 
 		const newMeeting = await this.meetingRepository.create(meeting);
+
 		return newMeeting.toObject();
 	}
 
 	public async delete(id: number): Promise<boolean> {
 		const meeting = await this.meetingRepository.find(id);
+
 		if (!meeting) {
 			throw new MeetingError({
 				message: MeetingStatusMessage.MEETING_NOT_FOUND,
@@ -56,6 +58,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 	public async find(id: number): Promise<MeetingResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
+
 		if (!meeting) {
 			throw new MeetingError({
 				message: MeetingStatusMessage.MEETING_NOT_FOUND,
@@ -85,6 +88,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		payload: Partial<MeetingUpdateRequestDto>,
 	): Promise<MeetingResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
+
 		if (!meeting) {
 			throw new MeetingError({
 				message: MeetingStatusMessage.CANNOT_UPDATE_NON_EXISTENT,

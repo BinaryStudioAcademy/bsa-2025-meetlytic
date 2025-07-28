@@ -6,45 +6,92 @@ import {
 	type FieldValues,
 } from "react-hook-form";
 
+import { Icon } from "~/libs/components/components.js";
+import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
+import { type IconName } from "~/libs/types/types.js";
+
+import { iconPositionToClass, inputPaddingToClass } from "./libs/maps/maps.js";
+import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
-	className?: string | undefined;
+	className?: string;
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
+	hasVisuallyHiddenLabel?: boolean;
+	iconClassName?: string;
+	iconName?: IconName;
+	iconPosition?: "left" | "right";
 	label: string;
 	labelStyle?: string | undefined;
 	name: FieldPath<T>;
+	onClickIcon?: () => void;
 	placeholder?: string;
-	type?: "email" | "password" | "text";
+	type?: React.HTMLInputTypeAttribute;
+	wrapperClassName?: string;
 };
 
 const Input = <T extends FieldValues>({
 	className = "",
 	control,
 	errors,
+	hasVisuallyHiddenLabel = false,
+	iconClassName = "",
+	iconName,
+	iconPosition = iconName && "left",
 	label,
-	labelStyle,
 	name,
+	onClickIcon,
 	placeholder = "",
 	type = "text",
+	wrapperClassName = "",
 }: Properties<T>): React.JSX.Element => {
-	const { field } = useFormController({ control, name });
-
+	const {
+		field,
+		formState: { isSubmitted },
+	} = useFormController({ control, name });
 	const error = errors[name]?.message;
 	const hasError = Boolean(error);
 
 	return (
-		<label>
-			<span className={labelStyle}>{label}</span>
-			<input
-				{...field}
-				className={className}
-				placeholder={placeholder}
-				type={type}
-			/>
-			{hasError && <span>{error as string}</span>}
-		</label>
+		<div className={getValidClassNames(styles["input"], wrapperClassName)}>
+			<label
+				className={hasVisuallyHiddenLabel ? "visually-hidden" : ""}
+				htmlFor={name}
+			>
+				{label}
+			</label>
+			<div className={styles["input__relative-wrapper"]}>
+				{iconName && (
+					<Icon
+						className={getValidClassNames(
+							styles["input__icon"],
+							iconPosition && iconPositionToClass[iconPosition],
+							iconClassName,
+						)}
+						name={iconName}
+						onClick={onClickIcon}
+					/>
+				)}
+				<input
+					className={getValidClassNames(
+						styles["input__entry"],
+						iconName && iconPosition && inputPaddingToClass[iconPosition],
+						hasError
+							? styles["input__entry--invalid"]
+							: isSubmitted && styles["input__entry--valid"],
+						className,
+					)}
+					{...field}
+					id={name}
+					placeholder={placeholder}
+					type={type}
+				/>
+			</div>
+			{hasError && (
+				<div className={styles["input__error"]}>{error as string}</div>
+			)}
+		</div>
 	);
 };
 

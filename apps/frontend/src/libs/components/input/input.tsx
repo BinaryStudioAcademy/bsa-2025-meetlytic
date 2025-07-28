@@ -23,7 +23,6 @@ type Properties<T extends FieldValues> = {
 	iconName?: IconName;
 	iconPosition?: "left" | "right";
 	label: string;
-	labelSuffix?: React.ReactNode;
 	name: FieldPath<T>;
 	onClickIcon?: () => void;
 	placeholder?: string;
@@ -40,7 +39,6 @@ const Input = <T extends FieldValues>({
 	iconName,
 	iconPosition = iconName && "left",
 	label,
-	labelSuffix,
 	name,
 	onClickIcon,
 	placeholder = "",
@@ -55,16 +53,15 @@ const Input = <T extends FieldValues>({
 	const hasError = Boolean(error);
 
 	return (
-		<div className={wrapperClassName}>
-			<div className={styles["label-wrapper"]}>
-				<label
-					className={hasVisuallyHiddenLabel ? "visually-hidden" : ""}
-					htmlFor={name}
-				>
-					{label}
-				</label>
-				{labelSuffix}
-			</div>
+		<div
+			className={getValidClassNames(styles["input-wrapper"], wrapperClassName)}
+		>
+			<label
+				className={hasVisuallyHiddenLabel ? "visually-hidden" : ""}
+				htmlFor={name}
+			>
+				{label}
+			</label>
 			<div className={styles["input-relative-inner-wrapper"]}>
 				{iconName && (
 					<Icon

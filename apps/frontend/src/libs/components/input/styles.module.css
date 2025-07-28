@@ -1,6 +1,6 @@
-.label-wrapper {
+.input-wrapper {
 	display: flex;
-	justify-content: space-between;
+	flex-direction: column;
 }
 
 .input-relative-inner-wrapper {

@@ -3,7 +3,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { storage, StorageKey } from "~/libs/modules/storage/storage.js";
 import { type AsyncThunkConfig } from "~/libs/types/types.js";
-import { type UserSignUpRequestDto } from "~/modules/users/users.js";
+import {
+	type UserResponseDto,
+	type UserSignUpRequestDto,
+} from "~/modules/users/users.js";
 
 import { name as sliceName } from "./auth.slice.js";
 
@@ -19,4 +22,28 @@ const signUp = createAsyncThunk<
 	return { token, user };
 });
 
-export { signUp };
+const getAuthenticatedUser = createAsyncThunk<
+	null | UserResponseDto,
+	undefined,
+	AsyncThunkConfig
+>(`${sliceName}/get-authenticated-user`, async (_, { extra }) => {
+	const { authApi, storage } = extra;
+
+	const token = await storage.get(StorageKey.TOKEN);
+
+	if (!token) {
+		return null;
+	}
+
+	try {
+		const user = await authApi.getAuthenticatedUser();
+
+		return user;
+	} catch {
+		await storage.drop(StorageKey.TOKEN);
+
+		return null;
+	}
+});
+
+export { getAuthenticatedUser, signUp };

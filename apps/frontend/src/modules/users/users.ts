@@ -14,6 +14,7 @@ export { userApi };
 export {
 	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
+	type UserResponseDto,
 	type UserSignUpRequestDto,
 } from "./libs/types/types.js";
 export { userSignUpValidationSchema } from "./libs/validation-schemas/validation-schemas.js";

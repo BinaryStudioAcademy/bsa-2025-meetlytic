@@ -10,7 +10,6 @@ const userApi = new UserApi({
 	storage,
 });
 
-export { DEFAULT_SIGN_IN_VALUES } from "./libs/default-values/sign-in.default-values.js";
 export { userApi };
 export {
 	type UserGetAllItemResponseDto,

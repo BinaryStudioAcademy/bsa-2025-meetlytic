@@ -1,9 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+import { NotificationMessage } from "~/libs/enums/enums.js";
 import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { type AsyncThunkConfig } from "~/libs/types/types.js";
-import { type AuthResponseDto } from "~/modules/auth/auth.js";
-import { NotificationMessage } from "~/modules/auth/libs/enums/enums.js";
 import {
 	type UserResponseDto,
 	type UserSignInRequestDto,
@@ -14,18 +13,18 @@ import {
 import { name as sliceName } from "./auth.slice.js";
 
 const signIn = createAsyncThunk<
-	AuthResponseDto,
+	UserResponseDto,
 	UserSignInRequestDto,
 	AsyncThunkConfig
 >(`${sliceName}/sign-in`, async (signInPayload, { extra, rejectWithValue }) => {
 	const { authApi, notification } = extra;
 
 	try {
-		const response = await authApi.signIn(signInPayload);
-		localStorage.setItem("token", response.token);
+		const { token, user } = await authApi.signIn(signInPayload);
+		localStorage.setItem("StorageKey.TOKEN", token);
 		notification.success(NotificationMessage.SIGN_IN_SUCCESS);
 
-		return response;
+		return user;
 	} catch (error: unknown) {
 		notification.error(NotificationMessage.SIGN_IN_FAILURE);
 

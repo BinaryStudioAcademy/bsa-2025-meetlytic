@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { useAppForm } from "~/libs/hooks/hooks.js";
 
 type SearchFormValues = {
-	searchField: string;
+	[key: string]: string;
 };
 
 type UseSearchResult = {
@@ -13,19 +13,22 @@ type UseSearchResult = {
 	name: keyof SearchFormValues;
 };
 
-const useAppSearch = (callback: (value: string) => void): UseSearchResult => {
+const useAppSearch = (
+	callback: (value: string) => void,
+	fieldName: string = "searchField",
+): UseSearchResult => {
 	const { control, errors, getValues } = useAppForm<SearchFormValues>({
 		defaultValues: {
-			searchField: "",
+			[fieldName]: "",
 		},
 	});
 
 	const handleSearch = useCallback(() => {
-		const searchValue = getValues("searchField");
+		const searchValue = getValues(fieldName);
 		callback(searchValue);
-	}, [callback, getValues]);
+	}, [callback, getValues, fieldName]);
 
-	return { control, errors, handleSearch, name: "searchField" };
+	return { control, errors, handleSearch, name: fieldName };
 };
 
 export { useAppSearch };

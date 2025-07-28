@@ -3,12 +3,13 @@ import template from "~/libs/modules/cloud-formation/libs/templates/ec2-instance
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
 
-import { MeetingErrorMessage } from "./libs/enums/enums.js";
+import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
 import {
 	type MeetingCreateRequestDto,
 	type MeetingGetAllResponseDto,
 	type MeetingResponseDto,
+	type MeetingUpdateRequestDto,
 } from "./libs/types/types.js";
 import { MeetingEntity } from "./meeting.entity.js";
 import { type MeetingRepository } from "./meeting.repository.js";
@@ -77,6 +78,15 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		return await this.meetingRepository.delete(id);
 	}
+	public async endMeeting(id: number): Promise<MeetingResponseDto> {
+		const updated = await this.meetingRepository.update(id, {
+			status: MeetingStatus.ENDED,
+		});
+
+		await this.cloudFormation.delete(id);
+
+		return updated.toObject();
+	}
 
 	public async find(id: number): Promise<MeetingResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
@@ -101,7 +111,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 	public async update(
 		id: number,
-		payload: Partial<MeetingCreateRequestDto>,
+		payload: MeetingUpdateRequestDto,
 	): Promise<MeetingResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
 
@@ -113,7 +123,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		}
 
 		const updatedEntity = MeetingEntity.initialize({
-			host: (payload as MeetingCreateRequestDto).host,
+			host: payload.host,
 			id,
 			instanceId: meeting.toObject().instanceId,
 			ownerId: meeting.toObject().ownerId,

@@ -1,6 +1,6 @@
 import { type Entity, type ValueOf } from "~/libs/types/types.js";
 
-import { type MeetingHost } from "./libs/enums/enums.js";
+import { MeetingHost } from "./libs/enums/enums.js";
 
 class MeetingEntity implements Entity {
 	private host: ValueOf<typeof MeetingHost>;
@@ -29,7 +29,7 @@ class MeetingEntity implements Entity {
 	}
 
 	public static initialize({
-		host,
+		host = MeetingHost.ZOOM,
 		id,
 		instanceId,
 		ownerId,

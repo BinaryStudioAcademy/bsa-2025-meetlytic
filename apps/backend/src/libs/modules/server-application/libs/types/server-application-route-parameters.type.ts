@@ -14,7 +14,7 @@ type ServerApplicationRouteParameters = {
 	) => Promise<void> | void;
 	method: HTTPMethod;
 	path: string;
-	preHandler?: preHandlerHookHandler | preHandlerHookHandler[] | undefined;
+	preHandlers?: preHandlerHookHandler | preHandlerHookHandler[] | undefined;
 	validation?: {
 		body?: ValidationSchema;
 	};

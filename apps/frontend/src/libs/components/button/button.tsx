@@ -5,7 +5,7 @@ import { type Size, type Variant } from "~/libs/types/types.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	className: string | undefined;
+	className?: string | undefined;
 	iconLeft?: React.ReactNode;
 	iconRight?: React.ReactNode;
 	isDisabled?: boolean;

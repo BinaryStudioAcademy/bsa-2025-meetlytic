@@ -28,6 +28,25 @@ class MeetingService implements Service<MeetingResponseDto> {
 		this.meetingRepository = meetingRepository;
 	}
 
+	private async createInstance(id: number): Promise<MeetingResponseDto> {
+		const instanceId = await this.cloudFormation.create({
+			id,
+			template: JSON.stringify(template),
+		});
+		const meeting = await this.meetingRepository.update(id, {
+			instanceId,
+		});
+
+		if (!meeting) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.UPDATE_FAILED,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return meeting.toObject();
+	}
+
 	public async create(
 		payload: MeetingCreateRequestDto,
 	): Promise<MeetingResponseDto> {
@@ -48,20 +67,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		const instanceId = await this.cloudFormation.create({
-			id,
-			template: JSON.stringify(template),
-		});
-		const updated = await this.meetingRepository.update(id, {
-			instanceId,
-		});
-
-		if (!updated) {
-			throw new MeetingError({
-				message: MeetingErrorMessage.UPDATE_FAILED,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
+		const updated = await this.createInstance(id);
 
 		return updated.toObject();
 	}
@@ -79,13 +85,13 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return await this.meetingRepository.delete(id);
 	}
 	public async endMeeting(id: number): Promise<MeetingResponseDto> {
-		const updated = await this.meetingRepository.update(id, {
+		const meeting = await this.meetingRepository.update(id, {
 			status: MeetingStatus.ENDED,
 		});
 
 		await this.cloudFormation.delete(id);
 
-		return updated.toObject();
+		return meeting.toObject();
 	}
 
 	public async find(id: number): Promise<MeetingResponseDto> {

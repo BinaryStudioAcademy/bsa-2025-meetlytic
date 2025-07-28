@@ -2,7 +2,7 @@ import { config } from "~/libs/modules/config/config.js";
 import { logger } from "~/libs/modules/logger/logger.js";
 import { meetingService } from "~/modules/meetings/meetings.js";
 
-import { CloudFormation } from "./cloud-formation.module.js";
+import { BaseCloudFormation } from "./base-cloud-formation.module.js";
 
 const {
 	ACCESS_KEY_ID: accessKeyId,
@@ -11,7 +11,7 @@ const {
 	SECRET_ACCESS_KEY: secretAccessKey,
 } = config.ENV.AWS;
 
-const cloudFormation = new CloudFormation({
+const cloudFormation = new BaseCloudFormation({
 	credentials: { accessKeyId, secretAccessKey },
 	imageId,
 	logger,
@@ -20,3 +20,4 @@ const cloudFormation = new CloudFormation({
 });
 
 export { cloudFormation };
+export { type CloudFormation } from "./libs/type/types.js";

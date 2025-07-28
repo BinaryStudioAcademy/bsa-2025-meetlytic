@@ -10,7 +10,7 @@ import {
 import { ExceptionMessage } from "~/libs/enums/enums.js";
 import { CloudFormationError } from "~/libs/exceptions/exceptions.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
-import { type MeetingService } from "~/modules/meetings/meeting.service.js";
+import { type MeetingService } from "~/modules/meetings/meetings.js";
 
 import { type Logger } from "../logger/logger.js";
 import {
@@ -19,7 +19,7 @@ import {
 	ParameterKey,
 	StackPrefix,
 } from "./libs/enums/enums.js";
-import { type CreateInstance } from "./libs/type/types.js";
+import { type CloudFormation, type CreateStack } from "./libs/type/types.js";
 
 type Constructor = {
 	credentials: {
@@ -32,7 +32,7 @@ type Constructor = {
 	region: string;
 };
 
-class CloudFormation {
+class BaseCloudFormation implements CloudFormation {
 	private client: CloudFormationClient;
 	private imageId: string;
 	private logger: Logger;
@@ -75,7 +75,7 @@ class CloudFormation {
 		return `${StackPrefix.MEETLYTIC}-${String(meetingId)}`;
 	}
 
-	public async create({ id, template }: CreateInstance): Promise<string> {
+	public async create({ id, template }: CreateStack): Promise<string> {
 		const stackName = this.getStackName(id);
 		this.logger.info(`Creating stack: ${stackName}`);
 
@@ -154,4 +154,4 @@ class CloudFormation {
 	}
 }
 
-export { CloudFormation };
+export { BaseCloudFormation };

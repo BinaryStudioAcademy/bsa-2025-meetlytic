@@ -17,6 +17,7 @@ type Properties = {
 const SignInForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 	const { control, errors, handleSubmit } = useAppForm<UserSignInRequestDto>({
 		defaultValues: DEFAULT_SIGN_IN_VALUES,
+		mode: "onBlur",
 		validationSchema: userSignInValidationSchema,
 	});
 
@@ -36,7 +37,6 @@ const SignInForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					control={control}
 					errors={errors}
 					label="Email"
-					labelStyle={styles["label-text"]}
 					name="email"
 					placeholder="user@example.com"
 					type="text"
@@ -45,7 +45,6 @@ const SignInForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					control={control}
 					errors={errors}
 					label="Password"
-					labelStyle={styles["label-text"]}
 					name="password"
 					placeholder="********"
 					type="password"

@@ -1,1 +1,1 @@
-export { CreateInstance } from "./create-instance.types.js";
+export { type CreateInstance } from "./create-instance.types.js";

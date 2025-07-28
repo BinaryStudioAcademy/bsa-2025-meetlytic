@@ -7,6 +7,9 @@ import {
 	waitUntilStackDeleteComplete,
 } from "@aws-sdk/client-cloudformation";
 
+import { ExceptionMessage } from "~/libs/enums/enums.js";
+import { CloudFormationError } from "~/libs/exceptions/exceptions.js";
+import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type MeetingService } from "~/modules/meetings/meeting.service.js";
 
 import { type Logger } from "../logger/logger.js";
@@ -16,10 +19,7 @@ import {
 	ParameterKey,
 	StackPrefix,
 } from "./libs/enums/enums.js";
-import { ExceptionMessage } from "~/libs/enums/enums.js";
-import { CreateInstance } from "./libs/type/types.js";
-import { CloudFormationError } from "~/libs/exceptions/exceptions.js";
-import { HTTPCode } from "~/libs/modules/http/http.js";
+import { type CreateInstance } from "./libs/type/types.js";
 
 type Constructor = {
 	credentials: {
@@ -38,7 +38,7 @@ class CloudFormation {
 	private logger: Logger;
 	private meetingService: MeetingService;
 
-	constructor({
+	public constructor({
 		credentials,
 		imageId,
 		logger,
@@ -75,9 +75,10 @@ class CloudFormation {
 		return `${StackPrefix.MEETLYTIC}-${String(meetingId)}`;
 	}
 
-	async create({ id, template }: CreateInstance): Promise<string> {
+	public async create({ id, template }: CreateInstance): Promise<string> {
 		const stackName = this.getStackName(id);
 		this.logger.info(`Creating stack: ${stackName}`);
+
 		try {
 			const command = new CreateStackCommand({
 				Capabilities: [Capability.NAMED_IAM],
@@ -101,18 +102,27 @@ class CloudFormation {
 
 			return instanceId;
 		} catch (error) {
-			this.logger.error(`Failed to create stack ${stackName}`, error);
+			if (error instanceof Error) {
+				this.logger.error(`Failed to create stack ${stackName}`, {
+					message: error.message,
+					stack: error.stack,
+				});
+			} else {
+				this.logger.error(`Failed to create stack ${stackName}`, { error });
+			}
+
 			throw new CloudFormationError({
+				cause: error,
 				message: ExceptionMessage.FAILED_TO_CREATE_STACK,
 				status: HTTPCode.INTERNAL_SERVER_ERROR,
-				cause: error,
 			});
 		}
 	}
 
-	async delete(meetingId: number): Promise<void> {
+	public async delete(meetingId: number): Promise<void> {
 		const stackName = this.getStackName(meetingId);
 		this.logger.info(`Deleting stack: ${stackName}`);
+
 		try {
 			const command = new DeleteStackCommand({ StackName: stackName });
 			await this.client.send(command);
@@ -126,7 +136,14 @@ class CloudFormation {
 
 			this.logger.info(`Stack ${stackName} deleted`);
 		} catch (error) {
-			this.logger.error(`Failed to delete stack ${stackName}:`, error);
+			if (error instanceof Error) {
+				this.logger.error(`Failed to delete stack ${stackName}:`, {
+					message: error.message,
+					stack: error.stack,
+				});
+			} else {
+				this.logger.error(`Failed to delete stack ${stackName}:`, { error });
+			}
 
 			throw new CloudFormationError({
 				cause: error,

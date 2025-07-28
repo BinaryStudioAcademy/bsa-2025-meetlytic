@@ -7,11 +7,11 @@ import { MeetingService } from "./meeting.service.js";
 import { MeetingsController } from "./meetings.controller.js";
 
 const meetingRepository = new MeetingRepository(MeetingModel);
-const meetingService = new MeetingService({
+const meetingService: MeetingService = new MeetingService({
 	cloudFormation,
 	meetingRepository,
 });
 const meetingsController = new MeetingsController(logger, meetingService);
 
-export { meetingsController };
+export { meetingsController, meetingService };
 export { MeetingService } from "./meeting.service.js";

@@ -1,6 +1,5 @@
 import { type CloudFormation } from "~/libs/modules/cloud-formation/cloud-formation.module.js";
 import template from "~/libs/modules/cloud-formation/libs/templates/ec2-instance-template.json" with { type: "json" };
-
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
 
@@ -55,12 +54,14 @@ class MeetingService implements Service<MeetingResponseDto> {
 		const updated = await this.meetingRepository.update(id, {
 			instanceId,
 		});
+
 		if (!updated) {
 			throw new MeetingError({
 				message: MeetingErrorMessage.UPDATE_FAILED,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
+
 		return updated.toObject();
 	}
 

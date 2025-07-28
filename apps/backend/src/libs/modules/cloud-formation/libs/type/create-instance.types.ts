@@ -3,4 +3,4 @@ type CreateInstance = {
 	template: string;
 };
 
-export { CreateInstance };
+export { type CreateInstance };

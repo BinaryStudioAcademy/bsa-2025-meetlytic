@@ -1,4 +1,4 @@
-import { ExceptionMessage } from "@meetlytic/shared";
+import { type ExceptionMessage } from "~/libs/enums/enums.js";
 import { type HTTPCode } from "~/libs/modules/http/http.js";
 import { HTTPError } from "~/libs/modules/http/http.js";
 import { type ValueOf } from "~/libs/types/types.js";

@@ -79,7 +79,7 @@ class MeetingsController extends BaseController {
 			handler: (options) => this.update(options as UpdateMeetingOptions),
 			method: "PATCH",
 			path: MeetingsApiPath.$ID,
-			preHandler: [checkIfMeetingOwner(this.meetingService)],
+			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 			validation: { body: meetingUpdateValidationSchema },
 		});
 
@@ -87,21 +87,21 @@ class MeetingsController extends BaseController {
 			handler: (options) => this.delete(options as DeleteMeetingOptions),
 			method: "DELETE",
 			path: MeetingsApiPath.$ID,
-			preHandler: [checkIfMeetingOwner(this.meetingService)],
+			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 
 		this.addRoute({
 			handler: (options) => this.find(options as FindMeetingOptions),
 			method: "GET",
 			path: MeetingsApiPath.$ID,
-			preHandler: [checkIfMeetingOwner(this.meetingService)],
+			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 
 		this.addRoute({
 			handler: (options) => this.findAll(options as FindAllMeetingOptions),
 			method: "GET",
 			path: MeetingsApiPath.ROOT,
-			preHandler: [checkIfMeetingOwner(this.meetingService)],
+			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 	}
 

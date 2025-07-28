@@ -47,14 +47,14 @@ class BaseController implements Controller {
 	}
 
 	public addRoute(options: ControllerRouteParameters): void {
-		const { handler, path, preHandler } = options;
+		const { handler, path, preHandlers } = options;
 		const fullPath = this.apiUrl + path;
 
 		this.routes.push({
 			...options,
 			handler: (request, reply) => this.mapHandler(handler, request, reply),
 			path: fullPath,
-			preHandler: preHandler,
+			preHandlers: preHandlers,
 		});
 	}
 }

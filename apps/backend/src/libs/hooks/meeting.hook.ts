@@ -3,27 +3,16 @@ import { type FastifyRequest } from "fastify";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { MeetingErrorMessage } from "~/modules/meetings/libs/enums/enums.js";
 import { MeetingError } from "~/modules/meetings/libs/exceptions/exceptions.js";
-import { type MeetingRepository } from "~/modules/meetings/meetings.js";
+import { type MeetingService } from "~/modules/meetings/meetings.js";
 
-const createMeetingHook = (meetingRepository: MeetingRepository) => {
+const createMeetingHook = (meetingService: MeetingService) => {
 	return async function (request: FastifyRequest): Promise<void> {
-		const { method, params } = request;
-
-		if (method.toUpperCase() === "POST") {
-			return;
-		}
+		const { params } = request;
 
 		const meetingId = Number((params as Record<string, string>)["id"]);
-		const meeting = await meetingRepository.find(meetingId);
+		const meeting = await meetingService.find(meetingId);
 
-		if (!meeting) {
-			throw new MeetingError({
-				message: MeetingErrorMessage.MEETING_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		const ownerIdFromDataBase = meeting.toObject().ownerId;
+		const ownerIdFromDataBase = meeting.ownerId;
 		const ownerIdFromUser = request.user?.id;
 
 		if (ownerIdFromDataBase !== ownerIdFromUser) {

@@ -34,7 +34,8 @@ class MeetingService implements Service<MeetingResponseDto> {
 		const meeting = MeetingEntity.initializeNew({
 			host: payload.host,
 			instanceId: payload.instanceId ?? null,
-			ownerId: payload.ownerId,
+			ownerId: (payload as MeetingCreateRequestDto & { ownerId: number })
+				.ownerId,
 		});
 
 		const newMeeting = await this.meetingRepository.create(meeting);

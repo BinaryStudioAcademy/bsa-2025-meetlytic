@@ -52,20 +52,3 @@
 .create-account:hover {
 	text-decoration: underline;
 }
-
-.sign-in-btn {
-	width: 420px;
-	padding: 12px 10px;
-	font-size: 16px;
-	font-weight: 700;
-	color: white;
-	cursor: pointer;
-	background-color: var(--color-brand);
-	border: none;
-	border-radius: 6px;
-	transition: all 0.3s ease;
-}
-
-.sign-in-btn:hover {
-	background-color: var(--color-brand-hover);
-}

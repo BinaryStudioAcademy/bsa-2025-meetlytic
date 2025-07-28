@@ -1,5 +1,6 @@
 import { Button, Input, Link } from "~/libs/components/components.js";
 import { AppRoute, ButtonVariant } from "~/libs/enums/enums.js";
+import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
 	type UserSignUpRequestDto,
@@ -32,47 +33,57 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 			<h3 className={styles["title"]}>Create an account</h3>
 			<form className={styles["form"]} onSubmit={handleFormSubmit}>
 				<Input
+					className={getValidClassNames(styles["input"])}
 					control={control}
 					errors={errors}
 					label="First name"
 					name="firstName"
 					placeholder="First name"
 					type="text"
+					wrapperClassName={getValidClassNames(styles["input-wrapper"])}
 				/>
 				<Input
+					className={getValidClassNames(styles["input"])}
 					control={control}
 					errors={errors}
 					label="Last name"
 					name="lastName"
 					placeholder="Last name"
 					type="text"
+					wrapperClassName={getValidClassNames(styles["input-wrapper"])}
 				/>
 				<Input
+					className={getValidClassNames(styles["input"])}
 					control={control}
 					errors={errors}
 					label="Email"
 					name="email"
 					placeholder="mail@abc.com"
 					type="text"
+					wrapperClassName={getValidClassNames(styles["input-wrapper"])}
 				/>
 				<Input
+					className={getValidClassNames(styles["input"])}
 					control={control}
 					errors={errors}
 					label="Password"
 					name="password"
 					placeholder="*************"
 					type="text"
+					wrapperClassName={getValidClassNames(styles["input-wrapper"])}
 				/>
 				<Input
+					className={getValidClassNames(styles["input"])}
 					control={control}
 					errors={errors}
 					label="Confirm Password"
 					name="confirmPassword"
 					placeholder="*************"
 					type="text"
+					wrapperClassName={getValidClassNames(styles["input-wrapper"])}
 				/>
 				<Button
-					label="Create an account"
+					label="Create An Account"
 					type="submit"
 					variant={ButtonVariant.PRIMARY}
 				/>

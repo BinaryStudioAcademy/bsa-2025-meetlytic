@@ -12,11 +12,17 @@ const ColumnName = {
 	ID: "id",
 	INSTANCE_ID: "instance_id",
 	OWNER_ID: "owner_id",
+	STATUS: "status",
 	UPDATED_AT: "updated_at",
 } as const;
 
 const MeetingHost = {
 	ZOOM: "zoom",
+} as const;
+
+const MeetingStatus = {
+	ENDED: "ended",
+	STARTED: "started",
 } as const;
 
 function down(knex: Knex): Promise<void> {
@@ -28,6 +34,10 @@ function up(knex: Knex): Promise<void> {
 		table.increments(ColumnName.ID).primary();
 		table.text(ColumnName.INSTANCE_ID).notNullable();
 		table.enu(ColumnName.HOST, Object.values(MeetingHost)).notNullable();
+		table
+			.enu(ColumnName.STATUS, Object.values(MeetingStatus))
+			.notNullable()
+			.defaultTo(MeetingStatus.STARTED);
 		table
 			.integer(ColumnName.OWNER_ID)
 			.notNullable()

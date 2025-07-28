@@ -1,0 +1,81 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	min-width: 420px;
+	max-width: 450px;
+	padding: 15px;
+	margin: 0 auto;
+	border-radius: 12px;
+}
+
+.title {
+	margin-bottom: 24px;
+	font-size: 20px;
+	font-weight: 600;
+	text-align: left;
+}
+
+.input {
+	width: 100%;
+	height: 44px;
+	padding: 12px 16px;
+	margin-bottom: 14px;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 18px;
+	color: #222222;
+	outline: none;
+	background: #ffffff;
+	border: 1.5px solid #f0ecec;
+	border-radius: 8px;
+	transition: border 0.2s;
+}
+
+.input:focus {
+	border: 1.5px solid #aaeb98;
+}
+
+.button-secondary {
+	width: 100%;
+	padding: 12px 0;
+	margin-top: 15px;
+	font-size: 16px;
+	font-weight: 600;
+	color: #10add8;
+	cursor: pointer;
+	background: transparent;
+	border: 2px solid #10add8;
+	border-radius: 6px;
+	transition:
+		background 0.2s,
+		color 0.2s;
+}
+
+.button-secondary:hover {
+	color: #0f8fb2;
+	background: #f5f5f5;
+	border: 2px solid #0f8fb2;
+}
+
+.button-start-meeting {
+	width: 100%;
+	padding: 5px;
+	margin-bottom: 12px;
+	font-size: 24px;
+	font-weight: 600;
+	color: #222222;
+	cursor: pointer;
+	background: #ffffff;
+	border: 2px solid #222222;
+	border-radius: 6px;
+	transition:
+		background 0.2s,
+		color 0.2s,
+		border 0.2s;
+}
+
+.button-start-meeting:hover {
+	color: #009fd4;
+	background: #f5f5f5;
+	border-color: #009fd4;
+}

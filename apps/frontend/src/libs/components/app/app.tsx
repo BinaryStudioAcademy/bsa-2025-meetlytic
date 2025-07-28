@@ -1,3 +1,5 @@
+import React, { useCallback } from "react";
+
 import reactLogo from "~/assets/img/react.svg";
 import {
 	Header,
@@ -20,6 +22,11 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { actions as userActions } from "~/modules/users/users.js";
 
+import { Button } from "../button/button.js";
+import { MeetingForm } from "../meeting-form/meeting-form.js";
+import meetingFormStyles from "../meeting-form/meeting-form.module.css";
+import { Modal } from "../modal/modal.js";
+
 const App: React.FC = () => {
 	const { pathname } = useLocation();
 	const dispatch = useAppDispatch();
@@ -29,6 +36,16 @@ const App: React.FC = () => {
 	}));
 
 	const isRoot = pathname === AppRoute.ROOT;
+
+	const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+	const handleOpenModal = useCallback((): void => {
+		setIsModalOpen(true);
+	}, []);
+
+	const handleCloseModal = useCallback((): void => {
+		setIsModalOpen(false);
+	}, []);
 
 	useEffect(() => {
 		if (isRoot) {
@@ -49,6 +66,30 @@ const App: React.FC = () => {
 			<Sidebar>
 				<Navigation items={NAVIGATION_ITEMS} />
 			</Sidebar>
+
+			{isRoot && (
+				<div
+					style={{
+						alignItems: "flex-start",
+						display: "flex",
+						justifyContent: "flex-end",
+						padding: "32px 32px 0 0",
+						width: "100%",
+					}}
+				>
+					<div style={{ minWidth: 240, width: 240 }}>
+						<Button
+							className={meetingFormStyles["button-start-meeting"]}
+							label="Start a meeting"
+							onClick={handleOpenModal}
+						/>
+					</div>
+				</div>
+			)}
+
+			<Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+				<MeetingForm onClose={handleCloseModal} />
+			</Modal>
 
 			<ul className="App-navigation-list">
 				<li>

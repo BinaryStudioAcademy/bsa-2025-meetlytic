@@ -11,6 +11,7 @@ const config: KnipConfig = {
 			entry: ["src/db/migrations/*.ts", "knexfile.ts"],
 			ignoreDependencies: ["pg"],
 		},
+		"apps/bot": {},
 		"apps/frontend": {},
 		"packages/shared": {
 			includeEntryExports: true,

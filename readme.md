@@ -87,13 +87,19 @@ TODO: add application schema
 
 3. modules - separate app features or functionalities
 
-### 5.4 Shared Package
+### 5.4 Bot
 
-#### 5.4.1 Reason
+#### 5.4.1 Technologies
+
+1. [Puppeteer](https://pptr.dev/) — API to automate Chrome
+
+### 5.5 Shared Package
+
+#### 5.5.1 Reason
 
 As we are already using js on both frontend and backend it would be useful to share some contracts and code between them.
 
-#### 5.4.2 Technologies
+#### 5.5.2 Technologies
 
 1. [Zod](https://github.com/colinhacks/zod) — a schema validator
 
@@ -105,6 +111,7 @@ As we are already using js on both frontend and backend it would be useful to sh
 
 - apps/frontend/.env
 - apps/backend/.env
+- apps/bot/.env
 
 You should use .env.example files as a reference.
 

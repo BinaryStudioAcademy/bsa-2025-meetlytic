@@ -24,11 +24,18 @@ frontend:
           - "apps/frontend/**/*"
           - "!apps/frontend/.env.example"
 
+bot:
+  - changed-files:
+      - all-globs-to-any-file:
+          - "apps/bot/**/*"
+          - "!apps/bot/.env.example"
+
 env:
   - changed-files:
       - any-glob-to-any-file:
           - "apps/backend/.env.example"
           - "apps/frontend/.env.example"
+          - "apps/bot/.env.example"
 
 config:
   - changed-files:

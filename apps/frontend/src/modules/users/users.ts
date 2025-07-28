@@ -14,6 +14,7 @@ export { userApi };
 export {
 	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
+	type UserResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "./libs/types/types.js";

@@ -6,9 +6,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { WHITE_ROUTES } from "~/libs/constants/constants.js";
-import { APIPath, FastifyHook, ServerErrorType } from "~/libs/enums/enums.js";
+import { ServerErrorType } from "~/libs/enums/enums.js";
 import { type ValidationError } from "~/libs/exceptions/exceptions.js";
-import { createMeetingHook } from "~/libs/hooks/hooks.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Database } from "~/libs/modules/database/database.js";
 import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
@@ -20,10 +19,6 @@ import {
 	type ServerValidationErrorResponse,
 	type ValidationSchema,
 } from "~/libs/types/types.js";
-import {
-	meetingRepository,
-	meetingsController,
-} from "~/modules/meetings/meetings.js";
 import { userService } from "~/modules/users/users.js";
 
 import {
@@ -228,27 +223,6 @@ class BaseServerApplication implements ServerApplication {
 				userService,
 			},
 		});
-
-		await this.app.register(
-			(meetingScope) => {
-				meetingScope.addHook(
-					FastifyHook.PRE_HANDLER,
-					createMeetingHook(meetingRepository),
-				);
-
-				for (const route of meetingsController.routes) {
-					meetingScope.route({
-						handler: route.handler,
-						method: route.method,
-						schema: {
-							body: route.validation?.body,
-						},
-						url: route.path,
-					});
-				}
-			},
-			{ prefix: APIPath.MEETINGS },
-		);
 	}
 
 	public initRoutes(): void {

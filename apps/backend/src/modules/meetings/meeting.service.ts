@@ -1,5 +1,3 @@
-//mport { FIRST_ITEM_INDEX } from "@meetlytic/shared";
-
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
 
@@ -27,7 +25,8 @@ class MeetingService implements Service<MeetingResponseDto> {
 		const meeting = MeetingEntity.initializeNew({
 			host: payload.host,
 			instanceId: payload.instanceId ?? null,
-			ownerId: payload.ownerId,
+			ownerId: (payload as MeetingCreateRequestDto & { ownerId: number })
+				.ownerId,
 		});
 
 		const newMeeting = await this.meetingRepository.create(meeting);

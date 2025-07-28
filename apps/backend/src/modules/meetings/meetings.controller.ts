@@ -1,4 +1,5 @@
 import { APIPath } from "~/libs/enums/enums.js";
+import { createMeetingHook } from "~/libs/hooks/hooks.js";
 import {
 	type APIHandlerResponse,
 	BaseController,
@@ -29,7 +30,7 @@ import { type MeetingService } from "./meeting.service.js";
  *         id:
  *           type: number
  *         host:
- *           type: string
+ *           type: enum
  *         instanceId:
  *           type: string
  *           nullable: true
@@ -46,7 +47,7 @@ import { type MeetingService } from "./meeting.service.js";
  *         - host
  *       properties:
  *         host:
- *           type: string
+ *           type: enum
  *         instanceId:
  *           type: string
  *           nullable: true
@@ -56,7 +57,7 @@ import { type MeetingService } from "./meeting.service.js";
  *         - host
  *       properties:
  *         host:
- *           type: string
+ *           type: enum
  */
 
 class MeetingsController extends BaseController {
@@ -77,6 +78,7 @@ class MeetingsController extends BaseController {
 			handler: (options) => this.update(options as UpdateMeetingOptions),
 			method: "PATCH",
 			path: MeetingsApiPath.$ID,
+			preHandler: [createMeetingHook(this.meetingService)],
 			validation: { body: meetingUpdateValidationSchema },
 		});
 
@@ -84,18 +86,21 @@ class MeetingsController extends BaseController {
 			handler: (options) => this.delete(options as DeleteMeetingOptions),
 			method: "DELETE",
 			path: MeetingsApiPath.$ID,
+			preHandler: [createMeetingHook(this.meetingService)],
 		});
 
 		this.addRoute({
 			handler: (options) => this.find(options as FindMeetingOptions),
 			method: "GET",
 			path: MeetingsApiPath.$ID,
+			preHandler: [createMeetingHook(this.meetingService)],
 		});
 
 		this.addRoute({
 			handler: () => this.findAll(),
 			method: "GET",
 			path: MeetingsApiPath.ROOT,
+			preHandler: [createMeetingHook(this.meetingService)],
 		});
 	}
 

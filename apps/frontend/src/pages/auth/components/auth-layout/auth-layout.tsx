@@ -12,15 +12,15 @@ type Properties = {
 const AuthLayout = ({ children }: Properties): React.JSX.Element => {
 	return (
 		<div className={styles["auth"]}>
-			<div className={styles["auth__left"]}>
-				<div className={styles["auth__logo"]}>
-					<span className={styles["auth__logo-circle"]} />
+			<div className={styles["auth-left"]}>
+				<div className={styles["auth-logo"]}>
+					<span className={styles["auth-logo-circle"]} />
 					<Logo size={LogoSize.LARGE} />
 				</div>
 			</div>
 
-			<div className={styles["auth__right"]}>
-				<div className={styles["auth__form-wrapper"]}>{children}</div>
+			<div className={styles["auth-right"]}>
+				<div className={styles["auth-form-wrapper"]}>{children}</div>
 			</div>
 		</div>
 	);

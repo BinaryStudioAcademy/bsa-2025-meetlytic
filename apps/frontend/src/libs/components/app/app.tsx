@@ -15,8 +15,8 @@ import {
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
-	useAppForm,
 	useAppSelector,
+	useCallback,
 	useEffect,
 	useLocation,
 } from "~/libs/hooks/hooks.js";
@@ -30,15 +30,6 @@ const App: React.FC = () => {
 		users: users.users,
 	}));
 
-	{
-		/* TODO: Remove useAppForm call if it is no longer needed*/
-	}
-	const { control, errors } = useAppForm({
-		defaultValues: {
-			search: "",
-		},
-	});
-
 	const isRoot = pathname === AppRoute.ROOT;
 
 	useEffect(() => {
@@ -46,6 +37,11 @@ const App: React.FC = () => {
 			void dispatch(userActions.loadAll());
 		}
 	}, [isRoot, dispatch]);
+
+	const handleSearch = useCallback((value: string) => {
+		// TODO: implement handleSearch logic
+		return value;
+	}, []);
 
 	return (
 		<>
@@ -89,7 +85,7 @@ const App: React.FC = () => {
 				</>
 			)}
 			{/* TODO: Remove this component if it is no longer needed*/}
-			<SearchInput control={control} errors={errors} name="search" />
+			<SearchInput label="Search" onSearch={handleSearch} />
 		</>
 	);
 };

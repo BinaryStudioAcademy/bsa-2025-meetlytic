@@ -2,7 +2,7 @@ import { type FastifyPluginCallback } from "fastify";
 import fp from "fastify-plugin";
 
 import { type WhiteRoute } from "~/libs/constants/libs/types/types.js";
-import { APIPath, FastifyHook } from "~/libs/enums/enums.js";
+import { FastifyHook } from "~/libs/enums/enums.js";
 import { AuthError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
@@ -66,22 +66,6 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 				}
 
 				request.user = user;
-
-				const apiPrefixRegex = /^\/api\/v\d+(?:\/|$)/;
-
-				const endpointToCompare = request.url.replace(apiPrefixRegex, "/");
-
-				if (
-					endpointToCompare === APIPath.MEETINGS &&
-					request.body &&
-					typeof request.body === "object"
-				) {
-					const body = request.body as Record<string, unknown>;
-
-					if (!("ownerId" in body)) {
-						body["ownerId"] = user.id;
-					}
-				}
 			} catch (error: unknown) {
 				if (error instanceof Error) {
 					logger.error(`[Authorization Error]: ${error.message}`);

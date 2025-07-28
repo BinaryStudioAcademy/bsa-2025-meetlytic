@@ -53,20 +53,18 @@ const Input = <T extends FieldValues>({
 	const hasError = Boolean(error);
 
 	return (
-		<div
-			className={getValidClassNames(styles["input-wrapper"], wrapperClassName)}
-		>
+		<div className={getValidClassNames(styles["input"], wrapperClassName)}>
 			<label
 				className={hasVisuallyHiddenLabel ? "visually-hidden" : ""}
 				htmlFor={name}
 			>
 				{label}
 			</label>
-			<div className={styles["input-relative-inner-wrapper"]}>
+			<div className={styles["input__relative-wrapper"]}>
 				{iconName && (
 					<Icon
 						className={getValidClassNames(
-							styles["input-icon"],
+							styles["input__icon"],
 							iconPosition && iconPositionToClass[iconPosition],
 							iconClassName,
 						)}
@@ -76,11 +74,11 @@ const Input = <T extends FieldValues>({
 				)}
 				<input
 					className={getValidClassNames(
-						styles["input"],
+						styles["input__entry"],
 						iconName && iconPosition && inputPaddingToClass[iconPosition],
 						hasError
-							? styles["input-invalid"]
-							: isSubmitted && styles["input-valid"],
+							? styles["input__entry--invalid"]
+							: isSubmitted && styles["input__entry--valid"],
 						className,
 					)}
 					{...field}
@@ -90,7 +88,7 @@ const Input = <T extends FieldValues>({
 				/>
 			</div>
 			{hasError && (
-				<div className={styles["input-error-label"]}>{error as string}</div>
+				<div className={styles["input__error"]}>{error as string}</div>
 			)}
 		</div>
 	);

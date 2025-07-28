@@ -1,10 +1,10 @@
 import { cloudFormation } from "~/libs/modules/cloud-formation/cloud-formation.js";
 import { logger } from "~/libs/modules/logger/logger.js";
 
-import { MeetingModel } from "./meeting.model.js";
-import { MeetingRepository } from "./meeting.repository.js";
-import { MeetingService } from "./meeting.service.js";
 import { MeetingsController } from "./meetings.controller.js";
+import { MeetingModel } from "./meetings.model.js";
+import { MeetingRepository } from "./meetings.repository.js";
+import { MeetingService } from "./meetings.service.js";
 
 const meetingRepository = new MeetingRepository(MeetingModel);
 const meetingService: MeetingService = new MeetingService({
@@ -14,4 +14,4 @@ const meetingService: MeetingService = new MeetingService({
 const meetingsController = new MeetingsController(logger, meetingService);
 
 export { meetingsController, meetingService };
-export { MeetingService } from "./meeting.service.js";
+export { MeetingService } from "./meetings.service.js";

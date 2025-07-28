@@ -11,8 +11,8 @@ import {
 	type MeetingResponseDto,
 	type MeetingUpdateRequestDto,
 } from "./libs/types/types.js";
-import { MeetingEntity } from "./meeting.entity.js";
-import { type MeetingRepository } from "./meeting.repository.js";
+import { MeetingEntity } from "./meetings.entity.js";
+import { type MeetingRepository } from "./meetings.repository.js";
 
 type Constructor = {
 	cloudFormation: CloudFormation;
@@ -107,12 +107,21 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return meeting.toObject();
 	}
 
-	public async findAll(): Promise<MeetingGetAllResponseDto> {
-		const allMeetings = await this.meetingRepository.findAll();
+	public async findAll(
+		filter?: Partial<MeetingResponseDto>,
+	): Promise<MeetingGetAllResponseDto> {
+		const ownerId = filter?.ownerId;
 
-		return {
-			items: allMeetings.map((m) => m.toObject()),
-		};
+		if (!ownerId) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.FORBIDDEN,
+				status: HTTPCode.FORBIDDEN,
+			});
+		}
+
+		const entities = await this.meetingRepository.findAllByOwnerId(ownerId);
+
+		return { items: entities.map((m) => m.toObject()) };
 	}
 
 	public async update(
@@ -133,6 +142,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			id,
 			instanceId: meeting.toObject().instanceId,
 			ownerId: meeting.toObject().ownerId,
+			status: payload.status ?? meeting.toObject().status,
 		});
 
 		const updated = await this.meetingRepository.update(

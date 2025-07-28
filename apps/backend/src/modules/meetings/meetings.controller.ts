@@ -1,5 +1,5 @@
 import { APIPath } from "~/libs/enums/enums.js";
-import { createMeetingHook } from "~/libs/hooks/hooks.js";
+import { checkIfMeetingOwner } from "~/libs/hooks/hooks.js";
 import {
 	type APIHandlerResponse,
 	BaseController,
@@ -11,6 +11,7 @@ import { MeetingsApiPath } from "./libs/enums/enums.js";
 import {
 	type CreateMeetingOptions,
 	type DeleteMeetingOptions,
+	type FindAllMeetingOptions,
 	type FindMeetingOptions,
 	type UpdateMeetingOptions,
 } from "./libs/types/types.js";
@@ -18,7 +19,7 @@ import {
 	meetingCreateValidationSchema,
 	meetingUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
-import { type MeetingService } from "./meeting.service.js";
+import { type MeetingService } from "./meetings.service.js";
 
 /**
  * @swagger
@@ -78,7 +79,7 @@ class MeetingsController extends BaseController {
 			handler: (options) => this.update(options as UpdateMeetingOptions),
 			method: "PATCH",
 			path: MeetingsApiPath.$ID,
-			preHandler: [createMeetingHook(this.meetingService)],
+			preHandler: [checkIfMeetingOwner(this.meetingService)],
 			validation: { body: meetingUpdateValidationSchema },
 		});
 
@@ -86,21 +87,21 @@ class MeetingsController extends BaseController {
 			handler: (options) => this.delete(options as DeleteMeetingOptions),
 			method: "DELETE",
 			path: MeetingsApiPath.$ID,
-			preHandler: [createMeetingHook(this.meetingService)],
+			preHandler: [checkIfMeetingOwner(this.meetingService)],
 		});
 
 		this.addRoute({
 			handler: (options) => this.find(options as FindMeetingOptions),
 			method: "GET",
 			path: MeetingsApiPath.$ID,
-			preHandler: [createMeetingHook(this.meetingService)],
+			preHandler: [checkIfMeetingOwner(this.meetingService)],
 		});
 
 		this.addRoute({
-			handler: () => this.findAll(),
+			handler: (options) => this.findAll(options as FindAllMeetingOptions),
 			method: "GET",
 			path: MeetingsApiPath.ROOT,
-			preHandler: [createMeetingHook(this.meetingService)],
+			preHandler: [checkIfMeetingOwner(this.meetingService)],
 		});
 	}
 
@@ -169,7 +170,7 @@ class MeetingsController extends BaseController {
 	 *     tags:
 	 *       - Meetings
 	 *     parameters:
-	 *       - in: path
+	 *       - in: pathresult
 	 *         name: id
 	 *         required: true
 	 *         schema:
@@ -211,10 +212,14 @@ class MeetingsController extends BaseController {
 	 *                   items:
 	 *                     $ref: "#/components/schemas/Meeting"
 	 */
-	private async findAll(): Promise<APIHandlerResponse> {
-		const all = await this.meetingService.findAll();
+	private async findAll(
+		options: FindAllMeetingOptions,
+	): Promise<APIHandlerResponse> {
+		const meetings = await this.meetingService.findAll({
+			ownerId: options.user.id,
+		});
 
-		return { payload: all, status: HTTPCode.OK };
+		return { payload: meetings, status: HTTPCode.OK };
 	}
 
 	/**
@@ -250,9 +255,9 @@ class MeetingsController extends BaseController {
 		options: UpdateMeetingOptions,
 	): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
-		const updated = await this.meetingService.update(id, options.body);
+		const meeting = await this.meetingService.update(id, options.body);
 
-		return { payload: updated, status: HTTPCode.OK };
+		return { payload: meeting, status: HTTPCode.OK };
 	}
 }
 

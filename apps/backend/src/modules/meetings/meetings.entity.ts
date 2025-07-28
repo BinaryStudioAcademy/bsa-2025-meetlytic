@@ -1,6 +1,6 @@
 import { type Entity, type ValueOf } from "~/libs/types/types.js";
 
-import { type MeetingHost } from "./libs/enums/enums.js";
+import { type MeetingHost, MeetingStatus } from "./libs/enums/enums.js";
 
 class MeetingEntity implements Entity {
 	private host: ValueOf<typeof MeetingHost>;
@@ -11,21 +11,26 @@ class MeetingEntity implements Entity {
 
 	private ownerId: number;
 
+	private status!: ValueOf<typeof MeetingStatus>;
+
 	private constructor({
 		host,
 		id,
 		instanceId,
 		ownerId,
+		status,
 	}: {
 		host: ValueOf<typeof MeetingHost>;
 		id: null | number;
 		instanceId: null | string;
 		ownerId: number;
+		status: ValueOf<typeof MeetingStatus>;
 	}) {
 		this.id = id;
 		this.host = host;
 		this.instanceId = instanceId;
 		this.ownerId = ownerId;
+		this.status = status;
 	}
 
 	public static initialize({
@@ -33,17 +38,20 @@ class MeetingEntity implements Entity {
 		id,
 		instanceId,
 		ownerId,
+		status,
 	}: {
 		host: ValueOf<typeof MeetingHost>;
 		id: number;
 		instanceId: null | string;
 		ownerId: number;
+		status: ValueOf<typeof MeetingStatus>;
 	}): MeetingEntity {
 		return new MeetingEntity({
 			host,
 			id,
 			instanceId,
 			ownerId,
+			status,
 		});
 	}
 
@@ -61,6 +69,7 @@ class MeetingEntity implements Entity {
 			id: null,
 			instanceId,
 			ownerId,
+			status: MeetingStatus.STARTED,
 		});
 	}
 
@@ -68,11 +77,13 @@ class MeetingEntity implements Entity {
 		host: ValueOf<typeof MeetingHost>;
 		instanceId: null | string;
 		ownerId: number;
+		status: ValueOf<typeof MeetingStatus>;
 	} {
 		return {
 			host: this.host,
 			instanceId: this.instanceId,
 			ownerId: this.ownerId,
+			status: this.status,
 		};
 	}
 
@@ -81,12 +92,14 @@ class MeetingEntity implements Entity {
 		id: number;
 		instanceId: null | string;
 		ownerId: number;
+		status: ValueOf<typeof MeetingStatus>;
 	} {
 		return {
 			host: this.host,
 			id: this.id as number,
 			instanceId: this.instanceId,
 			ownerId: this.ownerId,
+			status: this.status,
 		};
 	}
 }

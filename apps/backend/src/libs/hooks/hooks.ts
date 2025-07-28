@@ -1,1 +1,1 @@
-export { createMeetingHook } from "./meeting.hook.js";
+export { checkIfMeetingOwner } from "./meeting-owner.hook.js";

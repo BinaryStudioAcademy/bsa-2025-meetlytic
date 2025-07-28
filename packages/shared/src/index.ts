@@ -33,6 +33,7 @@ export {
 	MeetingErrorMessage,
 	MeetingHost,
 	MeetingsApiPath,
+	MeetingStatus,
 } from "./modules/meetings/meetings.js";
 export {
 	type MeetingCreateRequestDto,

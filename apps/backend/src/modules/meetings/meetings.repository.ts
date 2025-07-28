@@ -1,8 +1,8 @@
 import { DELETE_SUCCESS_THRESHOLD } from "~/libs/constants/constants.js";
 import { type Repository } from "~/libs/types/types.js";
 
-import { MeetingEntity } from "./meeting.entity.js";
-import { type MeetingModel } from "./meeting.model.js";
+import { MeetingEntity } from "./meetings.entity.js";
+import { type MeetingModel } from "./meetings.model.js";
 
 class MeetingRepository implements Repository<MeetingEntity> {
 	private meetingModel: typeof MeetingModel;
@@ -12,10 +12,10 @@ class MeetingRepository implements Repository<MeetingEntity> {
 	}
 
 	public async create(entity: MeetingEntity): Promise<MeetingEntity> {
-		const { host, instanceId, ownerId } = entity.toNewObject();
+		const payload = entity.toNewObject();
 		const meeting = await this.meetingModel
 			.query()
-			.insert({ host, instanceId, ownerId })
+			.insert(payload)
 			.returning("*")
 			.execute();
 
@@ -36,6 +36,15 @@ class MeetingRepository implements Repository<MeetingEntity> {
 
 	public async findAll(): Promise<MeetingEntity[]> {
 		const meetings = await this.meetingModel.query().execute();
+
+		return meetings.map((meeting) => MeetingEntity.initialize(meeting));
+	}
+
+	public async findAllByOwnerId(ownerId: number): Promise<MeetingEntity[]> {
+		const meetings = await this.meetingModel
+			.query()
+			.where("owner_id", ownerId)
+			.execute();
 
 		return meetings.map((meeting) => MeetingEntity.initialize(meeting));
 	}

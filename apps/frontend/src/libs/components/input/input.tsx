@@ -35,7 +35,7 @@ const Input = <T extends FieldValues>({
 	hasVisuallyHiddenLabel = false,
 	iconClassName,
 	iconName,
-	iconPosition = iconName && "left",
+	iconPosition = "left",
 	label,
 	name,
 	onClickIcon,
@@ -75,7 +75,7 @@ const Input = <T extends FieldValues>({
 					<div
 						className={getValidClassNames(
 							styles["input__icon"],
-							iconPosition && styles[`input__icon--${iconPosition}`],
+							styles[`input__icon--${iconPosition}`],
 						)}
 					>
 						{isClickableIcon ? (
@@ -90,9 +90,7 @@ const Input = <T extends FieldValues>({
 				<input
 					className={getValidClassNames(
 						styles["input__entry"],
-						iconName &&
-							iconPosition &&
-							styles[`input__entry--${iconPosition}-padding`],
+						iconName && styles[`input__entry--${iconPosition}-padding`],
 						hasError && styles["input__entry--invalid"],
 						!hasError && isSubmitted && styles["input__entry--valid"],
 						className,

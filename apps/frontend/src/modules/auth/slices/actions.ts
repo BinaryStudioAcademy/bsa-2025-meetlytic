@@ -11,7 +11,7 @@ import {
 import { name as sliceName } from "./auth.slice.js";
 
 const signUp = createAsyncThunk<
-	AuthResponseDto,
+	AuthResponseDto & { user: UserResponseDto },
 	UserSignUpRequestDto,
 	AsyncThunkConfig
 >(`${sliceName}/sign-up`, async (registerPayload, { extra }) => {
@@ -19,7 +19,7 @@ const signUp = createAsyncThunk<
 	const { token, user } = await authApi.signUp(registerPayload);
 	await storage.set(StorageKey.TOKEN, token);
 
-	return { token, user };
+	return { user } as AuthResponseDto & { user: UserResponseDto };
 });
 
 const getAuthenticatedUser = createAsyncThunk<

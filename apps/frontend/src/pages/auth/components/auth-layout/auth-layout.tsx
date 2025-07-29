@@ -9,7 +9,7 @@ type Properties = {
 	children: React.ReactNode;
 };
 
-const AuthLayout = ({ children }: Properties): React.JSX.Element => {
+const AuthLayout: React.FC<Properties> = ({ children }: Properties) => {
 	return (
 		<div className={styles["auth"]}>
 			<div className={styles["auth-left"]}>

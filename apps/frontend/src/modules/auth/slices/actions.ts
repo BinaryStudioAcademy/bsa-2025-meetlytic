@@ -21,7 +21,7 @@ const signIn = createAsyncThunk<
 
 	try {
 		const { token, user } = await authApi.signIn(signInPayload);
-		localStorage.setItem("StorageKey.TOKEN", token);
+		localStorage.setItem(StorageKey.TOKEN, token);
 		notification.success(NotificationMessage.SIGN_IN_SUCCESS);
 
 		return user;

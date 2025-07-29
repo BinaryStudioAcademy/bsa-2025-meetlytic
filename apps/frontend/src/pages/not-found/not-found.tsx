@@ -21,11 +21,11 @@ const NotFoundPage: React.FC = () => {
 				The page you’re looking for might have been moved or never existed.
 			</p>
 			<h5 className={styles["link-container"]}>
-				<Link to={AppRoute.ROOT}>
+				<Link className={styles["link-container__link"]} to={AppRoute.ROOT}>
 					<p>Go to homepage</p>
 				</Link>
 				or
-				<Link to={AppRoute.SIGN_IN}>
+				<Link className={styles["link-container__link"]} to={AppRoute.SIGN_IN}>
 					<p>Sign in to your account</p>
 				</Link>
 			</h5>

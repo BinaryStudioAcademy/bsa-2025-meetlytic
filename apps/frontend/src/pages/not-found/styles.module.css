@@ -37,13 +37,9 @@
 	text-align: center;
 }
 
-.link-container a {
+.link-container__link {
 	color: var(--color-brand);
 	text-decoration: none;
-}
-
-.link-container p {
-	margin-block: 0;
 }
 
 .image {

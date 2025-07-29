@@ -72,14 +72,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 	public async findAll(
 		filter?: Partial<MeetingResponseDto>,
 	): Promise<MeetingGetAllResponseDto> {
-		const ownerId = filter?.ownerId;
-
-		if (!ownerId) {
-			throw new MeetingError({
-				message: MeetingErrorMessage.FORBIDDEN,
-				status: HTTPCode.FORBIDDEN,
-			});
-		}
+		const ownerId = filter?.ownerId as number;
 
 		const meetings = await this.meetingRepository.findAllByOwnerId(ownerId);
 

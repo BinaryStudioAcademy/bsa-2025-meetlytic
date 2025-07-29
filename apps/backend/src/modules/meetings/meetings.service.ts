@@ -76,7 +76,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		const meetings = await this.meetingRepository.findAllByOwnerId(ownerId);
 
-		return { items: meetings.map((m) => m.toObject()) };
+		return { items: meetings.map((meeting) => meeting.toObject()) };
 	}
 
 	public async update(

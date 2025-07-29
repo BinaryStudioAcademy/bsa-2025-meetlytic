@@ -26,6 +26,8 @@ const SearchInput = <T extends FieldValues>({
 	className = "",
 	control,
 	errors,
+	hasVisuallyHiddenLabel = true,
+	label,
 	name,
 	onSearch,
 	placeholder = "Search...",

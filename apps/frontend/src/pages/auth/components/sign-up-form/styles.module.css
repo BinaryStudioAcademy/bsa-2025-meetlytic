@@ -1,0 +1,48 @@
+.title {
+	width: 100%;
+	max-width: 420px;
+	margin-block: 35px 45px;
+	font-size: 36px;
+	font-weight: 700;
+	line-height: 23px;
+	color: var(--color-brand);
+}
+
+.link-container {
+	display: flex;
+	gap: 10px;
+	max-width: 420px;
+	margin-block: 30px 10px;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 25px;
+}
+
+.link {
+	color: var(--color-brand);
+	text-decoration: none;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	width: 100%;
+	max-width: 420px;
+}
+
+.input-wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.input {
+	height: 44px;
+}
+
+.input:focus,
+.input:focus-visible {
+	outline: unset;
+	border-color: var(--color-accent-2);
+}

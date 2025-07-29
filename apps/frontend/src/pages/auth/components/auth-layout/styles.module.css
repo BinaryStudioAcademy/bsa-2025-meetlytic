@@ -25,6 +25,7 @@
 	font-size: 85px;
 	font-weight: 600;
 	line-height: 1.4;
+	color: var(--color-background-4);
 	letter-spacing: 3.05px;
 }
 

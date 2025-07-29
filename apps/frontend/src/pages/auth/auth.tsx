@@ -21,6 +21,7 @@ const Auth: React.FC = () => {
 		user: auth.user,
 	}));
 	const { pathname } = useLocation();
+	const hasUser = Boolean(user);
 
 	const handleSignInSubmit = useCallback(
 		(payload: UserSignInRequestDto): void => {
@@ -36,10 +37,6 @@ const Auth: React.FC = () => {
 		[dispatch],
 	);
 
-	if (dataStatus === DataStatus.FULFILLED && user) {
-		return <Navigate replace to={AppRoute.ROOT} />;
-	}
-
 	const getScreen = (screen: string): React.JSX.Element => {
 		if (screen === AppRoute.SIGN_UP) {
 			return <SignUpForm onSubmit={handleSignUpSubmit} />;
@@ -48,7 +45,11 @@ const Auth: React.FC = () => {
 		return <SignInForm onSubmit={handleSignInSubmit} />;
 	};
 
-	return getScreen(pathname);
+	if (dataStatus === DataStatus.FULFILLED && hasUser) {
+		return <Navigate replace to={AppRoute.ROOT} />;
+	}
+
+	return <>{getScreen(pathname)}</>;
 };
 
 export { Auth };

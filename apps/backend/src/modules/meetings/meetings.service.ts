@@ -67,9 +67,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		const updated = await this.createInstance(id);
-
-		return updated.toObject();
+		return await this.createInstance(id);
 	}
 
 	public async delete(id: number): Promise<boolean> {
@@ -88,6 +86,13 @@ class MeetingService implements Service<MeetingResponseDto> {
 		const meeting = await this.meetingRepository.update(id, {
 			status: MeetingStatus.ENDED,
 		});
+
+		if (!meeting) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.MEETING_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
 
 		await this.cloudFormation.delete(id);
 
@@ -142,7 +147,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			id,
 			instanceId: meeting.toObject().instanceId,
 			ownerId: meeting.toObject().ownerId,
-			status: payload.status ?? meeting.toObject().status,
+			status: payload.status,
 		});
 
 		const updated = await this.meetingRepository.update(

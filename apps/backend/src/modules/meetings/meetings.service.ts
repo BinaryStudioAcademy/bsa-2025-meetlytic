@@ -44,7 +44,16 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return await this.meetingRepository.delete(id);
+		const isDeleted = await this.meetingRepository.delete(id);
+
+		if (!isDeleted) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.DELETE_FAILED,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
+		return isDeleted;
 	}
 
 	public async find(id: number): Promise<MeetingResponseDto> {
@@ -81,26 +90,26 @@ class MeetingService implements Service<MeetingResponseDto> {
 		id: number,
 		payload: Partial<MeetingUpdateRequestDto>,
 	): Promise<MeetingResponseDto> {
-		const meeting = await this.meetingRepository.find(id);
+		const meetingEntity = await this.meetingRepository.find(id);
 
-		if (!meeting) {
+		if (!meetingEntity) {
 			throw new MeetingError({
 				message: MeetingErrorMessage.CANNOT_UPDATE_NON_EXISTENT,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
-		const newMeeting = MeetingEntity.initialize({
-			host: payload.host ?? meeting.toObject().host,
+		const meeting = MeetingEntity.initialize({
+			host: payload.host ?? meetingEntity.toObject().host,
 			id,
-			instanceId: meeting.toObject().instanceId,
-			ownerId: meeting.toObject().ownerId,
-			status: payload.status ?? meeting.toObject().status,
+			instanceId: meetingEntity.toObject().instanceId,
+			ownerId: meetingEntity.toObject().ownerId,
+			status: payload.status ?? meetingEntity.toObject().status,
 		});
 
 		const updatedMeeting = await this.meetingRepository.update(
 			id,
-			newMeeting.toNewObject(),
+			meeting.toNewObject(),
 		);
 
 		if (!updatedMeeting) {

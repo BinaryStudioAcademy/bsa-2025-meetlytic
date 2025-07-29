@@ -13,18 +13,6 @@
 	text-align: center;
 }
 
-.link-container {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	align-items: center;
-	max-width: 420px;
-	margin-block: 30px 10px;
-	font-size: 16px;
-	font-weight: 600;
-	line-height: 25px;
-}
-
 .sub-title {
 	width: 100%;
 	max-width: 420px;
@@ -35,6 +23,18 @@
 	line-height: 26px;
 	color: var(--color-text-1);
 	text-align: center;
+}
+
+.link-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	align-items: center;
+	max-width: 420px;
+	margin-block: 30px 10px;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 25px;
 }
 
 .link-container__link {

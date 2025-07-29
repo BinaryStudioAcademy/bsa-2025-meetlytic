@@ -17,7 +17,7 @@ type Properties<T extends FieldValues> = {
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
 	hasVisuallyHiddenLabel?: boolean;
-	iconClassName?: string | undefined;
+	iconClassName?: string;
 	iconName?: IconName;
 	iconPosition?: "left" | "right";
 	label: string;
@@ -25,23 +25,23 @@ type Properties<T extends FieldValues> = {
 	onClickIcon?: () => void;
 	placeholder?: string;
 	type?: React.HTMLInputTypeAttribute;
-	wrapperClassName?: string | undefined;
+	wrapperClassName?: string;
 };
 
 const Input = <T extends FieldValues>({
-	className = "",
+	className,
 	control,
 	errors,
 	hasVisuallyHiddenLabel = false,
-	iconClassName = "",
+	iconClassName,
 	iconName,
 	iconPosition = iconName && "left",
 	label,
 	name,
 	onClickIcon,
-	placeholder = "",
+	placeholder,
 	type = "text",
-	wrapperClassName = "",
+	wrapperClassName,
 }: Properties<T>): React.JSX.Element => {
 	const {
 		field,

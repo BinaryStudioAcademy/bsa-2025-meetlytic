@@ -1,4 +1,3 @@
-import React from "react";
 import {
 	type Control,
 	type FieldErrors,
@@ -11,7 +10,6 @@ import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
 import { type IconName } from "~/libs/types/types.js";
 
-import { iconPositionToClass, inputPaddingToClass } from "./libs/maps/maps.js";
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
@@ -19,7 +17,7 @@ type Properties<T extends FieldValues> = {
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
 	hasVisuallyHiddenLabel?: boolean;
-	iconClassName?: string;
+	iconClassName?: string | undefined;
 	iconName?: IconName;
 	iconPosition?: "left" | "right";
 	label: string;
@@ -28,7 +26,7 @@ type Properties<T extends FieldValues> = {
 	onClickIcon?: () => void;
 	placeholder?: string;
 	type?: React.HTMLInputTypeAttribute;
-	wrapperClassName?: string;
+	wrapperClassName?: string | undefined;
 };
 
 const Input = <T extends FieldValues>({
@@ -52,34 +50,52 @@ const Input = <T extends FieldValues>({
 	} = useFormController({ control, name });
 	const error = errors[name]?.message;
 	const hasError = Boolean(error);
+	const isClickableIcon = Boolean(onClickIcon);
+	const icon = iconName && (
+		<Icon
+			className={getValidClassNames(
+				styles["input__icon--default-size"],
+				iconClassName,
+			)}
+			name={iconName}
+		/>
+	);
 
 	return (
 		<div className={getValidClassNames(styles["input"], wrapperClassName)}>
 			<label
-				className={hasVisuallyHiddenLabel ? "visually-hidden" : ""}
+				className={getValidClassNames(
+					hasVisuallyHiddenLabel && "visually-hidden",
+				)}
 				htmlFor={name}
 			>
 				{label}
 			</label>
 			<div className={styles["input__relative-wrapper"]}>
-				{iconName && (
-					<Icon
+				{icon && (
+					<div
 						className={getValidClassNames(
 							styles["input__icon"],
-							iconPosition && iconPositionToClass[iconPosition],
-							iconClassName,
+							iconPosition && styles[`input__icon--${iconPosition}`],
 						)}
-						name={iconName}
-						onClick={onClickIcon}
-					/>
+					>
+						{isClickableIcon ? (
+							<button onClick={onClickIcon} type="button">
+								{icon}
+							</button>
+						) : (
+							icon
+						)}
+					</div>
 				)}
 				<input
 					className={getValidClassNames(
 						styles["input__entry"],
-						iconName && iconPosition && inputPaddingToClass[iconPosition],
-						hasError
-							? styles["input__entry--invalid"]
-							: isSubmitted && styles["input__entry--valid"],
+						iconName &&
+							iconPosition &&
+							styles[`input__entry--${iconPosition}-padding`],
+						hasError && styles["input__entry--invalid"],
+						!hasError && isSubmitted && styles["input__entry--invalid"],
 						className,
 					)}
 					{...field}

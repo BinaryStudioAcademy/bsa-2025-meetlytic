@@ -9,9 +9,9 @@
 
 .input__icon {
 	position: absolute;
-	top: 33%;
-	width: 16px;
-	height: 16px;
+	display: flex;
+	align-items: center;
+	height: 100%;
 }
 
 .input__icon--left {
@@ -20,6 +20,11 @@
 
 .input__icon--right {
 	right: 8px;
+}
+
+.input__icon--default-size {
+	width: 16px;
+	height: 16px;
 }
 
 .input__entry {

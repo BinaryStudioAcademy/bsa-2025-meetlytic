@@ -1,7 +1,7 @@
 .auth {
 	display: flex;
 	height: 100vh;
-	font-family: var(--font-family);
+	font-family: sans-serif;
 }
 
 .auth-left {
@@ -18,14 +18,7 @@
 	align-items: center;
 	font-size: 24px;
 	font-weight: bold;
-	color: white;
-}
-
-.auth-logo-text {
-	font-size: 85px;
-	font-weight: 600;
-	line-height: 1.4;
-	letter-spacing: 3.05px;
+	color: var(--color-background-4);
 }
 
 .auth-logo-circle {

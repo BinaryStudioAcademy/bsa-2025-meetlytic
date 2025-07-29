@@ -1,10 +1,10 @@
 import styles from "./styles.module.css";
 
-interface AuthLayoutProperties {
+type Properties = {
 	children: React.ReactNode;
-}
+};
 
-const AuthLayout = ({ children }: AuthLayoutProperties): React.ReactElement => {
+const AuthLayout = ({ children }: Properties): React.ReactElement => {
 	return (
 		<div className={styles["auth"]}>
 			<div className={styles["auth-left"]}>

@@ -1,16 +1,22 @@
 .layout {
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
+	display: grid;
+	grid-template:
+		"header header" 74px
+		"sidebar main" 1fr
+		/ 263px 1fr;
+	height: 100vh;
 }
 
-.layout__body {
-	display: flex;
-	flex: 1;
+.layout__header {
+	grid-area: header;
+}
+
+.layout__sidebar {
+	grid-area: sidebar;
 }
 
 .layout__main {
-	flex: 1;
-	padding: 43px 39px;
+	grid-area: main;
+	padding: 30px 40px;
 	background-color: var(--color-background-2);
 }

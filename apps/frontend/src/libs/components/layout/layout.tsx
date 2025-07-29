@@ -1,22 +1,29 @@
-import { Header, Navigation, Sidebar } from "~/libs/components/components.js";
+import {
+	Header,
+	Navigation,
+	RouterOutlet,
+	Sidebar,
+} from "~/libs/components/components.js";
 import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
 
 import styles from "./styles.module.css";
 
-type Properties = {
-	children: React.ReactNode;
-};
-
-const Layout: React.FC<Properties> = ({ children }: Properties) => {
+const Layout: React.FC = () => {
 	return (
 		<div className={styles["layout"]}>
-			<Header />
-			<div className={styles["layout__body"]}>
+			<div className={styles["layout__header"]}>
+				<Header />
+			</div>
+
+			<div className={styles["layout__sidebar"]}>
 				<Sidebar>
 					<Navigation items={NAVIGATION_ITEMS} />
 				</Sidebar>
-				<main className={styles["layout__main"]}>{children}</main>
 			</div>
+
+			<main className={styles["layout__main"]}>
+				<RouterOutlet />
+			</main>
 		</div>
 	);
 };

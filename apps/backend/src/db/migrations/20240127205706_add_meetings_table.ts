@@ -33,9 +33,17 @@ function up(knex: Knex): Promise<void> {
 	return knex.schema.createTable(TableName.MEETINGS, (table) => {
 		table.increments(ColumnName.ID).primary();
 		table.text(ColumnName.INSTANCE_ID).notNullable();
-		table.enu(ColumnName.HOST, Object.values(MeetingHost)).notNullable();
 		table
-			.enu(ColumnName.STATUS, Object.values(MeetingStatus))
+			.enu(ColumnName.HOST, Object.values(MeetingHost), {
+				enumName: "meeting_host",
+				useNative: true,
+			})
+			.notNullable();
+		table
+			.enu(ColumnName.STATUS, Object.values(MeetingStatus), {
+				enumName: "meeting_status",
+				useNative: true,
+			})
 			.notNullable()
 			.defaultTo(MeetingStatus.STARTED);
 		table

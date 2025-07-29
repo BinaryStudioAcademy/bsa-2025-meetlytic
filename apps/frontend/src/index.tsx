@@ -44,7 +44,7 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 					},
 					{
 						element: <NotFoundPage />,
-						path: AppRoute.NOT_FOUND,
+						path: AppRoute.ANY,
 					},
 				]}
 			/>

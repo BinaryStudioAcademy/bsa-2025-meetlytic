@@ -1,9 +1,11 @@
+import { Button } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
 	useCallback,
 	useLocation,
+	useLogout,
 } from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import { type UserSignUpRequestDto } from "~/modules/users/users.js";
@@ -11,6 +13,7 @@ import { type UserSignUpRequestDto } from "~/modules/users/users.js";
 import { SignInForm, SignUpForm } from "./components/components.js";
 
 const Auth: React.FC = () => {
+	const logout = useLogout(); // Example of usage
 	const dispatch = useAppDispatch();
 	const { dataStatus } = useAppSelector(({ auth }) => ({
 		dataStatus: auth.dataStatus,
@@ -28,6 +31,10 @@ const Auth: React.FC = () => {
 		[dispatch],
 	);
 
+	const handleLogout = useCallback((): void => {
+		void logout();
+	}, [logout]);
+
 	const getScreen = (screen: string): React.JSX.Element => {
 		if (screen === AppRoute.SIGN_UP) {
 			return <SignUpForm onSubmit={handleSignUpSubmit} />;
@@ -38,6 +45,7 @@ const Auth: React.FC = () => {
 
 	return (
 		<>
+			<Button label="Logout" onClick={handleLogout}></Button>
 			state: {dataStatus}
 			{getScreen(pathname)}
 		</>

@@ -1,4 +1,3 @@
-import { type AuthResponseDto } from "@meetlytic/shared";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { storage, StorageKey } from "~/libs/modules/storage/storage.js";
@@ -8,6 +7,7 @@ import {
 	type UserSignUpRequestDto,
 } from "~/modules/users/users.js";
 
+import { type AuthResponseDto } from "../libs/types/types.js";
 import { name as sliceName } from "./auth.slice.js";
 
 const signUp = createAsyncThunk<

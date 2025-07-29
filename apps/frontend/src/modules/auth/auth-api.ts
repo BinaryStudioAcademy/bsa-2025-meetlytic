@@ -1,5 +1,3 @@
-import { type AuthResponseDto } from "@meetlytic/shared";
-
 import { APIPath, ContentType } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
@@ -10,6 +8,7 @@ import {
 } from "~/modules/users/users.js";
 
 import { AuthApiPath } from "./libs/enums/enums.js";
+import { type AuthResponseDto } from "./libs/types/types.js";
 
 type Constructor = {
 	baseUrl: string;

@@ -1,4 +1,4 @@
-import { Navigate } from "~/libs/components/components.js";
+import { Layout, Navigate } from "~/libs/components/components.js";
 import { type AppRoute } from "~/libs/enums/enums.js";
 import { useAppSelector, useLocation } from "~/libs/hooks/hooks.js";
 import { type ValueOf } from "~/libs/types/types.js";
@@ -21,7 +21,7 @@ const ProtectedRoute: React.FC<Properties> = ({
 		);
 	}
 
-	return <>{children}</>;
+	return <Layout>{children}</Layout>;
 };
 
 export { ProtectedRoute };

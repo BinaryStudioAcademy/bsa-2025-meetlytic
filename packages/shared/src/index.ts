@@ -35,7 +35,6 @@ export {
 	type UserResponseDto,
 	type UserSignInRequestDto,
 	type UserSignUpRequestDto,
-	type UserSignUpResponseDto,
 	UsersApiPath,
 	userSignInValidationSchema,
 	userSignUpValidationSchema,

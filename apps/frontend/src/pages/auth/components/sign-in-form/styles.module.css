@@ -52,3 +52,9 @@
 .create-account:hover {
 	text-decoration: underline;
 }
+
+.input:focus,
+.input:focus-visible {
+	outline: unset;
+	border-color: var(--color-accent-2);
+}

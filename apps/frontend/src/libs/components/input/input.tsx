@@ -21,7 +21,6 @@ type Properties<T extends FieldValues> = {
 	iconName?: IconName;
 	iconPosition?: "left" | "right";
 	label: string;
-	labelStyle?: string | undefined;
 	name: FieldPath<T>;
 	onClickIcon?: () => void;
 	placeholder?: string;

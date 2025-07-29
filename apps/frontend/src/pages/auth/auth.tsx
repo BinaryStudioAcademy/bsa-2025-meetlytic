@@ -37,15 +37,11 @@ const Auth: React.FC = () => {
 		return <SignInForm onSubmit={handleSignInSubmit} />;
 	};
 
-	const handleRedirect = (): React.JSX.Element => {
-		if (dataStatus === DataStatus.FULFILLED) {
-			return <Navigate replace to={AppRoute.ROOT} />;
-		}
+	if (dataStatus === DataStatus.FULFILLED) {
+		return <Navigate replace to={AppRoute.ROOT} />;
+	}
 
-		return <>{getScreen(pathname)}</>;
-	};
-
-	return <>{handleRedirect()}</>;
+	return <>{getScreen(pathname)}</>;
 };
 
 export { Auth };

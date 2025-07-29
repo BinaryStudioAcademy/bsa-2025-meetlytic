@@ -4,7 +4,7 @@ import { type MeetingUpdateRequestDto } from "./types.js";
 
 type UpdateMeetingOptions = APIHandlerOptions<{
 	body: MeetingUpdateRequestDto;
-	params: { id: string };
+	params: { id: number };
 }>;
 
 export { type UpdateMeetingOptions };

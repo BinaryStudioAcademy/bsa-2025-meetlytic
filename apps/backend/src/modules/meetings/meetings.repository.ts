@@ -43,7 +43,7 @@ class MeetingRepository implements Repository<MeetingEntity> {
 	public async findAllByOwnerId(ownerId: number): Promise<MeetingEntity[]> {
 		const meetings = await this.meetingModel
 			.query()
-			.where("owner_id", ownerId)
+			.where({ ownerId })
 			.execute();
 
 		return meetings.map((meeting) => MeetingEntity.initialize(meeting));

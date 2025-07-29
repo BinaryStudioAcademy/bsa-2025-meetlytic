@@ -124,9 +124,9 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		const entities = await this.meetingRepository.findAllByOwnerId(ownerId);
+		const meetings = await this.meetingRepository.findAllByOwnerId(ownerId);
 
-		return { items: entities.map((m) => m.toObject()) };
+		return { items: meetings.map((m) => m.toObject()) };
 	}
 
 	public async update(
@@ -142,27 +142,27 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		const updatedEntity = MeetingEntity.initialize({
-			host: payload.host,
+		const newMeeting = MeetingEntity.initialize({
+			host: payload.host ?? meeting.toObject().host,
 			id,
 			instanceId: meeting.toObject().instanceId,
 			ownerId: meeting.toObject().ownerId,
 			status: payload.status,
 		});
 
-		const updated = await this.meetingRepository.update(
+		const updatedMeeting = await this.meetingRepository.update(
 			id,
-			updatedEntity.toNewObject(),
+			newMeeting.toNewObject(),
 		);
 
-		if (!updated) {
+		if (!updatedMeeting) {
 			throw new MeetingError({
 				message: MeetingErrorMessage.UPDATE_FAILED,
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}
 
-		return updated.toObject();
+		return updatedMeeting.toObject();
 	}
 }
 

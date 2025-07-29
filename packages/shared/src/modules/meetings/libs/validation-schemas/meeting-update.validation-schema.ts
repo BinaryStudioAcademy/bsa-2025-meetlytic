@@ -25,7 +25,6 @@ const meetingUpdate = z
 					message: MeetingValidationMessage.HOST_WRONG,
 				},
 			),
-		instanceId: z.string().nullable().optional(),
 		status: z
 			.string()
 			.refine(

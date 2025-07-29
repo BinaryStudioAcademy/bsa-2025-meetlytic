@@ -28,26 +28,22 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 		<>
 			<h3>Sign Up</h3>
 			<form onSubmit={handleFormSubmit}>
-				<p>
-					<Input
-						control={control}
-						errors={errors}
-						label="Email"
-						name="email"
-						placeholder="Enter your email"
-						type="text"
-					/>
-				</p>
-				<p>
-					<Input
-						control={control}
-						errors={errors}
-						label="Password"
-						name="password"
-						placeholder="Enter your password"
-						type="text"
-					/>
-				</p>
+				<Input
+					control={control}
+					errors={errors}
+					label="Email"
+					name="email"
+					placeholder="Enter your email"
+					type="text"
+				/>
+				<Input
+					control={control}
+					errors={errors}
+					label="Password"
+					name="password"
+					placeholder="Enter your password"
+					type="text"
+				/>
 				<Button label="Sign up" type="submit" />
 			</form>
 		</>

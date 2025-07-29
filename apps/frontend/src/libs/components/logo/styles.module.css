@@ -2,18 +2,18 @@
 	font-weight: 500;
 }
 
-.logo--small {
+.logo-small {
 	font-size: 23px;
 }
 
-.logo--large {
+.logo-large {
 	font-size: 85px;
 }
 
-.logo--light {
+.logo-light {
 	color: white;
 }
 
-.logo--dark {
+.logo-dark {
 	color: var(--color-text-1);
 }

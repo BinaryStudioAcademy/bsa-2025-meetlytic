@@ -17,7 +17,7 @@ type Properties<T extends FieldValues> = {
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
 	hasVisuallyHiddenLabel?: boolean;
-	iconClassName?: string | undefined;
+	iconClassName?: string;
 	iconName?: IconName;
 	iconPosition?: "left" | "right";
 	label: string;
@@ -25,23 +25,23 @@ type Properties<T extends FieldValues> = {
 	onClickIcon?: () => void;
 	placeholder?: string;
 	type?: React.HTMLInputTypeAttribute;
-	wrapperClassName?: string | undefined;
+	wrapperClassName?: string;
 };
 
 const Input = <T extends FieldValues>({
-	className = "",
+	className,
 	control,
 	errors,
 	hasVisuallyHiddenLabel = false,
-	iconClassName = "",
+	iconClassName,
 	iconName,
-	iconPosition = iconName && "left",
+	iconPosition = "left",
 	label,
 	name,
 	onClickIcon,
-	placeholder = "",
+	placeholder,
 	type = "text",
-	wrapperClassName = "",
+	wrapperClassName,
 }: Properties<T>): React.JSX.Element => {
 	const {
 		field,
@@ -75,7 +75,7 @@ const Input = <T extends FieldValues>({
 					<div
 						className={getValidClassNames(
 							styles["input__icon"],
-							iconPosition && styles[`input__icon--${iconPosition}`],
+							styles[`input__icon--${iconPosition}`],
 						)}
 					>
 						{isClickableIcon ? (
@@ -90,11 +90,9 @@ const Input = <T extends FieldValues>({
 				<input
 					className={getValidClassNames(
 						styles["input__entry"],
-						iconName &&
-							iconPosition &&
-							styles[`input__entry--${iconPosition}-padding`],
+						iconName && styles[`input__entry--${iconPosition}-padding`],
 						hasError && styles["input__entry--invalid"],
-						!hasError && isSubmitted && styles["input__entry--invalid"],
+						!hasError && isSubmitted && styles["input__entry--valid"],
 						className,
 					)}
 					{...field}

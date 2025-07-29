@@ -15,6 +15,7 @@ import {
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
+	useAppForm,
 	useAppSelector,
 	useCallback,
 	useEffect,
@@ -31,6 +32,16 @@ const App: React.FC = () => {
 	}));
 
 	const isRoot = pathname === AppRoute.ROOT;
+
+	{
+		/* TODO: Remove useAppForm call if it is no longer needed*/
+	}
+
+	const { control, errors } = useAppForm({
+		defaultValues: {
+			search: "",
+		},
+	});
 
 	useEffect(() => {
 		if (isRoot) {
@@ -85,7 +96,13 @@ const App: React.FC = () => {
 				</>
 			)}
 			{/* TODO: Remove this component if it is no longer needed*/}
-			<SearchInput label="Search" onSearch={handleSearch} />
+			<SearchInput
+				control={control}
+				errors={errors}
+				label="Search"
+				name="search"
+				onSearch={handleSearch}
+			/>
 		</>
 	);
 };

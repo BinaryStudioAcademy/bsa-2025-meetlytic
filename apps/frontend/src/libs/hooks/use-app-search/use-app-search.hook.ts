@@ -1,34 +1,21 @@
-import { useCallback } from "react";
+import { SearchDebounceDelay } from "~/libs/enums/enums.js";
+import { useEffect } from "~/libs/hooks/hooks.js";
 
-import { useAppForm } from "~/libs/hooks/hooks.js";
-
-type SearchFormValues = {
-	[key: string]: string;
+type UseSearchParameters = {
+	onSearch: (value: string) => void;
+	value: string;
 };
 
-type UseSearchResult = {
-	control: ReturnType<typeof useAppForm<SearchFormValues>>["control"];
-	errors: ReturnType<typeof useAppForm<SearchFormValues>>["errors"];
-	handleSearch: () => void;
-	name: keyof SearchFormValues;
-};
+const useAppSearch = ({ onSearch, value }: UseSearchParameters): void => {
+	useEffect(() => {
+		const handler = setTimeout(() => {
+			onSearch(value);
+		}, SearchDebounceDelay.DEFAULT);
 
-const useAppSearch = (
-	callback: (value: string) => void,
-	fieldName: string = "searchField",
-): UseSearchResult => {
-	const { control, errors, getValues } = useAppForm<SearchFormValues>({
-		defaultValues: {
-			[fieldName]: "",
-		},
-	});
-
-	const handleSearch = useCallback(() => {
-		const searchValue = getValues(fieldName);
-		callback(searchValue);
-	}, [callback, getValues, fieldName]);
-
-	return { control, errors, handleSearch, name: fieldName };
+		return (): void => {
+			clearTimeout(handler);
+		};
+	}, [value, onSearch]);
 };
 
 export { useAppSearch };

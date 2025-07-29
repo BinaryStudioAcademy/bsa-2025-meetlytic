@@ -7,17 +7,17 @@ import {
 
 import { Input } from "~/libs/components/components.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
-import { useAppSearch } from "~/libs/hooks/hooks.js";
+import { useAppSearch, useFormController } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
 	className?: string;
-	control?: Control<T, null>;
-	errors?: FieldErrors<T>;
+	control: Control<T, null>;
+	errors: FieldErrors<T>;
 	hasVisuallyHiddenLabel?: boolean;
 	label: string;
-	name?: FieldPath<T>;
+	name: FieldPath<T>;
 	onSearch?: (value: string) => void;
 	placeholder?: string;
 };
@@ -32,22 +32,23 @@ const SearchInput = <T extends FieldValues>({
 	onSearch,
 	placeholder = "Search...",
 }: Properties<T>): React.JSX.Element => {
-	const {
-		control: searchControl,
-		errors: searchErrors,
-		name: searchName,
-	} = useAppSearch(onSearch ?? ((): void => {}));
+	const { field } = useFormController({ control, name });
+
+	useAppSearch({
+		onSearch: onSearch ?? ((): void => {}),
+		value: field.value as string,
+	});
 
 	return (
 		<Input
 			className={getValidClassNames(styles["search-input"], className)}
-			control={(control ?? searchControl) as Control<T, null>}
-			errors={(errors ?? searchErrors) as FieldErrors<T>}
+			control={control}
+			errors={errors}
 			hasVisuallyHiddenLabel={hasVisuallyHiddenLabel}
 			iconName="search"
 			iconPosition="left"
 			label={label}
-			name={(name ?? searchName) as FieldPath<T>}
+			name={name}
 			placeholder={placeholder}
 		/>
 	);

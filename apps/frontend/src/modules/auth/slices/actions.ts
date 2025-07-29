@@ -7,11 +7,10 @@ import {
 	type UserSignUpRequestDto,
 } from "~/modules/users/users.js";
 
-import { type AuthResponseDto } from "../libs/types/types.js";
 import { name as sliceName } from "./auth.slice.js";
 
 const signUp = createAsyncThunk<
-	AuthResponseDto & { user: UserResponseDto },
+	UserResponseDto,
 	UserSignUpRequestDto,
 	AsyncThunkConfig
 >(`${sliceName}/sign-up`, async (registerPayload, { extra }) => {
@@ -19,7 +18,7 @@ const signUp = createAsyncThunk<
 	const { token, user } = await authApi.signUp(registerPayload);
 	await storage.set(StorageKey.TOKEN, token);
 
-	return { user } as AuthResponseDto & { user: UserResponseDto };
+	return user;
 });
 
 const getAuthenticatedUser = createAsyncThunk<

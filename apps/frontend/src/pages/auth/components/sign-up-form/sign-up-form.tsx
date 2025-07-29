@@ -39,7 +39,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					name="firstName"
 					placeholder="First name"
 					type="text"
-					wrapperClassName={styles["input-wrapper"]}
+					wrapperClassName={styles["input-wrapper"] as string}
 				/>
 				<Input
 					className={styles["input"] as string}
@@ -49,7 +49,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					name="lastName"
 					placeholder="Last name"
 					type="text"
-					wrapperClassName={styles["input-wrapper"]}
+					wrapperClassName={styles["input-wrapper"] as string}
 				/>
 				<Input
 					className={styles["input"] as string}
@@ -59,7 +59,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					name="email"
 					placeholder="mail@abc.com"
 					type="text"
-					wrapperClassName={styles["input-wrapper"]}
+					wrapperClassName={styles["input-wrapper"] as string}
 				/>
 				<Input
 					className={styles["input"] as string}
@@ -69,7 +69,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					name="password"
 					placeholder="*************"
 					type="text"
-					wrapperClassName={styles["input-wrapper"]}
+					wrapperClassName={styles["input-wrapper"] as string}
 				/>
 				<Input
 					className={styles["input"] as string}
@@ -79,7 +79,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					name="confirmPassword"
 					placeholder="*************"
 					type="text"
-					wrapperClassName={styles["input-wrapper"]}
+					wrapperClassName={styles["input-wrapper"] as string}
 				/>
 				<Button
 					label="Create An Account"

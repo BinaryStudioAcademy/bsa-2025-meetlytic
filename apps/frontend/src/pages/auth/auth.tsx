@@ -13,10 +13,12 @@ import { SignInForm, SignUpForm } from "./components/components.js";
 
 const Auth: React.FC = () => {
 	const dispatch = useAppDispatch();
-	const { dataStatus } = useAppSelector(({ auth }) => ({
+	const { dataStatus, user } = useAppSelector(({ auth }) => ({
 		dataStatus: auth.dataStatus,
+		user: auth.user,
 	}));
 	const { pathname } = useLocation();
+	const hasUser = Boolean(user);
 
 	const handleSignInSubmit = useCallback((): void => {
 		// handle sign in
@@ -37,7 +39,7 @@ const Auth: React.FC = () => {
 		return <SignInForm onSubmit={handleSignInSubmit} />;
 	};
 
-	if (dataStatus === DataStatus.FULFILLED) {
+	if (dataStatus === DataStatus.FULFILLED && hasUser) {
 		return <Navigate replace to={AppRoute.ROOT} />;
 	}
 

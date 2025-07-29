@@ -94,7 +94,7 @@ const Input = <T extends FieldValues>({
 							iconPosition &&
 							styles[`input__entry--${iconPosition}-padding`],
 						hasError && styles["input__entry--invalid"],
-						!hasError && isSubmitted && styles["input__entry--invalid"],
+						!hasError && isSubmitted && styles["input__entry--valid"],
 						className,
 					)}
 					{...field}

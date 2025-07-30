@@ -1,65 +1,79 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
+
+import { useCallback } from "~/libs/hooks/hooks.js";
 
 import { Button } from "../button/button.js";
-import styles from "./meeting-form.module.css";
+import { Input } from "../input/input.js";
+import styles from "./styles.module.css";
 
-type MeetingFormProperties = {
+type MeetingFormData = {
+	meetingLink: string;
+	meetingPassword: string;
+};
+
+type Properties = {
 	onClose: () => void;
 };
 
-const MeetingForm: React.FC<MeetingFormProperties> = ({ onClose }) => {
-	const [meetingLink, setMeetingLink] = useState("");
-	const [meetingPassword, setMeetingPassword] = useState("");
-
-	const handleSubmit = useCallback(
-		(event: React.FormEvent): void => {
-			event.preventDefault();
-			setMeetingLink("");
-			setMeetingPassword("");
-			onClose();
+const MeetingForm: React.FC<Properties> = ({ onClose }) => {
+	const {
+		control,
+		formState: { errors },
+		handleSubmit,
+		reset,
+	} = useForm<MeetingFormData>({
+		defaultValues: {
+			meetingLink: "",
+			meetingPassword: "",
 		},
-		[onClose],
-	);
+	});
 
-	const handleMeetingLinkChange = useCallback(
-		(event: React.ChangeEvent<HTMLInputElement>): void => {
-			setMeetingLink(event.target.value);
-		},
-		[],
-	);
+	const onSubmit = useCallback((): void => {
+		// Handle form submission
+		reset();
+		onClose();
+	}, [onClose, reset]);
 
-	const handlePasswordChange = useCallback(
-		(event: React.ChangeEvent<HTMLInputElement>): void => {
-			setMeetingPassword(event.target.value);
+	const handleFormSubmit = useCallback(
+		(event: React.FormEvent) => {
+			void handleSubmit(() => {
+				onSubmit();
+			})(event);
 		},
-		[],
+		[handleSubmit, onSubmit],
 	);
 
 	return (
-		<form className={styles["container"]} onSubmit={handleSubmit}>
-			<div className={styles["title"]}>Add meeting information</div>
-			<input
-				className={styles["input"]}
-				onChange={handleMeetingLinkChange}
+		<form className={styles["meeting-form"]} onSubmit={handleFormSubmit}>
+			<div className={styles["meeting-form__title"]}>
+				Add meeting information
+			</div>
+			<Input
+				control={control}
+				errors={errors}
+				hasVisuallyHiddenLabel={true}
+				label="Meeting invite link"
+				name="meetingLink"
 				placeholder="Meeting invite link"
-				required
 				type="text"
-				value={meetingLink}
 			/>
-			<input
-				className={styles["input"]}
-				onChange={handlePasswordChange}
+			<Input
+				control={control}
+				errors={errors}
+				hasVisuallyHiddenLabel={true}
+				label="Meeting password"
+				name="meetingPassword"
 				placeholder="Meeting password (optional)"
 				type="text"
-				value={meetingPassword}
 			/>
 			<Button
-				className={styles["button-primary"]}
+				className={styles["meeting-form__button--primary"]}
 				label="Start"
 				type="submit"
 			/>
 			<Button
-				className={styles["button-secondary"]}
+				className={styles["meeting-form__button--secondary"]}
 				label="Cancel"
 				onClick={onClose}
 				type="button"

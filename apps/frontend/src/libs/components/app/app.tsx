@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useState } from "react";
 
 import reactLogo from "~/assets/img/react.svg";
 import {
@@ -17,6 +17,7 @@ import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
+	useCallback,
 	useEffect,
 	useLocation,
 } from "~/libs/hooks/hooks.js";
@@ -24,8 +25,8 @@ import { actions as userActions } from "~/modules/users/users.js";
 
 import { Button } from "../button/button.js";
 import { MeetingForm } from "../meeting-form/meeting-form.js";
-import meetingFormStyles from "../meeting-form/meeting-form.module.css";
 import { Modal } from "../modal/modal.js";
+import styles from "./styles.module.css";
 
 const App: React.FC = () => {
 	const { pathname } = useLocation();
@@ -37,7 +38,7 @@ const App: React.FC = () => {
 
 	const isRoot = pathname === AppRoute.ROOT;
 
-	const [isModalOpen, setIsModalOpen] = React.useState(false);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const handleOpenModal = useCallback((): void => {
 		setIsModalOpen(true);
@@ -68,18 +69,10 @@ const App: React.FC = () => {
 			</Sidebar>
 
 			{isRoot && (
-				<div
-					style={{
-						alignItems: "flex-start",
-						display: "flex",
-						justifyContent: "flex-end",
-						padding: "32px 32px 0 0",
-						width: "100%",
-					}}
-				>
-					<div style={{ minWidth: 240, width: 240 }}>
+				<div className={styles["start-meeting"]}>
+					<div className={styles["start-meeting__button-wrapper"]}>
 						<Button
-							className={meetingFormStyles["button-start-meeting"]}
+							className={styles["start-meeting__button"]}
 							label="Start a meeting"
 							onClick={handleOpenModal}
 						/>

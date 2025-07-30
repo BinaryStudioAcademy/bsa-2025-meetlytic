@@ -1,0 +1,60 @@
+.meeting-form {
+	display: flex;
+	flex-direction: column;
+	min-width: 420px;
+	max-width: 450px;
+	padding: 15px;
+	margin: 0 auto;
+	border-radius: var(--border-radius-lg);
+}
+
+.meeting-form__title {
+	margin-bottom: 24px;
+	font-size: 20px;
+	font-weight: 600;
+	text-align: left;
+}
+
+.meeting-form__button--primary {
+	width: 100%;
+	padding: 12px 0;
+	margin-top: 24px;
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--color-background-4);
+	cursor: pointer;
+	background: var(--color-brand);
+	border: 2px solid var(--color-brand);
+	border-radius: var(--border-radius-sm);
+	transition:
+		background 0.2s,
+		border 0.2s;
+}
+
+.meeting-form__button--primary:hover {
+	background: var(--color-brand-hover);
+	border-color: var(--color-brand-hover);
+}
+
+.meeting-form__button--secondary {
+	width: 100%;
+	padding: 12px 0;
+	margin-top: 16px;
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--color-brand);
+	cursor: pointer;
+	background: transparent;
+	border: 2px solid var(--color-brand);
+	border-radius: var(--border-radius-sm);
+	transition:
+		background 0.2s,
+		color 0.2s,
+		border 0.2s;
+}
+
+.meeting-form__button--secondary:hover {
+	color: var(--color-brand-hover);
+	background: var(--color-background-3);
+	border: 2px solid var(--color-brand-hover);
+}

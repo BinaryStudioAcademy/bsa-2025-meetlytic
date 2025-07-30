@@ -8,15 +8,17 @@ import {
 	useRef,
 } from "react";
 
+import { KeyboardKey } from "~/libs/enums/enums.js";
+
 import styles from "./styles.module.css";
 
-interface ModalProperties {
+type Properties = {
 	children: ReactNode;
 	isOpen: boolean;
 	onClose: () => void;
-}
+};
 
-const Modal: FC<ModalProperties> = ({ children, isOpen, onClose }) => {
+const Modal: FC<Properties> = ({ children, isOpen, onClose }) => {
 	const modalReference = useRef<HTMLDivElement>(null);
 
 	const handleModalClick = useCallback(
@@ -28,7 +30,7 @@ const Modal: FC<ModalProperties> = ({ children, isOpen, onClose }) => {
 
 	const handleKeyDown = useCallback(
 		(event: ReactKeyboardEvent<HTMLDivElement>): void => {
-			if (event.key === "Escape") {
+			if (event.key === KeyboardKey.ESCAPE) {
 				event.preventDefault();
 				onClose();
 			}

@@ -32,34 +32,34 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 			<h3 className={styles["title"]}>Create an account</h3>
 			<form className={styles["form"]} onSubmit={handleFormSubmit}>
 				<Input
-					className={styles["input"] as string}
+					className={styles["input"]}
 					control={control}
 					errors={errors}
 					label="First name"
 					name="firstName"
 					placeholder="First name"
 					type="text"
-					wrapperClassName={styles["input-wrapper"] as string}
+					wrapperClassName={styles["input-wrapper"]}
 				/>
 				<Input
-					className={styles["input"] as string}
+					className={styles["input"]}
 					control={control}
 					errors={errors}
 					label="Last name"
 					name="lastName"
 					placeholder="Last name"
 					type="text"
-					wrapperClassName={styles["input-wrapper"] as string}
+					wrapperClassName={styles["input-wrapper"]}
 				/>
 				<Input
-					className={styles["input"] as string}
+					className={styles["input"]}
 					control={control}
 					errors={errors}
 					label="Email"
 					name="email"
 					placeholder="mail@abc.com"
 					type="text"
-					wrapperClassName={styles["input-wrapper"] as string}
+					wrapperClassName={styles["input-wrapper"]}
 				/>
 				<Input
 					className={styles["input"] as string}
@@ -69,17 +69,17 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					name="password"
 					placeholder="*************"
 					type="text"
-					wrapperClassName={styles["input-wrapper"] as string}
+					wrapperClassName={styles["input-wrapper"]}
 				/>
 				<Input
-					className={styles["input"] as string}
+					className={styles["input"]}
 					control={control}
 					errors={errors}
 					label="Confirm Password"
 					name="confirmPassword"
 					placeholder="*************"
 					type="text"
-					wrapperClassName={styles["input-wrapper"] as string}
+					wrapperClassName={styles["input-wrapper"]}
 				/>
 				<Button
 					label="Create An Account"

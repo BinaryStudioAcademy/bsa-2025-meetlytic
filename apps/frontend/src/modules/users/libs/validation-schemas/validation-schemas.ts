@@ -1,1 +1,4 @@
-export { userSignUpValidationSchema } from "@meetlytic/shared";
+export {
+	userSignInValidationSchema,
+	userSignUpValidationSchema,
+} from "@meetlytic/shared";

@@ -132,8 +132,6 @@ class BaseCloudFormation implements CloudFormation {
 				{ StackName: stackName },
 			);
 
-			await this.meetingService.update(meetingId, { instanceId: null });
-
 			this.logger.info(`Stack ${stackName} deleted`);
 		} catch (error) {
 			if (error instanceof Error) {

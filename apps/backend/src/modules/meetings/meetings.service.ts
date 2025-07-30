@@ -92,7 +92,9 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return isDeleted;
 	}
 	public async endMeeting(id: number): Promise<MeetingResponseDto> {
+		await this.cloudFormation.delete(id);
 		const meeting = await this.meetingRepository.update(id, {
+			instanceId: null,
 			status: MeetingStatus.ENDED,
 		});
 
@@ -102,8 +104,6 @@ class MeetingService implements Service<MeetingResponseDto> {
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
-
-		await this.cloudFormation.delete(id);
 
 		return meeting.toObject();
 	}

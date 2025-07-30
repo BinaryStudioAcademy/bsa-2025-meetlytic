@@ -1,7 +1,7 @@
 import { type APIHandlerOptions } from "~/libs/modules/controller/controller.js";
 
 type FindAllMeetingOptions = APIHandlerOptions & {
-	user: { id: number };
+	user: { id: string };
 };
 
 export { type FindAllMeetingOptions };

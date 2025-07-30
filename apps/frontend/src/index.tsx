@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import "~/assets/css/styles.css";
 import {
 	App,
+	Layout,
 	ProtectedRoute,
 	RouterProvider,
 	StoreProvider,
@@ -12,6 +13,7 @@ import {
 import { AppRoute } from "~/libs/enums/enums.js";
 import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
+import { NotFoundPage } from "~/pages/not-found/not-found.js";
 
 createRoot(document.querySelector("#root") as HTMLElement).render(
 	<StrictMode>
@@ -31,15 +33,19 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 						children: [
 							{
 								element: <App />,
-								path: AppRoute.ROOT,
+								index: true,
 							},
 						],
 						element: (
 							<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
-								<App />
+								<Layout />
 							</ProtectedRoute>
 						),
 						path: AppRoute.ROOT,
+					},
+					{
+						element: <NotFoundPage />,
+						path: AppRoute.ANY,
 					},
 				]}
 			/>

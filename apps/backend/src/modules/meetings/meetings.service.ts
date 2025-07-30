@@ -80,7 +80,16 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return await this.meetingRepository.delete(id);
+		const isDeleted = await this.meetingRepository.delete(id);
+
+		if (!isDeleted) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.DELETE_FAILED,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
+		return isDeleted;
 	}
 	public async endMeeting(id: number): Promise<MeetingResponseDto> {
 		const meeting = await this.meetingRepository.update(id, {
@@ -115,44 +124,37 @@ class MeetingService implements Service<MeetingResponseDto> {
 	public async findAll(
 		filter?: Partial<MeetingResponseDto>,
 	): Promise<MeetingGetAllResponseDto> {
-		const ownerId = filter?.ownerId;
-
-		if (!ownerId) {
-			throw new MeetingError({
-				message: MeetingErrorMessage.FORBIDDEN,
-				status: HTTPCode.FORBIDDEN,
-			});
-		}
+		const ownerId = filter?.ownerId as number;
 
 		const meetings = await this.meetingRepository.findAllByOwnerId(ownerId);
 
-		return { items: meetings.map((m) => m.toObject()) };
+		return { items: meetings.map((meeting) => meeting.toObject()) };
 	}
 
 	public async update(
 		id: number,
 		payload: MeetingUpdateRequestDto,
 	): Promise<MeetingResponseDto> {
-		const meeting = await this.meetingRepository.find(id);
+		const meetingEntity = await this.meetingRepository.find(id);
 
-		if (!meeting) {
+		if (!meetingEntity) {
 			throw new MeetingError({
 				message: MeetingErrorMessage.CANNOT_UPDATE_NON_EXISTENT,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
-		const newMeeting = MeetingEntity.initialize({
-			host: payload.host ?? meeting.toObject().host,
+		const meeting = MeetingEntity.initialize({
+			host: payload.host ?? meetingEntity.toObject().host,
 			id,
-			instanceId: meeting.toObject().instanceId,
-			ownerId: meeting.toObject().ownerId,
-			status: payload.status,
+			instanceId: meetingEntity.toObject().instanceId,
+			ownerId: meetingEntity.toObject().ownerId,
+			status: payload.status ?? meetingEntity.toObject().status,
 		});
 
 		const updatedMeeting = await this.meetingRepository.update(
 			id,
-			newMeeting.toNewObject(),
+			meeting.toNewObject(),
 		);
 
 		if (!updatedMeeting) {

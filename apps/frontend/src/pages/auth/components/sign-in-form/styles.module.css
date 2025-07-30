@@ -1,0 +1,60 @@
+.title {
+	margin-bottom: 20px;
+	font-size: 36px;
+	font-weight: 700;
+	color: var(--color-brand);
+	text-align: center;
+}
+
+.login-form {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	width: 100%;
+	max-width: 420px;
+}
+
+.label-text {
+	display: block;
+	margin-bottom: 5px;
+	font-size: 14px;
+}
+
+.password-label {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.input-field {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 10px 13px;
+	font-size: 14px;
+	border: 1px solid var(--color-text-2);
+	border-radius: 4px;
+}
+
+.register {
+	position: absolute;
+	bottom: 63px;
+	margin-top: 20px;
+	font-size: 16px;
+	text-align: center;
+}
+
+.create-account {
+	font-weight: 600;
+	color: var(--color-brand);
+	text-decoration: none;
+}
+
+.create-account:hover {
+	text-decoration: underline;
+}
+
+.input:focus,
+.input:focus-visible {
+	outline: unset;
+	border-color: var(--color-accent-2);
+}

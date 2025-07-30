@@ -13,5 +13,5 @@ const meetingService: MeetingService = new MeetingService({
 });
 const meetingsController = new MeetingsController(logger, meetingService);
 
-export { meetingsController, meetingService };
+export { meetingsController };
 export { MeetingService } from "./meetings.service.js";

@@ -10,7 +10,6 @@ import {
 import { ExceptionMessage } from "~/libs/enums/enums.js";
 import { CloudFormationError } from "~/libs/exceptions/exceptions.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
-import { type MeetingService } from "~/modules/meetings/meetings.js";
 
 import { type Logger } from "../logger/logger.js";
 import {
@@ -28,7 +27,6 @@ type Constructor = {
 	};
 	imageId: string;
 	logger: Logger;
-	meetingService: MeetingService;
 	region: string;
 };
 
@@ -36,18 +34,10 @@ class BaseCloudFormation implements CloudFormation {
 	private client: CloudFormationClient;
 	private imageId: string;
 	private logger: Logger;
-	private meetingService: MeetingService;
 
-	public constructor({
-		credentials,
-		imageId,
-		logger,
-		meetingService,
-		region,
-	}: Constructor) {
+	public constructor({ credentials, imageId, logger, region }: Constructor) {
 		this.imageId = imageId;
 		this.logger = logger;
-		this.meetingService = meetingService;
 		this.client = new CloudFormationClient({
 			credentials,
 			region,

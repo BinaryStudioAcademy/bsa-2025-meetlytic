@@ -1,17 +1,10 @@
 import reactLogo from "~/assets/img/react.svg";
 import {
-	Header,
 	Link,
 	Loader,
-	Navigation,
 	RouterOutlet,
 	SearchInput,
-	Sidebar,
 } from "~/libs/components/components.js";
-import {
-	HIDDEN_HEADER_ROUTES,
-	NAVIGATION_ITEMS,
-} from "~/libs/constants/constants.js";
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -58,15 +51,7 @@ const App: React.FC = () => {
 		<>
 			<Loader isLoading={dataStatus === DataStatus.PENDING} withOverlay />
 
-			{!HIDDEN_HEADER_ROUTES.some((route) => pathname.startsWith(route)) && (
-				<Header />
-			)}
-
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
-
-			<Sidebar>
-				<Navigation items={NAVIGATION_ITEMS} />
-			</Sidebar>
 
 			<ul className="App-navigation-list">
 				<li>

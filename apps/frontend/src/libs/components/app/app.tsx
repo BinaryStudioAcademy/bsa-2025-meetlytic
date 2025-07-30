@@ -1,15 +1,23 @@
 import reactLogo from "~/assets/img/react.svg";
-import { Link, Loader, RouterOutlet } from "~/libs/components/components.js";
+import {
+	Button,
+	Link,
+	Loader,
+	RouterOutlet,
+} from "~/libs/components/components.js";
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
+	useCallback,
 	useEffect,
 	useLocation,
+	useLogout,
 } from "~/libs/hooks/hooks.js";
 import { actions as userActions } from "~/modules/users/users.js";
 
 const App: React.FC = () => {
+	const logout = useLogout(); // Example of usage
 	const { pathname } = useLocation();
 	const dispatch = useAppDispatch();
 	const { dataStatus, users } = useAppSelector(({ users }) => ({
@@ -25,8 +33,14 @@ const App: React.FC = () => {
 		}
 	}, [isRoot, dispatch]);
 
+	const handleLogout = useCallback((): void => {
+		void logout();
+	}, [logout]);
+
 	return (
 		<>
+			<Button label="Logout" onClick={handleLogout}></Button>
+
 			<Loader isLoading={dataStatus === DataStatus.PENDING} withOverlay />
 
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />

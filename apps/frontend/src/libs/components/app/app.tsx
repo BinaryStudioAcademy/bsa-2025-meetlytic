@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 
 import reactLogo from "~/assets/img/react.svg";
-import { Link, Loader, RouterOutlet } from "~/libs/components/components.js";
+import {
+	Button,
+	Link,
+	Loader,
+	MeetingForm,
+	Modal,
+	RouterOutlet,
+} from "~/libs/components/components.js";
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -12,9 +19,6 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { actions as userActions } from "~/modules/users/users.js";
 
-import { Button } from "../button/button.js";
-import { MeetingForm } from "../meeting-form/meeting-form.js";
-import { Modal } from "../modal/modal.js";
 import styles from "./styles.module.css";
 
 const App: React.FC = () => {
@@ -50,12 +54,8 @@ const App: React.FC = () => {
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 			{isRoot && (
 				<div className={styles["start-meeting"]}>
-					<div className={styles["start-meeting__button-wrapper"]}>
-						<Button
-							className={styles["start-meeting__button"]}
-							label="Start a meeting"
-							onClick={handleOpenModal}
-						/>
+					<div>
+						<Button label="Start a meeting" onClick={handleOpenModal} />
 					</div>
 				</div>
 			)}

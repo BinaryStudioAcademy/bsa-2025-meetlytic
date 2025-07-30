@@ -1,10 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
+import { Button, Input } from "~/libs/components/components.js";
 import { useCallback } from "~/libs/hooks/hooks.js";
 
-import { Button } from "../button/button.js";
-import { Input } from "../input/input.js";
 import styles from "./styles.module.css";
 
 type MeetingFormData = {
@@ -45,42 +44,44 @@ const MeetingForm: React.FC<Properties> = ({ onClose }) => {
 	);
 
 	return (
-		<form className={styles["meeting-form"]} onSubmit={handleFormSubmit}>
+		<>
 			<div className={styles["meeting-form__title"]}>
 				Add meeting information
 			</div>
-			<div className={styles["meeting-form__inputs"]}>
-				<Input
-					control={control}
-					errors={errors}
-					hasVisuallyHiddenLabel={true}
-					label="Meeting invite link"
-					name="meetingLink"
-					placeholder="Meeting invite link"
-					type="text"
-				/>
-				<Input
-					control={control}
-					errors={errors}
-					hasVisuallyHiddenLabel={true}
-					label="Meeting password"
-					name="meetingPassword"
-					placeholder="Meeting password (optional)"
-					type="text"
-				/>
-			</div>
-			<Button
-				className={styles["meeting-form__button--primary"]}
-				label="Start"
-				type="submit"
-			/>
-			<Button
-				className={styles["meeting-form__button--secondary"]}
-				label="Cancel"
-				onClick={onClose}
-				type="button"
-			/>
-		</form>
+			<form className={styles["meeting-form"]} onSubmit={handleFormSubmit}>
+				<div className={styles["meeting-form__inputs"]}>
+					<Input
+						className={styles["meeting-form__input"]}
+						control={control}
+						errors={errors}
+						hasVisuallyHiddenLabel={true}
+						label="Meeting invite link"
+						name="meetingLink"
+						placeholder="Meeting invite link"
+						type="text"
+					/>
+					<Input
+						className={styles["meeting-form__input"]}
+						control={control}
+						errors={errors}
+						hasVisuallyHiddenLabel={true}
+						label="Meeting password"
+						name="meetingPassword"
+						placeholder="Meeting password (optional)"
+						type="text"
+					/>
+				</div>
+				<div className={styles["meeting-form__actions"]}>
+					<Button label="Start" type="submit" variant="primary" />
+					<Button
+						label="Cancel"
+						onClick={onClose}
+						type="button"
+						variant="outlined"
+					/>
+				</div>
+			</form>
+		</>
 	);
 };
 

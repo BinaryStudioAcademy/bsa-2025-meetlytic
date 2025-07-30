@@ -145,11 +145,11 @@ class MeetingService implements Service<MeetingResponseDto> {
 		}
 
 		const meeting = MeetingEntity.initialize({
-			host: payload.host ?? meetingEntity.toObject().host,
+			host: payload.host,
 			id,
 			instanceId: meetingEntity.toObject().instanceId,
 			ownerId: meetingEntity.toObject().ownerId,
-			status: payload.status ?? meetingEntity.toObject().status,
+			status: payload.status,
 		});
 
 		const updatedMeeting = await this.meetingRepository.update(

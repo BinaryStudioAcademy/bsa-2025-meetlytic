@@ -6,7 +6,6 @@ export {
 	type UserResponseDto,
 	type UserSignInRequestDto,
 	type UserSignUpRequestDto,
-	type UserSignUpResponseDto,
 } from "./libs/types/types.js";
 export {
 	userSignIn as userSignInValidationSchema,

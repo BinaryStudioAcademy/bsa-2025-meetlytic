@@ -1,21 +1,35 @@
-import { SearchDebounceDelay } from "~/libs/enums/enums.js";
-import { useEffect } from "~/libs/hooks/hooks.js";
+import {
+	type Control,
+	type FieldPath,
+	type FieldValues,
+} from "react-hook-form";
 
-type UseSearchParameters = {
+import { SearchDebounceDelay } from "~/libs/enums/enums.js";
+import { debounce } from "~/libs/helpers/helpers.js";
+import { useEffect, useFormController } from "~/libs/hooks/hooks.js";
+
+type UseSearchParameters<T extends FieldValues> = {
+	control: Control<T>;
+	debounceDelay?: number;
+	fieldName: FieldPath<T>;
 	onSearch: (value: string) => void;
-	value: string;
 };
 
-const useAppSearch = ({ onSearch, value }: UseSearchParameters): void => {
-	useEffect(() => {
-		const handler = setTimeout(() => {
-			onSearch(value);
-		}, SearchDebounceDelay.DEFAULT);
+const useAppSearch = <T extends FieldValues>({
+	control,
+	debounceDelay = SearchDebounceDelay.DEFAULT,
+	fieldName,
+	onSearch,
+}: UseSearchParameters<T>): void => {
+	const { field } = useFormController({ control, name: fieldName });
 
-		return (): void => {
-			clearTimeout(handler);
-		};
-	}, [value, onSearch]);
+	const watchedValue = field.value as string;
+
+	const debouncedOnSearch = debounce(onSearch, debounceDelay);
+
+	useEffect(() => {
+		debouncedOnSearch(watchedValue);
+	}, [watchedValue, debouncedOnSearch]);
 };
 
 export { useAppSearch };

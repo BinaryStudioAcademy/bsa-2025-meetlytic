@@ -7,7 +7,7 @@ import {
 
 import { Input } from "~/libs/components/components.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
-import { useAppSearch, useFormController } from "~/libs/hooks/hooks.js";
+import { useAppSearch } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
@@ -32,11 +32,10 @@ const SearchInput = <T extends FieldValues>({
 	onSearch,
 	placeholder = "Search...",
 }: Properties<T>): React.JSX.Element => {
-	const { field } = useFormController({ control, name });
-
 	useAppSearch({
+		control,
+		fieldName: name,
 		onSearch: onSearch ?? ((): void => {}),
-		value: field.value as string,
 	});
 
 	return (

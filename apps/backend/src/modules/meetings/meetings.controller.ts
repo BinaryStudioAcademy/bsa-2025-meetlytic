@@ -173,7 +173,7 @@ class MeetingsController extends BaseController {
 	private async delete(
 		options: DeleteMeetingOptions,
 	): Promise<APIHandlerResponse> {
-		const id = Number(options.params.id);
+		const id = options.params.id;
 		await this.meetingService.delete(id);
 
 		return { payload: null, status: HTTPCode.NO_CONTENT };

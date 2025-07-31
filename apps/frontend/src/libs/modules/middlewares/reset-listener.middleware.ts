@@ -1,15 +1,24 @@
-import { createListenerMiddleware } from "@reduxjs/toolkit";
+import {
+	createListenerMiddleware,
+	type ListenerMiddlewareInstance,
+} from "@reduxjs/toolkit";
 
-import { storage, StorageKey } from "~/libs/modules/storage/storage.js";
+import { type Storage, StorageKey } from "~/libs/modules/storage/storage.js";
 import { storeReset } from "~/libs/modules/store/actions.js";
 
-const resetListenerMiddleware = createListenerMiddleware({ extra: storage });
+function createResetListenerMiddleware(
+	storage: Storage,
+): ListenerMiddlewareInstance {
+	const resetListenerMiddleware = createListenerMiddleware({ extra: storage });
 
-resetListenerMiddleware.startListening({
-	effect: async (_action, listenerApi) => {
-		await listenerApi.extra.drop(StorageKey.TOKEN);
-	},
-	type: storeReset.type,
-});
+	resetListenerMiddleware.startListening({
+		effect: async (_action, listenerApi) => {
+			await listenerApi.extra.drop(StorageKey.TOKEN);
+		},
+		type: storeReset.type,
+	});
 
-export { resetListenerMiddleware };
+	return resetListenerMiddleware;
+}
+
+export { createResetListenerMiddleware };

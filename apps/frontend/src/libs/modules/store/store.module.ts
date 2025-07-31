@@ -9,8 +9,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import { AppEnvironment } from "~/libs/enums/enums.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import {
+	createResetListenerMiddleware,
 	errorListenerMiddleware,
-	resetListenerMiddleware,
 } from "~/libs/modules/middlewares/middlewares.js";
 import { storage } from "~/libs/modules/storage/storage.js";
 import { storeReset } from "~/libs/modules/store/actions.js";
@@ -43,6 +43,8 @@ const resettableRootReducer = (
 
 	return rootReducer(state, action);
 };
+
+const resetListenerMiddleware = createResetListenerMiddleware(storage);
 
 class Store {
 	public instance: ReturnType<

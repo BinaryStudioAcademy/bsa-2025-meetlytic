@@ -8,13 +8,13 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import { AppEnvironment } from "~/libs/enums/enums.js";
 import { type Config } from "~/libs/modules/config/config.js";
-import {
-	createResetListenerMiddleware,
-	errorListenerMiddleware,
-} from "~/libs/modules/middlewares/middlewares.js";
+import { errorListenerMiddleware } from "~/libs/modules/middlewares/middlewares.js";
 import { storage } from "~/libs/modules/storage/storage.js";
-import { resetStore } from "~/libs/modules/store/actions.js";
-import { authApi, reducer as authReducer } from "~/modules/auth/auth.js";
+import {
+	actions as authActions,
+	authApi,
+	reducer as authReducer,
+} from "~/modules/auth/auth.js";
 import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
 
 type ExtraArguments = {
@@ -37,14 +37,12 @@ const resettableRootReducer = (
 	state: RootReducer | undefined,
 	action: UnknownAction,
 ): RootReducer => {
-	if (action.type === resetStore.type) {
+	if (action.type === authActions.logout.fulfilled.type) {
 		return rootReducer(undefined, action);
 	}
 
 	return rootReducer(state, action);
 };
-
-const resetListenerMiddleware = createResetListenerMiddleware(storage);
 
 class Store {
 	public instance: ReturnType<
@@ -63,10 +61,7 @@ class Store {
 					thunk: {
 						extraArgument: this.extraArguments,
 					},
-				}).prepend(
-					errorListenerMiddleware.middleware,
-					resetListenerMiddleware.middleware,
-				);
+				}).prepend(errorListenerMiddleware.middleware);
 			},
 			reducer: resettableRootReducer,
 		});

@@ -1,11 +1,26 @@
-import { Loader, RouterOutlet } from "~/libs/components/components.js";
+import {
+	Loader,
+	RouterOutlet,
+	SearchInput,
+} from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
-import { useAppSelector } from "~/libs/hooks/hooks.js";
+import { useAppForm, useAppSelector, useCallback } from "~/libs/hooks/hooks.js";
 
 const App: React.FC = () => {
 	const { dataStatus } = useAppSelector(({ users }) => ({
 		dataStatus: users.dataStatus,
 	}));
+
+	const { control, errors } = useAppForm({
+		defaultValues: {
+			search: "",
+		},
+	});
+
+	const handleSearch = useCallback((value: string) => {
+		// TODO: implement handleSearch logic
+		return value;
+	}, []);
 
 	return (
 		<>
@@ -14,6 +29,14 @@ const App: React.FC = () => {
 			<div>
 				<RouterOutlet />
 			</div>
+
+			<SearchInput
+				control={control}
+				errors={errors}
+				label="Search"
+				name="search"
+				onSearch={handleSearch}
+			/>
 		</>
 	);
 };

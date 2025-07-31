@@ -1,7 +1,8 @@
 import React from "react";
 
 import { Button, Input } from "~/libs/components/components.js";
-import { useCallback, useForm } from "~/libs/hooks/hooks.js";
+import { useAppSelector, useCallback, useForm } from "~/libs/hooks/hooks.js";
+import { CreateMeetingApi } from "~/libs/modules/api/api.js";
 import { type MeetingFormData } from "~/libs/types/types.js";
 
 import { MEETING_FORM_DEFAULT_VALUES } from "./libs/meeting-form.default-values.js";
@@ -12,6 +13,7 @@ type Properties = {
 };
 
 const MeetingForm: React.FC<Properties> = ({ onClose }) => {
+	const user = useAppSelector((state) => state.auth.user);
 	const {
 		control,
 		formState: { errors },
@@ -21,11 +23,18 @@ const MeetingForm: React.FC<Properties> = ({ onClose }) => {
 		defaultValues: MEETING_FORM_DEFAULT_VALUES,
 	});
 
-	const onSubmit = useCallback((): void => {
-		// Handle form submission
-		reset();
-		onClose();
-	}, [onClose, reset]);
+	const onSubmit = useCallback(
+		async (data: MeetingFormData): Promise<void> => {
+			if (!user) {
+				return;
+			}
+
+			await CreateMeetingApi(data, user.id);
+			reset();
+			onClose();
+		},
+		[reset, onClose, user],
+	);
 
 	const handleFormSubmit = useCallback(
 		(event: React.FormEvent) => {

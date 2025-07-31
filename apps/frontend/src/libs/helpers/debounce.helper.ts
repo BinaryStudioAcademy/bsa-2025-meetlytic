@@ -1,9 +1,7 @@
-type DebounceCallback<T extends unknown[]> = (...arguments_: T) => void;
-
 type DebouncedFunction<T extends unknown[]> = (...arguments_: T) => void;
 
 const debounce = <T extends unknown[]>(
-	callback: DebounceCallback<T>,
+	callback: DebouncedFunction<T>,
 	delay: number,
 ): DebouncedFunction<T> => {
 	let timeoutId: null | ReturnType<typeof setTimeout> = null;

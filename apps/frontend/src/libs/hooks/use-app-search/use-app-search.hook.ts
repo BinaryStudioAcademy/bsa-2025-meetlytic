@@ -6,7 +6,7 @@ import {
 
 import { SearchDebounceDelay } from "~/libs/enums/enums.js";
 import { debounce } from "~/libs/helpers/helpers.js";
-import { useEffect, useFormController } from "~/libs/hooks/hooks.js";
+import { useEffect, useFormController, useMemo } from "~/libs/hooks/hooks.js";
 
 type UseSearchParameters<T extends FieldValues> = {
 	control: Control<T>;
@@ -25,7 +25,10 @@ const useAppSearch = <T extends FieldValues>({
 
 	const watchedValue = field.value as string;
 
-	const debouncedOnSearch = debounce(onSearch, debounceDelay);
+	const debouncedOnSearch = useMemo(
+		() => debounce(onSearch, debounceDelay),
+		[onSearch, debounceDelay],
+	);
 
 	useEffect(() => {
 		debouncedOnSearch(watchedValue);

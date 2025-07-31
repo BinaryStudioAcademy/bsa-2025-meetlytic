@@ -4,7 +4,7 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 import { type UserGetAllItemResponseDto } from "~/modules/users/users.js";
 
-import { loadAll } from "./actions.js";
+import { loadAll } from "./users.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
@@ -16,7 +16,7 @@ const initialState: State = {
 	users: [],
 };
 
-const { actions, name, reducer } = createSlice({
+const { name, reducer } = createSlice({
 	extraReducers(builder) {
 		builder.addCase(loadAll.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
@@ -34,4 +34,4 @@ const { actions, name, reducer } = createSlice({
 	reducers: {},
 });
 
-export { actions, name, reducer };
+export { name, reducer };

@@ -13,6 +13,7 @@ export { Modal } from "./modal/modal.js";
 export { Navigation } from "./navigation/navigation.js";
 export { ProtectedRoute } from "./router-provider/protected-route.js";
 export { RouterProvider } from "./router-provider/router-provider.js";
+export { SearchInput } from "./search-input/search-input.js";
 export { Sidebar } from "./sidebar/sidebar.js";
 export { ToastProvider } from "./toast-provider/toast-provider.js";
 export { Provider as StoreProvider } from "react-redux";

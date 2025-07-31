@@ -6,10 +6,12 @@ import {
 	MeetingForm,
 	Modal,
 	RouterOutlet,
+	SearchInput,
 } from "~/libs/components/components.js";
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
+	useAppForm,
 	useAppSelector,
 	useCallback,
 	useEffect,
@@ -27,16 +29,19 @@ const App: React.FC = () => {
 		dataStatus: users.dataStatus,
 		users: users.users,
 	}));
+	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+	const { control, errors } = useAppForm<{ search: string }>({
+		defaultValues: { search: "" },
+	});
 
 	const isRoot = pathname === AppRoute.ROOT;
 
-	const [isModalOpen, setIsModalOpen] = useState(false);
-
-	const handleOpenModal = useCallback((): void => {
+	const handleOpenModal = useCallback(() => {
 		setIsModalOpen(true);
 	}, []);
 
-	const handleCloseModal = useCallback((): void => {
+	const handleCloseModal = useCallback(() => {
 		setIsModalOpen(false);
 	}, []);
 
@@ -45,6 +50,11 @@ const App: React.FC = () => {
 			void dispatch(userActions.loadAll());
 		}
 	}, [isRoot, dispatch]);
+
+	const handleSearch = useCallback((value: string) => {
+		// TODO: implement handleSearch logic
+		return value;
+	}, []);
 
 	return (
 		<>
@@ -90,6 +100,14 @@ const App: React.FC = () => {
 					</ul>
 				</>
 			)}
+			{/* TODO: Remove this component if it is no longer needed*/}
+			<SearchInput
+				control={control}
+				errors={errors}
+				label="Search"
+				name="search"
+				onSearch={handleSearch}
+			/>
 		</>
 	);
 };

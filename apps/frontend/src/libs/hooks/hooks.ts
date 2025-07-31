@@ -1,5 +1,6 @@
 export { useAppDispatch } from "./use-app-dispatch/use-app-dispatch.hook.js";
 export { useAppForm } from "./use-app-form/use-app-form.hook.js";
+export { useAppSearch } from "./use-app-search/use-app-search.hook.js";
 export { useAppSelector } from "./use-app-selector/use-app-selector.hook.js";
 export {
 	type KeyboardEvent,
@@ -7,6 +8,7 @@ export {
 	type ReactNode,
 	useCallback,
 	useEffect,
+	useMemo,
 	useRef,
 	useState,
 } from "react";

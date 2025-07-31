@@ -1,6 +1,6 @@
-import { type MeetingFormData } from "~/libs/types/types.js";
+import { type CreateMeetingRequestDto } from "~/libs/types/types.js";
 
-const MEETING_FORM_DEFAULT_VALUES: MeetingFormData = {
+const MEETING_FORM_DEFAULT_VALUES: CreateMeetingRequestDto = {
 	meetingLink: "",
 	meetingPassword: "",
 };

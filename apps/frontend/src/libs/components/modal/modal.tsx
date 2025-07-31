@@ -1,19 +1,12 @@
 import { type FC } from "react";
 
 import { KeyboardKey } from "~/libs/enums/enums.js";
-import {
-	type MouseEvent,
-	type KeyboardEvent as ReactKeyboardEvent,
-	type ReactNode,
-	useCallback,
-	useEffect,
-	useRef,
-} from "~/libs/hooks/hooks.js";
+import { useCallback, useEffect, useRef } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
-	children: ReactNode;
+	children: React.ReactNode;
 	isOpen: boolean;
 	onClose: () => void;
 };
@@ -24,14 +17,14 @@ const Modal: FC<Properties> = ({ children, isOpen, onClose }) => {
 	const modalReference = useRef<HTMLDivElement>(null);
 
 	const handleModalClick = useCallback(
-		(event: MouseEvent<HTMLDivElement>): void => {
+		(event: React.MouseEvent<HTMLDivElement>): void => {
 			event.stopPropagation();
 		},
 		[],
 	);
 
 	const handleKeyDown = useCallback(
-		(event: ReactKeyboardEvent<HTMLDivElement>): void => {
+		(event: React.KeyboardEvent<HTMLDivElement>): void => {
 			if (event.key === KeyboardKey.ESCAPE) {
 				event.preventDefault();
 				onClose();

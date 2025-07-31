@@ -1,9 +1,10 @@
 import React from "react";
 
 import { Button, Input } from "~/libs/components/components.js";
+import { ButtonVariant } from "~/libs/enums/enums.js";
 import { useAppSelector, useCallback, useForm } from "~/libs/hooks/hooks.js";
 import { CreateMeetingApi } from "~/libs/modules/api/api.js";
-import { type MeetingFormData } from "~/libs/types/types.js";
+import { type CreateMeetingRequestDto } from "~/libs/types/types.js";
 
 import { MEETING_FORM_DEFAULT_VALUES } from "./libs/meeting-form.default-values.js";
 import styles from "./styles.module.css";
@@ -19,12 +20,12 @@ const MeetingForm: React.FC<Properties> = ({ onClose }) => {
 		formState: { errors },
 		handleSubmit,
 		reset,
-	} = useForm<MeetingFormData>({
+	} = useForm<CreateMeetingRequestDto>({
 		defaultValues: MEETING_FORM_DEFAULT_VALUES,
 	});
 
 	const onSubmit = useCallback(
-		async (data: MeetingFormData): Promise<void> => {
+		async (data: CreateMeetingRequestDto): Promise<void> => {
 			if (!user) {
 				return;
 			}
@@ -72,12 +73,12 @@ const MeetingForm: React.FC<Properties> = ({ onClose }) => {
 					/>
 				</div>
 				<div className={styles["meeting-form__actions"]}>
-					<Button label="Start" type="submit" variant="primary" />
+					<Button label="Start" type="submit" variant={ButtonVariant.PRIMARY} />
 					<Button
 						label="Cancel"
 						onClick={onClose}
 						type="button"
-						variant="outlined"
+						variant={ButtonVariant.OUTLINED}
 					/>
 				</div>
 			</form>

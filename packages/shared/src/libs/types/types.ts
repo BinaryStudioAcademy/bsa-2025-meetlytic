@@ -1,4 +1,4 @@
-export { type MeetingFormData } from "./meeting-form-data.type.js";
+export { type CreateMeetingRequestDto } from "./create-meeting-request-dto.type.js";
 export { type ServerErrorDetail } from "./server-error-detail.type.js";
 export {
 	type ServerCommonErrorResponse,

@@ -1,11 +1,11 @@
 import { ContentType } from "~/libs/enums/enums.js";
 import { http } from "~/libs/modules/http/http.js";
-import { type MeetingFormData } from "~/libs/types/types.js";
+import { type CreateMeetingRequestDto } from "~/libs/types/types.js";
 
 const MEETINGS_API = "/api/v1/meetings";
 
 const CreateMeetingApi = async (
-	data: MeetingFormData,
+	data: CreateMeetingRequestDto,
 	ownerId: number,
 ): Promise<void> => {
 	const payload = {

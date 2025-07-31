@@ -37,6 +37,10 @@ const App: React.FC = () => {
 
 	const isRoot = pathname === AppRoute.ROOT;
 
+	{
+		/* TODO: Remove useAppForm call if it is no longer needed*/
+	}
+
 	const handleOpenModal = useCallback(() => {
 		setIsModalOpen(true);
 	}, []);
@@ -63,9 +67,7 @@ const App: React.FC = () => {
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 			{isRoot && (
 				<div className={styles["start-meeting"]}>
-					<div>
-						<Button label="Start a meeting" onClick={handleOpenModal} />
-					</div>
+					<Button label="Start a meeting" onClick={handleOpenModal} />
 				</div>
 			)}
 

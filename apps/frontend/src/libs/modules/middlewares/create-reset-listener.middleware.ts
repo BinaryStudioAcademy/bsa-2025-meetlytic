@@ -6,9 +6,9 @@ import {
 import { type Storage, StorageKey } from "~/libs/modules/storage/storage.js";
 import { resetStore } from "~/libs/modules/store/actions.js";
 
-function createResetListenerMiddleware(
+const createResetListenerMiddleware = (
 	storage: Storage,
-): ListenerMiddlewareInstance {
+): ListenerMiddlewareInstance => {
 	const resetListenerMiddleware = createListenerMiddleware({ extra: storage });
 
 	resetListenerMiddleware.startListening({
@@ -19,6 +19,6 @@ function createResetListenerMiddleware(
 	});
 
 	return resetListenerMiddleware;
-}
+};
 
 export { createResetListenerMiddleware };

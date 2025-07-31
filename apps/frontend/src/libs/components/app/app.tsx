@@ -4,10 +4,12 @@ import {
 	Link,
 	Loader,
 	RouterOutlet,
+  SearchInput
 } from "~/libs/components/components.js";
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
+	useAppForm,
 	useAppSelector,
 	useCallback,
 	useEffect,
@@ -27,15 +29,32 @@ const App: React.FC = () => {
 
 	const isRoot = pathname === AppRoute.ROOT;
 
+	{
+		/* TODO: Remove useAppForm call if it is no longer needed*/
+	}
+
+	const { control, errors } = useAppForm({
+		defaultValues: {
+			search: "",
+		},
+	});
+
 	useEffect(() => {
 		if (isRoot) {
 			void dispatch(userActions.loadAll());
 		}
 	}, [isRoot, dispatch]);
 
+
 	const handleLogout = useCallback((): void => {
 		void logout();
 	}, [logout]);
+
+	const handleSearch = useCallback((value: string) => {
+		// TODO: implement handleSearch logic
+		return value;
+	}, []);
+
 
 	return (
 		<>
@@ -72,6 +91,14 @@ const App: React.FC = () => {
 					</ul>
 				</>
 			)}
+			{/* TODO: Remove this component if it is no longer needed*/}
+			<SearchInput
+				control={control}
+				errors={errors}
+				label="Search"
+				name="search"
+				onSearch={handleSearch}
+			/>
 		</>
 	);
 };

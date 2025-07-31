@@ -1,15 +1,11 @@
 import React from "react";
-import { useForm } from "react-hook-form";
 
 import { Button, Input } from "~/libs/components/components.js";
-import { useCallback } from "~/libs/hooks/hooks.js";
+import { useCallback, useForm } from "~/libs/hooks/hooks.js";
+import { type MeetingFormData } from "~/libs/types/types.js";
 
+import { MEETING_FORM_DEFAULT_VALUES } from "./libs/meeting-form.default-values.js";
 import styles from "./styles.module.css";
-
-type MeetingFormData = {
-	meetingLink: string;
-	meetingPassword: string;
-};
 
 type Properties = {
 	onClose: () => void;
@@ -22,10 +18,7 @@ const MeetingForm: React.FC<Properties> = ({ onClose }) => {
 		handleSubmit,
 		reset,
 	} = useForm<MeetingFormData>({
-		defaultValues: {
-			meetingLink: "",
-			meetingPassword: "",
-		},
+		defaultValues: MEETING_FORM_DEFAULT_VALUES,
 	});
 
 	const onSubmit = useCallback((): void => {
@@ -36,9 +29,7 @@ const MeetingForm: React.FC<Properties> = ({ onClose }) => {
 
 	const handleFormSubmit = useCallback(
 		(event: React.FormEvent) => {
-			void handleSubmit(() => {
-				onSubmit();
-			})(event);
+			void handleSubmit(onSubmit)(event);
 		},
 		[handleSubmit, onSubmit],
 	);

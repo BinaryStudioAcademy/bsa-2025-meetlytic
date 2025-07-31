@@ -1,14 +1,14 @@
+import { type FC } from "react";
+
+import { KeyboardKey } from "~/libs/enums/enums.js";
 import {
-	type FC,
 	type MouseEvent,
 	type KeyboardEvent as ReactKeyboardEvent,
 	type ReactNode,
 	useCallback,
 	useEffect,
 	useRef,
-} from "react";
-
-import { KeyboardKey } from "~/libs/enums/enums.js";
+} from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
@@ -17,6 +17,8 @@ type Properties = {
 	isOpen: boolean;
 	onClose: () => void;
 };
+
+const DEFAULT_TAB_INDEX = 0;
 
 const Modal: FC<Properties> = ({ children, isOpen, onClose }) => {
 	const modalReference = useRef<HTMLDivElement>(null);
@@ -56,7 +58,7 @@ const Modal: FC<Properties> = ({ children, isOpen, onClose }) => {
 			onKeyDown={handleKeyDown}
 			ref={modalReference}
 			role="button"
-			tabIndex={0}
+			tabIndex={DEFAULT_TAB_INDEX}
 		>
 			<div
 				aria-label="Modal window"

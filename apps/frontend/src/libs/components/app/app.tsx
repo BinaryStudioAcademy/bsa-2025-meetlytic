@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 import reactLogo from "~/assets/img/react.svg";
 import {
 	Button,
@@ -16,6 +14,7 @@ import {
 	useCallback,
 	useEffect,
 	useLocation,
+	useState,
 } from "~/libs/hooks/hooks.js";
 import { actions as userActions } from "~/modules/users/users.js";
 

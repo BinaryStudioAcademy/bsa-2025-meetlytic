@@ -29,7 +29,7 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 		fastify.addHook(FastifyHook.PRE_HANDLER, async (request) => {
 			const { method, url } = request;
 
-			if (url.startsWith("/api/v1/documentation")) {
+			if (/^\/api\/v\d+\/documentation/.test(url)) {
 				return;
 			}
 

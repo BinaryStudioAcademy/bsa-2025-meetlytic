@@ -51,7 +51,7 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 					version: `${this.version}.0.0`,
 				},
 				openapi: "3.0.0",
-				servers: [{ url: "/api/v1" }],
+				servers: [{ url: `/${this.version}` }],
 			},
 		});
 	}

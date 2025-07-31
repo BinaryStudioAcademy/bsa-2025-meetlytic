@@ -1,6 +1,5 @@
 import reactLogo from "~/assets/img/react.svg";
 import {
-	Button,
 	Link,
 	Loader,
 	RouterOutlet,
@@ -14,12 +13,10 @@ import {
 	useCallback,
 	useEffect,
 	useLocation,
-	useLogout,
 } from "~/libs/hooks/hooks.js";
 import { actions as userActions } from "~/modules/users/users.js";
 
 const App: React.FC = () => {
-	const logout = useLogout(); // Example of usage
 	const { pathname } = useLocation();
 	const dispatch = useAppDispatch();
 	const { dataStatus, users } = useAppSelector(({ users }) => ({
@@ -45,10 +42,6 @@ const App: React.FC = () => {
 		}
 	}, [isRoot, dispatch]);
 
-	const handleLogout = useCallback((): void => {
-		void logout();
-	}, [logout]);
-
 	const handleSearch = useCallback((value: string) => {
 		// TODO: implement handleSearch logic
 		return value;
@@ -56,8 +49,6 @@ const App: React.FC = () => {
 
 	return (
 		<>
-			<Button label="Logout" onClick={handleLogout}></Button>
-
 			<Loader isLoading={dataStatus === DataStatus.PENDING} withOverlay />
 
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />

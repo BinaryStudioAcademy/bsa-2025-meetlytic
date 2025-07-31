@@ -4,7 +4,7 @@ import {
 } from "@reduxjs/toolkit";
 
 import { type Storage, StorageKey } from "~/libs/modules/storage/storage.js";
-import { storeReset } from "~/libs/modules/store/actions.js";
+import { resetStore } from "~/libs/modules/store/actions.js";
 
 function createResetListenerMiddleware(
 	storage: Storage,
@@ -15,7 +15,7 @@ function createResetListenerMiddleware(
 		effect: async (_action, listenerApi) => {
 			await listenerApi.extra.drop(StorageKey.TOKEN);
 		},
-		type: storeReset.type,
+		type: resetStore.type,
 	});
 
 	return resetListenerMiddleware;

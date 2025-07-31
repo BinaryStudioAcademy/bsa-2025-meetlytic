@@ -1,5 +1,5 @@
 import { createAction } from "@reduxjs/toolkit";
 
-const storeReset = createAction("store/reset");
+const resetStore = createAction("store/reset");
 
-export { storeReset };
+export { resetStore };

@@ -13,7 +13,7 @@ import {
 	errorListenerMiddleware,
 } from "~/libs/modules/middlewares/middlewares.js";
 import { storage } from "~/libs/modules/storage/storage.js";
-import { storeReset } from "~/libs/modules/store/actions.js";
+import { resetStore } from "~/libs/modules/store/actions.js";
 import { authApi, reducer as authReducer } from "~/modules/auth/auth.js";
 import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
 
@@ -37,7 +37,7 @@ const resettableRootReducer = (
 	state: RootReducer | undefined,
 	action: UnknownAction,
 ): RootReducer => {
-	if (action.type === storeReset.type) {
+	if (action.type === resetStore.type) {
 		return rootReducer(undefined, action);
 	}
 

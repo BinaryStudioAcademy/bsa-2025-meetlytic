@@ -11,17 +11,17 @@ import { useEffect, useFormController } from "~/libs/hooks/hooks.js";
 type UseSearchParameters<T extends FieldValues> = {
 	control: Control<T>;
 	debounceDelay?: number;
-	fieldName: FieldPath<T>;
+	name: FieldPath<T>;
 	onSearch: (value: string) => void;
 };
 
 const useAppSearch = <T extends FieldValues>({
 	control,
 	debounceDelay = SearchDebounceDelay.DEFAULT,
-	fieldName,
+	name,
 	onSearch,
 }: UseSearchParameters<T>): void => {
-	const { field } = useFormController({ control, name: fieldName });
+	const { field } = useFormController({ control, name });
 
 	const watchedValue = field.value as string;
 

@@ -18,7 +18,7 @@ type Properties<T extends FieldValues> = {
 	hasVisuallyHiddenLabel?: boolean;
 	label: string;
 	name: FieldPath<T>;
-	onSearch?: (value: string) => void;
+	onSearch: (value: string) => void;
 	placeholder?: string;
 };
 
@@ -26,7 +26,7 @@ const SearchInput = <T extends FieldValues>({
 	className = "",
 	control,
 	errors,
-	hasVisuallyHiddenLabel = true,
+	hasVisuallyHiddenLabel = false,
 	label,
 	name,
 	onSearch,
@@ -34,8 +34,8 @@ const SearchInput = <T extends FieldValues>({
 }: Properties<T>): React.JSX.Element => {
 	useAppSearch({
 		control,
-		fieldName: name,
-		onSearch: onSearch ?? ((): void => {}),
+		name,
+		onSearch,
 	});
 
 	return (

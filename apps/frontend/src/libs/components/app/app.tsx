@@ -4,7 +4,7 @@ import {
 	Link,
 	Loader,
 	RouterOutlet,
-  SearchInput
+	SearchInput,
 } from "~/libs/components/components.js";
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
@@ -45,7 +45,6 @@ const App: React.FC = () => {
 		}
 	}, [isRoot, dispatch]);
 
-
 	const handleLogout = useCallback((): void => {
 		void logout();
 	}, [logout]);
@@ -54,7 +53,6 @@ const App: React.FC = () => {
 		// TODO: implement handleSearch logic
 		return value;
 	}, []);
-
 
 	return (
 		<>

@@ -29,6 +29,10 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 		fastify.addHook(FastifyHook.PRE_HANDLER, async (request) => {
 			const { method, url } = request;
 
+			if (url.startsWith("/api/v1/documentation")) {
+				return;
+			}
+
 			const apiPrefixRegex = /^\/api\/v\d+(?:\/|$)/;
 
 			const endpointToCompare = url.replace(apiPrefixRegex, "/");

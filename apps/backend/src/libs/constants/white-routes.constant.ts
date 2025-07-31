@@ -6,7 +6,7 @@ const WHITE_ROUTES: WhiteRoute[] = [
 	{ method: "POST", path: `${APIPath.AUTH}${AuthApiPath.SIGN_UP}` },
 	{ method: "POST", path: `${APIPath.AUTH}${AuthApiPath.SIGN_IN}` },
 
-	{ method: "GET", path: "/documentation*" },
+	{ method: "GET", path: "/documentation" },
 ];
 
 export { WHITE_ROUTES };

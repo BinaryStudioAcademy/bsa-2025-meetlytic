@@ -1,4 +1,4 @@
-import { Avatar, Button, Logo } from "~/libs/components/components.js";
+import { Avatar, Button, Icon, Logo } from "~/libs/components/components.js";
 import {
 	AvatarSize,
 	AvatarType,
@@ -25,6 +25,9 @@ const Header: React.FC = () => {
 				<div className={styles["header__avatar-logout-wrapper"]}>
 					<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
 					<Button
+						iconLeft={
+							<Icon className={styles["header__logout-icon"]} name="logout" />
+						}
 						label="Logout"
 						onClick={handleLogout}
 						size={ButtonSize.SMALL}

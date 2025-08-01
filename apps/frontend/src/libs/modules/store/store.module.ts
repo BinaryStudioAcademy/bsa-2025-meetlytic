@@ -40,6 +40,22 @@ const resettableRootReducer = (
 	return rootReducer(state, action);
 };
 
+const rootReducer = combineReducers({
+	auth: authReducer,
+	users: usersReducer,
+});
+
+const resettableRootReducer = (
+	state: RootReducer | undefined,
+	action: UnknownAction,
+): RootReducer => {
+	if (action.type === authActions.logout.fulfilled.type) {
+		return rootReducer(undefined, action);
+	}
+
+	return rootReducer(state, action);
+};
+
 class Store {
 	public instance: ReturnType<
 		typeof configureStore<

@@ -138,12 +138,16 @@ class BaseServerApplication implements ServerApplication {
 	public addRoute(parameters: ServerApplicationRouteParameters): void {
 		const { handler, method, path, validation } = parameters;
 
+		const schema: Record<string, unknown> = {};
+
+		if (validation?.body && !["DELETE", "GET", "HEAD"].includes(method)) {
+			schema["body"] = validation.body;
+		}
+
 		this.app.route({
 			handler,
 			method,
-			schema: {
-				body: validation?.body,
-			},
+			schema,
 			url: path,
 		});
 		this.logger.info(`Route: ${method} ${path} is registered`);

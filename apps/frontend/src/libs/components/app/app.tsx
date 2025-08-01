@@ -1,10 +1,7 @@
 import reactLogo from "~/assets/img/react.svg";
 import {
-	Button,
 	Link,
 	Loader,
-	MeetingForm,
-	Modal,
 	RouterOutlet,
 	SearchInput,
 } from "~/libs/components/components.js";
@@ -16,11 +13,9 @@ import {
 	useCallback,
 	useEffect,
 	useLocation,
-	useState,
 } from "~/libs/hooks/hooks.js";
 import { actions as userActions } from "~/modules/users/users.js";
-
-import styles from "./styles.module.css";
+import { RootPage } from "~/pages/root/root-page.js";
 
 const App: React.FC = () => {
 	const { pathname } = useLocation();
@@ -29,7 +24,6 @@ const App: React.FC = () => {
 		dataStatus: users.dataStatus,
 		users: users.users,
 	}));
-	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
 	const { control, errors } = useAppForm<{ search: string }>({
 		defaultValues: { search: "" },
@@ -40,14 +34,6 @@ const App: React.FC = () => {
 	{
 		/* TODO: Remove useAppForm call if it is no longer needed*/
 	}
-
-	const handleOpenModal = useCallback(() => {
-		setIsModalOpen(true);
-	}, []);
-
-	const handleCloseModal = useCallback(() => {
-		setIsModalOpen(false);
-	}, []);
 
 	useEffect(() => {
 		if (isRoot) {
@@ -65,17 +51,7 @@ const App: React.FC = () => {
 			<Loader isLoading={dataStatus === DataStatus.PENDING} withOverlay />
 
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
-			{isRoot && (
-				<div className={styles["start-meeting"]}>
-					<div className={styles["start-meeting-inner"]}>
-						<Button label="Start a meeting" onClick={handleOpenModal} />
-					</div>
-				</div>
-			)}
-
-			<Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-				<MeetingForm onClose={handleCloseModal} />
-			</Modal>
+			{isRoot && <RootPage />}
 
 			<ul className="App-navigation-list">
 				<li>

@@ -1,8 +1,11 @@
 import { Button, Input } from "~/libs/components/components.js";
 import { ButtonVariant } from "~/libs/enums/enums.js";
 import { useAppForm, useAppSelector, useCallback } from "~/libs/hooks/hooks.js";
-import { CreateMeetingApi } from "~/libs/modules/api/api.js";
 import { type MeetingCreateRequestDto } from "~/libs/types/types.js";
+import {
+	meetingApi,
+	meetingCreateValidationSchema,
+} from "~/modules/meeting/meeting.js";
 
 import { CREATE_MEETING_FORM_DEFAULT_VALUES } from "./libs/create-meeting-form.default-values.js";
 import styles from "./styles.module.css";
@@ -16,6 +19,7 @@ const MeetingForm = ({ onClose }: Properties): React.JSX.Element => {
 	const { control, errors, handleSubmit } = useAppForm<MeetingCreateRequestDto>(
 		{
 			defaultValues: CREATE_MEETING_FORM_DEFAULT_VALUES,
+			validationSchema: meetingCreateValidationSchema,
 		},
 	);
 
@@ -25,7 +29,7 @@ const MeetingForm = ({ onClose }: Properties): React.JSX.Element => {
 				return;
 			}
 
-			await CreateMeetingApi(data, user.id);
+			await meetingApi.create(data, user.id);
 			onClose();
 		},
 		[onClose, user],

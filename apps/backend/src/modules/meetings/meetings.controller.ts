@@ -32,23 +32,24 @@ import { type MeetingService } from "./meetings.service.js";
  *           type: number
  *         host:
  *           type: string
- * 			 enum:
- * 			   - zoom
+ *           enum:
+ *             - zoom
  *         instanceId:
  *           type: string
  *           nullable: true
  *         ownerId:
  *           type: number
- * 		   status:
- * 			 type: string
- * 			 enum:
- * 			   - started
- * 			   - ended
+ *         status:
+ *           type: string
+ *           enum:
+ *             - started
+ *             - ended
  *       required:
  *         - id
  *         - host
  *         - instanceId
  *         - ownerId
+ *         - status
  *     MeetingCreateRequest:
  *       type: object
  *       required:
@@ -56,8 +57,8 @@ import { type MeetingService } from "./meetings.service.js";
  *       properties:
  *         host:
  *           type: string
- * 			 enum:
- * 			   - zoom
+ *           enum:
+ *             - zoom
  *         instanceId:
  *           type: string
  *           nullable: true
@@ -65,18 +66,17 @@ import { type MeetingService } from "./meetings.service.js";
  *       type: object
  *       required:
  *         - host
- * 		   - status
+ *         - status
  *       properties:
  *         host:
  *           type: string
- * 			 enum:
- * 			   - zoom
- * 		   status:
- * 			 type: string
- * 			 enum:
+ *           enum:
+ *             - zoom
+ *         status:
+ *           type: string
+ *           enum:
  *             - started
- * 			   - ended
-
+ *             - ended
  */
 class MeetingsController extends BaseController {
 	private meetingService: MeetingService;

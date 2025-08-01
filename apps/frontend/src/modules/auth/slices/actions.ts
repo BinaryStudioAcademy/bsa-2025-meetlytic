@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+import { NotificationMessage } from "~/libs/enums/enums.js";
 import { extractErrorMessage } from "~/libs/helpers/helpers.js";
 import { storage, StorageKey } from "~/libs/modules/storage/storage.js";
 import { type AsyncThunkConfig } from "~/libs/types/types.js";
@@ -26,7 +27,7 @@ const signIn = createAsyncThunk<
 	} catch (error: unknown) {
 		const message = extractErrorMessage(
 			error,
-			"We couldn't sign you in. Please check your email and password.",
+			NotificationMessage.SIGN_UP_FAILED,
 		);
 
 		return rejectWithValue(message);

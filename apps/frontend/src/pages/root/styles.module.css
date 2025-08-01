@@ -1,0 +1,9 @@
+.start-meeting {
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-end;
+}
+
+.start-meeting-inner {
+	width: auto;
+}

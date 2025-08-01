@@ -15,6 +15,7 @@ import {
 	useLocation,
 } from "~/libs/hooks/hooks.js";
 import { actions as userActions } from "~/modules/users/users.js";
+import { RootPage } from "~/pages/root/root-page.js";
 
 const App: React.FC = () => {
 	const { pathname } = useLocation();
@@ -24,17 +25,15 @@ const App: React.FC = () => {
 		users: users.users,
 	}));
 
+	const { control, errors } = useAppForm<{ search: string }>({
+		defaultValues: { search: "" },
+	});
+
 	const isRoot = pathname === AppRoute.ROOT;
 
 	{
 		/* TODO: Remove useAppForm call if it is no longer needed*/
 	}
-
-	const { control, errors } = useAppForm({
-		defaultValues: {
-			search: "",
-		},
-	});
 
 	useEffect(() => {
 		if (isRoot) {
@@ -52,6 +51,7 @@ const App: React.FC = () => {
 			<Loader isLoading={dataStatus === DataStatus.PENDING} withOverlay />
 
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
+			{isRoot && <RootPage />}
 
 			<ul className="App-navigation-list">
 				<li>

@@ -1,6 +1,6 @@
 import { ButtonSize, ButtonVariant } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
-import { type Size, type Variant } from "~/libs/types/types.js";
+import { type ValueOf } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
@@ -10,9 +10,9 @@ type Properties = {
 	isDisabled?: boolean;
 	label: string;
 	onClick?: React.MouseEventHandler<HTMLButtonElement>;
-	size?: Size;
+	size?: ValueOf<typeof ButtonSize>;
 	type?: "button" | "submit";
-	variant?: Variant;
+	variant?: ValueOf<typeof ButtonVariant>;
 };
 
 const Button: React.FC<Properties> = ({

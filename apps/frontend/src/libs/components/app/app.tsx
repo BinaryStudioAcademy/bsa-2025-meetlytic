@@ -67,7 +67,9 @@ const App: React.FC = () => {
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 			{isRoot && (
 				<div className={styles["start-meeting"]}>
-					<Button label="Start a meeting" onClick={handleOpenModal} />
+					<div className={styles["start-meeting-inner"]}>
+						<Button label="Start a meeting" onClick={handleOpenModal} />
+					</div>
 				</div>
 			)}
 

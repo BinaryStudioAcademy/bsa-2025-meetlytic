@@ -1,47 +1,41 @@
-import React from "react";
-
 import { Button, Input } from "~/libs/components/components.js";
 import { ButtonVariant } from "~/libs/enums/enums.js";
-import { useAppSelector, useCallback, useForm } from "~/libs/hooks/hooks.js";
+import { useAppForm, useAppSelector, useCallback } from "~/libs/hooks/hooks.js";
 import { CreateMeetingApi } from "~/libs/modules/api/api.js";
 import { type CreateMeetingRequestDto } from "~/libs/types/types.js";
 
-import { MEETING_FORM_DEFAULT_VALUES } from "./libs/meeting-form.default-values.js";
+import { CREATE_MEETING_FORM_DEFAULT_VALUES } from "./libs/create-meeting-form.default-values.js";
 import styles from "./styles.module.css";
 
 type Properties = {
 	onClose: () => void;
 };
 
-const MeetingForm: React.FC<Properties> = ({ onClose }) => {
+const MeetingForm = ({ onClose }: Properties): React.JSX.Element => {
 	const user = useAppSelector((state) => state.auth.user);
-	const {
-		control,
-		formState: { errors },
-		handleSubmit,
-		reset,
-	} = useForm<CreateMeetingRequestDto>({
-		defaultValues: MEETING_FORM_DEFAULT_VALUES,
-	});
+	const { control, errors, handleSubmit } = useAppForm<CreateMeetingRequestDto>(
+		{
+			defaultValues: CREATE_MEETING_FORM_DEFAULT_VALUES,
+		},
+	);
 
-	const onSubmit = useCallback(
+	const handleSubmitMeeting = useCallback(
 		async (data: CreateMeetingRequestDto): Promise<void> => {
 			if (!user) {
 				return;
 			}
 
 			await CreateMeetingApi(data, user.id);
-			reset();
 			onClose();
 		},
-		[reset, onClose, user],
+		[onClose, user],
 	);
 
 	const handleFormSubmit = useCallback(
 		(event: React.FormEvent) => {
-			void handleSubmit(onSubmit)(event);
+			void handleSubmit(handleSubmitMeeting)(event);
 		},
-		[handleSubmit, onSubmit],
+		[handleSubmit, handleSubmitMeeting],
 	);
 
 	return (

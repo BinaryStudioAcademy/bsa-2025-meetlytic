@@ -3,5 +3,5 @@ export { useAppForm } from "./use-app-form/use-app-form.hook.js";
 export { useAppSearch } from "./use-app-search/use-app-search.hook.js";
 export { useAppSelector } from "./use-app-selector/use-app-selector.hook.js";
 export { useCallback, useEffect, useMemo, useRef, useState } from "react";
-export { useForm, useController as useFormController } from "react-hook-form";
+export { useController as useFormController } from "react-hook-form";
 export { useLocation } from "react-router-dom";

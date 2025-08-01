@@ -2,7 +2,7 @@ import { Button, Input } from "~/libs/components/components.js";
 import { ButtonVariant } from "~/libs/enums/enums.js";
 import { useAppForm, useAppSelector, useCallback } from "~/libs/hooks/hooks.js";
 import { CreateMeetingApi } from "~/libs/modules/api/api.js";
-import { type CreateMeetingRequestDto } from "~/libs/types/types.js";
+import { type MeetingCreateRequestDto } from "~/libs/types/types.js";
 
 import { CREATE_MEETING_FORM_DEFAULT_VALUES } from "./libs/create-meeting-form.default-values.js";
 import styles from "./styles.module.css";
@@ -13,14 +13,14 @@ type Properties = {
 
 const MeetingForm = ({ onClose }: Properties): React.JSX.Element => {
 	const user = useAppSelector((state) => state.auth.user);
-	const { control, errors, handleSubmit } = useAppForm<CreateMeetingRequestDto>(
+	const { control, errors, handleSubmit } = useAppForm<MeetingCreateRequestDto>(
 		{
 			defaultValues: CREATE_MEETING_FORM_DEFAULT_VALUES,
 		},
 	);
 
 	const handleSubmitMeeting = useCallback(
-		async (data: CreateMeetingRequestDto): Promise<void> => {
+		async (data: MeetingCreateRequestDto): Promise<void> => {
 			if (!user) {
 				return;
 			}
@@ -51,7 +51,7 @@ const MeetingForm = ({ onClose }: Properties): React.JSX.Element => {
 						errors={errors}
 						hasVisuallyHiddenLabel={true}
 						label="Meeting invite link"
-						name="meetingLink"
+						name="host"
 						placeholder="Meeting invite link"
 						type="text"
 					/>
@@ -61,7 +61,7 @@ const MeetingForm = ({ onClose }: Properties): React.JSX.Element => {
 						errors={errors}
 						hasVisuallyHiddenLabel={true}
 						label="Meeting password"
-						name="meetingPassword"
+						name="instanceId"
 						placeholder="Meeting password (optional)"
 						type="text"
 					/>

@@ -1,30 +1,122 @@
-import puppeteer from "puppeteer";
+import puppeteer, { type Page } from "puppeteer";
 
 import { config } from "~/libs/modules/config/config.js";
 
-const TIMEOUT_MS = 3000;
-const LAUNCH_OPTIONS = config.getLaunchOptions();
+import {
+	DEFAULT_PARTICIPANTS_COUNT,
+	MINIMUM_PARTICIPANTS_THRESHOLD,
+	TIMEOUTS,
+} from "./libs/constants/constants.js";
+import { ZoomUiLabel } from "./libs/enums/zoom-ui-label.enum.js";
+import { delay } from "./libs/helpers/helpers.js";
+import { logger } from "./libs/modules/logger/logger.js";
+
+const { BOT_NAME, MEETING_ID, MEETING_PASSWORD } = config.ENV.ZOOM;
+
+if (!MEETING_ID || !MEETING_PASSWORD) {
+	logger.error(
+		"Zoom meeting ID or password is missing in environment variables.",
+	);
+}
+
+const ZOOM_MEETING_URL = `https://zoom.us/wc/join/${MEETING_ID}?pwd=${MEETING_PASSWORD}`;
+
+async function clickHelper(selector: string, page: Page): Promise<void> {
+	try {
+		await page.waitForSelector(selector, {
+			timeout: TIMEOUTS.TEN_SECONDS,
+			visible: true,
+		});
+		await page.click(selector);
+	} catch (error) {
+		throw new Error(
+			`Failed to click selector "${selector}": ${error instanceof Error ? error.message : String(error)}`,
+		);
+	}
+}
+
+async function getParticipantsCount(page: Page): Promise<number> {
+	try {
+		await page.waitForSelector(".footer-button__number-counter span", {
+			timeout: TIMEOUTS.TEN_SECONDS,
+		});
+		const count = await page.$eval(
+			ZoomUiLabel.PARTISIPANTS_COUNT,
+			({ textContent }) => Number(textContent?.trim() ?? "0"),
+		);
+
+		return count;
+	} catch (error) {
+		logger.error(
+			`Failed to get participants count: ${error instanceof Error ? error.message : String(error)}`,
+		);
+
+		return DEFAULT_PARTICIPANTS_COUNT;
+	}
+}
+
+async function leaveMeeting(page: Page): Promise<void> {
+	try {
+		await clickHelper(ZoomUiLabel.LEAVE, page);
+		await delay(TIMEOUTS.TEN_SECONDS);
+		await clickHelper(ZoomUiLabel.CONFIRM_LEAVE, page);
+	} catch (error) {
+		logger.error(
+			`Failed to click leave button: ${error instanceof Error ? error.message : String(error)}`,
+		);
+	}
+}
 
 const launchBrowser = async (): Promise<void> => {
-	const browser = await puppeteer.launch(LAUNCH_OPTIONS);
-
-	const page = await browser.newPage();
-
-	await page.setViewport({ height: 1024, width: 1080 });
-	await page.evaluate(() => {
-		const containerElement = document.createElement("div");
-
-		containerElement.textContent =
-			"Your computer has been hijacked by Meetlytic Bot! 😈";
-		containerElement.id = "puppeteer-container";
-
-		document.title = "Meetlytic Bot 🤖";
-		document.body.append(containerElement);
+	const browser = await puppeteer.launch({
+		args: [
+			"--use-fake-ui-for-media-stream",
+			"--use-fake-device-for-media-stream",
+			"--no-sandbox",
+			"--disable-setuid-sandbox",
+		],
+		defaultViewport: { height: 700, width: 1200 },
+		headless: false,
 	});
 
-	await new Promise((resolve) => setTimeout(resolve, TIMEOUT_MS));
+	try {
+		const page = await browser.newPage();
+		logger.info(`🌐 Navigating to Zoom meeting: ${ZOOM_MEETING_URL}`);
+		await page.goto(ZOOM_MEETING_URL, { waitUntil: "networkidle2" });
 
-	await browser.close();
+		await page.waitForSelector(ZoomUiLabel.INPUT_NAME, {
+			timeout: TIMEOUTS.TEN_SECONDS,
+		});
+		await page.type(ZoomUiLabel.INPUT_NAME, BOT_NAME);
+		await page.waitForFunction(
+			() => !document.querySelector(ZoomUiLabel.SPINNER),
+		);
+		await clickHelper(ZoomUiLabel.MUTE_LOGIN, page);
+		await clickHelper(ZoomUiLabel.STOP_VIDEO_LOGIN, page);
+		await page.click(ZoomUiLabel.JOIN);
+		logger.info(`Bot "${BOT_NAME}" is joining the meeting...`);
+		await delay(TIMEOUTS.TEN_SECONDS);
+		logger.info("Joined Zoom meeting successfully");
+		let shouldMonitor = true;
+
+		while (shouldMonitor) {
+			const count = await getParticipantsCount(page);
+
+			if (count <= MINIMUM_PARTICIPANTS_THRESHOLD) {
+				logger.info("Only 1 participant detected. Leaving...");
+				await leaveMeeting(page);
+				shouldMonitor = false;
+			}
+
+			await delay(TIMEOUTS.FIFTEEN_SECONDS);
+		}
+	} catch (error) {
+		logger.error(
+			`Failed to join the meeting: ${error instanceof Error ? error.message : String(error)}`,
+		);
+	} finally {
+		await browser.close();
+	}
 };
 
 await launchBrowser();

@@ -1,5 +1,3 @@
-import { type FC } from "react";
-
 import { KeyboardKey } from "~/libs/enums/enums.js";
 import { useCallback, useEffect, useRef } from "~/libs/hooks/hooks.js";
 
@@ -13,7 +11,11 @@ type Properties = {
 
 const DEFAULT_TAB_INDEX = 0;
 
-const Modal: FC<Properties> = ({ children, isOpen, onClose }) => {
+const Modal: React.FC<Properties> = ({
+	children,
+	isOpen,
+	onClose,
+}: Properties) => {
 	const modalReference = useRef<HTMLDivElement>(null);
 
 	const handleModalClick = useCallback(

@@ -85,6 +85,7 @@ const importConfig = {
 			"error",
 			{
 				js: "ignorePackages",
+				json: "always",
 			},
 		],
 		"import/newline-after-import": ["error"],

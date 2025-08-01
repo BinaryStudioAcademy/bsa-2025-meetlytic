@@ -233,7 +233,7 @@ class MeetingsController extends BaseController {
 		options: FindAllMeetingOptions,
 	): Promise<APIHandlerResponse> {
 		const meetings = await this.meetingService.findAll({
-			ownerId: options.user.id,
+			ownerId: Number(options.user.id),
 		});
 
 		return { payload: meetings, status: HTTPCode.OK };
@@ -271,7 +271,7 @@ class MeetingsController extends BaseController {
 	private async update(
 		options: UpdateMeetingOptions,
 	): Promise<APIHandlerResponse> {
-		const id = options.params.id;
+		const id = Number(options.params.id);
 		const meeting = await this.meetingService.update(id, options.body);
 
 		return { payload: meeting, status: HTTPCode.OK };

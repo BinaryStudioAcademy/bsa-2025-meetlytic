@@ -13,11 +13,11 @@ import { type IconName } from "~/libs/types/types.js";
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
-	className?: string;
+	className?: string | undefined;
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
 	hasVisuallyHiddenLabel?: boolean;
-	iconClassName?: string;
+	iconClassName?: string | undefined;
 	iconName?: IconName;
 	iconPosition?: "left" | "right";
 	label: string;
@@ -25,7 +25,7 @@ type Properties<T extends FieldValues> = {
 	onClickIcon?: () => void;
 	placeholder?: string;
 	type?: React.HTMLInputTypeAttribute;
-	wrapperClassName?: string;
+	wrapperClassName?: string | undefined;
 };
 
 const Input = <T extends FieldValues>({

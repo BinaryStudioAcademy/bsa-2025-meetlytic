@@ -27,7 +27,7 @@ const signIn = createAsyncThunk<
 	} catch (error: unknown) {
 		const message = extractErrorMessage(
 			error,
-			NotificationMessage.SIGN_UP_FAILED,
+			NotificationMessage.SIGN_IN_FAILED,
 		);
 
 		return rejectWithValue(message);

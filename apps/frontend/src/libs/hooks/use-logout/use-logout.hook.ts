@@ -1,7 +1,9 @@
-import { useNavigate } from "react-router-dom";
-
 import { AppRoute } from "~/libs/enums/enums.js";
-import { useAppDispatch, useCallback } from "~/libs/hooks/hooks.js";
+import {
+	useAppDispatch,
+	useCallback,
+	useNavigate,
+} from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 
 const useLogout = (): (() => Promise<void>) => {

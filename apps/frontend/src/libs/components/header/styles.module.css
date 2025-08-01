@@ -12,3 +12,14 @@
 	padding: 15px 40px;
 	margin: 0 auto;
 }
+
+.header__avatar-logout-wrapper {
+	display: flex;
+	gap: 20px;
+	align-items: center;
+}
+
+.header__logout-icon {
+	width: 16px;
+	height: 16px;
+}

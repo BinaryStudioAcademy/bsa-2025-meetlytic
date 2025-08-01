@@ -49,10 +49,21 @@ class BaseConfig implements Config {
 
 	public getLaunchOptions(): LaunchOptions {
 		const isProduction = this.ENV.APP.ENVIRONMENT === AppEnvironment.PRODUCTION;
+		const isDevelopment =
+			this.ENV.APP.ENVIRONMENT === AppEnvironment.DEVELOPMENT;
 
 		return {
 			enableExtensions: true,
 			headless: isProduction,
+			...(isDevelopment && {
+				args: [
+					"--use-fake-ui-for-media-stream",
+					"--use-fake-device-for-media-stream",
+					"--no-sandbox",
+					"--disable-setuid-sandbox",
+					"--mute-audio",
+				],
+			}),
 			...(isProduction && {
 				args: ["--no-sandbox", "--disable-setuid-sandbox"],
 			}),

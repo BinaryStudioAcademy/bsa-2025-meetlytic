@@ -30,6 +30,14 @@ class BaseConfig implements Config {
 					format: Object.values(AppEnvironment),
 				},
 			},
+			OPEN_AI: {
+				WHISPER_KEY: {
+					default: null,
+					doc: "Whisper API key",
+					env: "WHISPER_KEY",
+					format: Object.values(AppEnvironment),
+				},
+			},
 		});
 	}
 

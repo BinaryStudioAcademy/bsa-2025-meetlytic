@@ -35,7 +35,7 @@ class BaseConfig implements Config {
 					default: null,
 					doc: "OpenAI API key",
 					env: "OPEN_AI_KEY",
-					format: Object.values(AppEnvironment),
+					format: String,
 				},
 			},
 		});

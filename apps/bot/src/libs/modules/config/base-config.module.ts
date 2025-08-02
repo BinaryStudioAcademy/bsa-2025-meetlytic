@@ -67,11 +67,16 @@ class BaseConfig implements Config {
 					"--use-fake-device-for-media-stream",
 					"--no-sandbox",
 					"--disable-setuid-sandbox",
-					"--mute-audio",
 				],
+				defaultViewport: { height: 700, width: 1200 },
 			}),
 			...(isProduction && {
-				args: ["--no-sandbox", "--disable-setuid-sandbox"],
+				args: [
+					"--use-fake-ui-for-media-stream",
+					"--use-fake-device-for-media-stream",
+					"--no-sandbox",
+					"--disable-setuid-sandbox",
+				],
 			}),
 		};
 	}

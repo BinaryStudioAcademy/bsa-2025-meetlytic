@@ -2,6 +2,11 @@ import fastifyStatic from "@fastify/static";
 import swagger, { type StaticDocumentSpec } from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
+import {
+	serializerCompiler,
+	validatorCompiler,
+	type ZodTypeProvider,
+} from "fastify-type-provider-zod";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -61,7 +66,10 @@ class BaseServerApplication implements ServerApplication {
 	private initApp(): void {
 		this.app = Fastify({
 			ignoreTrailingSlash: true,
-		});
+		})
+			.setValidatorCompiler(validatorCompiler)
+			.setSerializerCompiler(serializerCompiler)
+			.withTypeProvider<ZodTypeProvider>();
 	}
 
 	private initErrorHandler(): void {

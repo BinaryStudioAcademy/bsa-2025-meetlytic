@@ -17,7 +17,6 @@ type Properties = {
 const SignInForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 	const { control, errors, handleSubmit } = useAppForm<UserSignInRequestDto>({
 		defaultValues: DEFAULT_SIGN_IN_VALUES,
-		mode: "onBlur",
 		validationSchema: userSignInValidationSchema,
 	});
 

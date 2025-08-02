@@ -6,7 +6,10 @@ const errorListenerMiddleware = createListenerMiddleware();
 
 errorListenerMiddleware.startListening({
 	effect: (action) => {
-		const message = action.error.message ?? "Something went wrong";
+		const message =
+			typeof action.payload === "string"
+				? action.payload
+				: (action.error.message ?? "Something went wrong");
 
 		notification.error(message);
 	},

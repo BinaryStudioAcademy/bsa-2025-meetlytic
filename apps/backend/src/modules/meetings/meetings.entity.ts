@@ -9,6 +9,10 @@ class MeetingEntity implements Entity {
 
 	private instanceId: null | string;
 
+	private meetingId: string;
+
+	private meetingPassword: null | string;
+
 	private ownerId: number;
 
 	private status!: ValueOf<typeof MeetingStatus>;
@@ -17,18 +21,24 @@ class MeetingEntity implements Entity {
 		host,
 		id,
 		instanceId,
+		meetingId,
+		meetingPassword,
 		ownerId,
 		status,
 	}: {
 		host: ValueOf<typeof MeetingHost>;
 		id: null | number;
 		instanceId: null | string;
+		meetingId: string;
+		meetingPassword: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 	}) {
 		this.id = id;
 		this.host = host;
 		this.instanceId = instanceId;
+		this.meetingId = meetingId;
+		this.meetingPassword = meetingPassword;
 		this.ownerId = ownerId;
 		this.status = status;
 	}
@@ -37,12 +47,16 @@ class MeetingEntity implements Entity {
 		host,
 		id,
 		instanceId,
+		meetingId,
+		meetingPassword,
 		ownerId,
 		status,
 	}: {
 		host: ValueOf<typeof MeetingHost>;
 		id: number;
 		instanceId: null | string;
+		meetingId: string;
+		meetingPassword: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 	}): MeetingEntity {
@@ -50,6 +64,8 @@ class MeetingEntity implements Entity {
 			host,
 			id,
 			instanceId,
+			meetingId,
+			meetingPassword,
 			ownerId,
 			status,
 		});
@@ -58,16 +74,22 @@ class MeetingEntity implements Entity {
 	public static initializeNew({
 		host,
 		instanceId,
+		meetingId,
+		meetingPassword,
 		ownerId,
 	}: {
 		host: ValueOf<typeof MeetingHost>;
 		instanceId: null | string;
+		meetingId: string;
+		meetingPassword: null | string;
 		ownerId: number;
 	}): MeetingEntity {
 		return new MeetingEntity({
 			host,
 			id: null,
 			instanceId,
+			meetingId,
+			meetingPassword,
 			ownerId,
 			status: MeetingStatus.STARTED,
 		});
@@ -76,12 +98,16 @@ class MeetingEntity implements Entity {
 	public toNewObject(): {
 		host: ValueOf<typeof MeetingHost>;
 		instanceId: null | string;
+		meetingId: string;
+		meetingPassword: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 	} {
 		return {
 			host: this.host,
 			instanceId: this.instanceId,
+			meetingId: this.meetingId,
+			meetingPassword: this.meetingPassword,
 			ownerId: this.ownerId,
 			status: this.status,
 		};
@@ -91,6 +117,8 @@ class MeetingEntity implements Entity {
 		host: ValueOf<typeof MeetingHost>;
 		id: number;
 		instanceId: null | string;
+		meetingId: string;
+		meetingPassword: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 	} {
@@ -98,6 +126,8 @@ class MeetingEntity implements Entity {
 			host: this.host,
 			id: this.id as number,
 			instanceId: this.instanceId,
+			meetingId: this.meetingId,
+			meetingPassword: this.meetingPassword,
 			ownerId: this.ownerId,
 			status: this.status,
 		};

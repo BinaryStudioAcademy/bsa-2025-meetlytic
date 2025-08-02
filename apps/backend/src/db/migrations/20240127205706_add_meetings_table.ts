@@ -11,6 +11,8 @@ const ColumnName = {
 	HOST: "host",
 	ID: "id",
 	INSTANCE_ID: "instance_id",
+	MEETING_ID: "meeting_id",
+	MEETING_PASSWORD: "meeting_password",
 	OWNER_ID: "owner_id",
 	STATUS: "status",
 	UPDATED_AT: "updated_at",
@@ -33,6 +35,8 @@ function up(knex: Knex): Promise<void> {
 	return knex.schema.createTable(TableName.MEETINGS, (table) => {
 		table.increments(ColumnName.ID).primary();
 		table.text(ColumnName.INSTANCE_ID).notNullable();
+		table.text(ColumnName.MEETING_ID).notNullable().unique();
+		table.text(ColumnName.MEETING_PASSWORD);
 		table
 			.enu(ColumnName.HOST, Object.values(MeetingHost), {
 				enumName: "meeting_host",

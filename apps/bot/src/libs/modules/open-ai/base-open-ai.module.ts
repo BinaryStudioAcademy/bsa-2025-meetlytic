@@ -1,0 +1,35 @@
+import fs from "node:fs";
+import { type OpenAI } from "openai";
+
+import { type Logger } from "../logger/logger.js";
+
+class BaseOpenAI {
+	private client: OpenAI;
+	private logger: Logger;
+
+	public constructor(client: OpenAI, logger: Logger) {
+		this.client = client;
+		this.logger = logger;
+	}
+
+	public async transcribe(
+		audioFilePath: string,
+		language = "en",
+	): Promise<string> {
+		try {
+			const response = await this.client.audio.transcriptions.create({
+				file: fs.createReadStream(audioFilePath),
+				language,
+				model: "whisper-1",
+			});
+
+			return response.text;
+		} catch (error) {
+			this.logger.error("Failed to transcribe an audio");
+
+			throw error;
+		}
+	}
+}
+
+export { BaseOpenAI };

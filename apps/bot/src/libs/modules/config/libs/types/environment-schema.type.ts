@@ -5,6 +5,9 @@ type EnvironmentSchema = {
 	APP: {
 		ENVIRONMENT: ValueOf<typeof AppEnvironment>;
 	};
+	OPEN_AI: {
+		OPEN_AI_KEY: string;
+	};
 };
 
 export { type EnvironmentSchema };

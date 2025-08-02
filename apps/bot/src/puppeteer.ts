@@ -1,9 +1,17 @@
 import puppeteer from "puppeteer";
 
 import { config } from "~/libs/modules/config/config.js";
+import { logger } from "~/libs/modules/logger/logger.js";
+import { openAI } from "~/libs/modules/open-ai/open-ai.js";
 
 const TIMEOUT_MS = 3000;
 const LAUNCH_OPTIONS = config.getLaunchOptions();
+
+try {
+	await openAI.transcribe("wrong path");
+} catch {
+	logger.info("Dummy usage of openAI module");
+}
 
 const launchBrowser = async (): Promise<void> => {
 	const browser = await puppeteer.launch(LAUNCH_OPTIONS);

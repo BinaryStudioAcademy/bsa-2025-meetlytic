@@ -8,12 +8,14 @@ import {
 	DEFAULT_PARTICIPANTS_COUNT,
 	MINIMUM_PARTICIPANTS_THRESHOLD,
 	TIMEOUTS,
+	USER_AGENT,
 } from "./libs/constants/constants.js";
-import { ZoomUiLabel } from "./libs/enums/zoom-ui-label.enum.js";
+import { ZoomUILabel } from "./libs/enums/enums.js";
 import { delay } from "./libs/helpers/helpers.js";
 import { logger } from "./libs/modules/logger/logger.js";
 
 const { BOT_NAME, MEETING_ID, MEETING_PASSWORD } = config.ENV.ZOOM;
+const launchOptions = config.getLaunchOptions();
 
 if (!MEETING_ID || !MEETING_PASSWORD) {
 	logger.error(
@@ -43,7 +45,7 @@ async function getParticipantsCount(page: Page): Promise<number> {
 			timeout: TIMEOUTS.TEN_SECONDS,
 		});
 		const count = await page.$eval(
-			ZoomUiLabel.PARTISIPANTS_COUNT,
+			ZoomUILabel.PARTISIPANTS_COUNT,
 			({ textContent }) => Number(textContent?.trim() ?? "0"),
 		);
 
@@ -59,9 +61,9 @@ async function getParticipantsCount(page: Page): Promise<number> {
 
 async function leaveMeeting(page: Page): Promise<void> {
 	try {
-		await clickHelper(ZoomUiLabel.LEAVE, page);
+		await clickHelper(ZoomUILabel.LEAVE, page);
 		await delay(TIMEOUTS.TEN_SECONDS);
-		await clickHelper(ZoomUiLabel.CONFIRM_LEAVE, page);
+		await clickHelper(ZoomUILabel.CONFIRM_LEAVE, page);
 	} catch (error) {
 		logger.error(
 			`Failed to click leave button: ${error instanceof Error ? error.message : String(error)}`,
@@ -77,32 +79,41 @@ try {
 }
 
 const launchBrowser = async (): Promise<void> => {
-	const browser = await puppeteer.launch({
-		args: [
-			"--use-fake-ui-for-media-stream",
-			"--use-fake-device-for-media-stream",
-			"--no-sandbox",
-			"--disable-setuid-sandbox",
-		],
-		defaultViewport: { height: 700, width: 1200 },
-		headless: false,
-	});
+	const browser = await puppeteer.launch(launchOptions);
 
 	try {
 		const page = await browser.newPage();
+		await page.setUserAgent(USER_AGENT);
 		logger.info(`🌐 Navigating to Zoom meeting: ${ZOOM_MEETING_URL}`);
 		await page.goto(ZOOM_MEETING_URL, { waitUntil: "networkidle2" });
+		await clickHelper(ZoomUILabel.ACCEPT_COOKIES, page);
+		await page.waitForSelector(ZoomUILabel.ACCEPT_TERMS, {
+			timeout: TIMEOUTS.TEN_SECONDS,
+			visible: true,
+		});
+		await page.evaluate((selector) => {
+			const button = document.querySelector(selector) as HTMLButtonElement;
+			button.click();
+		}, ZoomUILabel.ACCEPT_TERMS);
 
-		await page.waitForSelector(ZoomUiLabel.INPUT_NAME, {
+		await page.waitForSelector(ZoomUILabel.INPUT_NAME, {
 			timeout: TIMEOUTS.TEN_SECONDS,
 		});
-		await page.type(ZoomUiLabel.INPUT_NAME, BOT_NAME);
-		await page.waitForFunction(
-			() => !document.querySelector(ZoomUiLabel.SPINNER),
-		);
-		await clickHelper(ZoomUiLabel.MUTE_LOGIN, page);
-		await clickHelper(ZoomUiLabel.STOP_VIDEO_LOGIN, page);
-		await page.click(ZoomUiLabel.JOIN);
+		await page.type(ZoomUILabel.INPUT_NAME, BOT_NAME);
+
+		try {
+			await page.waitForFunction(
+				(selector) => !document.querySelector(selector),
+				{ timeout: TIMEOUTS.TEN_SECONDS },
+				ZoomUILabel.SPINNER,
+			);
+		} catch {
+			logger.warn("Spinner not found or already removed.");
+		}
+
+		await clickHelper(ZoomUILabel.MUTE_LOGIN, page);
+		await clickHelper(ZoomUILabel.STOP_VIDEO_LOGIN, page);
+		await page.click(ZoomUILabel.JOIN);
 		logger.info(`Bot "${BOT_NAME}" is joining the meeting...`);
 		await delay(TIMEOUTS.TEN_SECONDS);
 		logger.info("Joined Zoom meeting successfully");

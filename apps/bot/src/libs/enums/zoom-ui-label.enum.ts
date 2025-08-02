@@ -1,4 +1,6 @@
-const ZoomUiLabel = {
+const ZoomUILabel = {
+	ACCEPT_COOKIES: "#onetrust-accept-btn-handler",
+	ACCEPT_TERMS: "#wc_agree1",
 	CONFIRM_LEAVE: "button.leave-meeting-options__btn--danger",
 	INPUT_NAME: "#input-for-name",
 	JOIN: "button[type='button']",
@@ -12,4 +14,4 @@ const ZoomUiLabel = {
 	UNMUTE: "button[aria-label='unmute my microphone']",
 } as const;
 
-export { ZoomUiLabel };
+export { ZoomUILabel };

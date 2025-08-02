@@ -27,7 +27,6 @@ class BaseController implements Controller {
 		handler: APIHandler;
 		reply: FastifyReply;
 		request: FastifyRequest;
-		validation?: ControllerRouteParameters["validation"];
 	}): Promise<void> {
 		const { handler, reply, request } = options;
 		this.logger.info(`${request.method.toUpperCase()} on ${request.url}`);

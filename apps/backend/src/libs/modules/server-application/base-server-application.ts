@@ -142,6 +142,10 @@ class BaseServerApplication implements ServerApplication {
 			method,
 			schema: {
 				body: validation?.body,
+				headers: validation?.headers,
+				params: validation?.params,
+				querystring: validation?.querystring,
+				response: validation?.response,
 			},
 			url: path,
 		});

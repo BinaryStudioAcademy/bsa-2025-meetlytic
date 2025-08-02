@@ -31,10 +31,10 @@ class BaseConfig implements Config {
 				},
 			},
 			OPEN_AI: {
-				WHISPER_KEY: {
+				OPEN_AI_KEY: {
 					default: null,
-					doc: "Whisper API key",
-					env: "WHISPER_KEY",
+					doc: "OpenAI API key",
+					env: "OPEN_AI_KEY",
 					format: Object.values(AppEnvironment),
 				},
 			},

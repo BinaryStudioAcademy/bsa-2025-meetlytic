@@ -6,7 +6,7 @@ type EnvironmentSchema = {
 		ENVIRONMENT: ValueOf<typeof AppEnvironment>;
 	};
 	OPEN_AI: {
-		WHISPER_KEY: string;
+		OPEN_AI_KEY: string;
 	};
 };
 

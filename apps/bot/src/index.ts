@@ -79,7 +79,10 @@ const launchBrowser = async (): Promise<void> => {
 		const page = await browser.newPage();
 		await page.setUserAgent(USER_AGENT);
 		logger.info(`🌐 Navigating to Zoom meeting: ${ZOOM_MEETING_URL}`);
-		await page.goto(ZOOM_MEETING_URL, { waitUntil: "networkidle2" });
+		await page.goto(ZOOM_MEETING_URL, {
+			timeout: TIMEOUTS.SIXTEEN_SECONDS,
+			waitUntil: "networkidle2",
+		});
 		await clickHelper(ZoomUILabel.ACCEPT_COOKIES, page);
 		await page.waitForSelector(ZoomUILabel.ACCEPT_TERMS, {
 			timeout: TIMEOUTS.TEN_SECONDS,

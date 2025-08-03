@@ -7,8 +7,9 @@ import { openAI } from "~/libs/modules/open-ai/open-ai.js";
 const TIMEOUT_MS = 3000;
 const LAUNCH_OPTIONS = config.getLaunchOptions();
 
+// TODO: use openAI module to transcribe audio files
 try {
-	await openAI.transcribe("wrong path");
+	await openAI.transcribe("Dummy path");
 } catch {
 	logger.info("Dummy usage of openAI module");
 }

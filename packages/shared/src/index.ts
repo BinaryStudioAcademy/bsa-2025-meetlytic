@@ -30,7 +30,6 @@ export {
 	type ValueOf,
 } from "./libs/types/types.js";
 export { AuthApiPath } from "./modules/auth/auth.js";
-export { type Logger, logger } from "./modules/logger/logger.js";
 export {
 	MeetingErrorMessage,
 	MeetingHost,

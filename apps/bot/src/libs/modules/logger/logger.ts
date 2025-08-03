@@ -1,1 +1,1 @@
-export { type Logger, logger } from "@meetlytic/shared";
+export { type Logger, logger } from "@meetlytic/shared-node";

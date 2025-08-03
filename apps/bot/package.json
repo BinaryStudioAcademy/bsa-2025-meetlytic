@@ -13,6 +13,7 @@
 	},
 	"dependencies": {
 		"@meetlytic/shared": "*",
+		"@meetlytic/shared-node": "*",
 		"convict": "6.2.4",
 		"dotenv": "17.2.1",
 		"openai": "5.11.0",

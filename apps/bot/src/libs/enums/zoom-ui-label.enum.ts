@@ -2,6 +2,7 @@ const ZoomUILabel = {
 	ACCEPT_COOKIES: "#onetrust-accept-btn-handler",
 	ACCEPT_TERMS: "#wc_agree1",
 	CONFIRM_LEAVE: "button.leave-meeting-options__btn--danger",
+	GET_PARTICIPANTS_COUNT: ".footer-button__number-counter span",
 	INPUT_NAME: "#input-for-name",
 	JOIN: "button[type='button']",
 	LEAVE: "button[aria-label='Leave']",

@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { type OpenAI } from "openai";
+import OpenAI from "openai";
 
 import { config } from "~/libs/modules/config/config.js";
 
@@ -9,8 +9,8 @@ class BaseOpenAI {
 	private client: OpenAI;
 	private logger: Logger;
 
-	public constructor(client: OpenAI, logger: Logger) {
-		this.client = client;
+	public constructor(logger: Logger) {
+		this.client = new OpenAI({ apiKey: config.ENV.OPEN_AI.KEY });
 		this.logger = logger;
 	}
 

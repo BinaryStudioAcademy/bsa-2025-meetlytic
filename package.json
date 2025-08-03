@@ -62,9 +62,5 @@
 	"simple-git-hooks": {
 		"pre-commit": "npm run lint:type && npm run git:hook:precommit",
 		"commit-msg": "npm run git:hook:commit"
-	},
-	"dependencies": {
-		"pino": "9.7.0",
-		"pino-pretty": "13.0.0"
 	}
 }

@@ -17,5 +17,9 @@
 	},
 	"devDependencies": {
 		"zod": "3.25.76"
+	},
+	"dependencies": {
+		"pino": "9.7.0",
+		"pino-pretty": "13.1.1"
 	}
 }

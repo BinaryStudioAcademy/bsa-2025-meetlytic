@@ -4,7 +4,8 @@ import { type MeetingHost } from "../enums/enums.js";
 type MeetingCreateRequestDto = {
 	host: ValueOf<typeof MeetingHost>;
 	instanceId: null | string;
-	ownerId?: number;
+	meetingId: string;
+	meetingPassword: null | string;
 };
 
 export { type MeetingCreateRequestDto };

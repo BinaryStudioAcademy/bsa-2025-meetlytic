@@ -17,6 +17,9 @@ type ServerApplicationRouteParameters = {
 	preHandlers?: preHandlerHookHandler | preHandlerHookHandler[] | undefined;
 	validation?: {
 		body?: ValidationSchema;
+		headers?: ValidationSchema;
+		params?: ValidationSchema;
+		querystring?: ValidationSchema;
 	};
 };
 

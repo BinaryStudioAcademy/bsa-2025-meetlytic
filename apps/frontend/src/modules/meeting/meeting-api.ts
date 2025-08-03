@@ -2,9 +2,12 @@ import { APIPath, ContentType } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
+import {
+	type MeetingCreateRequestDto,
+	type MeetingResponseDto,
+} from "~/modules/meeting/meeting.js";
 
-import { MeetingApiPath } from "./libs/enums/enums.js";
-import { type MeetingCreateRequestDto } from "./libs/types/types.js";
+import { MeetingsApiPath } from "./libs/enums/enums.js";
 
 type Constructor = {
 	baseUrl: string;
@@ -19,19 +22,18 @@ class MeetingApi extends BaseHTTPApi {
 
 	public async create(
 		payload: MeetingCreateRequestDto,
-		ownerId: number,
-	): Promise<void> {
-		const requestPayload = {
-			...payload,
-			ownerId,
-		};
+	): Promise<MeetingResponseDto> {
+		const response = await this.load(
+			this.getFullEndpoint(MeetingsApiPath.ROOT, {}),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "POST",
+				payload: JSON.stringify(payload),
+			},
+		);
 
-		await this.load(this.getFullEndpoint(MeetingApiPath.ROOT, {}), {
-			contentType: ContentType.JSON,
-			hasAuth: true,
-			method: "POST",
-			payload: JSON.stringify(requestPayload),
-		});
+		return await response.json<MeetingResponseDto>();
 	}
 }
 

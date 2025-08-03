@@ -12,5 +12,6 @@ export {
 	APIPath,
 	AppEnvironment,
 	ContentType,
+	MeetingHost,
 	ServerErrorType,
 } from "@meetlytic/shared";

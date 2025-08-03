@@ -1,1 +1,1 @@
-export { MeetingApiPath } from "./meeting-api-path.enum.js";
+export { MeetingsApiPath } from "@meetlytic/shared";

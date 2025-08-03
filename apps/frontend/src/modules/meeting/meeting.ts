@@ -11,4 +11,9 @@ const meetingApi = new MeetingApi({
 });
 
 export { meetingApi };
+export {
+	type MeetingCreateRequestDto,
+	type MeetingResponseDto,
+} from "./libs/types/types.js";
 export { meetingCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
+export { actions, reducer } from "./slices/meeting.js";

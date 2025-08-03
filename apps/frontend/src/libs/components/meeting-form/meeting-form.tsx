@@ -1,13 +1,18 @@
 import { Button, Input } from "~/libs/components/components.js";
+import { CREATE_MEETING_FORM_DEFAULT_VALUES } from "~/libs/constants/constants.js";
 import { ButtonVariant } from "~/libs/enums/enums.js";
-import { useAppForm, useAppSelector, useCallback } from "~/libs/hooks/hooks.js";
+import {
+	useAppDispatch,
+	useAppForm,
+	useAppSelector,
+	useCallback,
+} from "~/libs/hooks/hooks.js";
 import { type MeetingCreateRequestDto } from "~/libs/types/types.js";
 import {
-	meetingApi,
+	actions as meetingActions,
 	meetingCreateValidationSchema,
 } from "~/modules/meeting/meeting.js";
 
-import { CREATE_MEETING_FORM_DEFAULT_VALUES } from "./libs/create-meeting-form.default-values.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -15,6 +20,7 @@ type Properties = {
 };
 
 const MeetingForm = ({ onClose }: Properties): React.JSX.Element => {
+	const dispatch = useAppDispatch();
 	const user = useAppSelector((state) => state.auth.user);
 	const { control, errors, handleSubmit } = useAppForm<MeetingCreateRequestDto>(
 		{
@@ -29,10 +35,15 @@ const MeetingForm = ({ onClose }: Properties): React.JSX.Element => {
 				return;
 			}
 
-			await meetingApi.create(data, user.id);
+			const meetingData = {
+				...data,
+				ownerId: user.id,
+			};
+
+			await dispatch(meetingActions.createMeeting({ data: meetingData }));
 			onClose();
 		},
-		[onClose, user],
+		[dispatch, onClose, user],
 	);
 
 	const handleFormSubmit = useCallback(

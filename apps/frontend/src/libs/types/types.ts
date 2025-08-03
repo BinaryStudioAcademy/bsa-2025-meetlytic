@@ -5,6 +5,7 @@ export { type IconName } from "./icon-name.type.js";
 export { type NavigationItem } from "./navigation-item.type.js";
 export {
 	type MeetingCreateRequestDto,
+	type MeetingResponseDto,
 	type ServerErrorDetail,
 	type ServerErrorResponse,
 	type UserResponseDto,

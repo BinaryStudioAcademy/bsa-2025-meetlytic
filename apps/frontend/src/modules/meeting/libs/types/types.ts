@@ -1,1 +1,4 @@
-export { type MeetingCreateRequestDto } from "@meetlytic/shared";
+export {
+	type MeetingCreateRequestDto,
+	type MeetingResponseDto,
+} from "@meetlytic/shared";

@@ -25,7 +25,7 @@ class ZoomBot {
 
 	private async clickHelper(
 		selector: string,
-		timeout: number = TIMEOUTS.TEN_SECONDS,
+		timeout: number = TIMEOUTS.FIVE_SECONDS,
 	): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
@@ -96,7 +96,15 @@ class ZoomBot {
 		}
 
 		try {
-			await this.clickHelper(ZoomUILabel.ACCEPT_TERMS, TIMEOUTS.TEN_SECONDS);
+			await this.page.waitForSelector(ZoomUILabel.ACCEPT_TERMS, {
+				timeout: TIMEOUTS.TEN_SECONDS,
+				visible: true,
+			});
+
+			await this.page.evaluate((selector) => {
+				const button = document.querySelector(selector) as HTMLButtonElement;
+				button.click();
+			}, ZoomUILabel.ACCEPT_TERMS);
 			this.logger.info(ZoomBotMessages.TERM_AND_CONDITIONS_ACCEPTED);
 		} catch (error) {
 			this.logger.error(

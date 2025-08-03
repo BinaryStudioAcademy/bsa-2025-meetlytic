@@ -15,12 +15,10 @@ import {
 	authApi,
 	reducer as authReducer,
 } from "~/modules/auth/auth.js";
-import { userApi } from "~/modules/users/users.js";
 
 type ExtraArguments = {
 	authApi: typeof authApi;
 	storage: typeof storage;
-	userApi: typeof userApi;
 };
 
 type RootReducer = {
@@ -69,7 +67,6 @@ class Store {
 		return {
 			authApi,
 			storage,
-			userApi,
 		};
 	}
 }

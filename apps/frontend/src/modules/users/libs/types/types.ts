@@ -1,5 +1,4 @@
 export {
-	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignInRequestDto,
 	type UserSignUpRequestDto,

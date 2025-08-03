@@ -53,6 +53,8 @@ class MeetingService implements Service<MeetingResponseDto> {
 		const meeting = MeetingEntity.initializeNew({
 			host: payload.host,
 			instanceId: payload.instanceId ?? null,
+			meetingId: payload.meetingId,
+			meetingPassword: payload.meetingPassword ?? null,
 			ownerId: (payload as MeetingCreateRequestDto & { ownerId: number })
 				.ownerId,
 		});
@@ -148,6 +150,8 @@ class MeetingService implements Service<MeetingResponseDto> {
 			host: payload.host,
 			id,
 			instanceId: meetingEntity.toObject().instanceId,
+			meetingId: meetingEntity.toObject().meetingId,
+			meetingPassword: meetingEntity.toObject().meetingPassword,
 			ownerId: meetingEntity.toObject().ownerId,
 			status: payload.status,
 		});

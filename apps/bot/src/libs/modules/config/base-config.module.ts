@@ -63,6 +63,7 @@ class BaseConfig implements Config {
 					"--disable-setuid-sandbox",
 				],
 				defaultViewport: { height: 700, width: 1200 },
+				headless: false,
 			}),
 			...(isProduction && {
 				args: [

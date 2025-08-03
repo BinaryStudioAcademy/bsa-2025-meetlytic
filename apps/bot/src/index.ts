@@ -1,5 +1,3 @@
-import puppeteer, { type Page } from "puppeteer";
-
 import { config } from "~/libs/modules/config/config.js";
 import { logger } from "~/libs/modules/logger/logger.js";
 import { openAI } from "~/libs/modules/open-ai/open-ai.js";
@@ -145,4 +143,4 @@ const launchBrowser = async (): Promise<void> => {
 	}
 };
 
-await launchBrowser();
+await init();

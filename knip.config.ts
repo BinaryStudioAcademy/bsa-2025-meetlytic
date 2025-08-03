@@ -14,8 +14,6 @@ const config: KnipConfig = {
 		"apps/bot": {},
 		"apps/frontend": {},
 		"packages/shared": {
-			entry: ["build/index.js"],
-			ignore: ["src/**/**"],
 			includeEntryExports: true,
 		},
 	},

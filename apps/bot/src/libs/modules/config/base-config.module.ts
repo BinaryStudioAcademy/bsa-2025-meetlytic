@@ -31,10 +31,16 @@ class BaseConfig implements Config {
 				},
 			},
 			OPEN_AI: {
-				OPEN_AI_KEY: {
+				KEY: {
 					default: null,
 					doc: "OpenAI API key",
 					env: "OPEN_AI_KEY",
+					format: String,
+				},
+				TRANSCRIPTION_MODEL: {
+					default: null,
+					doc: "OpenAI transcription model",
+					env: "TRANSCRIPTION_MODEL",
 					format: String,
 				},
 			},

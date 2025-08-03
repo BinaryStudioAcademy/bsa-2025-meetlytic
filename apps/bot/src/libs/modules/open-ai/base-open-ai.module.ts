@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import { type OpenAI } from "openai";
 
+import { config } from "~/libs/modules/config/config.js";
+
 import { type Logger } from "../logger/logger.js";
 
 class BaseOpenAI {
@@ -20,7 +22,7 @@ class BaseOpenAI {
 			const response = await this.client.audio.transcriptions.create({
 				file: fs.createReadStream(audioFilePath),
 				language,
-				model: "whisper-1",
+				model: config.ENV.OPEN_AI.TRANSCRIPTION_MODEL,
 			});
 
 			return response.text;

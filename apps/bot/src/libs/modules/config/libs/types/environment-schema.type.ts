@@ -6,7 +6,8 @@ type EnvironmentSchema = {
 		ENVIRONMENT: ValueOf<typeof AppEnvironment>;
 	};
 	OPEN_AI: {
-		OPEN_AI_KEY: string;
+		KEY: string;
+		TRANSCRIPTION_MODEL: string;
 	};
 };
 

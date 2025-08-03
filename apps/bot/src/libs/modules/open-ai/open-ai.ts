@@ -5,7 +5,7 @@ import { logger } from "~/libs/modules/logger/logger.js";
 
 import { BaseOpenAI } from "./base-open-ai.module.js";
 
-const client = new OpenAI({ apiKey: config.ENV.OPEN_AI.OPEN_AI_KEY });
+const client = new OpenAI({ apiKey: config.ENV.OPEN_AI.KEY });
 const openAI = new BaseOpenAI(client, logger);
 
 export { openAI };

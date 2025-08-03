@@ -7,8 +7,8 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import { useAppForm, useAppSelector, useCallback } from "~/libs/hooks/hooks.js";
 
 const App: React.FC = () => {
-	const { dataStatus } = useAppSelector(({ users }) => ({
-		dataStatus: users.dataStatus,
+	const { dataStatus } = useAppSelector(({ auth }) => ({
+		dataStatus: auth.dataStatus,
 	}));
 
 	const { control, errors } = useAppForm({

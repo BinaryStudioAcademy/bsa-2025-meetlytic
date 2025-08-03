@@ -140,8 +140,20 @@ class BaseServerApplication implements ServerApplication {
 
 		const schema: Record<string, unknown> = {};
 
-		if (validation?.body && !["DELETE", "GET", "HEAD"].includes(method)) {
+		if (validation?.body) {
 			schema["body"] = validation.body;
+		}
+
+		if (validation?.params) {
+			schema["params"] = validation.params;
+		}
+
+		if (validation?.querystring) {
+			schema["querystring"] = validation.querystring;
+		}
+
+		if (validation?.headers) {
+			schema["headers"] = validation.headers;
 		}
 
 		this.app.route({

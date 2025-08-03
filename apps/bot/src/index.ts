@@ -64,6 +64,9 @@ async function leaveMeeting(page: Page): Promise<void> {
 		await clickHelper(ZoomUILabel.CONFIRM_LEAVE, page);
 	} catch (error) {
 		logger.error(
+			`Failed to leave meeting: ${error instanceof Error ? error.message : String(error)}`,
+		);
+		logger.error(
 			`Failed to click leave button: ${error instanceof Error ? error.message : String(error)}`,
 		);
 	}

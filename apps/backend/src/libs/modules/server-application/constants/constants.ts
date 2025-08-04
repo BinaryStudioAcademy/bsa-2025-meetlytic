@@ -1,0 +1,3 @@
+const SINGLE_ISSUE_COUNT = 1;
+
+export { SINGLE_ISSUE_COUNT };

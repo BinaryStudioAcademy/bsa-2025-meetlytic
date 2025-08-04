@@ -5,6 +5,11 @@ type EnvironmentSchema = {
 	APP: {
 		ENVIRONMENT: ValueOf<typeof AppEnvironment>;
 	};
+	AUDIO_RECORDER: {
+		AUDIO_CHUNK_DURATION: number;
+		AUDIO_OUTPUT_DIR: string;
+		FFMPEG_PATH: string;
+	};
 	ZOOM: {
 		BOT_NAME: string;
 		MEETING_ID: string;

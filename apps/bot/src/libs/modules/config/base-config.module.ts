@@ -30,6 +30,26 @@ class BaseConfig implements Config {
 					format: Object.values(AppEnvironment),
 				},
 			},
+			AUDIO_RECORDER: {
+				AUDIO_CHUNK_DURATION: {
+					default: null,
+					doc: "duration of audio chunks",
+					env: "AUDIO_CHUNK_DURATION",
+					format: Number,
+				},
+				AUDIO_OUTPUT_DIR: {
+					default: null,
+					doc: "path to the directory where the audio should be stored",
+					env: "AUDIO_OUTPUT_DIR",
+					format: String,
+				},
+				FFMPEG_PATH: {
+					default: null,
+					doc: "location of ffmpeg",
+					env: "FFMPEG_PATH",
+					format: String,
+				},
+			},
 			ZOOM: {
 				BOT_NAME: {
 					default: "Meetlytic Bot",

@@ -15,22 +15,18 @@ import {
 	authApi,
 	reducer as authReducer,
 } from "~/modules/auth/auth.js";
-import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
 
 type ExtraArguments = {
 	authApi: typeof authApi;
 	storage: typeof storage;
-	userApi: typeof userApi;
 };
 
 type RootReducer = {
 	auth: ReturnType<typeof authReducer>;
-	users: ReturnType<typeof usersReducer>;
 };
 
 const rootReducer = combineReducers({
 	auth: authReducer,
-	users: usersReducer,
 });
 
 const resettableRootReducer = (
@@ -71,7 +67,6 @@ class Store {
 		return {
 			authApi,
 			storage,
-			userApi,
 		};
 	}
 }

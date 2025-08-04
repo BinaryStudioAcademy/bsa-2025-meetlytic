@@ -15,8 +15,7 @@
 		"build:copy": "cp -r package.json build",
 		"prestart": "npm run migrate",
 		"migrate": "knex migrate:latest",
-		"start": "node ./src/index.js",
-		"test": "tsx watch test-cloud-formation.ts"
+		"start": "node ./src/index.js"
 	},
 	"dependencies": {
 		"@aws-sdk/client-cloudformation": "3.848.0",

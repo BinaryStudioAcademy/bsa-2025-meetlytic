@@ -146,7 +146,10 @@ class MeetingsController extends BaseController {
 	private async create(
 		options: CreateMeetingOptions,
 	): Promise<APIHandlerResponse> {
-		const created = await this.meetingService.create(options.body);
+		const created = await this.meetingService.create({
+			...options.body,
+			ownerId: Number(options.user.id),
+		});
 
 		return { payload: created, status: HTTPCode.CREATED };
 	}

@@ -35,12 +35,7 @@ const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 				return;
 			}
 
-			const meetingData = {
-				...data,
-				ownerId: user.id,
-			};
-
-			await dispatch(meetingActions.createMeeting({ data: meetingData }));
+			await dispatch(meetingActions.createMeeting({ data }));
 			onClose();
 		},
 		[dispatch, onClose, user],
@@ -66,7 +61,7 @@ const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 						errors={errors}
 						hasVisuallyHiddenLabel={true}
 						label="Meeting invite link"
-						name="host"
+						name="meetingId"
 						placeholder="Meeting invite link"
 						type="text"
 					/>

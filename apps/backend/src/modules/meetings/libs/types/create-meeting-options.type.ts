@@ -4,6 +4,8 @@ import { type MeetingCreateRequestDto } from "./types.js";
 
 type CreateMeetingOptions = APIHandlerOptions<{
 	body: MeetingCreateRequestDto;
-}>;
+}> & {
+	user: { id: string };
+};
 
 export { type CreateMeetingOptions };

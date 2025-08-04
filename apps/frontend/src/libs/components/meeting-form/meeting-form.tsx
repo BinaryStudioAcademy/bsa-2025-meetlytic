@@ -76,7 +76,7 @@ const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 						errors={errors}
 						hasVisuallyHiddenLabel={true}
 						label="Meeting password"
-						name="instanceId"
+						name="meetingPassword"
 						placeholder="Meeting password (optional)"
 						type="text"
 					/>

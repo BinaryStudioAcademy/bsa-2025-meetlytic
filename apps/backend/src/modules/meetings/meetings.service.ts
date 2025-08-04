@@ -52,7 +52,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 	): Promise<MeetingResponseDto> {
 		const meeting = MeetingEntity.initializeNew({
 			host: payload.host,
-			instanceId: payload.instanceId ?? null,
+			instanceId: null,
 			meetingId: payload.meetingId,
 			meetingPassword: payload.meetingPassword ?? null,
 			ownerId: (payload as MeetingCreateRequestDto & { ownerId: number })

@@ -55,4 +55,5 @@ export {
 	UsersApiPath,
 	userSignInValidationSchema,
 	userSignUpValidationSchema,
+	UserValidationRule,
 } from "./modules/users/users.js";

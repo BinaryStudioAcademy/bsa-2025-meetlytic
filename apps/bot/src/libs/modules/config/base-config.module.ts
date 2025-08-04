@@ -44,6 +44,25 @@ class BaseConfig implements Config {
 					format: String,
 				},
 			},
+			ZOOM: {
+				BOT_NAME: {
+					default: "Meetlytic Bot",
+					doc: "Name of the bot in the Zoom meeting",
+					env: "BOT_NAME",
+					format: String,
+				},
+				MEETING_ID: {
+					default: null,
+					doc: "meeting ID",
+					env: "MEETING_ID",
+					format: String,
+				},
+				MEETING_PASSWORD: {
+					default: "",
+					doc: "Zoom meeting password",
+					env: "MEETING_PASSWORD",
+				},
+			},
 		});
 	}
 

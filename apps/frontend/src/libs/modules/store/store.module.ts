@@ -42,7 +42,6 @@ const resettableRootReducer = (
 
 const rootReducer = combineReducers({
 	auth: authReducer,
-	users: usersReducer,
 });
 
 const resettableRootReducer = (

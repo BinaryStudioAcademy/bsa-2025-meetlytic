@@ -8,7 +8,6 @@ import {
 } from "~/libs/constants/constants.js";
 import { ZoomBotMessages, ZoomUILabel } from "~/libs/enums/enums.js";
 import { delay } from "~/libs/helpers/helpers.js";
-import {} from "~/libs/modules/config/base-config.module.js";
 import { type BaseConfig, type Logger } from "~/libs/types/types.js";
 
 class ZoomBot {
@@ -87,7 +86,7 @@ class ZoomBot {
 		}
 
 		try {
-			await this.clickHelper(ZoomUILabel.ACCEPT_COOKIES, TIMEOUTS.TEN_SECONDS);
+			await this.clickHelper(ZoomUILabel.ACCEPT_COOKIES, TIMEOUTS.FIVE_SECONDS);
 			this.logger.info(ZoomBotMessages.COOKIES_ACCEPTED);
 		} catch (error) {
 			this.logger.error(
@@ -97,7 +96,7 @@ class ZoomBot {
 
 		try {
 			await this.page.waitForSelector(ZoomUILabel.ACCEPT_TERMS, {
-				timeout: TIMEOUTS.TEN_SECONDS,
+				timeout: TIMEOUTS.FIVE_SECONDS,
 				visible: true,
 			});
 
@@ -118,7 +117,7 @@ class ZoomBot {
 		}
 
 		await this.page.waitForSelector(ZoomUILabel.INPUT_NAME, {
-			timeout: TIMEOUTS.TEN_SECONDS,
+			timeout: TIMEOUTS.FIVE_SECONDS,
 		});
 		await this.page.type(ZoomUILabel.INPUT_NAME, this.config.ENV.ZOOM.BOT_NAME);
 
@@ -139,7 +138,7 @@ class ZoomBot {
 	private async leaveMeeting(): Promise<void> {
 		try {
 			await this.clickHelper(ZoomUILabel.LEAVE);
-			await delay(TIMEOUTS.TEN_SECONDS);
+			await delay(TIMEOUTS.FIVE_SECONDS);
 			await this.clickHelper(ZoomUILabel.CONFIRM_LEAVE);
 		} catch (error) {
 			this.logger.error(
@@ -184,7 +183,7 @@ class ZoomBot {
 			this.logger.info(
 				`"${this.config.ENV.ZOOM.BOT_NAME}" ${ZoomBotMessages.JOINING_MEETING}`,
 			);
-			await delay(TIMEOUTS.TEN_SECONDS);
+			await delay(TIMEOUTS.FIVE_SECONDS);
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
 			await this.monitorParticipants();
 		} catch (error) {

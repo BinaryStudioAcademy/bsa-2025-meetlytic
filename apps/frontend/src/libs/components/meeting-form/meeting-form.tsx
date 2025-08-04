@@ -19,7 +19,7 @@ type Properties = {
 	onClose: () => void;
 };
 
-const MeetingForm = ({ onClose }: Properties): React.JSX.Element => {
+const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 	const dispatch = useAppDispatch();
 	const user = useAppSelector((state) => state.auth.user);
 	const { control, errors, handleSubmit } = useAppForm<MeetingCreateRequestDto>(

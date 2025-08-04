@@ -21,7 +21,6 @@ import {
 } from "~/libs/types/types.js";
 import { userService } from "~/modules/users/users.js";
 
-import { SINGLE_ISSUE_COUNT } from "./constants/constants.js";
 import {
 	type ServerApplication,
 	type ServerApplicationApi,
@@ -81,7 +80,7 @@ class BaseServerApplication implements ServerApplication {
 							path: issue.path,
 						})),
 						errorType: ServerErrorType.VALIDATION,
-						message: `You have ${String(error.issues.length)} validation issue${error.issues.length === SINGLE_ISSUE_COUNT ? "" : "s"}.`,
+						message: error.message,
 					};
 
 					return reply.status(HTTPCode.UNPROCESSED_ENTITY).send(response);

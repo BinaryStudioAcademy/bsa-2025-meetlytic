@@ -1,3 +1,4 @@
+export { AppLoader } from "./app-loader/app-loader.js";
 export { App } from "./app/app.js";
 export { Avatar } from "./avatar/avatar.js";
 export { Button } from "./button/button.js";

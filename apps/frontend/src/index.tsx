@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import "~/assets/css/styles.css";
 import {
 	App,
+	AppLoader,
 	Layout,
 	ProtectedRoute,
 	RouterProvider,
@@ -19,36 +20,38 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 	<StrictMode>
 		<ToastProvider />
 		<StoreProvider store={store.instance}>
-			<RouterProvider
-				routes={[
-					{
-						element: <Auth />,
-						path: AppRoute.SIGN_IN,
-					},
-					{
-						element: <Auth />,
-						path: AppRoute.SIGN_UP,
-					},
-					{
-						children: [
-							{
-								element: <App />,
-								index: true,
-							},
-						],
-						element: (
-							<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
-								<Layout />
-							</ProtectedRoute>
-						),
-						path: AppRoute.ROOT,
-					},
-					{
-						element: <NotFoundPage />,
-						path: AppRoute.ANY,
-					},
-				]}
-			/>
+			<AppLoader>
+				<RouterProvider
+					routes={[
+						{
+							element: <Auth />,
+							path: AppRoute.SIGN_IN,
+						},
+						{
+							element: <Auth />,
+							path: AppRoute.SIGN_UP,
+						},
+						{
+							children: [
+								{
+									element: <App />,
+									index: true,
+								},
+							],
+							element: (
+								<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
+									<Layout />
+								</ProtectedRoute>
+							),
+							path: AppRoute.ROOT,
+						},
+						{
+							element: <NotFoundPage />,
+							path: AppRoute.ANY,
+						},
+					]}
+				/>
+			</AppLoader>
 		</StoreProvider>
 	</StrictMode>,
 );

@@ -4,6 +4,7 @@ import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
 import {
 	type MeetingCreateRequestDto,
+	type MeetingGetAllResponseDto,
 	type MeetingResponseDto,
 } from "~/modules/meeting/meeting.js";
 
@@ -34,6 +35,19 @@ class MeetingApi extends BaseHTTPApi {
 		);
 
 		return await response.json<MeetingResponseDto>();
+	}
+
+	public async getAll(): Promise<MeetingGetAllResponseDto> {
+		const response = await this.load(
+			this.getFullEndpoint(MeetingsApiPath.ROOT, {}),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "GET",
+			},
+		);
+
+		return await response.json<MeetingGetAllResponseDto>();
 	}
 }
 

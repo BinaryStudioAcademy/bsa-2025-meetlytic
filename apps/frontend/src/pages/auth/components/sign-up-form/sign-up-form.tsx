@@ -1,5 +1,9 @@
 import { Button, Input, Link } from "~/libs/components/components.js";
-import { AppRoute, ButtonVariant } from "~/libs/enums/enums.js";
+import {
+	AppRoute,
+	ButtonVariant,
+	UserValidationRule,
+} from "~/libs/enums/enums.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
 	type UserSignUpRequestDto,
@@ -62,6 +66,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					wrapperClassName={styles["input-wrapper"]}
 				/>
 				<Input
+					attributes={{ maxLength: UserValidationRule.PASSWORD_MAXIMUM_LENGTH }}
 					className={styles["input"] as string}
 					control={control}
 					errors={errors}
@@ -72,6 +77,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					wrapperClassName={styles["input-wrapper"]}
 				/>
 				<Input
+					attributes={{ maxLength: UserValidationRule.PASSWORD_MAXIMUM_LENGTH }}
 					className={styles["input"]}
 					control={control}
 					errors={errors}

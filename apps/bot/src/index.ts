@@ -3,7 +3,7 @@ import { openAI } from "~/libs/modules/open-ai/open-ai.js";
 import { zoomBot } from "~/libs/modules/zoom/zoom-bot.js";
 
 const init = async (): Promise<void> => {
-	//await openAI.transcribe("Dummy path");
+	await openAI.transcribe("Dummy path");
 
 	if (config.ENV.ZOOM.MEETING_ID) {
 		await zoomBot.run();

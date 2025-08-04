@@ -13,10 +13,11 @@
 	},
 	"dependencies": {
 		"@meetlytic/shared": "*",
-		"@meetlytic/shared-node": "*",
 		"convict": "6.2.4",
 		"dotenv": "17.2.1",
 		"openai": "5.11.0",
+		"pino": "9.7.0",
+		"pino-pretty": "13.1.1",
 		"puppeteer": "24.15.0"
 	},
 	"devDependencies": {

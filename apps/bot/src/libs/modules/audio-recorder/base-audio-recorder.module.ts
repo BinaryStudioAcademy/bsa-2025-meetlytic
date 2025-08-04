@@ -2,9 +2,12 @@ import { spawn } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 
-import { type AudioRecorderOptions } from "./libs/types/types.js";
+import {
+	type AudioRecorder,
+	type AudioRecorderOptions,
+} from "./libs/types/types.js";
 
-class BaseAudioRecorder {
+class BaseAudioRecorder implements AudioRecorder {
 	private chunkDuration: number;
 	private ffmpegPath: string;
 	private isRecording = false;

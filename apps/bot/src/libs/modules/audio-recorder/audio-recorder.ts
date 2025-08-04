@@ -12,3 +12,4 @@ const audioRecorder = new BaseAudioRecorder({
 });
 
 export { audioRecorder };
+export { type AudioRecorder } from "./libs/types/types.js";

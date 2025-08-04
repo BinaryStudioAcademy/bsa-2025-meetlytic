@@ -35,7 +35,11 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 							{
 								children: [
 									{
-										element: <RootPage />,
+										element: (
+											<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
+												<RootPage />
+											</ProtectedRoute>
+										),
 										index: true,
 									},
 								],

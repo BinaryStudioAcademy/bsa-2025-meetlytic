@@ -1,2 +1,6 @@
 export { CloudFormationError } from "./cloud-formation.exception.js";
-export { AuthError, ValidationError } from "@meetlytic/shared";
+export {
+	AuthError,
+	EmailConflictError,
+	ValidationError,
+} from "@meetlytic/shared";

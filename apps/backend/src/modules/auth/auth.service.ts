@@ -1,4 +1,4 @@
-import { AuthError } from "~/libs/exceptions/exceptions.js";
+import { AuthError, EmailConflictError } from "~/libs/exceptions/exceptions.js";
 import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
 import { jwt } from "~/libs/modules/token/token.js";
 import { type UserService } from "~/modules/users/user.service.js";
@@ -48,6 +48,14 @@ class AuthService {
 	public async signUp(
 		userRequestDto: UserSignUpRequestDto,
 	): Promise<AuthResponseDto> {
+		const userWithSameEmail = await this.userService.findByEmail(
+			userRequestDto.email,
+		);
+
+		if (userWithSameEmail) {
+			throw new EmailConflictError();
+		}
+
 		const user = await this.userService.create(userRequestDto);
 
 		const token = await jwt.sign({ userId: user.id });

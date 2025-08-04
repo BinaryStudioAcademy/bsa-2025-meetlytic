@@ -7,6 +7,7 @@ export {
 } from "./libs/enums/enums.js";
 export {
 	AuthError,
+	EmailConflictError,
 	HTTPError,
 	MeetingError,
 	ValidationError,

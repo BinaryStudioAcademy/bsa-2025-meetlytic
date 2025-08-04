@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
-
 import { Loader } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
-import { useAppDispatch, useAppSelector } from "~/libs/hooks/hooks.js";
+import {
+	useAppDispatch,
+	useAppSelector,
+	useEffect,
+	useState,
+} from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 
 type Properties = {
 	children: React.ReactNode;
 };
 
-const AppLoader: React.FC<Properties> = ({ children }) => {
+const AppLoader: React.FC<Properties> = ({ children }: Properties) => {
 	const dispatch = useAppDispatch();
 	const dataStatus = useAppSelector((state) => state.auth.dataStatus);
 	const [initialized, setInitialized] = useState(false);

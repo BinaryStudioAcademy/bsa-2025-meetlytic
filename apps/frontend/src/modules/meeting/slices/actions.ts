@@ -13,39 +13,20 @@ const createMeeting = createAsyncThunk<
 	MeetingResponseDto,
 	{ data: MeetingCreateRequestDto },
 	AsyncThunkConfig
->(
-	`${sliceName}/create-meeting`,
-	async ({ data }, { extra, rejectWithValue }) => {
-		const { meetingApi } = extra;
+>(`${sliceName}/create-meeting`, async ({ data }, { extra }) => {
+	const { meetingApi } = extra;
 
-		try {
-			const meeting = await meetingApi.create(data);
-
-			return meeting;
-		} catch (error: unknown) {
-			return rejectWithValue({
-				message: error instanceof Error ? error.message : String(error),
-			});
-		}
-	},
-);
+	return await meetingApi.create(data);
+});
 
 const getAllMeetings = createAsyncThunk<
 	MeetingGetAllResponseDto,
 	undefined,
 	AsyncThunkConfig
->(`${sliceName}/get-all-meetings`, async (_, { extra, rejectWithValue }) => {
+>(`${sliceName}/get-all-meetings`, async (_, { extra }) => {
 	const { meetingApi } = extra;
 
-	try {
-		const meetings = await meetingApi.getAll();
-
-		return meetings;
-	} catch (error: unknown) {
-		return rejectWithValue({
-			message: error instanceof Error ? error.message : String(error),
-		});
-	}
+	return await meetingApi.getAll();
 });
 
 export { createMeeting, getAllMeetings };

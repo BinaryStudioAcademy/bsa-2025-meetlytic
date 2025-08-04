@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+import { type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
-	type AsyncThunkConfig,
 	type MeetingCreateRequestDto,
 	type MeetingResponseDto,
-} from "~/libs/types/types.js";
+} from "~/modules/meeting/meeting.js";
 
 import { name as sliceName } from "./meeting.slice.js";
 

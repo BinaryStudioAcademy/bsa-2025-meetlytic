@@ -7,9 +7,9 @@ import {
 	useAppSelector,
 	useCallback,
 } from "~/libs/hooks/hooks.js";
-import { type MeetingCreateRequestDto } from "~/libs/types/types.js";
 import {
 	actions as meetingActions,
+	type MeetingCreateRequestDto,
 	meetingCreateValidationSchema,
 } from "~/modules/meeting/meeting.js";
 

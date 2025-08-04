@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
-import { type MeetingResponseDto, type ValueOf } from "~/libs/types/types.js";
+import { type ValueOf } from "~/libs/types/types.js";
+import { type MeetingResponseDto } from "~/modules/meeting/meeting.js";
 
 import { createMeeting } from "./actions.js";
 

@@ -8,6 +8,7 @@ import {
 } from "~/libs/constants/constants.js";
 import { ZoomBotMessages, ZoomUILabel } from "~/libs/enums/enums.js";
 import { delay } from "~/libs/helpers/helpers.js";
+import { audioRecorder } from "~/libs/modules/audio-recorder/audio-recorder.js";
 import { type BaseConfig, type Logger } from "~/libs/types/types.js";
 
 class ZoomBot {
@@ -156,6 +157,8 @@ class ZoomBot {
 
 			if (count <= MINIMUM_PARTICIPANTS_THRESHOLD) {
 				this.logger.info(ZoomBotMessages.ONLY_ONE_PARTICIPANT_DETECTED);
+				audioRecorder.stop();
+				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
 				await this.leaveMeeting();
 				this.shouldMonitor = false;
 			}
@@ -185,6 +188,9 @@ class ZoomBot {
 			);
 			await delay(TIMEOUTS.FIVE_SECONDS);
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
+			audioRecorder.start();
+			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
+
 			await this.monitorParticipants();
 		} catch (error) {
 			this.logger.error(

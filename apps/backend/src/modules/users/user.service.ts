@@ -65,7 +65,22 @@ class UserService implements Service {
 	public async findByEmail(email: string): Promise<null | UserResponseDto> {
 		const user = await this.userRepository.findByEmail(email);
 
-		return user ? user.toObject() : null;
+		if (!user) {
+			return null;
+		}
+
+		const userObject = user.toObject();
+		const details = await this.userDetailsRepository.findByUserId(
+			userObject.id,
+		);
+
+		const detailsObject = details?.toObject();
+
+		return {
+			...userObject,
+			firstName: detailsObject?.firstName ?? "",
+			lastName: detailsObject?.lastName ?? "",
+		};
 	}
 
 	public async getCredentials(id: number): Promise<null | UserCredentials> {
@@ -74,8 +89,48 @@ class UserService implements Service {
 		return credentials ?? null;
 	}
 
-	public update(): ReturnType<Service["update"]> {
-		return Promise.resolve(null);
+	public async update(
+		userId: number,
+		payload: Pick<UserResponseDto, "email" | "firstName" | "lastName">,
+	): Promise<Pick<UserResponseDto, "email" | "firstName" | "lastName">> {
+		const user = await this.userRepository.find(userId);
+
+		if (!user) {
+			throw new Error("User not found");
+		}
+
+		if (payload.email !== user.toObject().email) {
+			const userWithEmail = await this.userRepository.findByEmail(
+				payload.email,
+			);
+
+			if (userWithEmail && userWithEmail.toObject().id !== userId) {
+				throw new Error("Email already in use");
+			}
+		}
+
+		await this.userRepository.update(userId, {
+			email: payload.email,
+		});
+
+		const userDetails = await this.userDetailsRepository.findByUserId(userId);
+
+		if (userDetails) {
+			await this.userDetailsRepository.update(userDetails.toObject().id, {
+				firstName: payload.firstName,
+				lastName: payload.lastName,
+			});
+		}
+
+		const updatedUser = await this.userRepository.find(userId);
+		const updatedDetails =
+			await this.userDetailsRepository.findByUserId(userId);
+
+		return {
+			email: updatedUser?.toObject().email ?? payload.email,
+			firstName: updatedDetails?.toObject().firstName ?? "",
+			lastName: updatedDetails?.toObject().lastName ?? "",
+		};
 	}
 }
 

@@ -46,6 +46,15 @@ class UserDetailsRepository implements Repository {
 		return userDetails.map((detail) => UserDetailsEntity.initialize(detail));
 	}
 
+	public async findByUserId(userId: number): Promise<null | UserDetailsEntity> {
+		const userDetails = await this.userDetailsModel
+			.query()
+			.where("userId", userId)
+			.first();
+
+		return userDetails ? UserDetailsEntity.initialize(userDetails) : null;
+	}
+
 	public async update(
 		id: number,
 		payload: Partial<Record<string, unknown>>,

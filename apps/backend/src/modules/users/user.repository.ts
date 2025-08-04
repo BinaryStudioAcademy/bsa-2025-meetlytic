@@ -60,8 +60,16 @@ class UserRepository implements Repository {
 		return credentials ?? null;
 	}
 
-	public update(): ReturnType<Repository["update"]> {
-		return Promise.resolve(null);
+	public async update(
+		id: number,
+		payload: Partial<{ email: string }>,
+	): Promise<UserEntity> {
+		const updatedUser = await this.userModel
+			.query()
+			.patchAndFetchById(id, payload)
+			.execute();
+
+		return UserEntity.initialize(updatedUser);
 	}
 }
 

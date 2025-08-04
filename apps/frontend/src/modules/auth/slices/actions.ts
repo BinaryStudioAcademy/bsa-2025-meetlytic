@@ -1,5 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+import { NotificationMessage } from "~/libs/enums/enums.js";
+import { extractErrorMessage } from "~/libs/helpers/helpers.js";
 import { storage, StorageKey } from "~/libs/modules/storage/storage.js";
 import { type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
@@ -23,7 +25,12 @@ const signIn = createAsyncThunk<
 
 		return user;
 	} catch (error: unknown) {
-		return rejectWithValue(error);
+		const message = extractErrorMessage(
+			error,
+			NotificationMessage.SIGN_IN_FAILED,
+		);
+
+		return rejectWithValue(message);
 	}
 });
 
@@ -63,4 +70,14 @@ const getAuthenticatedUser = createAsyncThunk<
 	}
 });
 
-export { getAuthenticatedUser, signIn, signUp };
+const logout = createAsyncThunk<null, undefined, AsyncThunkConfig>(
+	`${sliceName}/logout`,
+	async (_, { extra }) => {
+		const { storage } = extra;
+		await storage.drop(StorageKey.TOKEN);
+
+		return null;
+	},
+);
+
+export { getAuthenticatedUser, logout, signIn, signUp };

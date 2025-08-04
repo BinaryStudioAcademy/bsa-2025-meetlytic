@@ -2,6 +2,7 @@ export {
 	APIPath,
 	AppEnvironment,
 	ContentType,
+	ExceptionMessage,
 	ServerErrorType,
 } from "./libs/enums/enums.js";
 export {
@@ -47,7 +48,6 @@ export {
 } from "./modules/meetings/meetings.js";
 export {
 	type AuthResponseDto,
-	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignInRequestDto,

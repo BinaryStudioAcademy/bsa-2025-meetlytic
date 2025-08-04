@@ -1,4 +1,5 @@
 import { config } from "~/libs/modules/config/config.js";
+import { openAI } from "~/libs/modules/open-ai/open-ai.js";
 import { zoomBot } from "~/libs/modules/zoom/zoom-bot.js";
 
 const init = async (): Promise<void> => {

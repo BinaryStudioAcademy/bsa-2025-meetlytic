@@ -5,6 +5,10 @@ type EnvironmentSchema = {
 	APP: {
 		ENVIRONMENT: ValueOf<typeof AppEnvironment>;
 	};
+	OPEN_AI: {
+		KEY: string;
+		TRANSCRIPTION_MODEL: string;
+	};
 	ZOOM: {
 		BOT_NAME: string;
 		MEETING_ID: string;

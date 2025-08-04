@@ -30,6 +30,20 @@ class BaseConfig implements Config {
 					format: Object.values(AppEnvironment),
 				},
 			},
+			OPEN_AI: {
+				KEY: {
+					default: null,
+					doc: "OpenAI API key",
+					env: "OPEN_AI_KEY",
+					format: String,
+				},
+				TRANSCRIPTION_MODEL: {
+					default: null,
+					doc: "OpenAI transcription model",
+					env: "TRANSCRIPTION_MODEL",
+					format: String,
+				},
+			},
 			ZOOM: {
 				BOT_NAME: {
 					default: "Meetlytic Bot",
@@ -47,7 +61,6 @@ class BaseConfig implements Config {
 					default: null,
 					doc: "Zoom meeting password",
 					env: "MEETING_PASSWORD",
-					format: String,
 				},
 			},
 		});

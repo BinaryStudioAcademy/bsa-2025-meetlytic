@@ -15,4 +15,5 @@ export {
 	ContentType,
 	MeetingHost,
 	ServerErrorType,
+	UserValidationRule,
 } from "@meetlytic/shared";

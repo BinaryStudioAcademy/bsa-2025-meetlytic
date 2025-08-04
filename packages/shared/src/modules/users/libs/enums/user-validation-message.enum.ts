@@ -10,7 +10,7 @@ const UserValidationMessage = {
 	LAST_NAME_MIN_LENGTH: `Last name must be at least ${String(UserValidationRule.LAST_NAME_MINIMUM_LENGTH)} character long`,
 	LAST_NAME_REQUIRE: "Last name is required",
 	PASSWORD_MATCH: "Passwords do not match",
-	PASSWORD_REQUIRE: "Password is required",
+	PASSWORD_RANGE: "Password must be 8-64 characters long",
 } as const;
 
 export { UserValidationMessage };

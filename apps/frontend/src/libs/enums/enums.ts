@@ -13,4 +13,5 @@ export {
 	AppEnvironment,
 	ContentType,
 	ServerErrorType,
+	UserValidationRule,
 } from "@meetlytic/shared";

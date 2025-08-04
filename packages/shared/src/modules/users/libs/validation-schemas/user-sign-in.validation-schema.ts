@@ -22,7 +22,10 @@ const userSignIn = z
 			.string()
 			.trim()
 			.min(UserValidationRule.PASSWORD_MINIMUM_LENGTH, {
-				message: UserValidationMessage.PASSWORD_REQUIRE,
+				message: UserValidationMessage.PASSWORD_RANGE,
+			})
+			.max(UserValidationRule.PASSWORD_MAXIMUM_LENGTH, {
+				message: UserValidationMessage.PASSWORD_RANGE,
 			}),
 	})
 	.required();

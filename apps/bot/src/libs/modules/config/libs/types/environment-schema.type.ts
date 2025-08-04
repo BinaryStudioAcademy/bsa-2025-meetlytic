@@ -10,6 +10,10 @@ type EnvironmentSchema = {
 		AUDIO_OUTPUT_DIR: string;
 		FFMPEG_PATH: string;
 	};
+	OPEN_AI: {
+		KEY: string;
+		TRANSCRIPTION_MODEL: string;
+	};
 	ZOOM: {
 		BOT_NAME: string;
 		MEETING_ID: string;

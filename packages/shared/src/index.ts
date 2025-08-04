@@ -48,7 +48,6 @@ export {
 } from "./modules/meetings/meetings.js";
 export {
 	type AuthResponseDto,
-	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignInRequestDto,
@@ -56,4 +55,5 @@ export {
 	UsersApiPath,
 	userSignInValidationSchema,
 	userSignUpValidationSchema,
+	UserValidationRule,
 } from "./modules/users/users.js";

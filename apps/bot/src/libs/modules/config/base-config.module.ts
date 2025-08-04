@@ -48,30 +48,24 @@ class BaseConfig implements Config {
 	}
 
 	public getLaunchOptions(): LaunchOptions {
-		const isProduction = this.ENV.APP.ENVIRONMENT === AppEnvironment.PRODUCTION;
-		const isDevelopment =
-			this.ENV.APP.ENVIRONMENT === AppEnvironment.DEVELOPMENT;
+		const environment = this.ENV.APP.ENVIRONMENT;
+		const isProduction = environment === AppEnvironment.PRODUCTION;
+		const isDevelopment = environment === AppEnvironment.DEVELOPMENT;
+
+		const sharedArguments = [
+			"--use-fake-ui-for-media-stream",
+			"--use-fake-device-for-media-stream",
+			"--no-sandbox",
+			"--disable-setuid-sandbox",
+		];
 
 		return {
+			args: sharedArguments,
 			enableExtensions: true,
 			headless: isProduction,
 			...(isDevelopment && {
-				args: [
-					"--use-fake-ui-for-media-stream",
-					"--use-fake-device-for-media-stream",
-					"--no-sandbox",
-					"--disable-setuid-sandbox",
-				],
 				defaultViewport: { height: 700, width: 1200 },
 				headless: false,
-			}),
-			...(isProduction && {
-				args: [
-					"--use-fake-ui-for-media-stream",
-					"--use-fake-device-for-media-stream",
-					"--no-sandbox",
-					"--disable-setuid-sandbox",
-				],
 			}),
 		};
 	}

@@ -14,6 +14,7 @@ import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { jwt } from "~/libs/modules/token/token.js";
 import { authorizationPlugin } from "~/libs/plugins/authorization/authorization.plugin.js";
+import { fpAvatarPlugin } from "~/libs/plugins/avatar/avatar.plugin.js";
 import {
 	type ServerCommonErrorResponse,
 	type ServerValidationErrorResponse,
@@ -237,6 +238,12 @@ class BaseServerApplication implements ServerApplication {
 				jwt,
 				logger: this.logger,
 				userService,
+			},
+		});
+
+		await this.app.register(fpAvatarPlugin, {
+			services: {
+				config: this.config,
 			},
 		});
 	}

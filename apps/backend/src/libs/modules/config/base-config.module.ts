@@ -63,6 +63,12 @@ class BaseConfig implements Config {
 					env: "AMI_ID",
 					format: String,
 				},
+				AWS_S3_AVATAR_BUCKET: {
+					default: null,
+					doc: "AWS S3 Avatar Bucket",
+					env: "AWS_S3_AVATAR_BUCKET",
+					format: String,
+				},
 				REGION: {
 					default: null,
 					doc: "AWS Region",

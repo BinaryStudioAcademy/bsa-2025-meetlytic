@@ -199,7 +199,6 @@ class ZoomBot {
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
 			this.audioRecorder.start();
 			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
-
 			await this.monitorParticipants();
 		} catch (error) {
 			this.logger.error(

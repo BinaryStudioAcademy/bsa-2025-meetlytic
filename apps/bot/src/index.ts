@@ -3,7 +3,9 @@ import { openAI } from "~/libs/modules/open-ai/open-ai.js";
 import { zoomBot } from "~/libs/modules/zoom/zoom-bot.js";
 
 const init = async (): Promise<void> => {
-	await openAI.transcribe("Dummy path");
+	if (!config.ENV.OPEN_AI.KEY) {
+		await openAI.transcribe("audio.mp3");
+	}
 
 	if (config.ENV.ZOOM.MEETING_ID) {
 		await zoomBot.run();

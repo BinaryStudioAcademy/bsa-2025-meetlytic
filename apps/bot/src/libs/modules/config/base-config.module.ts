@@ -77,7 +77,7 @@ class BaseConfig implements Config {
 					format: String,
 				},
 				MEETING_PASSWORD: {
-					default: null,
+					default: "",
 					doc: "Zoom meeting password",
 					env: "MEETING_PASSWORD",
 				},

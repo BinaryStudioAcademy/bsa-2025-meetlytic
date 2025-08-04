@@ -2,9 +2,11 @@ import { Button, Input, Link } from "~/libs/components/components.js";
 import {
 	AppRoute,
 	ButtonVariant,
+	InputPasswordTypes,
 	UserValidationRule,
 } from "~/libs/enums/enums.js";
-import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
+import { useAppForm, useCallback, useState } from "~/libs/hooks/hooks.js";
+import { type InputPassword } from "~/libs/types/types.js";
 import {
 	type UserSignUpRequestDto,
 	userSignUpValidationSchema,
@@ -19,6 +21,14 @@ type Properties = {
 };
 
 const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
+	const [inputType, setInputType] = useState<{
+		confirm: InputPassword;
+		password: InputPassword;
+	}>({
+		confirm: InputPasswordTypes.PASSWORD,
+		password: InputPasswordTypes.PASSWORD,
+	});
+
 	const { control, errors, handleSubmit } = useAppForm<UserSignUpRequestDto>({
 		defaultValues: DEFAULT_SIGN_UP_PAYLOAD,
 		validationSchema: userSignUpValidationSchema,
@@ -30,6 +40,24 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 		},
 		[handleSubmit, onSubmit],
 	);
+
+	const handleToggleView = useCallback((field: keyof typeof inputType) => {
+		setInputType((previous) => ({
+			...previous,
+			[field]:
+				previous[field] === InputPasswordTypes.PASSWORD
+					? InputPasswordTypes.TEXT
+					: InputPasswordTypes.PASSWORD,
+		}));
+	}, []);
+
+	const handleTogglePasswordView = useCallback(() => {
+		handleToggleView("password");
+	}, [handleToggleView]);
+
+	const handleToggleConfirmPasswordView = useCallback(() => {
+		handleToggleView("confirm");
+	}, [handleToggleView]);
 
 	return (
 		<AuthLayout>
@@ -70,10 +98,17 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					className={styles["input"] as string}
 					control={control}
 					errors={errors}
+					iconName={
+						inputType.password === InputPasswordTypes.PASSWORD
+							? "showPassword"
+							: "hidePassword"
+					}
+					iconPosition="right"
 					label="Password"
 					name="password"
+					onClickIcon={handleTogglePasswordView}
 					placeholder="*************"
-					type="text"
+					type={inputType.password}
 					wrapperClassName={styles["input-wrapper"]}
 				/>
 				<Input
@@ -81,10 +116,17 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					className={styles["input"]}
 					control={control}
 					errors={errors}
+					iconName={
+						inputType.confirm === InputPasswordTypes.PASSWORD
+							? "showPassword"
+							: "hidePassword"
+					}
+					iconPosition="right"
 					label="Confirm Password"
 					name="confirmPassword"
+					onClickIcon={handleToggleConfirmPasswordView}
 					placeholder="*************"
-					type="text"
+					type={inputType.confirm}
 					wrapperClassName={styles["input-wrapper"]}
 				/>
 				<Button

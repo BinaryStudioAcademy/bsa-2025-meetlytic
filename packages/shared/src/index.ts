@@ -7,7 +7,6 @@ export {
 } from "./libs/enums/enums.js";
 export {
 	AuthError,
-	EmailConflictError,
 	HTTPError,
 	MeetingError,
 	ValidationError,
@@ -30,7 +29,7 @@ export {
 	type ValidationSchema,
 	type ValueOf,
 } from "./libs/types/types.js";
-export { AuthApiPath } from "./modules/auth/auth.js";
+export { AuthApiPath, AuthStatusMessage } from "./modules/auth/auth.js";
 export {
 	MeetingErrorMessage,
 	MeetingHost,

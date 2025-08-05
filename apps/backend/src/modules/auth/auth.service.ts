@@ -1,5 +1,6 @@
-import { AuthError, EmailConflictError } from "~/libs/exceptions/exceptions.js";
+import { AuthError } from "~/libs/exceptions/exceptions.js";
 import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
+import { HTTPCode } from "~/libs/modules/http/http.js";
 import { jwt } from "~/libs/modules/token/token.js";
 import { type UserService } from "~/modules/users/user.service.js";
 import {
@@ -7,6 +8,8 @@ import {
 	type UserSignInRequestDto,
 	type UserSignUpRequestDto,
 } from "~/modules/users/users.js";
+
+import { AuthStatusMessage } from "./libs/enums/enums.js";
 
 class AuthService {
 	private userService: UserService;
@@ -55,7 +58,10 @@ class AuthService {
 		const hasUserWithSameEmail = Boolean(userWithSameEmail);
 
 		if (hasUserWithSameEmail) {
-			throw new EmailConflictError();
+			throw new AuthError({
+				message: AuthStatusMessage.EMAIL_ALREADY_EXISTS,
+				status: HTTPCode.CONFLICT,
+			});
 		}
 
 		const user = await this.userService.create(userRequestDto);

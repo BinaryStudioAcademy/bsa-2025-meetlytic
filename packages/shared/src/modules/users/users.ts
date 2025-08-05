@@ -1,8 +1,4 @@
-export {
-	UsersApiPath,
-	UserStatusMessage,
-	UserValidationRule,
-} from "./libs/enums/enums.js";
+export { UsersApiPath, UserValidationRule } from "./libs/enums/enums.js";
 export {
 	type AuthResponseDto,
 	type UserGetAllResponseDto,

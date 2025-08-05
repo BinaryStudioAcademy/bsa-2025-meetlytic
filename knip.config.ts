@@ -2,7 +2,7 @@ import { type KnipConfig } from "knip";
 
 const config: KnipConfig = {
 	prettier: ["./prettier.config.js"],
-	stylelint: ["./stylelint.config.ts"],
+	stylelint: ["./stylelint.config.js"],
 	workspaces: {
 		".": {
 			entry: ["./dangerfile.ts"],
@@ -13,9 +13,7 @@ const config: KnipConfig = {
 		},
 		"apps/bot": {},
 		"apps/frontend": {},
-		"packages/shared": {
-			includeEntryExports: true,
-		},
+		"packages/shared": {},
 	},
 };
 

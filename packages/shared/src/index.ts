@@ -57,4 +57,5 @@ export {
 	userSignInValidationSchema,
 	userSignUpValidationSchema,
 	userUpdateValidationSchema,
+	UserValidationRule,
 } from "./modules/users/users.js";

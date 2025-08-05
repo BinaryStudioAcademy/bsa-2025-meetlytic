@@ -5,6 +5,10 @@ type EnvironmentSchema = {
 	APP: {
 		ENVIRONMENT: ValueOf<typeof AppEnvironment>;
 	};
+	OPEN_AI: {
+		KEY: string;
+		TRANSCRIPTION_MODEL: string;
+	};
 };
 
 export { type EnvironmentSchema };

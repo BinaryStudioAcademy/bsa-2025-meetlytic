@@ -4,7 +4,6 @@ import { createRoot } from "react-dom/client";
 import "~/assets/css/styles.css";
 import {
 	App,
-	Layout,
 	ProtectedRoute,
 	RouterProvider,
 	StoreProvider,
@@ -34,20 +33,15 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 					{
 						children: [
 							{
-								children: [
-									{
-										element: (
-											<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
-												<Meetings />
-											</ProtectedRoute>
-										),
-										index: true,
-									},
-								],
-								element: <Layout />,
+								element: <Meetings />,
+								path: AppRoute.MEETINGS,
 							},
 						],
-						element: <App />,
+						element: (
+							<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
+								<App />
+							</ProtectedRoute>
+						),
 						path: AppRoute.ROOT,
 					},
 					{

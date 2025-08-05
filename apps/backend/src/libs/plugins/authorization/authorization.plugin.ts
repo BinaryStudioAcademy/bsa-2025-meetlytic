@@ -35,6 +35,10 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 
 			const apiPrefixRegex = /^\/api\/v\d+(?:\/|$)/;
 
+			if (!apiPrefixRegex.test(url)) {
+				return;
+			}
+
 			const endpointToCompare = url.replace(apiPrefixRegex, "/");
 
 			const isWhiteRoute = routesWhiteList.some((whiteRoute) => {

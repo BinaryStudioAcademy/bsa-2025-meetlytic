@@ -15,6 +15,8 @@ import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFoundPage } from "~/pages/not-found/not-found.js";
 
+import { Meetings } from "./pages/meetings/meetings.js";
+
 createRoot(document.querySelector("#root") as HTMLElement).render(
 	<StrictMode>
 		<ToastProvider />
@@ -32,8 +34,8 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 					{
 						children: [
 							{
+								children: [{ element: <Meetings />, path: AppRoute.MEETINGS }],
 								element: <App />,
-								index: true,
 							},
 						],
 						element: (

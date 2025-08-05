@@ -46,7 +46,7 @@ const Auth: React.FC = () => {
 	};
 
 	if (dataStatus === DataStatus.FULFILLED && hasUser) {
-		return <Navigate replace to={AppRoute.ROOT} />;
+		return <Navigate replace to={AppRoute.MEETINGS} />;
 	}
 
 	return <>{getScreen(pathname)}</>;

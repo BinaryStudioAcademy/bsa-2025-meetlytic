@@ -29,14 +29,15 @@ const App: React.FC = () => {
 			<div>
 				<RouterOutlet />
 			</div>
-
-			<SearchInput
-				control={control}
-				errors={errors}
-				label="Search"
-				name="search"
-				onSearch={handleSearch}
-			/>
+			<div className="visually-hidden">
+				<SearchInput
+					control={control}
+					errors={errors}
+					label="Search"
+					name="search"
+					onSearch={handleSearch}
+				/>
+			</div>
 		</>
 	);
 };

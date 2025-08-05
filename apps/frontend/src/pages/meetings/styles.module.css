@@ -1,0 +1,38 @@
+.meetings {
+	display: flex;
+	flex-direction: column;
+}
+
+.meetings__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 26px;
+}
+
+.meetings__header {
+	display: flex;
+	gap: 18px;
+	margin-bottom: 50px;
+}
+
+.meetings__header-text {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	justify-content: center;
+}
+
+.meetings__header-name,
+.meetings__header-library {
+	font-family: var(--font-family);
+}
+
+.meetings__header-name {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.meetings__header-library {
+	font-size: 24px;
+	font-weight: 700;
+}

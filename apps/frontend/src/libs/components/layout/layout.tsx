@@ -3,6 +3,7 @@ import {
 	Navigation,
 	RouterOutlet,
 	Sidebar,
+	UserAvatarUploader,
 } from "~/libs/components/components.js";
 import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
 
@@ -23,6 +24,7 @@ const Layout: React.FC = () => {
 
 			<main className={styles["layout__main"]}>
 				<RouterOutlet />
+				<UserAvatarUploader />
 			</main>
 		</div>
 	);

@@ -52,7 +52,9 @@ class AuthService {
 			userRequestDto.email,
 		);
 
-		if (userWithSameEmail) {
+		const hasUserWithSameEmail = Boolean(userWithSameEmail);
+
+		if (hasUserWithSameEmail) {
 			throw new EmailConflictError();
 		}
 

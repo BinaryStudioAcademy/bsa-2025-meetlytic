@@ -2,7 +2,7 @@ import { Button, Input, Link } from "~/libs/components/components.js";
 import {
 	AppRoute,
 	ButtonVariant,
-	InputPasswordTypes,
+	InputPasswordType,
 	UserValidationRule,
 } from "~/libs/enums/enums.js";
 import { useAppForm, useCallback, useState } from "~/libs/hooks/hooks.js";
@@ -25,8 +25,8 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 		confirm: InputPassword;
 		password: InputPassword;
 	}>({
-		confirm: InputPasswordTypes.PASSWORD,
-		password: InputPasswordTypes.PASSWORD,
+		confirm: InputPasswordType.PASSWORD,
+		password: InputPasswordType.PASSWORD,
 	});
 
 	const { control, errors, handleSubmit } = useAppForm<UserSignUpRequestDto>({
@@ -45,9 +45,9 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 		setInputType((previous) => ({
 			...previous,
 			[field]:
-				previous[field] === InputPasswordTypes.PASSWORD
-					? InputPasswordTypes.TEXT
-					: InputPasswordTypes.PASSWORD,
+				previous[field] === InputPasswordType.PASSWORD
+					? InputPasswordType.TEXT
+					: InputPasswordType.PASSWORD,
 		}));
 	}, []);
 
@@ -58,6 +58,15 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 	const handleToggleConfirmPasswordView = useCallback(() => {
 		handleToggleView("confirm");
 	}, [handleToggleView]);
+
+	const handleChangeIconName = useCallback(
+		(inputType: InputPassword): "hidePassword" | "showPassword" => {
+			return inputType === InputPasswordType.PASSWORD
+				? "showPassword"
+				: "hidePassword";
+		},
+		[],
+	);
 
 	return (
 		<AuthLayout>
@@ -98,11 +107,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					className={styles["input"] as string}
 					control={control}
 					errors={errors}
-					iconName={
-						inputType.password === InputPasswordTypes.PASSWORD
-							? "showPassword"
-							: "hidePassword"
-					}
+					iconName={handleChangeIconName(inputType.password)}
 					iconPosition="right"
 					label="Password"
 					name="password"
@@ -116,11 +121,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					className={styles["input"]}
 					control={control}
 					errors={errors}
-					iconName={
-						inputType.confirm === InputPasswordTypes.PASSWORD
-							? "showPassword"
-							: "hidePassword"
-					}
+					iconName={handleChangeIconName(inputType.confirm)}
 					iconPosition="right"
 					label="Confirm Password"
 					name="confirmPassword"

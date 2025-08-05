@@ -1,6 +1,6 @@
-const InputPasswordTypes = {
+const InputPasswordType = {
 	PASSWORD: "password",
 	TEXT: "text",
 } as const;
 
-export { InputPasswordTypes };
+export { InputPasswordType };

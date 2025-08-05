@@ -21,7 +21,7 @@ class ZoomBot {
 	private logger: Logger;
 	private page: null | Page = null;
 	private shouldMonitor = true;
-
+  
 	public constructor(
 		config: BaseConfig,
 		logger: Logger,
@@ -45,7 +45,7 @@ class ZoomBot {
 				timeout,
 				visible: true,
 			});
-			await this.page.click(selector);
+		await this.page.click(selector);
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessages.FAILED_TO_CLICK_SELECTOR} "${selector}": ${error instanceof Error ? error.message : String(error)}`,

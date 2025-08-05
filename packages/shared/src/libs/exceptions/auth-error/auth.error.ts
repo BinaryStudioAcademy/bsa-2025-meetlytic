@@ -11,10 +11,12 @@ type Constructor = {
 
 class AuthError extends HTTPError {
 	public constructor({
+		cause,
 		message = AuthStatusMessage.INVALID_CREDENTIALS,
 		status = HTTPCode.UNAUTHORIZED,
 	}: Constructor = {}) {
 		super({
+			cause,
 			message,
 			status,
 		});

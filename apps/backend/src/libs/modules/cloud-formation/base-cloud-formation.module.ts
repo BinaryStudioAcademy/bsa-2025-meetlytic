@@ -65,7 +65,11 @@ class BaseCloudFormation implements CloudFormation {
 		return `${StackPrefix.MEETLYTIC}-${String(meetingId)}`;
 	}
 
-	public async create({ id, template }: CreateStack): Promise<string> {
+	public async create({
+		id,
+		meetingPassword = "",
+		template,
+	}: CreateStack): Promise<string> {
 		const stackName = this.getStackName(id);
 		this.logger.info(`Creating stack: ${stackName}`);
 
@@ -74,6 +78,11 @@ class BaseCloudFormation implements CloudFormation {
 				Capabilities: [Capability.NAMED_IAM],
 				Parameters: [
 					{ ParameterKey: ParameterKey.IMAGE_ID, ParameterValue: this.imageId },
+					{ ParameterKey: ParameterKey.MEETING_ID, ParameterValue: String(id) },
+					{
+						ParameterKey: ParameterKey.MEETING_PASSWORD,
+						ParameterValue: meetingPassword,
+					},
 				],
 				StackName: stackName,
 				TemplateBody: template,

@@ -17,7 +17,7 @@ const userUpdate = z
 				message: UserValidationMessage.EMAIL_REQUIRE,
 			})
 			.email({
-				message: UserValidationMessage.EMAIL_WRONG,
+				message: UserValidationMessage.EMAIL_INVALID,
 			}),
 		firstName: z
 			.string()

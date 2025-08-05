@@ -38,7 +38,7 @@ const Profile: React.FC = () => {
 	);
 
 	if (status === DataStatus.PENDING && !user) {
-		return <Loader isLoading={true} />;
+		return <Loader isLoading />;
 	}
 
 	if (!user) {

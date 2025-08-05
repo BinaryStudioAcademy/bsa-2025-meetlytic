@@ -1,5 +1,5 @@
 const RootPage: React.FC = () => {
-	return null;
+	return "Root";
 };
 
 export { RootPage };

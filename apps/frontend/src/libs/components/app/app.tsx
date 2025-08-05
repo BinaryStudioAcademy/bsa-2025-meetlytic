@@ -1,4 +1,8 @@
-import { Loader, SearchInput } from "~/libs/components/components.js";
+import {
+	Loader,
+	RouterOutlet,
+	SearchInput,
+} from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -9,11 +13,7 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 
-type Properties = {
-	children: React.ReactNode;
-};
-
-const App: React.FC<Properties> = ({ children }: Properties) => {
+const App: React.FC = () => {
 	const dispatch = useAppDispatch();
 
 	const { dataStatus } = useAppSelector(({ auth }) => ({
@@ -39,7 +39,9 @@ const App: React.FC<Properties> = ({ children }: Properties) => {
 		<>
 			<Loader isLoading={dataStatus === DataStatus.PENDING} withOverlay />
 
-			<div>{children}</div>
+			<div>
+				<RouterOutlet />
+			</div>
 
 			<SearchInput
 				control={control}

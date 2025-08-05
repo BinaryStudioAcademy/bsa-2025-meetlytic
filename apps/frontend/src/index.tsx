@@ -21,39 +21,41 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 	<StrictMode>
 		<ToastProvider />
 		<StoreProvider store={store.instance}>
-			<App>
-				<RouterProvider
-					routes={[
-						{
-							element: <Auth />,
-							path: AppRoute.SIGN_IN,
-						},
-						{
-							element: <Auth />,
-							path: AppRoute.SIGN_UP,
-						},
-						{
-							children: [
-								{
-									element: (
-										<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
-											<RootPage />
-										</ProtectedRoute>
-									),
-									index: true,
-								},
-							],
-
-							element: <Layout />,
-							path: AppRoute.ROOT,
-						},
-						{
-							element: <NotFoundPage />,
-							path: AppRoute.ANY,
-						},
-					]}
-				/>
-			</App>
+			<RouterProvider
+				routes={[
+					{
+						element: <Auth />,
+						path: AppRoute.SIGN_IN,
+					},
+					{
+						element: <Auth />,
+						path: AppRoute.SIGN_UP,
+					},
+					{
+						children: [
+							{
+								children: [
+									{
+										element: (
+											<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
+												<RootPage />
+											</ProtectedRoute>
+										),
+										index: true,
+									},
+								],
+								element: <Layout />,
+							},
+						],
+						element: <App />,
+						path: AppRoute.ROOT,
+					},
+					{
+						element: <NotFoundPage />,
+						path: AppRoute.ANY,
+					},
+				]}
+			/>
 		</StoreProvider>
 	</StrictMode>,
 );

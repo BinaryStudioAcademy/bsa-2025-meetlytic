@@ -80,7 +80,7 @@ class BaseCloudFormation implements CloudFormation {
 					{ ParameterKey: ParameterKey.IMAGE_ID, ParameterValue: this.imageId },
 					{ ParameterKey: ParameterKey.MEETING_ID, ParameterValue: String(id) },
 					{
-						ParameterKey: ParameterKey.ZOOM_PASSWORD,
+						ParameterKey: ParameterKey.MEETING_PASSWORD,
 						ParameterValue: meetingPassword,
 					},
 				],

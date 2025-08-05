@@ -2,6 +2,11 @@ import fastifyStatic from "@fastify/static";
 import swagger, { type StaticDocumentSpec } from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
+import {
+	serializerCompiler,
+	validatorCompiler,
+	type ZodTypeProvider,
+} from "fastify-type-provider-zod";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -17,7 +22,6 @@ import { authorizationPlugin } from "~/libs/plugins/authorization/authorization.
 import {
 	type ServerCommonErrorResponse,
 	type ServerValidationErrorResponse,
-	type ValidationSchema,
 } from "~/libs/types/types.js";
 import { userService } from "~/modules/users/users.js";
 
@@ -61,7 +65,10 @@ class BaseServerApplication implements ServerApplication {
 	private initApp(): void {
 		this.app = Fastify({
 			ignoreTrailingSlash: true,
-		});
+		})
+			.setValidatorCompiler(validatorCompiler)
+			.setSerializerCompiler(serializerCompiler)
+			.withTypeProvider<ZodTypeProvider>();
 	}
 
 	private initErrorHandler(): void {
@@ -106,7 +113,9 @@ class BaseServerApplication implements ServerApplication {
 					message: error.message,
 				};
 
-				return reply.status(HTTPCode.INTERNAL_SERVER_ERROR).send(response);
+				return reply
+					.status(error.statusCode || HTTPCode.INTERNAL_SERVER_ERROR)
+					.send(response);
 			},
 		);
 	}
@@ -139,23 +148,31 @@ class BaseServerApplication implements ServerApplication {
 		});
 	}
 
-	private initValidationCompiler(): void {
-		this.app.setValidatorCompiler<ValidationSchema>(({ schema }) => {
-			return <T, R = ReturnType<ValidationSchema["parse"]>>(data: T): R => {
-				return schema.parse(data) as R;
-			};
-		});
-	}
-
 	public addRoute(parameters: ServerApplicationRouteParameters): void {
 		const { handler, method, path, validation } = parameters;
+
+		const schema: Record<string, unknown> = {};
+
+		if (validation?.body) {
+			schema["body"] = validation.body;
+		}
+
+		if (validation?.params) {
+			schema["params"] = validation.params;
+		}
+
+		if (validation?.querystring) {
+			schema["querystring"] = validation.querystring;
+		}
+
+		if (validation?.headers) {
+			schema["headers"] = validation.headers;
+		}
 
 		this.app.route({
 			handler,
 			method,
-			schema: {
-				body: validation?.body,
-			},
+			schema,
 			url: path,
 		});
 		this.logger.info(`Route: ${method} ${path} is registered`);
@@ -173,8 +190,6 @@ class BaseServerApplication implements ServerApplication {
 		await this.initServe();
 
 		await this.initMiddlewares();
-
-		this.initValidationCompiler();
 
 		this.initErrorHandler();
 
@@ -223,7 +238,7 @@ class BaseServerApplication implements ServerApplication {
 				});
 
 				await this.app.register(swaggerUi, {
-					routePrefix: `${api.version}/documentation`,
+					routePrefix: `/api/${api.version}/documentation`,
 				});
 			}),
 		);

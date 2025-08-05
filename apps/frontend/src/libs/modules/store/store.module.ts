@@ -1,4 +1,5 @@
 import {
+	combineReducers,
 	type ThunkMiddleware,
 	type Tuple,
 	type UnknownAction,
@@ -9,18 +10,41 @@ import { AppEnvironment } from "~/libs/enums/enums.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { errorListenerMiddleware } from "~/libs/modules/middlewares/middlewares.js";
 import { storage } from "~/libs/modules/storage/storage.js";
-import { authApi, reducer as authReducer } from "~/modules/auth/auth.js";
-import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
+import {
+	actions as authActions,
+	authApi,
+	reducer as authReducer,
+} from "~/modules/auth/auth.js";
+import {
+	meetingApi,
+	reducer as meetingReducer,
+} from "~/modules/meeting/meeting.js";
 
 type ExtraArguments = {
 	authApi: typeof authApi;
+	meetingApi: typeof meetingApi;
 	storage: typeof storage;
-	userApi: typeof userApi;
 };
 
 type RootReducer = {
 	auth: ReturnType<typeof authReducer>;
-	users: ReturnType<typeof usersReducer>;
+	meeting: ReturnType<typeof meetingReducer>;
+};
+
+const rootReducer = combineReducers({
+	auth: authReducer,
+	meeting: meetingReducer,
+});
+
+const resettableRootReducer = (
+	state: RootReducer | undefined,
+	action: UnknownAction,
+): RootReducer => {
+	if (action.type === authActions.logout.fulfilled.type) {
+		return rootReducer(undefined, action);
+	}
+
+	return rootReducer(state, action);
 };
 
 class Store {
@@ -42,18 +66,15 @@ class Store {
 					},
 				}).prepend(errorListenerMiddleware.middleware);
 			},
-			reducer: {
-				auth: authReducer,
-				users: usersReducer,
-			},
+			reducer: resettableRootReducer,
 		});
 	}
 
 	public get extraArguments(): ExtraArguments {
 		return {
 			authApi,
+			meetingApi,
 			storage,
-			userApi,
 		};
 	}
 }

@@ -2,6 +2,7 @@ export {
 	APIPath,
 	AppEnvironment,
 	ContentType,
+	ExceptionMessage,
 	ServerErrorType,
 } from "./libs/enums/enums.js";
 export {
@@ -28,7 +29,7 @@ export {
 	type ValidationSchema,
 	type ValueOf,
 } from "./libs/types/types.js";
-export { AuthApiPath } from "./modules/auth/auth.js";
+export { AuthApiPath, AuthStatusMessage } from "./modules/auth/auth.js";
 export {
 	MeetingErrorMessage,
 	MeetingHost,
@@ -47,7 +48,6 @@ export {
 } from "./modules/meetings/meetings.js";
 export {
 	type AuthResponseDto,
-	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignInRequestDto,
@@ -55,4 +55,5 @@ export {
 	UsersApiPath,
 	userSignInValidationSchema,
 	userSignUpValidationSchema,
+	UserValidationRule,
 } from "./modules/users/users.js";

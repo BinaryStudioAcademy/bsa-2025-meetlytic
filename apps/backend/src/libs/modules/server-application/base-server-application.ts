@@ -2,6 +2,11 @@ import fastifyStatic from "@fastify/static";
 import swagger, { type StaticDocumentSpec } from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
+import {
+	serializerCompiler,
+	validatorCompiler,
+	type ZodTypeProvider,
+} from "fastify-type-provider-zod";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -17,7 +22,6 @@ import { authorizationPlugin } from "~/libs/plugins/authorization/authorization.
 import {
 	type ServerCommonErrorResponse,
 	type ServerValidationErrorResponse,
-	type ValidationSchema,
 } from "~/libs/types/types.js";
 import { userService } from "~/modules/users/users.js";
 
@@ -61,7 +65,10 @@ class BaseServerApplication implements ServerApplication {
 	private initApp(): void {
 		this.app = Fastify({
 			ignoreTrailingSlash: true,
-		});
+		})
+			.setValidatorCompiler(validatorCompiler)
+			.setSerializerCompiler(serializerCompiler)
+			.withTypeProvider<ZodTypeProvider>();
 	}
 
 	private initErrorHandler(): void {
@@ -113,6 +120,18 @@ class BaseServerApplication implements ServerApplication {
 		);
 	}
 
+	private async initPlugins(): Promise<void> {
+		await this.app.register(authorizationPlugin, {
+			routesWhiteList: WHITE_ROUTES,
+			services: {
+				config: this.config,
+				jwt,
+				logger: this.logger,
+				userService,
+			},
+		});
+	}
+
 	private async initServe(): Promise<void> {
 		const staticPath = path.join(
 			path.dirname(fileURLToPath(import.meta.url)),
@@ -126,14 +145,6 @@ class BaseServerApplication implements ServerApplication {
 
 		this.app.setNotFoundHandler(async (_request, response) => {
 			await response.sendFile("index.html", staticPath);
-		});
-	}
-
-	private initValidationCompiler(): void {
-		this.app.setValidatorCompiler<ValidationSchema>(({ schema }) => {
-			return <T, R = ReturnType<ValidationSchema["parse"]>>(data: T): R => {
-				return schema.parse(data) as R;
-			};
 		});
 	}
 
@@ -180,9 +191,9 @@ class BaseServerApplication implements ServerApplication {
 
 		await this.initMiddlewares();
 
-		this.initValidationCompiler();
-
 		this.initErrorHandler();
+
+		await this.initPlugins();
 
 		this.initRoutes();
 
@@ -231,16 +242,6 @@ class BaseServerApplication implements ServerApplication {
 				});
 			}),
 		);
-
-		await this.app.register(authorizationPlugin, {
-			routesWhiteList: WHITE_ROUTES,
-			services: {
-				config: this.config,
-				jwt,
-				logger: this.logger,
-				userService,
-			},
-		});
 	}
 
 	public initRoutes(): void {

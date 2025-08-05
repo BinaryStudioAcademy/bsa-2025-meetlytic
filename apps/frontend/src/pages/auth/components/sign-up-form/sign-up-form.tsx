@@ -59,7 +59,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 		handleToggleView("confirm");
 	}, [handleToggleView]);
 
-	const handleChangeIconName = useCallback(
+	const handleGetIconName = useCallback(
 		(inputType: InputPassword): "hidePassword" | "showPassword" => {
 			return inputType === InputPasswordType.PASSWORD
 				? "showPassword"
@@ -107,7 +107,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					className={styles["input"] as string}
 					control={control}
 					errors={errors}
-					iconName={handleChangeIconName(inputType.password)}
+					iconName={handleGetIconName(inputType.password)}
 					iconPosition="right"
 					label="Password"
 					name="password"
@@ -121,7 +121,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					className={styles["input"]}
 					control={control}
 					errors={errors}
-					iconName={handleChangeIconName(inputType.confirm)}
+					iconName={handleGetIconName(inputType.confirm)}
 					iconPosition="right"
 					label="Confirm Password"
 					name="confirmPassword"

@@ -1,6 +1,6 @@
 const ZoomBotMessages = {
-	AUDIO_RECORDING_STARTED: "audio recording started",
-	AUDIO_RECORDING_STOPPED: "audio recording stopped",
+	AUDIO_RECORDING_STARTED: "Audio recording started.",
+	AUDIO_RECORDING_STOPPED: "Audio recording stopped.",
 	COOKIES_ACCEPTED: "Cookies accepted.",
 	FAILED_TO_ACCEPT_COOKIES: "Failed to accept cookies: ",
 	FAILED_TO_ACCEPT_TERMS: "Failed to accept terms and conditions: ",

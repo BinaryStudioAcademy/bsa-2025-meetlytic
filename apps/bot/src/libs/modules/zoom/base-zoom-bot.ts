@@ -13,6 +13,7 @@ import {
 	type BaseConfig,
 	type Logger,
 } from "~/libs/types/types.js";
+
 class ZoomBot {
 	private audioRecorder: AudioRecorder;
 	private browser: Browser | null = null;

@@ -6,8 +6,8 @@
 		"lint:type": "npx tsc --noEmit",
 		"lint:js": "npx eslint . --max-warnings=0",
 		"lint": "concurrently \"npm:lint:*\"",
-		"start:dev": "tsx watch src/puppeteer.ts",
-		"start": "node ./src/puppeteer.js",
+		"start:dev": "tsx watch src/index.ts",
+		"start": "node ./src/index.js",
 		"build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json && npm run build:copy",
 		"build:copy": "cp -r package.json build"
 	},

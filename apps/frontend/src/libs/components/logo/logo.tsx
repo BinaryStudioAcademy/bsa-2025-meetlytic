@@ -20,8 +20,8 @@ const Logo: React.FC<Properties> = ({
 		<span
 			className={getValidClassNames(
 				styles["logo-text"],
-				styles[size],
-				styles[theme],
+				styles[`logo-text--${size}`],
+				styles[`logo-text--${theme}`],
 			)}
 		>
 			Meetlytic

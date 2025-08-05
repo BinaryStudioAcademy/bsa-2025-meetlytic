@@ -14,7 +14,7 @@
 
 .auth-logo {
 	display: flex;
-	gap: 10px;
+	gap: 13px;
 	align-items: center;
 	font-size: 24px;
 	font-weight: bold;
@@ -27,13 +27,6 @@
 	line-height: 1.4;
 	color: var(--color-background-4);
 	letter-spacing: 3.05px;
-}
-
-.auth-logo-circle {
-	width: 67px;
-	height: 67px;
-	background-color: var(--color-brand);
-	border-radius: 50%;
 }
 
 .auth-right {

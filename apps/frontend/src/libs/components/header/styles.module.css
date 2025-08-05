@@ -13,6 +13,12 @@
 	margin: 0 auto;
 }
 
+.header-logo {
+	display: flex;
+	gap: 7px;
+	align-items: center;
+}
+
 .header__avatar-logout-wrapper {
 	display: flex;
 	gap: 20px;

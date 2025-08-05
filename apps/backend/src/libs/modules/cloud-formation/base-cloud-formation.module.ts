@@ -67,8 +67,8 @@ class BaseCloudFormation implements CloudFormation {
 
 	public async create({
 		id,
+		meetingPassword,
 		template,
-		zoomPassword,
 	}: CreateStack): Promise<string> {
 		const stackName = this.getStackName(id);
 		this.logger.info(`Creating stack: ${stackName}`);
@@ -81,7 +81,7 @@ class BaseCloudFormation implements CloudFormation {
 					{ ParameterKey: ParameterKey.MEETING_ID, ParameterValue: String(id) },
 					{
 						ParameterKey: ParameterKey.ZOOM_PASSWORD,
-						ParameterValue: zoomPassword,
+						ParameterValue: meetingPassword,
 					},
 				],
 				StackName: stackName,

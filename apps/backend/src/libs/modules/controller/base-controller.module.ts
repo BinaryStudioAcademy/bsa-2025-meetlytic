@@ -23,12 +23,11 @@ class BaseController implements Controller {
 		this.routes = [];
 	}
 
-	private async mapHandler(options: {
-		handler: APIHandler;
-		reply: FastifyReply;
-		request: FastifyRequest;
-	}): Promise<void> {
-		const { handler, reply, request } = options;
+	private async mapHandler(
+		handler: APIHandler,
+		reply: FastifyReply,
+		request: FastifyRequest,
+	): Promise<void> {
 		this.logger.info(`${request.method.toUpperCase()} on ${request.url}`);
 
 		const handlerOptions = this.mapRequest(request);
@@ -54,7 +53,7 @@ class BaseController implements Controller {
 
 		this.routes.push({
 			...options,
-			handler: (request, reply) => this.mapHandler({ handler, reply, request }),
+			handler: (request, reply) => this.mapHandler(handler, reply, request),
 			path: fullPath,
 			preHandlers: preHandlers,
 		});

@@ -29,7 +29,7 @@ OPEN_AI_KEY=
 TRANSCRIPTION_MODEL=whisper-1
 CHUNK_DURATION=10
 FFMPEG_PATH=/usr/bin/ffmpeg
-OUTPUT_DIR=/home/ubuntu/audio
+OUTPUT_DIRECTORY=/home/ubuntu/audio
 EOF
 
 # === Start bot ===

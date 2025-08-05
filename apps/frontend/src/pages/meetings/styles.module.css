@@ -36,3 +36,13 @@
 	font-size: 24px;
 	font-weight: 700;
 }
+
+.start-meeting {
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-end;
+}
+
+.start-meeting-inner {
+	width: auto;
+}

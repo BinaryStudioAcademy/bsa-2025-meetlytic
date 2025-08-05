@@ -1,12 +1,38 @@
-import { Avatar } from "~/libs/components/components.js";
+import {
+	Avatar,
+	Button,
+	MeetingForm,
+	Modal,
+} from "~/libs/components/components.js";
 import { AvatarSize } from "~/libs/enums/enums.js";
+import { useCallback, useState } from "~/libs/hooks/hooks.js";
 
 import { MeetingItem } from "./components/meeting-item/meeting-item.js";
 import styles from "./styles.module.css";
 
 const Meetings: React.FC = () => {
+	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+	const handleOpenModal = useCallback(() => {
+		setIsModalOpen(true);
+	}, []);
+
+	const handleCloseModal = useCallback(() => {
+		setIsModalOpen(false);
+	}, []);
+
 	return (
 		<>
+			<div className={styles["start-meeting"]}>
+				<div className={styles["start-meeting-inner"]}>
+					<Button label="Start a meeting" onClick={handleOpenModal} />
+				</div>
+			</div>
+
+			<Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+				<MeetingForm onClose={handleCloseModal} />
+			</Modal>
+
 			<div className={styles["meetings"]}>
 				<div className={styles["meetings__header"]}>
 					<Avatar size={AvatarSize.LARGE} />

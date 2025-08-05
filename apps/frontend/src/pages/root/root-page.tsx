@@ -17,7 +17,6 @@ const RootPage: React.FC = () => {
 
 	return (
 		<>
-			<Meetings />
 			<div className={styles["start-meeting"]}>
 				<div className={styles["start-meeting-inner"]}>
 					<Button label="Start a meeting" onClick={handleOpenModal} />
@@ -27,6 +26,7 @@ const RootPage: React.FC = () => {
 			<Modal isOpen={isModalOpen} onClose={handleCloseModal}>
 				<MeetingForm onClose={handleCloseModal} />
 			</Modal>
+			<Meetings />
 		</>
 	);
 };

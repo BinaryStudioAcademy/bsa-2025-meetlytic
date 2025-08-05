@@ -5,8 +5,10 @@ export {
 	type UserResponseDto,
 	type UserSignInRequestDto,
 	type UserSignUpRequestDto,
+	type UserUpdateResponseDto,
 } from "./libs/types/types.js";
 export {
 	userSignIn as userSignInValidationSchema,
 	userSignUp as userSignUpValidationSchema,
+	userUpdate as userUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";

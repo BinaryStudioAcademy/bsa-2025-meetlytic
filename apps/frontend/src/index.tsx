@@ -43,14 +43,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 										index: true,
 									},
 								],
-								element: <App />,
+								element: <Layout />,
 							},
 						],
-						element: (
-							<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
-								<Layout />
-							</ProtectedRoute>
-						),
+						element: <App />,
 						path: AppRoute.ROOT,
 					},
 					{

@@ -6,6 +6,7 @@ import {
 	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignUpRequestDto,
+	type UserUpdateResponseDto,
 } from "./libs/types/types.js";
 import { UserDetailsEntity } from "./user-details.entity.js";
 import { type UserDetailsRepository } from "./user-details.repository.js";
@@ -91,8 +92,8 @@ class UserService implements Service {
 
 	public async update(
 		userId: number,
-		payload: Pick<UserResponseDto, "email" | "firstName" | "lastName">,
-	): Promise<Pick<UserResponseDto, "email" | "firstName" | "lastName">> {
+		payload: UserUpdateResponseDto,
+	): Promise<UserUpdateResponseDto> {
 		const user = await this.userRepository.find(userId);
 
 		if (!user) {
@@ -117,8 +118,8 @@ class UserService implements Service {
 
 		if (userDetails) {
 			await this.userDetailsRepository.update(userDetails.toObject().id, {
-				firstName: payload.firstName,
-				lastName: payload.lastName,
+				firstName: payload.firstName ?? "",
+				lastName: payload.lastName ?? "",
 			});
 		}
 

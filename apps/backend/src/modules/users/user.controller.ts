@@ -139,10 +139,7 @@ class UserController extends BaseController {
 		user,
 	}: APIHandlerOptions): Promise<APIHandlerResponse> {
 		const currentUser = user as { email: string; id: number };
-		const payload = body as Pick<
-			UserResponseDto,
-			"email" | "firstName" | "lastName"
-		>;
+		const payload = body as UserResponseDto;
 
 		const updatedUser = await this.userService.update(currentUser.id, payload);
 

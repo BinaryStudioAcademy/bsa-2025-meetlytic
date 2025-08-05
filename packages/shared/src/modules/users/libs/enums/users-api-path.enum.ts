@@ -1,5 +1,5 @@
 const UsersApiPath = {
-	CURRENT_USER: "/me",
+	ME: "/me",
 	ROOT: "/",
 } as const;
 

@@ -22,7 +22,7 @@ class UsersApi extends BaseHTTPApi {
 
 	public async getCurrent(): Promise<UserResponseDto> {
 		const response = await this.load(
-			this.getFullEndpoint(UsersApiPath.CURRENT_USER, {}),
+			this.getFullEndpoint(UsersApiPath.ME, {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,
@@ -37,7 +37,7 @@ class UsersApi extends BaseHTTPApi {
 		payload: Partial<UserUpdateResponseDto>,
 	): Promise<UserResponseDto> {
 		const response = await this.load(
-			this.getFullEndpoint(UsersApiPath.CURRENT_USER, {}),
+			this.getFullEndpoint(UsersApiPath.ME, {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,

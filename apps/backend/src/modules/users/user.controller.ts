@@ -42,13 +42,13 @@ class UserController extends BaseController {
 		this.addRoute({
 			handler: (options) => this.getCurrentUser(options),
 			method: "GET",
-			path: UsersApiPath.CURRENT_USER,
+			path: UsersApiPath.ME,
 		});
 
 		this.addRoute({
 			handler: (options) => this.updateProfile(options),
 			method: "PATCH",
-			path: UsersApiPath.CURRENT_USER,
+			path: UsersApiPath.ME,
 		});
 	}
 

@@ -1,7 +1,7 @@
 type CreateStack = {
 	id: number;
+	meetingPassword?: string;
 	template: string;
-	zoomPassword?: string;
 };
 
 export { type CreateStack };

@@ -7,7 +7,7 @@ type EnvironmentSchema = {
 	};
 	AUDIO_RECORDER: {
 		AUDIO_CHUNK_DURATION: number;
-		AUDIO_OUTPUT_DIR: string;
+		AUDIO_OUTPUT_DIRECTORY: string;
 		FFMPEG_PATH: string;
 	};
 	OPEN_AI: {

@@ -1,7 +1,7 @@
 const ParameterKey = {
 	IMAGE_ID: "ImageId",
 	MEETING_ID: "MeetingId",
-	ZOOM_PASSWORD: "ZoomPassword",
+	MEETING_PASSWORD: "MeetingPassword",
 } as const;
 
 export { ParameterKey };

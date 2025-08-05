@@ -6,11 +6,11 @@
 		},
 		"MeetingId": {
 			"Type": "String",
-			"Description": "Zoom Meeting ID"
+			"Description": "Meeting ID"
 		},
-		"ZoomPassword": {
+		"MeetingPassword": {
 			"Type": "String",
-			"Description": "Zoom Meeting Password"
+			"Description": "Meeting Password"
 		}
 	},
 	"Resources": {
@@ -49,8 +49,8 @@
 								"MeetingId": {
 									"Ref": "MeetingId"
 								},
-								"ZoomPassword": {
-									"Ref": "ZoomPassword"
+								"MeetingPassword": {
+									"Ref": "MeetingPassword"
 								}
 							}
 						]

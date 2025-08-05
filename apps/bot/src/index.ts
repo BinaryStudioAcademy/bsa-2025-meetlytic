@@ -3,7 +3,7 @@ import { openAI } from "~/libs/modules/open-ai/open-ai.js";
 import { zoomBot } from "~/libs/modules/zoom/zoom-bot.js";
 
 const init = async (): Promise<void> => {
-	if (!config.ENV.OPEN_AI.KEY) {
+	if (config.ENV.OPEN_AI.KEY) {
 		await openAI.transcribe("audio.mp3");
 	}
 

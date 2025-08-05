@@ -7,13 +7,11 @@ import { type MeetingResponseDto } from "~/modules/meeting/meeting.js";
 import { createMeeting, getAllMeetings } from "./actions.js";
 
 type State = {
-	currentMeeting: MeetingResponseDto | null;
 	dataStatus: ValueOf<typeof DataStatus>;
 	meetings: MeetingResponseDto[];
 };
 
 const initialState: State = {
-	currentMeeting: null,
 	dataStatus: DataStatus.IDLE,
 	meetings: [],
 };

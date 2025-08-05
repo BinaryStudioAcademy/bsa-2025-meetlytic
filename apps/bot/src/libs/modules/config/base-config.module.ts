@@ -34,7 +34,7 @@ class BaseConfig implements Config {
 				CHUNK_DURATION: {
 					default: null,
 					doc: "Duration of audio chunks",
-					env: "AUDIO_CHUNK_DURATION",
+					env: "CHUNK_DURATION",
 					format: Number,
 				},
 				FFMPEG_PATH: {
@@ -46,7 +46,7 @@ class BaseConfig implements Config {
 				OUTPUT_DIRECTORY: {
 					default: null,
 					doc: "Path to the audio output directory",
-					env: "AUDIO_OUTPUT_DIRECTORY",
+					env: "OUTPUT_DIRECTORY",
 					format: String,
 				},
 			},

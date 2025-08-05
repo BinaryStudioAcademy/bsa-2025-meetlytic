@@ -2,14 +2,13 @@
 	"name": "@meetlytic/shared",
 	"version": "1.0.0",
 	"type": "module",
-	"main": "src/index.ts",
+	"main": "build/index.js",
 	"types": "src/index.ts",
 	"engines": {
 		"node": "22.x.x",
 		"npm": "10.x.x"
 	},
 	"scripts": {
-		"postinstall": "npm run build",
 		"lint:type": "npx tsc --noEmit",
 		"lint:js": "npx eslint . --max-warnings=0 --no-warn-ignored",
 		"lint": "concurrently \"npm:lint:*\"",

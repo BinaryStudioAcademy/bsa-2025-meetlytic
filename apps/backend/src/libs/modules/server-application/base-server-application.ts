@@ -120,6 +120,18 @@ class BaseServerApplication implements ServerApplication {
 		);
 	}
 
+	private async initPlugins(): Promise<void> {
+		await this.app.register(authorizationPlugin, {
+			routesWhiteList: WHITE_ROUTES,
+			services: {
+				config: this.config,
+				jwt,
+				logger: this.logger,
+				userService,
+			},
+		});
+	}
+
 	private async initServe(): Promise<void> {
 		const staticPath = path.join(
 			path.dirname(fileURLToPath(import.meta.url)),
@@ -181,6 +193,8 @@ class BaseServerApplication implements ServerApplication {
 
 		this.initErrorHandler();
 
+		await this.initPlugins();
+
 		this.initRoutes();
 
 		this.database.connect();
@@ -228,16 +242,6 @@ class BaseServerApplication implements ServerApplication {
 				});
 			}),
 		);
-
-		await this.app.register(authorizationPlugin, {
-			routesWhiteList: WHITE_ROUTES,
-			services: {
-				config: this.config,
-				jwt,
-				logger: this.logger,
-				userService,
-			},
-		});
 	}
 
 	public initRoutes(): void {

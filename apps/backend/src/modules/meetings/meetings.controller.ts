@@ -6,6 +6,7 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type UserResponseDto } from "~/modules/users/users.js";
 
 import { MeetingsApiPath } from "./libs/enums/enums.js";
 import {
@@ -32,23 +33,24 @@ import { type MeetingService } from "./meetings.service.js";
  *           type: number
  *         host:
  *           type: string
- * 			 enum:
- * 			   - zoom
+ *           enum:
+ *             - zoom
  *         instanceId:
  *           type: string
  *           nullable: true
  *         ownerId:
  *           type: number
- * 		   status:
- * 			 type: string
- * 			 enum:
- * 			   - started
- * 			   - ended
+ *         status:
+ *           type: string
+ *           enum:
+ *             - started
+ *             - ended
  *       required:
  *         - id
  *         - host
  *         - instanceId
  *         - ownerId
+ *         - status
  *     MeetingCreateRequest:
  *       type: object
  *       required:
@@ -56,8 +58,8 @@ import { type MeetingService } from "./meetings.service.js";
  *       properties:
  *         host:
  *           type: string
- * 			 enum:
- * 			   - zoom
+ *           enum:
+ *             - zoom
  *         instanceId:
  *           type: string
  *           nullable: true
@@ -65,18 +67,17 @@ import { type MeetingService } from "./meetings.service.js";
  *       type: object
  *       required:
  *         - host
- * 		   - status
+ *         - status
  *       properties:
  *         host:
  *           type: string
- * 			 enum:
- * 			   - zoom
- * 		   status:
- * 			 type: string
- * 			 enum:
+ *           enum:
+ *             - zoom
+ *         status:
+ *           type: string
+ *           enum:
  *             - started
- * 			   - ended
-
+ *             - ended
  */
 class MeetingsController extends BaseController {
 	private meetingService: MeetingService;
@@ -146,7 +147,10 @@ class MeetingsController extends BaseController {
 	private async create(
 		options: CreateMeetingOptions,
 	): Promise<APIHandlerResponse> {
-		const created = await this.meetingService.create(options.body);
+		const created = await this.meetingService.create({
+			...options.body,
+			ownerId: (options.user as UserResponseDto).id,
+		});
 
 		return { payload: created, status: HTTPCode.CREATED };
 	}
@@ -233,7 +237,7 @@ class MeetingsController extends BaseController {
 		options: FindAllMeetingOptions,
 	): Promise<APIHandlerResponse> {
 		const meetings = await this.meetingService.findAll({
-			ownerId: Number(options.user.id),
+			ownerId: (options.user as UserResponseDto).id,
 		});
 
 		return { payload: meetings, status: HTTPCode.OK };

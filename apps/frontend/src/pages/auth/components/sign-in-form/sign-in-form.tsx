@@ -1,5 +1,5 @@
 import { Button, Input, Link } from "~/libs/components/components.js";
-import { AppRoute } from "~/libs/enums/enums.js";
+import { AppRoute, UserValidationRule } from "~/libs/enums/enums.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import { DEFAULT_SIGN_IN_VALUES } from "~/modules/users/libs/default-values/sign-in.default-values.js";
 import {
@@ -17,7 +17,6 @@ type Properties = {
 const SignInForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 	const { control, errors, handleSubmit } = useAppForm<UserSignInRequestDto>({
 		defaultValues: DEFAULT_SIGN_IN_VALUES,
-		mode: "onBlur",
 		validationSchema: userSignInValidationSchema,
 	});
 
@@ -43,6 +42,7 @@ const SignInForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					type="text"
 				/>
 				<Input
+					attributes={{ maxLength: UserValidationRule.PASSWORD_MAXIMUM_LENGTH }}
 					className={styles["input"]}
 					control={control}
 					errors={errors}

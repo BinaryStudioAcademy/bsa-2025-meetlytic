@@ -48,13 +48,14 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 
 	public async create(
-		payload: MeetingCreateRequestDto,
+		payload: MeetingCreateRequestDto & { ownerId: number },
 	): Promise<MeetingResponseDto> {
 		const meeting = MeetingEntity.initializeNew({
 			host: payload.host,
-			instanceId: payload.instanceId ?? null,
-			ownerId: (payload as MeetingCreateRequestDto & { ownerId: number })
-				.ownerId,
+			instanceId: null,
+			meetingId: payload.meetingId,
+			meetingPassword: payload.meetingPassword ?? null,
+			ownerId: payload.ownerId,
 		});
 
 		const newMeeting = await this.meetingRepository.create(meeting);
@@ -148,6 +149,8 @@ class MeetingService implements Service<MeetingResponseDto> {
 			host: payload.host,
 			id,
 			instanceId: meetingEntity.toObject().instanceId,
+			meetingId: meetingEntity.toObject().meetingId,
+			meetingPassword: meetingEntity.toObject().meetingPassword,
 			ownerId: meetingEntity.toObject().ownerId,
 			status: payload.status,
 		});

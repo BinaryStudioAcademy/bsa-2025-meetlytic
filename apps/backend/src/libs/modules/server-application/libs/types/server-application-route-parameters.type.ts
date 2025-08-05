@@ -20,7 +20,6 @@ type ServerApplicationRouteParameters = {
 		headers?: ValidationSchema;
 		params?: ValidationSchema;
 		querystring?: ValidationSchema;
-		response?: ValidationSchema;
 	};
 };
 

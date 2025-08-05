@@ -113,7 +113,9 @@ class BaseServerApplication implements ServerApplication {
 					message: error.message,
 				};
 
-				return reply.status(HTTPCode.INTERNAL_SERVER_ERROR).send(response);
+				return reply
+					.status(error.statusCode || HTTPCode.INTERNAL_SERVER_ERROR)
+					.send(response);
 			},
 		);
 	}
@@ -137,16 +139,28 @@ class BaseServerApplication implements ServerApplication {
 	public addRoute(parameters: ServerApplicationRouteParameters): void {
 		const { handler, method, path, validation } = parameters;
 
+		const schema: Record<string, unknown> = {};
+
+		if (validation?.body) {
+			schema["body"] = validation.body;
+		}
+
+		if (validation?.params) {
+			schema["params"] = validation.params;
+		}
+
+		if (validation?.querystring) {
+			schema["querystring"] = validation.querystring;
+		}
+
+		if (validation?.headers) {
+			schema["headers"] = validation.headers;
+		}
+
 		this.app.route({
 			handler,
 			method,
-			schema: {
-				body: validation?.body,
-				headers: validation?.headers,
-				params: validation?.params,
-				querystring: validation?.querystring,
-				response: validation?.response,
-			},
+			schema,
 			url: path,
 		});
 		this.logger.info(`Route: ${method} ${path} is registered`);

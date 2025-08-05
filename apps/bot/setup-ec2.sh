@@ -11,7 +11,7 @@ curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 sudo apt install -y nodejs
 
 echo "[+] Installing system libraries and dependencies..."
-sudo apt install -y git ffmpeg pulseaudio pulseaudio-utils
+sudo apt install -y ffmpeg pulseaudio pulseaudio-utils
 \ libatk-bridge2.0-0 libgtk-3-0 libappindicator3-1 libnss3 libxss1
 \ libasound2 libgbm1 libx11-xcb1 libxcomposite1 libxkbcommon0
 

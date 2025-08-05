@@ -81,7 +81,7 @@ class BaseCloudFormation implements CloudFormation {
 					{ ParameterKey: ParameterKey.MEETING_ID, ParameterValue: String(id) },
 					{
 						ParameterKey: ParameterKey.MEETING_PASSWORD,
-						ParameterValue: meetingPassword as string,
+						ParameterValue: meetingPassword,
 					},
 				],
 				StackName: stackName,

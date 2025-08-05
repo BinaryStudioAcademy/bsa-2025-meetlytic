@@ -7,7 +7,7 @@ import {
 	USER_AGENT,
 } from "~/libs/constants/constants.js";
 import { ZoomBotMessages, ZoomUILabel } from "~/libs/enums/enums.js";
-import { delay } from "~/libs/helpers/helpers.js";
+import { buildQueryParameters, delay } from "~/libs/helpers/helpers.js";
 import { type BaseConfig, type Logger } from "~/libs/types/types.js";
 
 class ZoomBot {
@@ -52,9 +52,9 @@ class ZoomBot {
 			throw new Error(ZoomBotMessages.ZOOM_MEETING_ID_MISSING);
 		}
 
-		const passwordQuery = MEETING_PASSWORD ? `?pwd=${MEETING_PASSWORD}` : "";
+		const query = buildQueryParameters({ pwd: MEETING_PASSWORD });
 
-		return `https://zoom.us/wc/join/${MEETING_ID}${passwordQuery}`;
+		return `https://zoom.us/wc/join/${MEETING_ID}${query}`;
 	}
 
 	private async getParticipantsCount(): Promise<number> {

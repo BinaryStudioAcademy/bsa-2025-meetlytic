@@ -13,6 +13,7 @@ import { type IconName } from "~/libs/types/types.js";
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
+	attributes?: React.InputHTMLAttributes<HTMLInputElement>;
 	className?: string | undefined;
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
@@ -29,6 +30,7 @@ type Properties<T extends FieldValues> = {
 };
 
 const Input = <T extends FieldValues>({
+	attributes,
 	className,
 	control,
 	errors,
@@ -88,6 +90,7 @@ const Input = <T extends FieldValues>({
 					</div>
 				)}
 				<input
+					{...attributes}
 					className={getValidClassNames(
 						styles["input__entry"],
 						iconName && styles[`input__entry--${iconPosition}-padding`],

@@ -3,8 +3,10 @@
 	"version": "1.0.0",
 	"type": "module",
 	"workspaces": [
-		"apps/*",
-		"packages/*"
+		"apps/backend",
+		"apps/bot",
+		"apps/frontend",
+		"packages/shared"
 	],
 	"engines": {
 		"node": "22.x.x",
@@ -17,7 +19,8 @@
 		"build:frontend": "npm run build -w apps/frontend",
 		"build:backend": "npm run build -w apps/backend",
 		"build:bot": "npm run build -w apps/bot",
-		"build": "npm run build:shared && npm run build:backend && npm run build:frontend && npm run build:bot",
+		"build": "npm run build:shared && npm run build:backend && npm run build:frontend && npm run prepare-build",
+		"prepare-build": "sh ./prepare-build.sh",
 		"lint:editor": "editorconfig-checker",
 		"lint:fs": "ls-lint",
 		"lint:type": "npx tsc --noEmit",
@@ -26,7 +29,9 @@
 		"lint:trash": "knip",
 		"format": "prettier --write \"**/*.{ts,tsx,json,md,css,html}\"",
 		"lint": "concurrently \"npm:lint:*\" && npm run lint --workspaces",
-		"ci:prepare": "simple-git-hooks"
+		"ci:prepare": "simple-git-hooks",
+		"prestart": "npm install --include=dev && npm run build",
+		"start": "cd apps/build/backend && npm run start"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "19.8.1",

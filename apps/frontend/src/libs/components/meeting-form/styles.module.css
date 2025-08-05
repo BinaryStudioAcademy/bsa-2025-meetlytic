@@ -1,0 +1,30 @@
+.meeting-form {
+	display: flex;
+	flex-direction: column;
+	font-family: var(--font-family);
+	border-radius: var(--border-radius-lg);
+}
+
+.meeting-form__title {
+	margin-bottom: 24px;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.meeting-form__inputs {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.meeting-form__input {
+	padding: 13px 14px;
+	background-color: var(--color-background-3);
+}
+
+.meeting-form__actions {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	margin-top: 16px;
+}

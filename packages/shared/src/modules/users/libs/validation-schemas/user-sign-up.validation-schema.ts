@@ -10,13 +10,18 @@ type UserSignUpRequestValidationDto = {
 	password: z.ZodString;
 };
 
+const NAME_VALIDATION_REGEX = /^[a-zA-Z]+(?:[ -][a-zA-Z]+)*$/;
+
 const userSignUp = z
 	.object<UserSignUpRequestValidationDto>({
 		confirmPassword: z
 			.string()
 			.trim()
 			.min(UserValidationRule.PASSWORD_MINIMUM_LENGTH, {
-				message: UserValidationMessage.PASSWORD_REQUIRE,
+				message: UserValidationMessage.PASSWORD_RANGE,
+			})
+			.max(UserValidationRule.PASSWORD_MAXIMUM_LENGTH, {
+				message: UserValidationMessage.PASSWORD_RANGE,
 			}),
 		email: z
 			.string()
@@ -25,7 +30,7 @@ const userSignUp = z
 				message: UserValidationMessage.EMAIL_REQUIRE,
 			})
 			.email({
-				message: UserValidationMessage.EMAIL_WRONG,
+				message: UserValidationMessage.EMAIL_INVALID,
 			}),
 		firstName: z
 			.string()
@@ -35,6 +40,9 @@ const userSignUp = z
 			})
 			.max(UserValidationRule.FIRST_NAME_MAXIMUM_LENGTH, {
 				message: UserValidationMessage.FIRST_NAME_MAX_LENGTH,
+			})
+			.regex(NAME_VALIDATION_REGEX, {
+				message: UserValidationMessage.ONLY_LATIN_LETTERS,
 			}),
 		lastName: z
 			.string()
@@ -44,12 +52,18 @@ const userSignUp = z
 			})
 			.max(UserValidationRule.LAST_NAME_MAXIMUM_LENGTH, {
 				message: UserValidationMessage.LAST_NAME_MAX_LENGTH,
+			})
+			.regex(NAME_VALIDATION_REGEX, {
+				message: UserValidationMessage.ONLY_LATIN_LETTERS,
 			}),
 		password: z
 			.string()
 			.trim()
 			.min(UserValidationRule.PASSWORD_MINIMUM_LENGTH, {
-				message: UserValidationMessage.PASSWORD_REQUIRE,
+				message: UserValidationMessage.PASSWORD_RANGE,
+			})
+			.max(UserValidationRule.PASSWORD_MAXIMUM_LENGTH, {
+				message: UserValidationMessage.PASSWORD_RANGE,
 			}),
 	})
 	.required()

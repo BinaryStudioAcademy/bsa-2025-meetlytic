@@ -1,6 +1,12 @@
 import { Button, Input, Link } from "~/libs/components/components.js";
-import { AppRoute, ButtonVariant } from "~/libs/enums/enums.js";
-import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
+import {
+	AppRoute,
+	ButtonVariant,
+	InputPasswordType,
+	UserValidationRule,
+} from "~/libs/enums/enums.js";
+import { useAppForm, useCallback, useState } from "~/libs/hooks/hooks.js";
+import { type InputPassword } from "~/libs/types/types.js";
 import {
 	type UserSignUpRequestDto,
 	userSignUpValidationSchema,
@@ -15,6 +21,14 @@ type Properties = {
 };
 
 const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
+	const [inputType, setInputType] = useState<{
+		confirm: InputPassword;
+		password: InputPassword;
+	}>({
+		confirm: InputPasswordType.PASSWORD,
+		password: InputPasswordType.PASSWORD,
+	});
+
 	const { control, errors, handleSubmit } = useAppForm<UserSignUpRequestDto>({
 		defaultValues: DEFAULT_SIGN_UP_PAYLOAD,
 		validationSchema: userSignUpValidationSchema,
@@ -25,6 +39,33 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 			void handleSubmit(onSubmit)(event_);
 		},
 		[handleSubmit, onSubmit],
+	);
+
+	const handleToggleView = useCallback((field: keyof typeof inputType) => {
+		setInputType((previous) => ({
+			...previous,
+			[field]:
+				previous[field] === InputPasswordType.PASSWORD
+					? InputPasswordType.TEXT
+					: InputPasswordType.PASSWORD,
+		}));
+	}, []);
+
+	const handleTogglePasswordView = useCallback(() => {
+		handleToggleView("password");
+	}, [handleToggleView]);
+
+	const handleToggleConfirmPasswordView = useCallback(() => {
+		handleToggleView("confirm");
+	}, [handleToggleView]);
+
+	const handleGetIconName = useCallback(
+		(inputType: InputPassword): "hidePassword" | "showPassword" => {
+			return inputType === InputPasswordType.PASSWORD
+				? "showPassword"
+				: "hidePassword";
+		},
+		[],
 	);
 
 	return (
@@ -62,23 +103,31 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					wrapperClassName={styles["input-wrapper"]}
 				/>
 				<Input
+					attributes={{ maxLength: UserValidationRule.PASSWORD_MAXIMUM_LENGTH }}
 					className={styles["input"] as string}
 					control={control}
 					errors={errors}
+					iconName={handleGetIconName(inputType.password)}
+					iconPosition="right"
 					label="Password"
 					name="password"
+					onClickIcon={handleTogglePasswordView}
 					placeholder="*************"
-					type="text"
+					type={inputType.password}
 					wrapperClassName={styles["input-wrapper"]}
 				/>
 				<Input
+					attributes={{ maxLength: UserValidationRule.PASSWORD_MAXIMUM_LENGTH }}
 					className={styles["input"]}
 					control={control}
 					errors={errors}
+					iconName={handleGetIconName(inputType.confirm)}
+					iconPosition="right"
 					label="Confirm Password"
 					name="confirmPassword"
+					onClickIcon={handleToggleConfirmPasswordView}
 					placeholder="*************"
-					type="text"
+					type={inputType.confirm}
 					wrapperClassName={styles["input-wrapper"]}
 				/>
 				<Button

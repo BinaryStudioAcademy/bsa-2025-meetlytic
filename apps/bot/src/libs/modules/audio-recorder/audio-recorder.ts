@@ -1,16 +1,18 @@
 import { config } from "~/libs/modules/config/config.js";
 import { logger } from "~/libs/modules/logger/logger.js";
+import { openAI } from "~/libs/modules/open-ai/open-ai.js";
 
 import { BaseAudioRecorder } from "./base-audio-recorder.module.js";
 
-const { AUDIO_CHUNK_DURATION, AUDIO_OUTPUT_DIRECTORY, FFMPEG_PATH } =
+const { CHUNK_DURATION, FFMPEG_PATH, OUTPUT_DIRECTORY } =
 	config.ENV.AUDIO_RECORDER;
 
 const audioRecorder = new BaseAudioRecorder({
-	chunkDuration: AUDIO_CHUNK_DURATION,
+	chunkDuration: CHUNK_DURATION,
 	ffmpegPath: FFMPEG_PATH,
 	logger,
-	outputDir: AUDIO_OUTPUT_DIRECTORY,
+	openAI,
+	outputDir: OUTPUT_DIRECTORY,
 });
 
 export { audioRecorder };

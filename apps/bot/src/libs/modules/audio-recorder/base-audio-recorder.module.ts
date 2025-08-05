@@ -2,8 +2,7 @@ import { spawn } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 
-import { openAI } from "~/libs/modules/open-ai/open-ai.js";
-import { type Logger } from "~/libs/types/types.js";
+import { type Logger, type OpenAI } from "~/libs/types/types.js";
 
 import {
 	type AudioRecorder,
@@ -15,17 +14,20 @@ class BaseAudioRecorder implements AudioRecorder {
 	private ffmpegPath: string;
 	private isRecording = false;
 	private logger: Logger;
+	private openAI: OpenAI;
 	private outputDir: string;
 
 	public constructor({
 		chunkDuration,
 		ffmpegPath,
 		logger,
+		openAI,
 		outputDir,
 	}: AudioRecorderOptions) {
 		this.chunkDuration = chunkDuration;
 		this.ffmpegPath = ffmpegPath;
 		this.outputDir = outputDir;
+		this.openAI = openAI;
 		this.logger = logger;
 	}
 
@@ -55,11 +57,12 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		process.on("exit", () => {
 			if (this.isRecording) {
-				openAI.transcribe(filePath).catch((error: unknown) => {
-					this.logger.error(String(error));
-				});
 				this.recordNextChunk();
 			}
+
+			this.openAI.transcribe(filePath).catch((error: unknown) => {
+				this.logger.error(String(error));
+			});
 		});
 	}
 

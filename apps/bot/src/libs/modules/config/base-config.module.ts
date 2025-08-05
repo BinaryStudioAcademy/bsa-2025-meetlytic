@@ -31,22 +31,22 @@ class BaseConfig implements Config {
 				},
 			},
 			AUDIO_RECORDER: {
-				AUDIO_CHUNK_DURATION: {
+				CHUNK_DURATION: {
 					default: null,
 					doc: "Duration of audio chunks",
 					env: "AUDIO_CHUNK_DURATION",
 					format: Number,
 				},
-				AUDIO_OUTPUT_DIRECTORY: {
-					default: null,
-					doc: "Path to the audio output directory",
-					env: "AUDIO_OUTPUT_DIRECTORY",
-					format: String,
-				},
 				FFMPEG_PATH: {
 					default: null,
 					doc: "Location of ffmpeg",
 					env: "FFMPEG_PATH",
+					format: String,
+				},
+				OUTPUT_DIRECTORY: {
+					default: null,
+					doc: "Path to the audio output directory",
+					env: "AUDIO_OUTPUT_DIRECTORY",
 					format: String,
 				},
 			},

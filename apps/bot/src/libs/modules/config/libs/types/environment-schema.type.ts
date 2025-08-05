@@ -6,9 +6,9 @@ type EnvironmentSchema = {
 		ENVIRONMENT: ValueOf<typeof AppEnvironment>;
 	};
 	AUDIO_RECORDER: {
-		AUDIO_CHUNK_DURATION: number;
-		AUDIO_OUTPUT_DIRECTORY: string;
+		CHUNK_DURATION: number;
 		FFMPEG_PATH: string;
+		OUTPUT_DIRECTORY: string;
 	};
 	OPEN_AI: {
 		KEY: string;

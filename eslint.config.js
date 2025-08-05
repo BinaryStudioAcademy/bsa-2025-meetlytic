@@ -96,9 +96,6 @@ const importConfig = {
 			espree: [".js", ".cjs"],
 		},
 		"import/resolver": {
-			"node": {
-				"extensions": [".js", ".ts", ".tsx"],
-			},
 			typescript: tsResolver,
 		},
 	},
@@ -266,7 +263,7 @@ const overridesConfigs = [
 		files: [
 			"commitlint.config.ts",
 			"prettier.config.js",
-			"stylelint.config.ts",
+			"stylelint.config.js",
 			"knip.config.ts",
 			"packages.d.ts",
 			"lint-staged.config.js",

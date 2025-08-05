@@ -7,6 +7,7 @@
 		"lint:js": "npx eslint . --max-warnings=0",
 		"lint": "concurrently \"npm:lint:*\"",
 		"start:dev": "tsx watch src/puppeteer.ts",
+		"prestart": "npm run build",
 		"start": "node ./src/puppeteer.js",
 		"build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json && npm run build:copy",
 		"build:copy": "cp -r package.json build"
@@ -14,7 +15,7 @@
 	"dependencies": {
 		"@meetlytic/shared": "*",
 		"convict": "6.2.4",
-		"dotenv": "17.2.1",
+		"dotenv": "17.1.0",
 		"puppeteer": "24.15.0"
 	},
 	"devDependencies": {

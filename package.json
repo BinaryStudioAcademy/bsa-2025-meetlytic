@@ -3,8 +3,10 @@
 	"version": "1.0.0",
 	"type": "module",
 	"workspaces": [
-		"apps/*",
-		"packages/*"
+		"apps/backend",
+		"apps/bot",
+		"apps/frontend",
+		"packages/shared"
 	],
 	"engines": {
 		"node": "22.x.x",

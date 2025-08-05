@@ -106,7 +106,9 @@ class BaseServerApplication implements ServerApplication {
 					message: error.message,
 				};
 
-				return reply.status(HTTPCode.INTERNAL_SERVER_ERROR).send(response);
+				return reply
+					.status(error.statusCode || HTTPCode.INTERNAL_SERVER_ERROR)
+					.send(response);
 			},
 		);
 	}

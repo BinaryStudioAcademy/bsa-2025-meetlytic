@@ -217,6 +217,17 @@ class AuthController extends BaseController {
 	 *                    type: string
 	 *                  message:
 	 *                    type: string
+	 *        422:
+	 *          description: Unprocessable Entity (validation error)
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  errorType:
+	 *                    type: string
+	 *                  message:
+	 *                    type: string
 	 *        500:
 	 *          description: Internal server error
 	 *          content:

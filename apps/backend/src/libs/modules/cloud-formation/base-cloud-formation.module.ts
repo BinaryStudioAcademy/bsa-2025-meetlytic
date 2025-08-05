@@ -67,7 +67,7 @@ class BaseCloudFormation implements CloudFormation {
 
 	public async create({
 		id,
-		meetingPassword,
+		meetingPassword = "",
 		template,
 	}: CreateStack): Promise<string> {
 		const stackName = this.getStackName(id);

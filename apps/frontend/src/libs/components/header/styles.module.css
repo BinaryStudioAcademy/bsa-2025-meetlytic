@@ -19,6 +19,10 @@
 	align-items: center;
 }
 
+.header__profile-button {
+	width: 100%;
+}
+
 .header__logout-icon {
 	width: 16px;
 	height: 16px;

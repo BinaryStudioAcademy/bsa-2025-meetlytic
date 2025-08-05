@@ -1,5 +1,6 @@
 import { Avatar, Button, Icon, Logo } from "~/libs/components/components.js";
 import {
+	AppRoute,
 	AvatarSize,
 	AvatarType,
 	ButtonSize,
@@ -7,23 +8,33 @@ import {
 	LogoSize,
 	LogoTheme,
 } from "~/libs/enums/enums.js";
-import { useCallback, useLogout } from "~/libs/hooks/hooks.js";
+import { useCallback, useLogout, useNavigate } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
 const Header: React.FC = () => {
 	const logout = useLogout();
+	const navigate = useNavigate() as (to: string) => void; // TODO: fix navigation
 
 	const handleLogout = useCallback((): void => {
 		void logout();
 	}, [logout]);
+
+	const handleProfileClick = useCallback((): void => {
+		navigate(AppRoute.PROFILE);
+	}, [navigate]);
 
 	return (
 		<header className={styles["header"]}>
 			<div className={styles["header-inner"]}>
 				<Logo hasLink size={LogoSize.SMALL} theme={LogoTheme.LIGHT} />
 				<div className={styles["header__avatar-logout-wrapper"]}>
-					<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
+					<button
+						className={styles["header__profile-button"]}
+						onClick={handleProfileClick}
+					>
+						<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
+					</button>
 					<Button
 						iconLeft={
 							<Icon className={styles["header__logout-icon"]} name="logout" />

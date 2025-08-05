@@ -1,3 +1,10 @@
-type IconName = "arrowRight" | "logout" | "meetings" | "search" | "settings";
+type IconName =
+	| "arrowRight"
+	| "hidePassword"
+	| "logout"
+	| "meetings"
+	| "search"
+	| "settings"
+	| "showPassword";
 
 export { type IconName };

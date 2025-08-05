@@ -9,7 +9,10 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
-import { type UserResponseDto } from "./libs/types/types.js";
+import {
+	type UserGetAllResponseDto,
+	type UserResponseDto,
+} from "./libs/types/types.js";
 
 /*** @swagger
  * components:
@@ -92,7 +95,7 @@ class UserController extends BaseController {
 	private async getCurrentUser({
 		user,
 	}: APIHandlerOptions): Promise<APIHandlerResponse> {
-		const currentUser = user as { email: string; id: number };
+		const currentUser = user as UserGetAllResponseDto["items"][number];
 
 		const fullUser = await this.userService.findByEmail(currentUser.email);
 

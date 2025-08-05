@@ -9,6 +9,8 @@ const UserValidationMessage = {
 	LAST_NAME_MAX_LENGTH: `Last name must not exceed ${String(UserValidationRule.LAST_NAME_MAXIMUM_LENGTH)} characters`,
 	LAST_NAME_MIN_LENGTH: `Last name must be at least ${String(UserValidationRule.LAST_NAME_MINIMUM_LENGTH)} character long`,
 	LAST_NAME_REQUIRE: "Last name is required",
+	ONLY_LATIN_LETTERS:
+		"Only Latin letters are allowed in First Name and Last Name",
 	PASSWORD_MATCH: "Passwords do not match",
 	PASSWORD_RANGE: "Password must be 8-64 characters long",
 } as const;

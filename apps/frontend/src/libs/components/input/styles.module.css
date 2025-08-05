@@ -34,6 +34,10 @@
 	border-radius: var(--border-radius-sm);
 }
 
+.input__entry:focus {
+	border-color: var(--color-accent-2);
+}
+
 .input__entry--valid {
 	border-color: var(--color-accent-2);
 }

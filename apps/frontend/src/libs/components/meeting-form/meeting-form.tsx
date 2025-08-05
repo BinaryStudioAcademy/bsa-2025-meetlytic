@@ -1,12 +1,7 @@
 import { Button, Input } from "~/libs/components/components.js";
 import { CREATE_MEETING_FORM_DEFAULT_VALUES } from "~/libs/constants/constants.js";
 import { ButtonVariant } from "~/libs/enums/enums.js";
-import {
-	useAppDispatch,
-	useAppForm,
-	useAppSelector,
-	useCallback,
-} from "~/libs/hooks/hooks.js";
+import { useAppDispatch, useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
 	actions as meetingActions,
 	type MeetingCreateRequestDto,
@@ -21,7 +16,6 @@ type Properties = {
 
 const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 	const dispatch = useAppDispatch();
-	const user = useAppSelector((state) => state.auth.user);
 	const { control, errors, handleSubmit } = useAppForm<MeetingCreateRequestDto>(
 		{
 			defaultValues: CREATE_MEETING_FORM_DEFAULT_VALUES,
@@ -31,14 +25,10 @@ const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 
 	const handleSubmitMeeting = useCallback(
 		async (data: MeetingCreateRequestDto): Promise<void> => {
-			if (!user) {
-				return;
-			}
-
 			await dispatch(meetingActions.createMeeting({ data }));
 			onClose();
 		},
-		[dispatch, onClose, user],
+		[dispatch, onClose],
 	);
 
 	const handleFormSubmit = useCallback(

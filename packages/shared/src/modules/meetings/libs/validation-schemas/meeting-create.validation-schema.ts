@@ -23,7 +23,7 @@ const meetingCreate = z
 					message: MeetingValidationMessage.HOST_WRONG,
 				},
 			),
-		meetingId: z.string().min(MeetingValidationRule.MINIMAL_HOST_LENGTH),
+		meetingId: z.string().min(MeetingValidationRule.MINIMAL_MEETING_ID_LENGTH),
 		meetingPassword: z.string().nullable().optional(),
 	})
 	.required();

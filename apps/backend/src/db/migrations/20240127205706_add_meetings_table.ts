@@ -32,7 +32,7 @@ function down(knex: Knex): Promise<void> {
 function up(knex: Knex): Promise<void> {
 	return knex.schema.createTable(TableName.MEETINGS, (table) => {
 		table.increments(ColumnName.ID).primary();
-		table.text(ColumnName.INSTANCE_ID).notNullable();
+		table.text(ColumnName.INSTANCE_ID).defaultTo(null);
 		table
 			.enu(ColumnName.HOST, Object.values(MeetingHost), {
 				enumName: "meeting_host",

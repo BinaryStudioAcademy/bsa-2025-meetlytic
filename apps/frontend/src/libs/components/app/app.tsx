@@ -16,6 +16,7 @@ const App: React.FC = () => {
 			search: "",
 		},
 	});
+
 	const handleSearch = useCallback((value: string) => {
 		// TODO: implement handleSearch logic
 		return value;

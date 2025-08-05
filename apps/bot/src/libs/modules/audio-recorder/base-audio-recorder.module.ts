@@ -33,9 +33,9 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		const ffmpegArguments = [
 			"-f",
-			"alsa",
+			"pulse",
 			"-i",
-			"default",
+			"virtual_sink.monitor",
 			"-t",
 			String(this.chunkDuration),
 			"-acodec",

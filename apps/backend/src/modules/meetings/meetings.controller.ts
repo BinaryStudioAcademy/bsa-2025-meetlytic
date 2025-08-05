@@ -149,7 +149,7 @@ class MeetingsController extends BaseController {
 	): Promise<APIHandlerResponse> {
 		const created = await this.meetingService.create({
 			...options.body,
-			ownerId: Number((options.user as UserResponseDto).id),
+			ownerId: (options.user as UserResponseDto).id,
 		});
 
 		return { payload: created, status: HTTPCode.CREATED };
@@ -237,7 +237,7 @@ class MeetingsController extends BaseController {
 		options: FindAllMeetingOptions,
 	): Promise<APIHandlerResponse> {
 		const meetings = await this.meetingService.findAll({
-			ownerId: Number((options.user as UserResponseDto).id),
+			ownerId: (options.user as UserResponseDto).id,
 		});
 
 		return { payload: meetings, status: HTTPCode.OK };

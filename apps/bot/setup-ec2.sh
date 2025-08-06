@@ -29,7 +29,7 @@ sudo apt-get install -y \
 	libappindicator3-1
 
 echo "[+] Starting PulseAudio..."
-pulseaudio --start
+pulseaudio --start --exit-idle-time=-1
 
 echo "[+] Waiting for PulseAudio to be ready..."
 for i in {1..10}; do

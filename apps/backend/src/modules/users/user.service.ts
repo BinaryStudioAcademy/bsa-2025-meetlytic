@@ -7,11 +7,14 @@ import {
 	type UserResponseDto,
 	type UserSignUpRequestDto,
 	type UserUpdateResponseDto,
+	type UserWithDetailsDto,
 } from "./libs/types/types.js";
 import { UserDetailsEntity } from "./user-details.entity.js";
 import { type UserDetailsRepository } from "./user-details.repository.js";
 import { UserEntity } from "./user.entity.js";
 import { type UserRepository } from "./user.repository.js";
+
+const DEFAULT_ID = 0;
 
 class UserService implements Service {
 	private userDetailsRepository: UserDetailsRepository;
@@ -66,6 +69,14 @@ class UserService implements Service {
 	public async findByEmail(email: string): Promise<null | UserResponseDto> {
 		const user = await this.userRepository.findByEmail(email);
 
+		return user ? user.toObject() : null;
+	}
+
+	public async findProfileByEmail(
+		email: string,
+	): Promise<null | UserWithDetailsDto> {
+		const user = await this.userRepository.findByEmail(email);
+
 		if (!user) {
 			return null;
 		}
@@ -74,13 +85,21 @@ class UserService implements Service {
 		const details = await this.userDetailsRepository.findByUserId(
 			userObject.id,
 		);
-
 		const detailsObject = details?.toObject();
 
 		return {
-			...userObject,
-			firstName: detailsObject?.firstName ?? "",
-			lastName: detailsObject?.lastName ?? "",
+			details: detailsObject
+				? {
+						firstName: detailsObject.firstName,
+						id: detailsObject.id,
+						lastName: detailsObject.lastName,
+						userId: detailsObject.userId,
+					}
+				: null,
+			user: {
+				email: userObject.email,
+				id: userObject.id,
+			},
 		};
 	}
 
@@ -93,12 +112,14 @@ class UserService implements Service {
 	public async update(
 		userId: number,
 		payload: UserUpdateResponseDto,
-	): Promise<UserUpdateResponseDto> {
-		const user = await this.userRepository.find(userId);
+	): Promise<UserWithDetailsDto> {
+		const result = await this.userRepository.findByIdWithDetails(userId);
 
-		if (!user) {
+		if (!result) {
 			throw new Error("User not found");
 		}
+
+		const { details, user } = result;
 
 		if (payload.email !== user.toObject().email) {
 			const userWithEmail = await this.userRepository.findByEmail(
@@ -108,29 +129,30 @@ class UserService implements Service {
 			if (userWithEmail && userWithEmail.toObject().id !== userId) {
 				throw new Error("Email already in use");
 			}
-		}
 
-		await this.userRepository.update(userId, {
-			email: payload.email,
-		});
-
-		const userDetails = await this.userDetailsRepository.findByUserId(userId);
-
-		if (userDetails) {
-			await this.userDetailsRepository.update(userDetails.toObject().id, {
-				firstName: payload.firstName ?? "",
-				lastName: payload.lastName ?? "",
+			await this.userRepository.update(userId, {
+				email: payload.email,
 			});
 		}
 
-		const updatedUser = await this.userRepository.find(userId);
-		const updatedDetails =
-			await this.userDetailsRepository.findByUserId(userId);
+		if (details) {
+			await this.userDetailsRepository.update(details.toObject().id, {
+				firstName: payload.firstName ?? details.toObject().firstName,
+				lastName: payload.lastName ?? details.toObject().lastName,
+			});
+		}
 
 		return {
-			email: updatedUser?.toObject().email ?? payload.email,
-			firstName: updatedDetails?.toObject().firstName ?? "",
-			lastName: updatedDetails?.toObject().lastName ?? "",
+			details: {
+				firstName: payload.firstName ?? details?.toObject().firstName ?? "",
+				id: details?.toObject().id ?? DEFAULT_ID,
+				lastName: payload.lastName ?? details?.toObject().lastName ?? "",
+				userId,
+			},
+			user: {
+				email: payload.email,
+				id: user.toObject().id,
+			},
 		};
 	}
 }

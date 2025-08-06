@@ -1,4 +1,5 @@
 import { type Repository } from "~/libs/types/types.js";
+import { UserDetailsEntity } from "~/modules/users/user-details.entity.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
@@ -49,6 +50,38 @@ class UserRepository implements Repository {
 			.findOne(UserAttribute.EMAIL, email);
 
 		return user ? UserEntity.initialize(user) : null;
+	}
+
+	public async findByIdWithDetails(id: number): Promise<null | {
+		details: null | UserDetailsEntity;
+		user: UserEntity;
+	}> {
+		const userWithDetails = await this.userModel
+			.query()
+			.findById(id)
+			.withGraphFetched("userDetails");
+
+		if (!userWithDetails) {
+			return null;
+		}
+
+		const user = UserEntity.initialize({
+			email: userWithDetails.email,
+			id: userWithDetails.id,
+			passwordHash: userWithDetails.passwordHash,
+			passwordSalt: userWithDetails.passwordSalt,
+		});
+
+		const details = userWithDetails.userDetails
+			? UserDetailsEntity.initialize({
+					firstName: userWithDetails.userDetails.firstName,
+					id: userWithDetails.userDetails.id,
+					lastName: userWithDetails.userDetails.lastName,
+					userId: userWithDetails.userDetails.userId,
+				})
+			: null;
+
+		return { details, user };
 	}
 
 	public async getCredentials(id: number): Promise<null | UserCredentials> {

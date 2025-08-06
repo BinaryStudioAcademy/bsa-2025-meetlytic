@@ -4,6 +4,7 @@ import { UserDetailsEntity } from "./user-details.entity.js";
 import { type UserDetailsModel } from "./user-details.model.js";
 
 const NO_ROWS_DELETED = 0;
+const NO_ROWS_UPDATED = 0;
 
 class UserDetailsRepository implements Repository {
 	private userDetailsModel: typeof UserDetailsModel;
@@ -70,6 +71,18 @@ class UserDetailsRepository implements Repository {
 			.patchAndFetchById(id, payload);
 
 		return UserDetailsEntity.initialize(updated);
+	}
+
+	public async updateByUserId(
+		userId: number,
+		payload: Partial<{ firstName: string; lastName: string }>,
+	): Promise<boolean> {
+		const updatedRows = await this.userDetailsModel
+			.query()
+			.patch(payload)
+			.where("userId", userId);
+
+		return updatedRows > NO_ROWS_UPDATED;
 	}
 }
 

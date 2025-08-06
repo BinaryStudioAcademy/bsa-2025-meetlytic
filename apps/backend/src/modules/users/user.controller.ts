@@ -97,7 +97,9 @@ class UserController extends BaseController {
 	}: APIHandlerOptions): Promise<APIHandlerResponse> {
 		const currentUser = user as UserGetAllResponseDto["items"][number];
 
-		const fullUser = await this.userService.findByEmail(currentUser.email);
+		const fullUser = await this.userService.findProfileByEmail(
+			currentUser.email,
+		);
 
 		return {
 			payload: fullUser,
@@ -141,7 +143,7 @@ class UserController extends BaseController {
 		body,
 		user,
 	}: APIHandlerOptions): Promise<APIHandlerResponse> {
-		const currentUser = user as UserGetAllResponseDto["items"][number];
+		const currentUser = user as { email: string; id: number };
 		const payload = body as UserResponseDto;
 
 		const updatedUser = await this.userService.update(currentUser.id, payload);

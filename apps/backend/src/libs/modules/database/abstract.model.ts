@@ -1,4 +1,4 @@
-import { Model } from "objection";
+import { type ColumnNameMappers, Model, snakeCaseMappers } from "objection";
 
 class Abstract extends Model {
 	public createdAt!: string;
@@ -6,6 +6,10 @@ class Abstract extends Model {
 	public id!: number;
 
 	public updatedAt!: string;
+
+	public static get columnNameMappers(): ColumnNameMappers {
+		return snakeCaseMappers();
+	}
 
 	public override $beforeInsert(): void {
 		const insertDate = new Date().toISOString();

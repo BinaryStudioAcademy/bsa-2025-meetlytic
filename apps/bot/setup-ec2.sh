@@ -3,8 +3,8 @@
 echo "[+] Updating system packages..."
 sudo apt update -y
 
-echo "[+] Installing curl and git..."
-sudo apt install -y curl git
+echo "[+] Installing curl"
+sudo apt install -y curl
 
 echo "[+] Installing Node.js 22..."
 curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
@@ -37,17 +37,17 @@ pactl unload-module module-loopback || true
 pactl load-module module-null-sink sink_name=virtual_sink sink_properties=device.description=Virtual_Sink
 pactl load-module module-loopback source=virtual_sink.monitor
 
+echo "[+] Installing bot dependencies..."
+cd /home/ubuntu/bsa-2025-meetlytic/apps/bot
+npm install
+
 echo "[+] Building shared package..."
-cd /home/ubuntu/bsa-2025-meetlytic/packages/shared
+cd ../../packages/shared
 npm install
 npm run build
 
-echo "[+] Go to apps/bot..."
-cd /home/ubuntu/bsa-2025-meetlytic/apps/bot
-
-echo "[+] Installing bot dependencies..."
-npm install
-
+echo "[+] Go back to apps/bot..."
+cd ../../apps/bot
 
 echo "[+] Installing Chromium for Puppeteer (as root)..."
 sudo npx puppeteer browsers install chrome

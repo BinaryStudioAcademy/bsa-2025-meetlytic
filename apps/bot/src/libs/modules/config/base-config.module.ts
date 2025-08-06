@@ -93,7 +93,6 @@ class BaseConfig implements Config {
 
 		const sharedArguments = [
 			"--use-fake-ui-for-media-stream",
-			"--use-fake-device-for-media-stream",
 			"--no-sandbox",
 			"--disable-setuid-sandbox",
 		];

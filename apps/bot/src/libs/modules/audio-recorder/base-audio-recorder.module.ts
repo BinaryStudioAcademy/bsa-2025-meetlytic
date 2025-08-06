@@ -55,6 +55,10 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		const process = spawn(this.ffmpegPath, ffmpegArguments);
 
+		process.stderr.on("data", (data) => {
+			this.logger.error(`FFmpeg error: ${String(data)}`);
+		});
+
 		process.on("exit", () => {
 			if (this.isRecording) {
 				this.recordNextChunk();

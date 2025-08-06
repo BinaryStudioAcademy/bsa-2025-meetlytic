@@ -6,6 +6,7 @@ import {
 	useState,
 } from "~/libs/hooks/hooks.js";
 
+import { Icon } from "../components.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -121,7 +122,11 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 				className={getValidClassNames(styles["button"], "")}
 				onClick={handleTogglePlayback}
 			>
-				{isPlaying ? "||" : "▷"}
+				{isPlaying ? (
+					<Icon className={styles["icon"]} name="play" />
+				) : (
+					<Icon className={styles["icon"]} name="pause" />
+				)}
 			</button>
 
 			<div
@@ -141,7 +146,7 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 				/>
 			</div>
 
-			<div className={getValidClassNames(styles["time"], "")}>
+			<div className={styles["time"]}>
 				{formatTime(currentTime)} / {formatTime(duration)}
 			</div>
 

@@ -3,6 +3,8 @@ import { type Entity, type ValueOf } from "~/libs/types/types.js";
 import { type MeetingHost, MeetingStatus } from "./libs/enums/enums.js";
 
 class MeetingEntity implements Entity {
+	private createdAt: null | string;
+
 	private host: ValueOf<typeof MeetingHost>;
 
 	private id: null | number;
@@ -18,6 +20,7 @@ class MeetingEntity implements Entity {
 	private status!: ValueOf<typeof MeetingStatus>;
 
 	private constructor({
+		createdAt,
 		host,
 		id,
 		instanceId,
@@ -26,6 +29,7 @@ class MeetingEntity implements Entity {
 		ownerId,
 		status,
 	}: {
+		createdAt: null | string;
 		host: ValueOf<typeof MeetingHost>;
 		id: null | number;
 		instanceId: null | string;
@@ -34,6 +38,7 @@ class MeetingEntity implements Entity {
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 	}) {
+		this.createdAt = createdAt;
 		this.id = id;
 		this.host = host;
 		this.instanceId = instanceId;
@@ -44,6 +49,7 @@ class MeetingEntity implements Entity {
 	}
 
 	public static initialize({
+		createdAt,
 		host,
 		id,
 		instanceId,
@@ -52,6 +58,7 @@ class MeetingEntity implements Entity {
 		ownerId,
 		status,
 	}: {
+		createdAt: null | string;
 		host: ValueOf<typeof MeetingHost>;
 		id: number;
 		instanceId: null | string;
@@ -61,6 +68,7 @@ class MeetingEntity implements Entity {
 		status: ValueOf<typeof MeetingStatus>;
 	}): MeetingEntity {
 		return new MeetingEntity({
+			createdAt,
 			host,
 			id,
 			instanceId,
@@ -85,6 +93,7 @@ class MeetingEntity implements Entity {
 		ownerId: number;
 	}): MeetingEntity {
 		return new MeetingEntity({
+			createdAt: null,
 			host,
 			id: null,
 			instanceId,
@@ -114,6 +123,7 @@ class MeetingEntity implements Entity {
 	}
 
 	public toObject(): {
+		createdAt: string;
 		host: ValueOf<typeof MeetingHost>;
 		id: number;
 		instanceId: null | string;
@@ -123,6 +133,7 @@ class MeetingEntity implements Entity {
 		status: ValueOf<typeof MeetingStatus>;
 	} {
 		return {
+			createdAt: this.createdAt as string,
 			host: this.host,
 			id: this.id as number,
 			instanceId: this.instanceId,

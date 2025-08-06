@@ -146,6 +146,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		}
 
 		const meeting = MeetingEntity.initialize({
+			createdAt: meetingEntity.toObject().createdAt,
 			host: payload.host,
 			id,
 			instanceId: meetingEntity.toObject().instanceId,

@@ -38,34 +38,44 @@ for i in {1..10}; do
 done
 
 echo "[+] Unloading existing null sinks (if any)..."
-pactl unload-module module-null-sink &> /dev/null || true
+pactl list short modules | grep module-null-sink | cut -f1 | while read -r mod; do
+	pactl unload-module "$mod"
+done
 
 echo "[+] Creating virtual sink..."
-pactl load-module module-null-sink sink_name=virtual_sink sink_properties=device.description=Virtual_Sink
+VIRTUAL_SINK_ID=$(pactl load-module module-null-sink sink_name=virtual_sink sink_properties=device.description=Virtual_Sink)
+if [ -z "$VIRTUAL_SINK_ID" ]; then
+	echo "[✗] Failed to create virtual_sink"
+	exit 1
+fi
 
-echo "[+] Loading loopback to monitor..."
-pactl load-module module-loopback source=virtual_sink.monitor
+echo "[+] Waiting for virtual_sink.monitor to appear..."
+for i in {1..10}; do
+	if pactl list sources short | grep -q virtual_sink.monitor; then
+		echo "[✓] virtual_sink.monitor successfully created"
+		break
+	fi
+	sleep 1
+done
 
-echo "[+] Verifying virtual_sink.monitor exists..."
-if pactl list sources short | grep -q virtual_sink.monitor; then
-	echo "[✓] virtual_sink.monitor successfully created"
-else
+if ! pactl list sources short | grep -q virtual_sink.monitor; then
 	echo "[◕︵◕] virtual_sink.monitor NOT FOUND. Recording will fail!"
 	pactl list sources short
 	exit 1
 fi
 
+echo "[+] Loading loopback from virtual_sink.monitor to default sink..."
+pactl load-module module-loopback source=virtual_sink.monitor
+
 echo "[+] Building shared package..."
-cd ../../packages/shared
+# current: /home/ubuntu/bsa-2025-meetlytic/
+cd packages/shared
 npm install
 npm run build
 
 echo "[+] Installing bot dependencies..."
-cd /home/ubuntu/bsa-2025-meetlytic/apps/bot
-npm install
-
-echo "[+] Go back to apps/bot..."
 cd ../../apps/bot
+npm install
 
 echo "[+] Installing Chromium for Puppeteer..."
 npx puppeteer browsers install chrome

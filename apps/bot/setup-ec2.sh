@@ -31,6 +31,9 @@ cd ../../packages/shared
 npm install
 npm run build
 
+echo "[+] Go back to apps/bot..."
+cd ../../apps/bot
+
 echo "[+] Installing Chromium for Puppeteer..."
 npx puppeteer browsers install chrome
 

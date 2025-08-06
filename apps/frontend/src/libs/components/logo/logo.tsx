@@ -1,4 +1,5 @@
-import logoIcon from "~/assets/img/logo/meetlytic-icon.svg";
+import logoDark from "~/assets/img/logo/meetlytic-logo-dark.svg";
+import logoLight from "~/assets/img/logo/meetlytic-logo.svg";
 import { Link } from "~/libs/components/components.js";
 import { AppRoute, LogoSize, LogoTheme } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
@@ -17,27 +18,18 @@ const Logo: React.FC<Properties> = ({
 	size = LogoSize.SMALL,
 	theme = LogoTheme.LIGHT,
 }: Properties) => {
+	const logoSource = theme === LogoTheme.DARK ? logoDark : logoLight;
+
 	const logoContent = (
-		<div
-			className={getValidClassNames(styles["logo"], styles[`logo--${size}`])}
-		>
+		<div className={styles["logo"]}>
 			<img
-				alt="Meetlytic Icon"
+				alt="Meetlytic Logo"
 				className={getValidClassNames(
-					styles["logo__icon"],
-					styles[`logo__icon--${size}`],
+					styles["logo__image"],
+					styles[`logo__image--${size}`],
 				)}
-				src={logoIcon}
+				src={logoSource}
 			/>
-			<span
-				className={getValidClassNames(
-					styles["logo__text"],
-					styles[`logo__text--${size}`],
-					styles[`logo__text--${theme}`],
-				)}
-			>
-				Meetlytic
-			</span>
 		</div>
 	);
 

@@ -1,2 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg fill="none" viewBox="0.0 0.0 75.0 72.0" xmlns="http://www.w3.org/2000/svg"><path d="M72 51C72 53.1217 71.1571 55.1566 69.6569 56.6569C68.1566 58.1571 66.1217 59 64 59H16L0 75V11C0 8.87827 0.842854 6.84344 2.34315 5.34315C3.84344 3.84285 5.87827 3 8 3H64C66.1217 3 68.1566 3.84285 69.6569 5.34315C71.1571 6.84344 72 8.87827 72 11V51Z" fill="#10ADD8"/><path d="M12 41L16.5 24.5L23 49.5L30 15.5L36 43L39 24.5L44 37.5L47 30L52 37.5L58 20" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><circle cx="59.5" cy="15" fill="white" r="6"/></svg>
+<svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M72 48C72 50.1217 71.1571 52.1566 69.6569 53.6569C68.1566 55.1571 66.1217 56 64 56H16L0 72V8C0 5.87827 0.842854 3.84344 2.34315 2.34315C3.84344 0.842854 5.87827 0 8 0H64C66.1217 0 68.1566 0.842854 69.6569 2.34315C71.1571 3.84344 72 5.87827 72 8V48Z" fill="#10ADD8"/>
+<path d="M12 38L16.5 21.5L23 46.5L30 12.5L36 40L39 21.5L44 34.5L47 27L52 34.5L58 17" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="59.5" cy="12" r="6" fill="white"/>
+</svg>

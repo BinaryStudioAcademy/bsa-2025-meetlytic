@@ -1,5 +1,4 @@
-import { type ValueOf } from "~/libs/types/types.js";
-
+import { type ValueOf } from "../../../../types/types.js";
 import { type HTTPMethod } from "../enums/enums.js";
 
 type HTTPOptions = {

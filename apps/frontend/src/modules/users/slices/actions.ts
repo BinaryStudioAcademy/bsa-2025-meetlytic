@@ -5,14 +5,14 @@ import { extractErrorMessage } from "~/libs/helpers/helpers.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
 import { type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
-	type UserResponseDto,
 	type UserUpdateResponseDto,
+	type UserWithDetailsDto,
 } from "~/modules/users/users.js";
 
 import { name as sliceName } from "./users.slice.js";
 
 const getProfile = createAsyncThunk<
-	UserResponseDto,
+	UserWithDetailsDto,
 	undefined,
 	AsyncThunkConfig
 >(`${sliceName}/get-profile`, async (_, { extra }) => {
@@ -23,7 +23,7 @@ const getProfile = createAsyncThunk<
 });
 
 const updateProfile = createAsyncThunk<
-	UserResponseDto,
+	UserWithDetailsDto,
 	UserUpdateResponseDto,
 	AsyncThunkConfig
 >(

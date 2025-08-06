@@ -3,8 +3,8 @@ import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
 import {
-	type UserResponseDto,
 	type UserUpdateResponseDto,
+	type UserWithDetailsDto,
 } from "~/modules/users/users.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
@@ -20,7 +20,7 @@ class UsersApi extends BaseHTTPApi {
 		super({ baseUrl, http, path: APIPath.USERS, storage });
 	}
 
-	public async getCurrent(): Promise<UserResponseDto> {
+	public async getCurrent(): Promise<UserWithDetailsDto> {
 		const response = await this.load(
 			this.getFullEndpoint(UsersApiPath.ME, {}),
 			{
@@ -30,12 +30,12 @@ class UsersApi extends BaseHTTPApi {
 			},
 		);
 
-		return await response.json<UserResponseDto>();
+		return await response.json<UserWithDetailsDto>();
 	}
 
 	public async updateProfile(
 		payload: Partial<UserUpdateResponseDto>,
-	): Promise<UserResponseDto> {
+	): Promise<UserWithDetailsDto> {
 		const response = await this.load(
 			this.getFullEndpoint(UsersApiPath.ME, {}),
 			{
@@ -46,7 +46,7 @@ class UsersApi extends BaseHTTPApi {
 			},
 		);
 
-		return await response.json<UserResponseDto>();
+		return await response.json<UserWithDetailsDto>();
 	}
 }
 

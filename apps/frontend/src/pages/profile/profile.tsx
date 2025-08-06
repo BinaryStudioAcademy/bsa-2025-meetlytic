@@ -52,7 +52,14 @@ const Profile: React.FC = () => {
 				<div className={styles["profile__header"]}>
 					<Avatar size={AvatarSize.LARGE} type={AvatarType.MAIN} />
 				</div>
-				<ProfileForm onSubmit={handleSubmit} user={user} />
+				<ProfileForm
+					onSubmit={handleSubmit}
+					user={{
+						email: user.user.email,
+						firstName: user.details?.firstName ?? "",
+						lastName: user.details?.lastName ?? "",
+					}}
+				/>
 			</div>
 		</div>
 	);

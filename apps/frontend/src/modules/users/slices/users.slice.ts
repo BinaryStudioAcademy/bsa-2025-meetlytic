@@ -1,13 +1,13 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
-import { type UserResponseDto, type ValueOf } from "~/libs/types/types.js";
+import { type UserWithDetailsDto, type ValueOf } from "~/libs/types/types.js";
 
 import { getProfile, updateProfile } from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
-	user: null | UserResponseDto;
+	user: null | UserWithDetailsDto;
 };
 
 const initialState: State = {
@@ -41,7 +41,7 @@ const { actions, name, reducer } = createSlice({
 	initialState,
 	name: "users",
 	reducers: {
-		setUser: (state, action: PayloadAction<UserResponseDto>) => {
+		setUser: (state, action: PayloadAction<UserWithDetailsDto>) => {
 			state.user = action.payload;
 		},
 	},

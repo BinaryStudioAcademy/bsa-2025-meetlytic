@@ -6,6 +6,7 @@ export {
 	type ServerErrorDetail,
 	type ServerErrorResponse,
 	type UserResponseDto,
+	type UserWithDetailsDto,
 	type ValidationSchema,
 	type ValueOf,
 } from "@meetlytic/shared";

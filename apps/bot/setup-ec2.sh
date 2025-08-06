@@ -37,27 +37,24 @@ pactl unload-module module-loopback || true
 pactl load-module module-null-sink sink_name=virtual_sink sink_properties=device.description=Virtual_Sink
 pactl load-module module-loopback source=virtual_sink.monitor
 
+echo "[+] Building shared package..."
+cd /home/ubuntu/bsa-2025-meetlytic/packages/shared
+sudo -u ubuntu npm install
+sudo -u ubuntu npm run build
+
 echo "[+] Installing bot dependencies..."
 cd /home/ubuntu/bsa-2025-meetlytic/apps/bot
-npm install
+sudo -u ubuntu npm install
 
-echo "[+] Building shared package..."
-cd ../../packages/shared
-npm install
-npm run build
-
-echo "[+] Go back to apps/bot..."
-cd ../../apps/bot
-
-echo "[+] Installing Chromium for Puppeteer (as root)..."
-sudo npx puppeteer browsers install chrome
+echo "[+] Installing Chromium for Puppeteer (as ubuntu)..."
+sudo -u ubuntu npx puppeteer browsers install chrome
 
 echo "[+] Creating audio output directory..."
 mkdir -p /home/ubuntu/audio
 sudo chown -R ubuntu:ubuntu /home/ubuntu/audio
 
 echo "[+] Writing environment variables..."
-cat <<EOF > .env
+sudo -u ubuntu tee .env > /dev/null <<EOF
 NODE_ENV=production
 MEETING_ID=${1}
 MEETING_PASSWORD=${2}

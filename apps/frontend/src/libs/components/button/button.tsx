@@ -5,6 +5,7 @@ import { type ValueOf } from "~/libs/types/types.js";
 import styles from "./styles.module.css";
 
 type Properties = {
+	className?: string | undefined;
 	iconLeft?: React.ReactNode;
 	iconRight?: React.ReactNode;
 	isDisabled?: boolean;
@@ -16,6 +17,7 @@ type Properties = {
 };
 
 const Button: React.FC<Properties> = ({
+	className,
 	iconLeft,
 	iconRight,
 	isDisabled = false,
@@ -31,6 +33,7 @@ const Button: React.FC<Properties> = ({
 			styles[`button-${variant}`],
 			styles[`button-${size}`],
 			isDisabled && styles[`button-${variant}-disabled`],
+			className,
 		)}
 		disabled={isDisabled}
 		onClick={onClick}

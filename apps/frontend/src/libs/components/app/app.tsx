@@ -4,9 +4,18 @@ import {
 	SearchInput,
 } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
-import { useAppForm, useAppSelector, useCallback } from "~/libs/hooks/hooks.js";
+import {
+	useAppDispatch,
+	useAppForm,
+	useAppSelector,
+	useCallback,
+	useEffect,
+} from "~/libs/hooks/hooks.js";
+import { actions as authActions } from "~/modules/auth/auth.js";
 
 const App: React.FC = () => {
+	const dispatch = useAppDispatch();
+
 	const { dataStatus } = useAppSelector(({ auth }) => ({
 		dataStatus: auth.dataStatus,
 	}));
@@ -16,6 +25,10 @@ const App: React.FC = () => {
 			search: "",
 		},
 	});
+
+	useEffect(() => {
+		void dispatch(authActions.getAuthenticatedUser());
+	}, [dispatch]);
 
 	const handleSearch = useCallback((value: string) => {
 		// TODO: implement handleSearch logic

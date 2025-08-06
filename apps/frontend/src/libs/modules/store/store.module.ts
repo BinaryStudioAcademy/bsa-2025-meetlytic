@@ -15,21 +15,28 @@ import {
 	authApi,
 	reducer as authReducer,
 } from "~/modules/auth/auth.js";
+import {
+	meetingApi,
+	reducer as meetingReducer,
+} from "~/modules/meeting/meeting.js";
 import { userApi, reducer as userReducer } from "~/modules/users/users.js";
 
 type ExtraArguments = {
 	authApi: typeof authApi;
+	meetingApi: typeof meetingApi;
 	storage: typeof storage;
 	userApi: typeof userApi;
 };
 
 type RootReducer = {
 	auth: ReturnType<typeof authReducer>;
+	meeting: ReturnType<typeof meetingReducer>;
 	users: ReturnType<typeof userReducer>;
 };
 
 const rootReducer = combineReducers({
 	auth: authReducer,
+	meeting: meetingReducer,
 	users: userReducer,
 });
 
@@ -70,6 +77,7 @@ class Store {
 	public get extraArguments(): ExtraArguments {
 		return {
 			authApi,
+			meetingApi,
 			storage,
 			userApi,
 		};

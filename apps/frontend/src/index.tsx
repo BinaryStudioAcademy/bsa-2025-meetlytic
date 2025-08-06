@@ -15,6 +15,7 @@ import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFoundPage } from "~/pages/not-found/not-found.js";
 import { Profile } from "~/pages/profile/profile.jsx";
+import { RootPage } from "~/pages/root/root-page.js";
 
 createRoot(document.querySelector("#root") as HTMLElement).render(
 	<StrictMode>
@@ -33,19 +34,24 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 					{
 						children: [
 							{
-								element: <App />,
-								index: true,
+								children: [
+									{
+										element: (
+											<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
+												<RootPage />
+											</ProtectedRoute>
+										),
+										index: true,
+									},
+								],
+								element: <Layout />,
 							},
 							{
 								element: <Profile />,
 								path: AppRoute.PROFILE,
 							},
 						],
-						element: (
-							<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
-								<Layout />
-							</ProtectedRoute>
-						),
+						element: <App />,
 						path: AppRoute.ROOT,
 					},
 					{

@@ -1,6 +1,11 @@
 import { Button, Input, Link } from "~/libs/components/components.js";
-import { AppRoute, UserValidationRule } from "~/libs/enums/enums.js";
-import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
+import {
+	AppRoute,
+	InputPasswordType,
+	UserValidationRule,
+} from "~/libs/enums/enums.js";
+import { useAppForm, useCallback, useState } from "~/libs/hooks/hooks.js";
+import { type InputPassword } from "~/libs/types/types.js";
 import { DEFAULT_SIGN_IN_VALUES } from "~/modules/users/libs/default-values/sign-in.default-values.js";
 import {
 	type UserSignInRequestDto,
@@ -15,6 +20,10 @@ type Properties = {
 };
 
 const SignInForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
+	const [inputType, setInputType] = useState<InputPassword>(
+		InputPasswordType.PASSWORD,
+	);
+
 	const { control, errors, handleSubmit } = useAppForm<UserSignInRequestDto>({
 		defaultValues: DEFAULT_SIGN_IN_VALUES,
 		validationSchema: userSignInValidationSchema,
@@ -25,6 +34,23 @@ const SignInForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 			void handleSubmit(onSubmit)(event);
 		},
 		[handleSubmit, onSubmit],
+	);
+
+	const handleToggleView = useCallback(() => {
+		setInputType((previous) =>
+			previous === InputPasswordType.PASSWORD
+				? InputPasswordType.TEXT
+				: InputPasswordType.PASSWORD,
+		);
+	}, []);
+
+	const handleGetIconName = useCallback(
+		(inputType: InputPassword): "hidePassword" | "showPassword" => {
+			return inputType === InputPasswordType.PASSWORD
+				? "hidePassword"
+				: "showPassword";
+		},
+		[],
 	);
 
 	return (
@@ -46,10 +72,13 @@ const SignInForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					className={styles["input"]}
 					control={control}
 					errors={errors}
+					iconName={handleGetIconName(inputType)}
+					iconPosition="right"
 					label="Password"
 					name="password"
+					onClickIcon={handleToggleView}
 					placeholder="********"
-					type="password"
+					type={inputType}
 				/>
 
 				<Button label="Login" type="submit" />

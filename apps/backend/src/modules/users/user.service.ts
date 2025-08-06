@@ -1,6 +1,9 @@
 import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
+import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
 
+import { UserErrorMessage } from "./libs/enums/enums.js";
+import { UserError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserCredentials,
 	type UserGetAllResponseDto,
@@ -116,7 +119,10 @@ class UserService implements Service {
 		const result = await this.userRepository.findByIdWithDetails(userId);
 
 		if (!result) {
-			throw new Error("User not found");
+			throw new UserError({
+				message: UserErrorMessage.USER_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
 		}
 
 		const { details, user } = result;
@@ -127,7 +133,10 @@ class UserService implements Service {
 			);
 
 			if (userWithEmail && userWithEmail.toObject().id !== userId) {
-				throw new Error("Email already in use");
+				throw new UserError({
+					message: UserErrorMessage.USER_EMAIL_IN_USE,
+					status: HTTPCode.NOT_FOUND,
+				});
 			}
 
 			await this.userRepository.update(userId, {

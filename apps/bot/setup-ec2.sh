@@ -12,7 +12,21 @@ sudo apt install -y nodejs
 
 echo "[+] Installing system libraries and dependencies..."
 sudo apt-get update -y
-sudo apt-get install -y \ ffmpeg \ pulseaudio \ pulseaudio-utils \ libatk1.0-0 \ libatk-bridge2.0-0 \ libgtk-3-0 \ libnss3 \ libxss1 \ libasound2 \ libgbm1 \ libx11-xcb1 \ libxcomposite1 \ libxkbcommon0 \ libappindicator3-1
+sudo apt-get install -y \
+	ffmpeg \
+	pulseaudio \
+	pulseaudio-utils \
+	libatk1.0-0 \
+	libatk-bridge2.0-0 \
+	libgtk-3-0 \
+	libnss3 \
+	libxss1 \
+	libasound2 \
+	libgbm1 \
+	libx11-xcb1 \
+	libxcomposite1 \
+	libxkbcommon0 \
+	libappindicator3-1
 
 echo "[+] Starting PulseAudio..."
 pulseaudio --start
@@ -39,15 +53,16 @@ else
 	echo "[◕︵◕] virtual_sink.monitor NOT FOUND. Recording will fail!"
 	pactl list sources short
 	exit 1
-
-echo "[+] Installing bot dependencies..."
-cd /home/ubuntu/bsa-2025-meetlytic/apps/bot
-npm install
+fi
 
 echo "[+] Building shared package..."
 cd ../../packages/shared
 npm install
 npm run build
+
+echo "[+] Installing bot dependencies..."
+cd /home/ubuntu/bsa-2025-meetlytic/apps/bot
+npm install
 
 echo "[+] Go back to apps/bot..."
 cd ../../apps/bot

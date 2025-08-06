@@ -100,6 +100,7 @@ class BaseConfig implements Config {
 		return {
 			args: sharedArguments,
 			enableExtensions: true,
+			executablePath: "/usr/bin/google-chrome",
 			headless: isProduction,
 			...(isDevelopment && {
 				defaultViewport: { height: 700, width: 1200 },

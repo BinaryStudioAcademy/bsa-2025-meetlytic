@@ -1,3 +1,4 @@
+import logoIcon from "~/assets/img/logo/meetlytic-icon.svg";
 import { Link } from "~/libs/components/components.js";
 import { AppRoute, LogoSize, LogoTheme } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
@@ -17,15 +18,27 @@ const Logo: React.FC<Properties> = ({
 	theme = LogoTheme.LIGHT,
 }: Properties) => {
 	const logoContent = (
-		<span
-			className={getValidClassNames(
-				styles["logo-text"],
-				styles[`logo-text--${size}`],
-				styles[`logo-text--${theme}`],
-			)}
+		<div
+			className={getValidClassNames(styles["logo"], styles[`logo--${size}`])}
 		>
-			Meetlytic
-		</span>
+			<img
+				alt="Meetlytic Icon"
+				className={getValidClassNames(
+					styles["logo__icon"],
+					styles[`logo__icon--${size}`],
+				)}
+				src={logoIcon}
+			/>
+			<span
+				className={getValidClassNames(
+					styles["logo__text"],
+					styles[`logo__text--${size}`],
+					styles[`logo__text--${theme}`],
+				)}
+			>
+				Meetlytic
+			</span>
+		</div>
 	);
 
 	return hasLink ? <Link to={AppRoute.ROOT}>{logoContent}</Link> : logoContent;

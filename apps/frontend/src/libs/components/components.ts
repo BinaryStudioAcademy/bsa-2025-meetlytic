@@ -7,7 +7,6 @@ export { Input } from "./input/input.js";
 export { Layout } from "./layout/layout.js";
 export { Link } from "./link/link.js";
 export { Loader } from "./loader/loader.js";
-export { LogoIcon } from "./logo-icon/logo-icon.js";
 export { Logo } from "./logo/logo.js";
 export { MeetingForm } from "./meeting-form/meeting-form.js";
 export { Modal } from "./modal/modal.js";

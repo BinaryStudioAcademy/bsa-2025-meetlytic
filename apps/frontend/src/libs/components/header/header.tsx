@@ -1,10 +1,4 @@
-import {
-	Avatar,
-	Button,
-	Icon,
-	Logo,
-	LogoIcon,
-} from "~/libs/components/components.js";
+import { Avatar, Button, Icon, Logo } from "~/libs/components/components.js";
 import {
 	AvatarSize,
 	AvatarType,
@@ -28,7 +22,6 @@ const Header: React.FC = () => {
 		<header className={styles["header"]}>
 			<div className={styles["header-inner"]}>
 				<div className={styles["header-logo"]}>
-					<LogoIcon hasLink size={LogoSize.SMALL} />
 					<Logo hasLink size={LogoSize.SMALL} theme={LogoTheme.LIGHT} />
 				</div>
 				<div className={styles["header__avatar-logout-wrapper"]}>

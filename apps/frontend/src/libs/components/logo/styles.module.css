@@ -1,19 +1,47 @@
-.logo-text {
+.logo {
+	display: flex;
+	align-items: center;
+}
+
+.logo--small {
+	gap: 7px;
+}
+
+.logo--large {
+	gap: 13px;
+}
+
+.logo__icon {
+	display: block;
+	object-fit: contain;
+}
+
+.logo__icon--small {
+	width: 34px;
+	height: 34px;
+}
+
+.logo__icon--large {
+	width: 85px;
+	height: 85px;
+}
+
+.logo__text {
 	font-weight: 700;
 }
 
-.logo-text--small {
-	font-size: 25px;
+.logo__text--small {
+	font-size: 23px;
 }
 
-.logo-text--large {
-	font-size: 75px;
+.logo__text--large {
+	font-size: 85px;
 }
 
-.logo-text--light {
-	color: white;
+.logo__text--light {
+	color: var(--color-text-3);
 }
 
-.logo-text--dark {
+.logo__text--dark {
 	color: var(--color-text-1);
 }

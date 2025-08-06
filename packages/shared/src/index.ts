@@ -9,6 +9,7 @@ export {
 	AuthError,
 	HTTPError,
 	MeetingError,
+	UserError,
 	ValidationError,
 } from "./libs/exceptions/exceptions.js";
 export { configureString } from "./libs/helpers/helpers.js";
@@ -54,6 +55,7 @@ export {
 	type UserSignUpRequestDto,
 	type UserUpdateResponseDto,
 	type UserWithDetailsDto,
+	UserErrorMessage,
 	UsersApiPath,
 	userSignInValidationSchema,
 	userSignUpValidationSchema,

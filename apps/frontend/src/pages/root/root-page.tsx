@@ -1,4 +1,9 @@
-import { Button, MeetingForm, Modal } from "~/libs/components/components.js";
+import {
+	Button,
+	MeetingForm,
+	Modal,
+	PlayerTrack,
+} from "~/libs/components/components.js";
 import { useCallback, useState } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
@@ -21,6 +26,8 @@ const RootPage: React.FC = () => {
 					<Button label="Start a meeting" onClick={handleOpenModal} />
 				</div>
 			</div>
+
+			<PlayerTrack audioUrl="https://file-examples.com/storage/fe0ab252ad6893821a36477/2017/11/file_example_MP3_5MG.mp3" />
 
 			<Modal isOpen={isModalOpen} onClose={handleCloseModal}>
 				<MeetingForm onClose={handleCloseModal} />

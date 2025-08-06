@@ -1,0 +1,160 @@
+import { getValidClassNames } from "~/libs/helpers/helpers.js";
+import {
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from "~/libs/hooks/hooks.js";
+
+import styles from "./styles.module.css";
+
+type Properties = {
+	audioUrl: string;
+};
+
+const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
+	const SECONDS_IN_MINUTE = 60;
+	const PAD_LENGTH = 2;
+	const START_TIME = 0;
+	const PERCENT_MULTIPLIER = 100;
+
+	const audioReference = useRef<HTMLAudioElement>(null);
+	const progressReference = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const audio = audioReference.current;
+
+		if (!audio) {
+			return;
+		}
+
+		const handleTimeUpdate = (): void => {
+			setCurrentTime(audio.currentTime);
+		};
+
+		const handleLoadedMetadata = (): void => {
+			setDuration(audio.duration);
+		};
+
+		const handleEnded = (): void => {
+			setIsPlaying(false);
+		};
+
+		audio.addEventListener("timeupdate", handleTimeUpdate);
+		audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+		audio.addEventListener("ended", handleEnded);
+
+		return (): void => {
+			audio.removeEventListener("timeupdate", handleTimeUpdate);
+			audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+			audio.removeEventListener("ended", handleEnded);
+		};
+	}, []);
+
+	const [isPlaying, setIsPlaying] = useState(false);
+	const [currentTime, setCurrentTime] = useState(START_TIME);
+	const [duration, setDuration] = useState(START_TIME);
+
+	const formatTime = (time: number): string => {
+		const minutes = Math.floor(time / SECONDS_IN_MINUTE);
+		const seconds = Math.floor(time % SECONDS_IN_MINUTE);
+
+		return `${String(minutes).padStart(PAD_LENGTH, "0")}:${String(seconds).padStart(PAD_LENGTH, "0")}`;
+	};
+
+	const togglePlayback = useCallback(async (): Promise<void> => {
+		if (!audioReference.current) {
+			return;
+		}
+
+		if (isPlaying) {
+			audioReference.current.pause();
+		} else {
+			await audioReference.current.play();
+		}
+
+		setIsPlaying(!isPlaying);
+	}, [isPlaying]);
+
+	const handleTogglePlayback = useCallback((): void => {
+		void togglePlayback();
+	}, [togglePlayback]);
+
+	const handleSeek = useCallback(
+		(event: React.KeyboardEvent | React.MouseEvent): void => {
+			if (!audioReference.current || !progressReference.current) {
+				return;
+			}
+
+			if ("clientX" in event) {
+				const rect = progressReference.current.getBoundingClientRect();
+				const clickX = event.clientX - rect.left;
+				const newTime = (clickX / rect.width) * duration;
+
+				audioReference.current.currentTime = newTime;
+				setCurrentTime(newTime);
+			}
+		},
+		[duration],
+	);
+
+	const handleInteraction = useCallback(
+		(event: React.KeyboardEvent | React.MouseEvent): void => {
+			if ("clientX" in event) {
+				handleSeek(event);
+
+				return;
+			}
+
+			if ("key" in event && (event.key === "Enter" || event.key === " ")) {
+				handleSeek(event);
+			}
+		},
+		[handleSeek],
+	);
+
+	const progressWidth = `${String((currentTime / duration) * PERCENT_MULTIPLIER)}%`;
+
+	return (
+		<div className={styles["root"]}>
+			<button
+				className={getValidClassNames(styles["button"], "")}
+				onClick={handleTogglePlayback}
+			>
+				{isPlaying ? "||" : "▷"}
+			</button>
+
+			<div
+				className={getValidClassNames(styles["progress"], "")}
+				onClick={handleInteraction}
+				onKeyDown={handleInteraction}
+				ref={progressReference}
+				role="button"
+				tabIndex={0}
+			>
+				<div
+					className={getValidClassNames(
+						styles["progress__fill"],
+						isPlaying && styles["progress__fill_active"],
+					)}
+					style={{ width: progressWidth }}
+				/>
+			</div>
+
+			<div className={getValidClassNames(styles["time"], "")}>
+				{formatTime(currentTime)} / {formatTime(duration)}
+			</div>
+
+			<audio preload="metadata" ref={audioReference} src={audioUrl}>
+				<track
+					kind="captions"
+					label="English captions"
+					src="captions.vtt"
+					srcLang="en"
+				/>
+			</audio>
+		</div>
+	);
+};
+
+export { PlayerTrack };

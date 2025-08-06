@@ -11,10 +11,10 @@
 	"scripts": {
 		"lint:type": "npx tsc --noEmit",
 		"lint:js": "npx eslint . --max-warnings=0 --no-warn-ignored",
-		"lint": "npx concurrently \"npm:lint:*\"",
+		"lint": "concurrently \"npm:lint:*\"",
 		"build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json"
 	},
-	"dependencies": {
+	"devDependencies": {
 		"zod": "3.25.76"
 	}
 }

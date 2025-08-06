@@ -5,13 +5,22 @@ import {
 	Modal,
 } from "~/libs/components/components.js";
 import { AvatarSize } from "~/libs/enums/enums.js";
-import { useCallback, useState } from "~/libs/hooks/hooks.js";
+import {
+	useAppDispatch,
+	useAppSelector,
+	useCallback,
+	useEffect,
+	useState,
+} from "~/libs/hooks/hooks.js";
+import { actions as meetingActions } from "~/modules/meeting/meeting.js";
 
 import { MeetingItem } from "./components/meeting-item/meeting-item.js";
 import styles from "./styles.module.css";
 
 const Meetings: React.FC = () => {
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+	const dispatch = useAppDispatch();
+	const meetings = useAppSelector((state) => state.meeting.meetings);
 
 	const handleOpenModal = useCallback(() => {
 		setIsModalOpen(true);
@@ -20,6 +29,10 @@ const Meetings: React.FC = () => {
 	const handleCloseModal = useCallback(() => {
 		setIsModalOpen(false);
 	}, []);
+
+	useEffect(() => {
+		void dispatch(meetingActions.getAllMeetings());
+	}, [dispatch]);
 
 	return (
 		<>
@@ -44,11 +57,15 @@ const Meetings: React.FC = () => {
 					</div>
 				</div>
 				<div className={styles["meetings__list"]}>
-					<MeetingItem date="Aug 9, 2024, 1:24 PM" title="Meeting id" />
-					<MeetingItem date="Aug 9, 2024, 1:24 PM" title="Meeting id" />
-					<MeetingItem date="Aug 9, 2024, 1:24 PM" title="Meeting id" />
-					<MeetingItem date="Aug 9, 2024, 1:24 PM" title="Meeting id" />
-					<MeetingItem date="Aug 9, 2024, 1:24 PM" title="Meeting id" />
+					{meetings.map((meeting) => {
+						return (
+							<MeetingItem
+								date={new Date(meeting.createdAt).toDateString()}
+								key={meeting.id}
+								title={`Meeting #${String(meeting.id)}`}
+							/>
+						);
+					})}
 				</div>
 			</div>
 		</>

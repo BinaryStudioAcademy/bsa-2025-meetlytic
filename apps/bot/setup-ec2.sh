@@ -89,6 +89,15 @@ FFMPEG_PATH=/usr/bin/ffmpeg
 OUTPUT_DIRECTORY=/home/ubuntu/audio
 EOF
 
+echo "[?] Verifying that PulseAudio is already running"
+if pulseaudio --check; then
+	echo "[+] PulseAudio is already running"
+else
+	echo "[*] PulseAudio not running. Starting..."
+	pulseaudio --start --exit-idle-time=-1
+	sleep 2
+fi
+
 echo "[+] Starting ZoomBot..."
 nohup npm run start:dev > /home/ubuntu/bot.log 2>&1 &
 

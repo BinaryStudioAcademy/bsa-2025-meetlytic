@@ -16,10 +16,7 @@ import { SignInForm, SignUpForm } from "./components/components.js";
 
 const Auth: React.FC = () => {
 	const dispatch = useAppDispatch();
-	const { dataStatus, user } = useAppSelector(({ auth }) => ({
-		dataStatus: auth.dataStatus,
-		user: auth.user,
-	}));
+	const { dataStatus, user } = useAppSelector((state) => state.auth);
 	const { pathname } = useLocation();
 	const hasUser = Boolean(user);
 

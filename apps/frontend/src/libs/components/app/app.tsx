@@ -16,9 +16,7 @@ import { actions as authActions } from "~/modules/auth/auth.js";
 const App: React.FC = () => {
 	const dispatch = useAppDispatch();
 
-	const { dataStatus } = useAppSelector(({ auth }) => ({
-		dataStatus: auth.dataStatus,
-	}));
+	const { dataStatus } = useAppSelector((state) => state.auth);
 
 	const { control, errors } = useAppForm({
 		defaultValues: {

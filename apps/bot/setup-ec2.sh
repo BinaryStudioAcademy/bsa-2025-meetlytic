@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# === Set working directory to repo root ===
+echo "[+] Set working directory to repo root"
+cd "$(dirname "$0")/../.." || {
+	echo "[x] Failed to cd to repo root from setup-ec2.sh"
+	exit 1
+}
+
 echo "[+] Updating system packages..."
 sudo apt update -y
 
@@ -74,7 +81,7 @@ npm install
 npm run build
 
 echo "[+] Installing bot dependencies..."
-cd ../../apps/bot
+cd apps/bot
 npm install
 
 echo "[+] Installing Chromium for Puppeteer..."

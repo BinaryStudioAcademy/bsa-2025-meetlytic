@@ -37,23 +37,17 @@ pactl unload-module module-loopback || true
 pactl load-module module-null-sink sink_name=virtual_sink sink_properties=device.description=Virtual_Sink
 pactl load-module module-loopback source=virtual_sink.monitor
 
-echo "[+] Cloning repo if not present..."
-cd /home/ubuntu
-if [ ! -d "bsa-2025-meetlytic" ]; then
-	git clone --branch 44-feat-record-audio-from-ec2 https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic.git
-fi
-
-echo "[+] Installing bot dependencies..."
-cd /home/ubuntu/bsa-2025-meetlytic/apps/bot
-npm install
-
 echo "[+] Building shared package..."
-cd ../../packages/shared
+cd /home/ubuntu/bsa-2025-meetlytic/packages/shared
 npm install
 npm run build
 
-echo "[+] Go back to apps/bot..."
-cd ../../apps/bot
+echo "[+] Go to apps/bot..."
+cd /home/ubuntu/bsa-2025-meetlytic/apps/bot
+
+echo "[+] Installing bot dependencies..."
+npm install
+
 
 echo "[+] Installing Chromium for Puppeteer (as root)..."
 sudo npx puppeteer browsers install chrome

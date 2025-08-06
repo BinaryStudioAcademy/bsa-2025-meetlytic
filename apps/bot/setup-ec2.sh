@@ -27,15 +27,27 @@ sudo apt-get install -y \
 	libxkbcommon0 \
 	libappindicator3-1
 
-echo "[+] Starting PulseAudio..."
-pulseaudio --start --exit-idle-time=-1
+echo "[+] Creating PulseAudio runtime directory..."
+sudo mkdir -p /run/user/1000
+sudo chown ubuntu:ubuntu /run/user/1000
+export HOME=/home/ubuntu
+export XDG_RUNTIME_DIR=/run/user/1000
+
+echo "[+] Starting PulseAudio as ubuntu..."
+sudo -u ubuntu pulseaudio --start --exit-idle-time=-1
 sleep 2
 
 echo "[+] Setting up virtual audio sink..."
-pactl unload-module module-null-sink || true
-pactl unload-module module-loopback || true
-pactl load-module module-null-sink sink_name=virtual_sink sink_properties=device.description=Virtual_Sink
-pactl load-module module-loopback source=virtual_sink.monitor
+sudo -u ubuntu pactl unload-module module-null-sink || true
+sudo -u ubuntu pactl unload-module module-loopback || true
+sudo -u ubuntu pactl load-module module-null-sink sink_name=virtual_sink sink_properties=device.description=Virtual_Sink
+sudo -u ubuntu pactl load-module module-loopback source=virtual_sink.monitor
+
+echo "[+] Verifying virtual sink exists..."
+sudo -u ubuntu pactl list short sources | grep virtual_sink.monitor || {
+	echo "[◕︵◕] virtual_sink.monitor not found!"
+	exit 1
+}
 
 echo "[+] Installing bot dependencies..."
 cd /home/ubuntu/bsa-2025-meetlytic/apps/bot

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.0.0...frontend-v1.0.1) (2025-08-06)
+
+
+### Bug Fixes
+
+* change selector ml-115 ([#129](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/129)) ([63c3d88](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/63c3d88765fff40401110840cb31edb569edd967))
+* **frontend:** add hide-show icon ml-120 ([#125](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/125)) ([41b2eaf](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/41b2eaf353dab07738a18da616fadf5136b582d5))
+
 ## 1.0.0 (2025-08-05)
 
 ### Features

@@ -25,7 +25,11 @@ pactl load-module module-loopback source=virtual_sink.monitor
 echo "[+] Installing bot dependencies..."
 cd /home/ubuntu/bsa-2025-meetlytic/apps/bot
 npm install
-npm install --save-dev tsx
+
+echo "[+] Building shared package..."
+cd ../../packages/shared
+npm install
+npm run build
 
 echo "[+] Installing Chromium for Puppeteer..."
 npx puppeteer browsers install chrome

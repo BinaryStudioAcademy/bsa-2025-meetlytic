@@ -37,18 +37,25 @@ pactl unload-module module-loopback || true
 pactl load-module module-null-sink sink_name=virtual_sink sink_properties=device.description=Virtual_Sink
 pactl load-module module-loopback source=virtual_sink.monitor
 
+echo "[+] Installing bot dependencies..."
+cd /home/ubuntu/bsa-2025-meetlytic/apps/bot
+npm install
 
-echo "[+] Install NPM Dependencies & Puppeteer Browser"
-# current /home/ubuntu/bsa-2025-meetlytic
-/usr/bin/npm install
-/usr/bin/npx puppeteer browsers install chrome
+echo "[+] Building shared package..."
+cd ../../packages/shared
+npm install
+npm run build
+
+echo "[+] Installing Chromium for Puppeteer (as root)..."
+npx puppeteer browsers install chrome
+
+echo "[+] Go back to apps/bot..."
+cd ../../apps/bot
+
 
 echo "[+] Creating audio output directory..."
 mkdir -p /home/ubuntu/audio
 sudo chown -R ubuntu:ubuntu /home/ubuntu/audio
-
-echo "[*] go to apps/bot"
-cd apps/bot
 
 echo "[+] Writing environment variables..."
 cat <<EOF > .env
@@ -64,6 +71,6 @@ OUTPUT_DIRECTORY=/home/ubuntu/audio
 EOF
 
 echo "[+] Starting ZoomBot as user ubuntu..."
-nohup /usr/bin/npm run start:dev > /home/ubuntu/bot.log 2>&1 &
+sudo -u ubuntu nohup npm run start:dev > /home/ubuntu/bot.log 2>&1 &
 
 echo "[\0_0/] Setup complete. Bot is running in background."

@@ -5,6 +5,7 @@ import {
 	Modal,
 } from "~/libs/components/components.js";
 import { AvatarSize } from "~/libs/enums/enums.js";
+import { formatDate } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -60,7 +61,10 @@ const Meetings: React.FC = () => {
 					{meetings.map((meeting) => {
 						return (
 							<MeetingItem
-								date={new Date(meeting.createdAt).toDateString()}
+								date={formatDate(
+									new Date(meeting.createdAt),
+									"MMM D, YYYY, h:m A",
+								)}
 								key={meeting.id}
 								title={`Meeting #${String(meeting.id)}`}
 							/>

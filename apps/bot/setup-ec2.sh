@@ -50,7 +50,7 @@ echo "[+] Go back to apps/bot..."
 cd ../../apps/bot
 
 echo "[+] Installing Chromium for Puppeteer (as root)..."
-npx puppeteer browsers install chrome
+/usr/bin/npx puppeteer browsers install chrome
 
 echo "[+] Creating audio output directory..."
 mkdir -p /home/ubuntu/audio

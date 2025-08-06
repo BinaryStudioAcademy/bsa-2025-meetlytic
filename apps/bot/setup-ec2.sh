@@ -16,10 +16,29 @@ sudo apt-get install -y \ ffmpeg \ pulseaudio \ pulseaudio-utils \ libatk1.0-0 \
 
 echo "[+] Starting PulseAudio..."
 pulseaudio --start
-sleep 2
-echo "[+] Setting up virtual audio sink..."
+
+echo "[+] Waiting for PulseAudio to be ready..."
+for i in {1..10}; do
+	pactl info &> /dev/null && break
+	sleep 1
+done
+
+echo "[+] Unloading existing null sinks (if any)..."
+pactl unload-module module-null-sink &> /dev/null || true
+
+echo "[+] Creating virtual sink..."
 pactl load-module module-null-sink sink_name=virtual_sink sink_properties=device.description=Virtual_Sink
+
+echo "[+] Loading loopback to monitor..."
 pactl load-module module-loopback source=virtual_sink.monitor
+
+echo "[+] Verifying virtual_sink.monitor exists..."
+if pactl list sources short | grep -q virtual_sink.monitor; then
+	echo "[✓] virtual_sink.monitor successfully created"
+else
+	echo "[◕︵◕] virtual_sink.monitor NOT FOUND. Recording will fail!"
+	pactl list sources short
+	exit 1
 
 echo "[+] Installing bot dependencies..."
 cd /home/ubuntu/bsa-2025-meetlytic/apps/bot
@@ -38,6 +57,9 @@ npx puppeteer browsers install chrome
 
 echo "[+] Creating audio output directory..."
 mkdir -p /home/ubuntu/audio
+
+echo "[+] Setting permissions for /home/ubuntu/audio..."
+sudo chown -R ubuntu:ubuntu /home/ubuntu/audio
 
 echo "[+] Writing environment variables..."
 cat <<EOF > .env

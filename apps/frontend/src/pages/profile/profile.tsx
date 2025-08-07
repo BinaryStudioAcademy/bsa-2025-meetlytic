@@ -1,5 +1,10 @@
-import { Avatar, Loader } from "~/libs/components/components.js";
-import { AvatarSize, AvatarType, DataStatus } from "~/libs/enums/enums.js";
+import { Avatar, Loader, Navigate } from "~/libs/components/components.js";
+import {
+	AppRoute,
+	AvatarSize,
+	AvatarType,
+	DataStatus,
+} from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -42,7 +47,11 @@ const Profile: React.FC = () => {
 	}
 
 	if (!user) {
-		return null;
+		return status === DataStatus.PENDING || status === DataStatus.IDLE ? (
+			<Loader isLoading />
+		) : (
+			<Navigate replace to={AppRoute.SIGN_IN} />
+		);
 	}
 
 	return (

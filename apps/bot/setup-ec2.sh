@@ -80,6 +80,9 @@ else
 	exit 1
 fi
 
+echo "[+] Give permission to /home/ubuntu/bsa-2025-meetlytic..."
+sudo chown -R ubuntu:ubuntu /home/ubuntu/bsa-2025-meetlytic
+
 echo "[+] Installing bot dependencies..."
 cd /home/ubuntu/bsa-2025-meetlytic/apps/bot
 npm install
@@ -88,6 +91,7 @@ echo "[+] Building shared package..."
 cd ../../packages/shared
 npm install
 npm run build
+
 
 echo "[+] Go back to apps/bot..."
 cd ../../apps/bot

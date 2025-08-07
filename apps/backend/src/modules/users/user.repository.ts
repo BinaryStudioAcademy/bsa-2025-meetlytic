@@ -72,14 +72,12 @@ class UserRepository implements Repository {
 			passwordSalt: userWithDetails.passwordSalt,
 		});
 
-		const details = userWithDetails.userDetails
-			? UserDetailsEntity.initialize({
-					firstName: userWithDetails.userDetails.firstName,
-					id: userWithDetails.userDetails.id,
-					lastName: userWithDetails.userDetails.lastName,
-					userId: userWithDetails.userDetails.userId,
-				})
-			: null;
+		const details = UserDetailsEntity.initialize({
+			firstName: userWithDetails.userDetails.firstName,
+			id: userWithDetails.userDetails.id,
+			lastName: userWithDetails.userDetails.lastName,
+			userId: userWithDetails.userDetails.userId,
+		});
 
 		return { details, user };
 	}

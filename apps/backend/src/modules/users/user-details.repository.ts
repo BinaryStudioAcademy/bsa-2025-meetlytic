@@ -3,8 +3,7 @@ import { type Repository } from "~/libs/types/types.js";
 import { UserDetailsEntity } from "./user-details.entity.js";
 import { type UserDetailsModel } from "./user-details.model.js";
 
-const NO_ROWS_DELETED = 0;
-const NO_ROWS_UPDATED = 0;
+const NO_ROWS_AFFECTED = 0;
 
 class UserDetailsRepository implements Repository {
 	private userDetailsModel: typeof UserDetailsModel;
@@ -32,7 +31,7 @@ class UserDetailsRepository implements Repository {
 	public async delete(id: number): Promise<boolean> {
 		const deletedRows = await this.userDetailsModel.query().deleteById(id);
 
-		return deletedRows > NO_ROWS_DELETED;
+		return deletedRows > NO_ROWS_AFFECTED;
 	}
 
 	public async find(id: number): Promise<null | UserDetailsEntity> {
@@ -82,7 +81,7 @@ class UserDetailsRepository implements Repository {
 			.patch(payload)
 			.where("userId", userId);
 
-		return updatedRows > NO_ROWS_UPDATED;
+		return updatedRows > NO_ROWS_AFFECTED;
 	}
 }
 

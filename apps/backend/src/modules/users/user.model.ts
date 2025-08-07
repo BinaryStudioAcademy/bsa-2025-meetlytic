@@ -15,7 +15,7 @@ class UserModel extends AbstractModel {
 
 	public passwordSalt!: string;
 
-	public userDetails?: UserDetailsModel;
+	public userDetails!: UserDetailsModel;
 
 	public static get relationMappings(): RelationMappings {
 		return {

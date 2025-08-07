@@ -135,7 +135,7 @@ class UserService implements Service {
 			if (userWithEmail && userWithEmail.toObject().id !== userId) {
 				throw new UserError({
 					message: UserErrorMessage.USER_EMAIL_IN_USE,
-					status: HTTPCode.NOT_FOUND,
+					status: HTTPCode.CONFLICT,
 				});
 			}
 

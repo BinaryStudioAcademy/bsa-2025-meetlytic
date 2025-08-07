@@ -118,7 +118,7 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 				<Icon className={styles["icon"]} name={isPlaying ? "play" : "pause"} />
 			</button>
 			<button
-				className={getValidClassNames(styles["progress"], "")}
+				className={styles["progress"]}
 				onClick={handleInteraction}
 				onKeyDown={handleInteraction}
 				ref={progressReference}

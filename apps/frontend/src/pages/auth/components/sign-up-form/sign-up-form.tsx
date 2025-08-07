@@ -123,7 +123,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					errors={errors}
 					iconName={handleGetIconName(inputType.confirm)}
 					iconPosition="right"
-					label="Confirm Password"
+					label="Confirm password"
 					name="confirmPassword"
 					onClickIcon={handleToggleConfirmPasswordView}
 					placeholder="*************"
@@ -131,17 +131,17 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					wrapperClassName={styles["input-wrapper"]}
 				/>
 				<Button
-					label="Create An Account"
+					label="Create an account"
 					type="submit"
 					variant={ButtonVariant.PRIMARY}
 				/>
 			</form>
-			<h5 className={styles["link-container"]}>
+			<div className={styles["link-container"]}>
 				Already have an account?
 				<Link className={styles["link"]} to={AppRoute.SIGN_IN}>
-					<p>Sign in</p>
+					Log in
 				</Link>
-			</h5>
+			</div>
 		</AuthLayout>
 	);
 };

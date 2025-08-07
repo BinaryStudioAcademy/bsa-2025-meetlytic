@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { Link } from "react-router-dom";
 
 import "~/assets/css/styles.css";
 import {
@@ -41,6 +42,17 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 							<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
 								<App />
 							</ProtectedRoute>
+						),
+					},
+					{
+						element: (
+							// TODO: add LandingPage component
+							<div>
+								Landing Page
+								<div>
+									<Link to={AppRoute.SIGN_IN}>Sign In</Link>
+								</div>
+							</div>
 						),
 						path: AppRoute.ROOT,
 					},

@@ -60,16 +60,16 @@ else
 	exit 1
 fi
 
-echo "[+] Loading loopback from virtual_sink.monitor..."
-sleep 1
-loopback_id=$(sudo -u ubuntu pactl load-module module-loopback source=virtual_sink.monitor)
+#echo "[+] Loading loopback from virtual_sink.monitor..."
+#sleep 1
+#loopback_id=$(sudo -u ubuntu pactl load-module module-loopback source=virtual_sink.monitor)
 
-if [ $? -eq 0 ]; then
-	echo "[\0_0/] loopback loaded: module ID = $loopback_id"
-else
-	echo "[◕︵◕] Failed to load loopback"
-	exit 1
-fi
+#if [ $? -eq 0 ]; then
+#	echo "[\0_0/] loopback loaded: module ID = $loopback_id"
+#else
+#	echo "[◕︵◕] Failed to load loopback"
+#	exit 1
+#fi
 
 echo "[+] Setting virtual_sink as default by sudo...."
 sleep 1
@@ -91,6 +91,13 @@ else
 	echo "[◕︵◕] virtual_sink.monitor NOT FOUND!"
 	exit 1
 fi
+
+echo "[+] Listing sink inputs (debug)..."
+sudo -u ubuntu pactl list sink-inputs 2>&1 | tee /home/ubuntu/pactl_sink_inputs.log
+
+echo "[+] Starting pactl subscribe in background for sink changes (debug)..."
+sudo -u ubuntu bash -c "pactl subscribe > /home/ubuntu/pactl_subscribe.log 2>&1 &"
+
 
 echo "[+] Installing bot dependencies..."
 cd /home/ubuntu/bsa-2025-meetlytic/apps/bot

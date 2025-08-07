@@ -36,7 +36,7 @@ sudo apt install -y \
 echo "[+] Starting PulseAudio as ubuntu..."
 sleep 1
 
-sudo -u ubuntu pulseaudio --start --exit-idle-time=-1
+pulseaudio --start
 
 if [ $? -eq 0 ]; then
 	echo "[\0_0/] PulseAudio started"
@@ -47,7 +47,7 @@ fi
 echo "[+] Unloading existing sinks and loopbacks..."
 sleep 1
 
-sudo -u ubuntu pactl unload-module module-null-sink || echo "[i] No null-sink to unload"
+pactl unload-module module-null-sink || echo "[i] No null-sink to unload"
 
 echo "[+] Loading virtual_sink (module-null-sink)..."
 sleep 1
@@ -59,20 +59,9 @@ else
 	exit 1
 fi
 
-#echo "[+] Loading loopback from virtual_sink.monitor..."
-#sleep 1
-#loopback_id=$(sudo -u ubuntu pactl load-module module-loopback source=virtual_sink.monitor)
-
-#if [ $? -eq 0 ]; then
-#	echo "[\0_0/] loopback loaded: module ID = $loopback_id"
-#else
-#	echo "[◕︵◕] Failed to load loopback"
-#	exit 1
-#fi
-
 echo "[+] Setting virtual_sink as default by sudo...."
 sleep 1
-sudo -u ubuntu pactl set-default-sink virtual_sink
+pactl set-default-sink virtual_sink
 
 if [ $? -eq 0 ]; then
 	echo "[\0_0/] virtual_sink set as default"
@@ -83,20 +72,13 @@ fi
 
 echo "[+] Verifying that virtual_sink.monitor exists..."
 sleep 1
-sudo -u ubuntu pactl list short sources | grep virtual_sink.monitor > /dev/null
+sudo pactl list short sources | grep virtual_sink.monitor > /dev/null
 if [ $? -eq 0 ]; then
 	echo "[\0_0/] virtual_sink.monitor found"
 else
 	echo "[◕︵◕] virtual_sink.monitor NOT FOUND!"
 	exit 1
 fi
-
-echo "[+] Listing sink inputs (debug)..."
-sudo -u ubuntu pactl list sink-inputs 2>&1 | tee /home/ubuntu/pactl_sink_inputs.log
-
-echo "[+] Starting pactl subscribe in background for sink changes (debug)..."
-sudo -u ubuntu bash -c "pactl subscribe > /home/ubuntu/pactl_subscribe.log 2>&1 &"
-
 
 echo "[+] Installing bot dependencies..."
 cd /home/ubuntu/bsa-2025-meetlytic/apps/bot
@@ -109,10 +91,6 @@ npm run build
 
 echo "[+] Go back to apps/bot..."
 cd ../../apps/bot
-
-echo "[+] Creating audio output directory..."
-mkdir -p /home/ubuntu/audio
-sudo chown -R ubuntu:ubuntu /home/ubuntu/audio
 
 echo "[+] Writing environment variables..."
 cat <<EOF > .env

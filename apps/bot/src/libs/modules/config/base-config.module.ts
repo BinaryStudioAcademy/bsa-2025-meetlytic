@@ -88,7 +88,6 @@ class BaseConfig implements Config {
 
 	public getLaunchOptions(): LaunchOptions {
 		const environment = this.ENV.APP.ENVIRONMENT;
-		const isProduction = environment === AppEnvironment.PRODUCTION;
 		const isDevelopment = environment === AppEnvironment.DEVELOPMENT;
 
 		const sharedArguments = [
@@ -100,11 +99,11 @@ class BaseConfig implements Config {
 
 		return {
 			args: sharedArguments,
+			defaultViewport: { height: 700, width: 1200 },
 			enableExtensions: true,
 			executablePath: "/usr/bin/google-chrome",
-			headless: isProduction,
+			headless: true,
 			...(isDevelopment && {
-				defaultViewport: { height: 700, width: 1200 },
 				headless: false,
 			}),
 		};

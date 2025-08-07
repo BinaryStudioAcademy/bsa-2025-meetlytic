@@ -129,7 +129,7 @@ OUTPUT_DIRECTORY=/home/ubuntu/audio
 EOF
 
 echo "[+] Starting ZoomBot with xvfb-run..."
-sudo -u ubuntu xvfb-run --auto-servernum --server-num=99 --server-args="-screen 0 1280x720x24" \
+sudo -u ubuntu xvfb-run --auto-servernum --server-num=99 --server-args="-screen 0 1200x700x24" \
 	npm run start:dev > /home/ubuntu/bot.log 2>&1 &
 
 echo "[\0_0/] Setup complete. Bot is running with xvfb-run + Chromium:headless."

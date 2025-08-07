@@ -1,5 +1,5 @@
 import { KeyboardKey } from "~/libs/enums/enums.js";
-import { getValidClassNames } from "~/libs/helpers/helpers.js";
+import { formatDate, getValidClassNames } from "~/libs/helpers/helpers.js";
 import {
 	useCallback,
 	useEffect,
@@ -15,10 +15,9 @@ type Properties = {
 };
 
 const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
-	const SECONDS_IN_MINUTE = 60;
-	const PAD_LENGTH = 2;
-	const START_TIME = 0;
+	const MILLISECONDS_IN_SECOND = 1000;
 	const PERCENT_MULTIPLIER = 100;
+	const START_TIME = 0;
 
 	const audioReference = useRef<HTMLAudioElement>(null);
 	const progressReference = useRef<HTMLButtonElement>(null);
@@ -56,13 +55,6 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [currentTime, setCurrentTime] = useState(START_TIME);
 	const [duration, setDuration] = useState(START_TIME);
-
-	const formatTime = (time: number): string => {
-		const minutes = Math.floor(time / SECONDS_IN_MINUTE);
-		const seconds = Math.floor(time % SECONDS_IN_MINUTE);
-
-		return `${String(minutes).padStart(PAD_LENGTH, "0")}:${String(seconds).padStart(PAD_LENGTH, "0")}`;
-	};
 
 	const togglePlayback = useCallback(async (): Promise<void> => {
 		if (!audioReference.current) {
@@ -147,7 +139,8 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 				/>
 			</button>
 			<div className={styles["time"]}>
-				{formatTime(currentTime)} / {formatTime(duration)}
+				{formatDate(new Date(currentTime * MILLISECONDS_IN_SECOND), "mm:ss")} /{" "}
+				{formatDate(new Date(duration * MILLISECONDS_IN_SECOND), "mm:ss")}
 			</div>
 			{/* We will not have captions file for this */}
 			{/* eslint-disable-next-line jsx-a11y/media-has-caption */}

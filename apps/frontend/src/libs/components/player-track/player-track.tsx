@@ -1,3 +1,4 @@
+import { KeyboardKey } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import {
 	useCallback,
@@ -107,7 +108,10 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 				return;
 			}
 
-			if ("key" in event && (event.key === "Enter" || event.key === " ")) {
+			if (
+				"key" in event &&
+				(event.key === KeyboardKey.ENTER || event.key === KeyboardKey.SPACE)
+			) {
 				handleSeek(event);
 			}
 		},

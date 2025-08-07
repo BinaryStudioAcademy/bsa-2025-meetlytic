@@ -132,7 +132,6 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 					<Icon className={styles["icon"]} name="pause" />
 				)}
 			</button>
-
 			<button
 				className={getValidClassNames(styles["progress"], "")}
 				onClick={handleInteraction}
@@ -147,19 +146,12 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 					style={{ width: progressWidth }}
 				/>
 			</button>
-
 			<div className={styles["time"]}>
 				{formatTime(currentTime)} / {formatTime(duration)}
 			</div>
-
-			<audio preload="metadata" ref={audioReference} src={audioUrl}>
-				<track
-					kind="captions"
-					label="English captions"
-					src="captions.vtt"
-					srcLang="en"
-				/>
-			</audio>
+			{/* We will not have captions file for this */}
+			{/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+			<audio preload="metadata" ref={audioReference} src={audioUrl} />
 		</div>
 	);
 };

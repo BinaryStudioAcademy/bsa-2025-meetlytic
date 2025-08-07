@@ -11,7 +11,8 @@ curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 sudo apt install -y nodejs
 
 echo "[+] Installing system libraries and dependencies..."
-sudo apt-get install -y \
+sudo apt install -y \
+	xvfb \
 	ffmpeg \
 	pulseaudio \
 	pulseaudio-utils \
@@ -25,7 +26,11 @@ sudo apt-get install -y \
 	libx11-xcb1 \
 	libxcomposite1 \
 	libxkbcommon0 \
-	libappindicator3-1
+	libappindicator3-1 \
+	libdrm2 \
+	ca-certificates \
+	build-essential \
+	git
 
 echo "[+] Creating PulseAudio runtime directory..."
 sudo mkdir -p /run/user/1000
@@ -43,7 +48,9 @@ sudo -u ubuntu pactl unload-module module-loopback || true
 sudo -u ubuntu pactl load-module module-null-sink sink_name=virtual_sink sink_properties=device.description=Virtual_Sink
 sudo -u ubuntu pactl load-module module-loopback source=virtual_sink.monitor
 
-echo "[+] Verifying virtual sink exists..."
+sudo -u ubuntu pactl set-default-sink virtual_sink
+
+echo "[+] Verifying virtual_sink.monitor exists..."
 sudo -u ubuntu pactl list short sources | grep virtual_sink.monitor || {
 	echo "[◕︵◕] virtual_sink.monitor not found!"
 	exit 1
@@ -78,7 +85,11 @@ FFMPEG_PATH=/usr/bin/ffmpeg
 OUTPUT_DIRECTORY=/home/ubuntu/audio
 EOF
 
-echo "[+] Starting ZoomBot as user ubuntu..."
-sudo -u ubuntu nohup npm run start:dev > /home/ubuntu/bot.log 2>&1 &
+echo "[+] Starting ZoomBot in Xvfb virtual display..."
+sudo -u ubuntu bash -c '
+	Xvfb :99 -screen 0 1280x720x24 &
+	export DISPLAY=:99
+	nohup npm run start:dev > /home/ubuntu/bot.log 2>&1 &
+'
 
-echo "[\0_0/] Setup complete. Bot is running in background."
+echo "[\0_0/] Setup complete. Bot is running under Xvfb + Chromium:headless."

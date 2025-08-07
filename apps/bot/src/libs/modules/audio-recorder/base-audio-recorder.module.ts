@@ -16,6 +16,8 @@ class BaseAudioRecorder implements AudioRecorder {
 	private logger: Logger;
 	private openAI: OpenAI;
 	private outputDir: string;
+	private useMp3 = true;
+	private VOLUME_RE = /mean[_ ]volume:\s*(-?\d+(?:\.\d+)?)\s*dB/i;
 
 	public constructor({
 		chunkDuration,
@@ -31,35 +33,83 @@ class BaseAudioRecorder implements AudioRecorder {
 		this.logger = logger;
 	}
 
+	private logChunkStart(filePath: string, type: string): void {
+		this.logger.info(
+			`[+] New chunk - ${filePath} | type=${type.toUpperCase()} | duration=${String(this.chunkDuration)}s`,
+		);
+	}
+
+	private logVolume(line: string): void {
+		const message = this.VOLUME_RE.exec(line);
+		const ONE = 1;
+
+		if (message) {
+			this.logger.info(`[VOL] ${String(message[ONE])} dB`);
+		}
+	}
+
 	private recordNextChunk(): void {
 		if (!this.isRecording) {
 			return;
 		}
 
 		const timestamp = Date.now().toString();
-		const filePath = path.join(this.outputDir, `chunk-${timestamp}.mp3`);
+		const fileExtension = this.useMp3 ? "mp3" : "wav";
+		const filePath = path.join(
+			this.outputDir,
+			`chunk-${timestamp}.${fileExtension}`,
+		);
 
 		const ffmpegArguments = [
+			"-hide_banner",
+			"-fflags",
+			"+genpts",
+			"-use_wallclock_as_timestamps",
+			"1",
 			"-f",
 			"pulse",
 			"-i",
 			"virtual_sink.monitor",
 			"-t",
 			String(this.chunkDuration),
-			"-acodec",
-			"libmp3lame",
-			"-b:a",
-			"128k",
-			filePath,
+			"-af",
+			"astats=metadata=1:reset=1",
 		];
 
-		const process = spawn(this.ffmpegPath, ffmpegArguments);
+		if (this.useMp3) {
+			ffmpegArguments.push("-acodec", "libmp3lame", "-b:a", "128k");
+		} else {
+			ffmpegArguments.push("-acodec", "pcm_s16le", "-ar", "44100", "-ac", "2");
+		}
 
-		process.stderr.on("data", (data) => {
-			this.logger.error(`FFmpeg error: ${String(data)}`);
+		ffmpegArguments.push(filePath);
+
+		this.logChunkStart(filePath, fileExtension);
+
+		const ffmpeg = spawn(this.ffmpegPath, ffmpegArguments);
+
+		ffmpeg.stderr.on("data", (data) => {
+			const lines = String(data)
+				.trim()
+				.split("\n")
+				.map((l) => l.trim());
+
+			for (const line of lines) {
+				this.logVolume(line);
+
+				if (/error|invalid|failed|no such/i.test(line)) {
+					this.logger.error(`[FFMPEG][ERROR?] ${line}`);
+				} else if (line && !line.startsWith("size=")) {
+					this.logger.debug(`[FFMPEG][INFO] ${line}`);
+				}
+			}
 		});
 
-		process.on("exit", () => {
+		ffmpeg.on("exit", (code, signal) => {
+			this.logger.info(
+				`[+] Chunk done | path=${filePath} | code=${String(code)}  signal=${String(signal)}`,
+			);
+
 			if (this.isRecording) {
 				this.recordNextChunk();
 			}
@@ -72,16 +122,23 @@ class BaseAudioRecorder implements AudioRecorder {
 
 	public start(): void {
 		if (this.isRecording) {
+			this.logger.warn("[+] Already recording: ignoring start()");
+
 			return;
 		}
 
 		mkdirSync(this.outputDir, { recursive: true });
+
+		this.logger.info(
+			`[+] Start recording | dir=${this.outputDir}  |  chunk=${String(this.chunkDuration)}s  |  format=${this.useMp3 ? "MP3" : "WAV"}`,
+		);
 
 		this.isRecording = true;
 		this.recordNextChunk();
 	}
 
 	public stop(): void {
+		this.logger.info("[-] Recording stopped by caller");
 		this.isRecording = false;
 	}
 }

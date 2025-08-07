@@ -1,6 +1,8 @@
 import dayjs from "dayjs";
 
-const formatDate = (date: Date, format: string): string => {
+import { type DateFormat } from "../types/date-format.js";
+
+const formatDate = (date: Date, format: DateFormat): string => {
 	return dayjs(date).format(format);
 };
 

@@ -87,14 +87,12 @@ class BaseConfig implements Config {
 	}
 
 	public getLaunchOptions(): LaunchOptions {
-		const environment = this.ENV.APP.ENVIRONMENT;
-		const isDevelopment = environment === AppEnvironment.DEVELOPMENT;
-
 		const sharedArguments = [
-			"--use-fake-ui-for-media-stream",
 			"--no-sandbox",
 			"--disable-setuid-sandbox",
-			"--headless=new",
+			"--autoplay-policy=no-user-gesture-required",
+			"--use-fake-ui-for-media-stream",
+			"--headless=false",
 		];
 
 		return {
@@ -102,10 +100,7 @@ class BaseConfig implements Config {
 			defaultViewport: { height: 700, width: 1200 },
 			enableExtensions: true,
 			executablePath: "/usr/bin/google-chrome",
-			headless: true,
-			...(isDevelopment && {
-				headless: false,
-			}),
+			headless: false,
 		};
 	}
 }

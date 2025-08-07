@@ -48,7 +48,6 @@ echo "[+] Unloading existing sinks and loopbacks..."
 sleep 1
 
 sudo -u ubuntu pactl unload-module module-null-sink || echo "[i] No null-sink to unload"
-sudo -u ubuntu pactl unload-module module-loopback || echo "[i] No loopback to unload"
 
 echo "[+] Loading virtual_sink (module-null-sink)..."
 sleep 1
@@ -129,7 +128,7 @@ OUTPUT_DIRECTORY=/home/ubuntu/audio
 EOF
 
 echo "[+] Starting ZoomBot with xvfb-run..."
-sudo -u ubuntu xvfb-run --auto-servernum --server-num=99 --server-args="-screen 0 1200x700x24" \
+xvfb-run --auto-servernum --server-num=99 --server-args="-screen 0 1200x700x24" \
 	npm run start:dev > /home/ubuntu/bot.log 2>&1 &
 
 echo "[\0_0/] Setup complete. Bot is running with xvfb-run + Chromium:headless."

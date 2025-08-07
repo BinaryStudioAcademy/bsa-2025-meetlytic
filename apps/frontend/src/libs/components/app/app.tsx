@@ -36,18 +36,16 @@ const App: React.FC = () => {
 	return (
 		<>
 			<Loader isLoading={dataStatus === DataStatus.PENDING} withOverlay />
-
-			<div>
-				<RouterOutlet />
+			<RouterOutlet />
+			<div className="visually-hidden">
+				<SearchInput
+					control={control}
+					errors={errors}
+					label="Search"
+					name="search"
+					onSearch={handleSearch}
+				/>
 			</div>
-
-			<SearchInput
-				control={control}
-				errors={errors}
-				label="Search"
-				name="search"
-				onSearch={handleSearch}
-			/>
 		</>
 	);
 };

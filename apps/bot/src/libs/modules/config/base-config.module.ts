@@ -1,7 +1,6 @@
 import convict, { type Config as LibraryConfig } from "convict";
 import { config } from "dotenv";
 import { type LaunchOptions } from "puppeteer";
-import { executablePath } from "puppeteer";
 
 import { AppEnvironment } from "~/libs/enums/enums.js";
 
@@ -102,7 +101,7 @@ class BaseConfig implements Config {
 		return {
 			args: sharedArguments,
 			enableExtensions: true,
-			executablePath: executablePath(),
+			executablePath: "/usr/bin/google-chrome",
 			headless: isProduction,
 			...(isDevelopment && {
 				defaultViewport: { height: 700, width: 1200 },

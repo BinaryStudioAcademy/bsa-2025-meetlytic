@@ -114,15 +114,8 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 
 	return (
 		<div className={styles["root"]}>
-			<button
-				className={getValidClassNames(styles["button"], "")}
-				onClick={handleTogglePlayback}
-			>
-				{isPlaying ? (
-					<Icon className={styles["icon"]} name="play" />
-				) : (
-					<Icon className={styles["icon"]} name="pause" />
-				)}
+			<button className={styles["button"]} onClick={handleTogglePlayback}>
+				<Icon className={styles["icon"]} name={isPlaying ? "play" : "pause"} />
 			</button>
 			<button
 				className={getValidClassNames(styles["progress"], "")}

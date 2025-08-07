@@ -1,19 +1,19 @@
-.logo-text {
-	font-weight: 500;
+.logo {
+	display: flex;
+	align-items: center;
 }
 
-.logo-small {
-	font-size: 23px;
+.logo__image {
+	display: block;
+	width: 100%;
+	aspect-ratio: 442 / 75;
+	object-fit: contain;
 }
 
-.logo-large {
-	font-size: 85px;
+.logo__image--small {
+	height: 34px;
 }
 
-.logo-light {
-	color: white;
-}
-
-.logo-dark {
-	color: var(--color-text-1);
+.logo__image--large {
+	height: 70px;
 }

@@ -1,8 +1,4 @@
-import {
-	DeleteObjectCommand,
-	ObjectCannedACL,
-	PutObjectCommand,
-} from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 
 import { s3Client } from "~/libs/modules/aws/s3.js";
 import { type Config } from "~/libs/modules/config/config.js";
@@ -52,7 +48,6 @@ class UserAvatarService {
 		const { buffer, filename, mimetype } = options;
 		const fileKey = `avatars/${Date.now().toString()}-${filename}`;
 		const uploadParameters = {
-			ACL: ObjectCannedACL.public_read,
 			Body: buffer,
 			Bucket: this.bucketName,
 			ContentType: mimetype,

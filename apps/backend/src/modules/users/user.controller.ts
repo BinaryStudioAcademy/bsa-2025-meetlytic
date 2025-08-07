@@ -182,7 +182,7 @@ class UserController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /users/avatar/upload:
+	 * /users/avatar:
 	 *   post:
 	 *     tags:
 	 *       - Users

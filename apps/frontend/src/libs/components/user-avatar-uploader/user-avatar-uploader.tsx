@@ -36,21 +36,30 @@ const UserAvatarUploader: React.FC = () => {
 
 	const handleFileChange = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>): void => {
-			const file = event.target.files?.[FIRST_FILE_INDEX];
+			void (async (): Promise<void> => {
+				const file = event.target.files?.[FIRST_FILE_INDEX];
 
-			if (!file) {
-				return;
-			}
+				if (!file) {
+					return;
+				}
 
-			setIsLoading(true);
+				setIsLoading(true);
 
-			const uploadFile = async (): Promise<void> => {
 				try {
+					const token = localStorage.getItem("token");
+
+					if (!token) {
+						throw new Error("No token found");
+					}
+
 					const formData = new FormData();
 					formData.append("avatar", file);
 
-					const response = await fetch("/api/users/avatar/upload", {
+					const response = await fetch("/api/v1/users/avatar", {
 						body: formData,
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
 						method: "POST",
 					});
 
@@ -66,9 +75,7 @@ const UserAvatarUploader: React.FC = () => {
 				} finally {
 					setIsLoading(false);
 				}
-			};
-
-			void uploadFile();
+			})();
 		},
 		[],
 	);
@@ -82,7 +89,16 @@ const UserAvatarUploader: React.FC = () => {
 
 		const deleteAvatar = async (): Promise<void> => {
 			try {
-				const response = await fetch(`/api/users/avatar/${fileKey}`, {
+				const token = localStorage.getItem("token");
+
+				if (!token) {
+					throw new Error("No token found");
+				}
+
+				const response = await fetch(`/users/avatar/${fileKey}`, {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
 					method: "DELETE",
 				});
 

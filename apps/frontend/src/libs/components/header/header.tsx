@@ -21,7 +21,9 @@ const Header: React.FC = () => {
 	return (
 		<header className={styles["header"]}>
 			<div className={styles["header-inner"]}>
-				<Logo hasLink size={LogoSize.SMALL} theme={LogoTheme.LIGHT} />
+				<div className={styles["header-logo"]}>
+					<Logo hasLink size={LogoSize.SMALL} theme={LogoTheme.LIGHT} />
+				</div>
 				<div className={styles["header__avatar-logout-wrapper"]}>
 					<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
 					<Button

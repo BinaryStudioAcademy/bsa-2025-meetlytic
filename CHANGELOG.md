@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.0.1...v1.1.0) (2025-08-07)
+
+
+### Features
+
+* change the logo of our application ml-121 ([#128](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/128)) ([aafd8e6](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/aafd8e671eb0c0a5af770e4bf2e2ad821b73e62e))
+
+
+### Bug Fixes
+
+* change styles in SignIn an SignUp ml-134 ([#137](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/137)) ([a32ba42](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/a32ba4202492337943429baf43b1097a855824c8))
+* change the order in which password status icons are displayed ml-99 ([#127](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/127)) ([5b2d0ad](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/5b2d0ad01e9de78803e466ede657514d958f3c68))
+
 ## [1.0.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.0.0...v1.0.1) (2025-08-06)
 
 

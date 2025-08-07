@@ -1,14 +1,8 @@
 type UserWithDetailsDto = {
-	details: null | {
-		firstName: string;
-		id: number;
-		lastName: string;
-		userId: number;
-	};
-	user: {
-		email: string;
-		id: number;
-	};
+	email: string;
+	firstName: string;
+	id: number;
+	lastName: string;
 };
 
 export { type UserWithDetailsDto };

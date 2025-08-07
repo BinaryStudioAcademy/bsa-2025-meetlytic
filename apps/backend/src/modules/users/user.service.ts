@@ -17,8 +17,6 @@ import { type UserDetailsRepository } from "./user-details.repository.js";
 import { UserEntity } from "./user.entity.js";
 import { type UserRepository } from "./user.repository.js";
 
-const DEFAULT_ID = 0;
-
 class UserService implements Service {
 	private userDetailsRepository: UserDetailsRepository;
 	private userRepository: UserRepository;
@@ -90,19 +88,15 @@ class UserService implements Service {
 		);
 		const detailsObject = details?.toObject();
 
+		if (!detailsObject) {
+			return null;
+		}
+
 		return {
-			details: detailsObject
-				? {
-						firstName: detailsObject.firstName,
-						id: detailsObject.id,
-						lastName: detailsObject.lastName,
-						userId: detailsObject.userId,
-					}
-				: null,
-			user: {
-				email: userObject.email,
-				id: userObject.id,
-			},
+			email: userObject.email,
+			firstName: detailsObject.firstName,
+			id: userObject.id,
+			lastName: detailsObject.lastName,
 		};
 	}
 
@@ -152,16 +146,10 @@ class UserService implements Service {
 		}
 
 		return {
-			details: {
-				firstName: payload.firstName ?? details?.toObject().firstName ?? "",
-				id: details?.toObject().id ?? DEFAULT_ID,
-				lastName: payload.lastName ?? details?.toObject().lastName ?? "",
-				userId,
-			},
-			user: {
-				email: payload.email,
-				id: user.toObject().id,
-			},
+			email: payload.email,
+			firstName: payload.firstName ?? details?.toObject().firstName ?? "",
+			id: user.toObject().id,
+			lastName: payload.lastName ?? details?.toObject().lastName ?? "",
 		};
 	}
 }

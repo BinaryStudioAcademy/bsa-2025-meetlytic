@@ -62,8 +62,8 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 	const handleGetIconName = useCallback(
 		(inputType: InputPassword): "hidePassword" | "showPassword" => {
 			return inputType === InputPasswordType.PASSWORD
-				? "showPassword"
-				: "hidePassword";
+				? "hidePassword"
+				: "showPassword";
 		},
 		[],
 	);

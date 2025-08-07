@@ -15,5 +15,5 @@
 }
 
 .logo__image--large {
-	height: 70px;
+	height: clamp(40px, 5vw, 400px);
 }

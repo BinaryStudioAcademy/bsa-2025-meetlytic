@@ -1,6 +1,6 @@
 const LogoSize = {
-	LARGE: "logo-large",
-	SMALL: "logo-small",
+	LARGE: "large",
+	SMALL: "small",
 } as const;
 
 export { LogoSize };

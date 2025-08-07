@@ -1,1 +1,1 @@
-export { HTTPCode } from "@meetlytic/shared";
+export { HTTPCode, HTTPMethod } from "@meetlytic/shared";

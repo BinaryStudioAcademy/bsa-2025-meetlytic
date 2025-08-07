@@ -1,4 +1,8 @@
-import { Layout, Loader, SearchInput } from "~/libs/components/components.js";
+import {
+	Loader,
+	RouterOutlet,
+	SearchInput,
+} from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -32,7 +36,7 @@ const App: React.FC = () => {
 	return (
 		<>
 			<Loader isLoading={dataStatus === DataStatus.PENDING} withOverlay />
-			<Layout />
+			<RouterOutlet />
 			<div className="visually-hidden">
 				<SearchInput
 					control={control}

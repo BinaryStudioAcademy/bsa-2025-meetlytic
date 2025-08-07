@@ -37,18 +37,14 @@
 
 .register {
 	position: absolute;
-	bottom: 63px;
-	margin-top: 20px;
+	bottom: 60px;
+	display: flex;
+	gap: 10px;
 	font-size: 16px;
-	text-align: center;
+	font-weight: 600;
 }
 
 .create-account {
-	font-weight: 600;
 	color: var(--color-brand);
 	text-decoration: none;
-}
-
-.create-account:hover {
-	text-decoration: underline;
 }

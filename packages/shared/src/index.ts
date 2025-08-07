@@ -12,7 +12,7 @@ export {
 	UserError,
 	ValidationError,
 } from "./libs/exceptions/exceptions.js";
-export { configureString } from "./libs/helpers/helpers.js";
+export { configureString, formatDate } from "./libs/helpers/helpers.js";
 export { type Config } from "./libs/modules/config/config.js";
 export {
 	type HTTP,

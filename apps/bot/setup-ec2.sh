@@ -32,29 +32,65 @@ sudo apt install -y \
 	build-essential \
 	git
 
-echo "[+] Creating PulseAudio runtime directory..."
-sudo mkdir -p /run/user/1000
-sudo chown ubuntu:ubuntu /run/user/1000
-export HOME=/home/ubuntu
-export XDG_RUNTIME_DIR=/run/user/1000
 
 echo "[+] Starting PulseAudio as ubuntu..."
+sleep 1
+
 sudo -u ubuntu pulseaudio --start --exit-idle-time=-1
-sleep 2
 
-echo "[+] Setting up virtual audio sink..."
-sudo -u ubuntu pactl unload-module module-null-sink || true
-sudo -u ubuntu pactl unload-module module-loopback || true
-sudo -u ubuntu pactl load-module module-null-sink sink_name=virtual_sink sink_properties=device.description=Virtual_Sink
-sudo -u ubuntu pactl load-module module-loopback source=virtual_sink.monitor
+if [ $? -eq 0 ]; then
+	echo "[\0_0/] PulseAudio started"
+else
+	echo "[◕︵◕] Failed to start PulseAudio"
+fi
 
+echo "[+] Unloading existing sinks and loopbacks..."
+sleep 1
+
+sudo -u ubuntu pactl unload-module module-null-sink || echo "[i] No null-sink to unload"
+sudo -u ubuntu pactl unload-module module-loopback || echo "[i] No loopback to unload"
+
+echo "[+] Loading virtual_sink (module-null-sink)..."
+sleep 1
+sink_id=$(sudo -u ubuntu pactl load-module module-null-sink sink_name=virtual_sink sink_properties=device.description=Virtual_Sink)
+if [ $? -eq 0 ]; then
+	echo "[\0_0/] virtual_sink loaded: module ID = $sink_id"
+else
+	echo "[◕︵◕] Failed to load virtual_sink"
+	exit 1
+fi
+
+echo "[+] Loading loopback from virtual_sink.monitor..."
+sleep 1
+loopback_id=$(sudo -u ubuntu pactl load-module module-loopback source=virtual_sink.monitor)
+
+if [ $? -eq 0 ]; then
+	echo "[\0_0/] loopback loaded: module ID = $loopback_id"
+else
+	echo "[◕︵◕] Failed to load loopback"
+	exit 1
+fi
+
+echo "[+] Setting virtual_sink as default by sudo...."
+sleep 1
 sudo -u ubuntu pactl set-default-sink virtual_sink
 
-echo "[+] Verifying virtual_sink.monitor exists..."
-sudo -u ubuntu pactl list short sources | grep virtual_sink.monitor || {
-	echo "[◕︵◕] virtual_sink.monitor not found!"
+if [ $? -eq 0 ]; then
+	echo "[\0_0/] virtual_sink set as default"
+else
+	echo "[◕︵◕] Failed to set default sink"
+fi
+
+
+echo "[+] Verifying that virtual_sink.monitor exists..."
+sleep 1
+sudo -u ubuntu pactl list short sources | grep virtual_sink.monitor > /dev/null
+if [ $? -eq 0 ]; then
+	echo "[\0_0/] virtual_sink.monitor found"
+else
+	echo "[◕︵◕] virtual_sink.monitor NOT FOUND!"
 	exit 1
-}
+fi
 
 echo "[+] Installing bot dependencies..."
 cd /home/ubuntu/bsa-2025-meetlytic/apps/bot

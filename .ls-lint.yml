@@ -19,3 +19,4 @@ ignore:
   - apps/backend/node_modules
   - apps/bot/build
   - apps/bot/node_modules
+  - apps/build

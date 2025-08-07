@@ -8,7 +8,7 @@ import { useCallback, useState } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
-const RootPage: React.FC = () => {
+const MeetingCreationModal: React.FC = () => {
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
 	const handleOpenModal = useCallback(() => {
@@ -36,4 +36,4 @@ const RootPage: React.FC = () => {
 	);
 };
 
-export { RootPage };
+export { MeetingCreationModal };

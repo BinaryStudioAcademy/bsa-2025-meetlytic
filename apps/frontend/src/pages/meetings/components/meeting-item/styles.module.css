@@ -1,0 +1,41 @@
+.meeting {
+	display: flex;
+	flex-direction: column;
+	gap: 9px;
+	width: 344px;
+	height: 274px;
+	padding: 8px;
+	cursor: pointer;
+	background-color: var(--color-background-4);
+	border-radius: var(--border-radius-lg);
+	transition: outline 0.1s ease-in-out;
+}
+
+.meeting:hover {
+	outline: 2px solid var(--color-brand);
+}
+
+.meeting__image {
+	width: 327px;
+	height: 198px;
+}
+
+.meeting__info-wrapper {
+	display: flex;
+	flex-direction: column;
+	padding: 0 8px;
+}
+
+.meeting__title {
+	font-family: var(--font-family);
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--color-text-1);
+}
+
+.meeting__extra-info {
+	font-family: var(--second-font-family);
+	font-size: 12px;
+	font-weight: 400;
+	color: var(--color-text-2);
+}

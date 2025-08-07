@@ -1,6 +1,6 @@
 const LogoTheme = {
-	DARK: "logo-dark",
-	LIGHT: "logo-light",
+	DARK: "dark",
+	LIGHT: "light",
 } as const;
 
 export { LogoTheme };

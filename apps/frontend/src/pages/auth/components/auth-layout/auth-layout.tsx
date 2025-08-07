@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Logo } from "~/libs/components/components.js";
-import { LogoSize } from "~/libs/enums/enums.js";
+import { LogoSize, LogoTheme } from "~/libs/enums/enums.js";
 
 import styles from "./styles.module.css";
 
@@ -14,8 +14,7 @@ const AuthLayout: React.FC<Properties> = ({ children }: Properties) => {
 		<div className={styles["auth"]}>
 			<div className={styles["auth-left"]}>
 				<div className={styles["auth-logo"]}>
-					<span className={styles["auth-logo-circle"]} />
-					<Logo size={LogoSize.LARGE} />
+					<Logo size={LogoSize.LARGE} theme={LogoTheme.LIGHT} />
 				</div>
 			</div>
 

@@ -27,7 +27,7 @@ const MeetingCreationModal: React.FC = () => {
 				</div>
 			</div>
 
-			<PlayerTrack audioUrl="https://file-examples.com/storage/fe0ab252ad6893821a36477/2017/11/file_example_MP3_5MG.mp3" />
+			<PlayerTrack audioUrl="https://download.samplelib.com/mp3/sample-15s.mp3" />
 
 			<Modal isOpen={isModalOpen} onClose={handleCloseModal}>
 				<MeetingForm onClose={handleCloseModal} />

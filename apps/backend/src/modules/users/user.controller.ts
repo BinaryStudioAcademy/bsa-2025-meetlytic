@@ -12,6 +12,7 @@ import { UsersApiPath } from "./libs/enums/enums.js";
 import {
 	type UserGetAllResponseDto,
 	type UserResponseDto,
+	type UserUpdateResponseDto,
 } from "./libs/types/types.js";
 
 /*** @swagger
@@ -49,7 +50,13 @@ class UserController extends BaseController {
 		});
 
 		this.addRoute({
-			handler: (options) => this.updateProfile(options),
+			handler: (options) =>
+				this.updateProfile(
+					options as APIHandlerOptions<{
+						body: UserResponseDto;
+						user: UserResponseDto;
+					}>,
+				),
 			method: "PATCH",
 			path: UsersApiPath.ME,
 		});
@@ -142,11 +149,15 @@ class UserController extends BaseController {
 	public async updateProfile({
 		body,
 		user,
-	}: APIHandlerOptions): Promise<APIHandlerResponse> {
-		const currentUser = user as { email: string; id: number };
-		const payload = body as UserResponseDto;
+	}: APIHandlerOptions<{
+		body: UserUpdateResponseDto;
+		user: UserResponseDto;
+	}>): Promise<APIHandlerResponse> {
+		if (!user) {
+			throw new Error("User not found in request");
+		}
 
-		const updatedUser = await this.userService.update(currentUser.id, payload);
+		const updatedUser = await this.userService.update(user.id, body);
 
 		return {
 			payload: updatedUser,

@@ -9,6 +9,10 @@ import { ColumnName } from "./libs/enums/enums.js";
 import { UserDetailsModel } from "./user-details.model.js";
 
 class UserModel extends AbstractModel {
+	public avatarKey!: null | string;
+
+	public avatarUrl!: null | string;
+
 	public email!: string;
 
 	public passwordHash!: string;

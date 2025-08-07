@@ -77,6 +77,15 @@ class UserService implements Service {
 	public update(): ReturnType<Service["update"]> {
 		return Promise.resolve(null);
 	}
+
+	public async updateById(
+		id: number,
+		payload: { avatarKey?: null | string; avatarUrl?: null | string },
+	): Promise<UserResponseDto> {
+		const updatedUser = await this.userRepository.updateById(id, payload);
+
+		return updatedUser.toObject();
+	}
 }
 
 export { UserService };

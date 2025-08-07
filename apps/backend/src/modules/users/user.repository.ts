@@ -63,6 +63,17 @@ class UserRepository implements Repository {
 	public update(): ReturnType<Repository["update"]> {
 		return Promise.resolve(null);
 	}
+
+	public async updateById(
+		id: number,
+		payload: { avatarKey?: null | string; avatarUrl?: null | string },
+	): Promise<UserEntity> {
+		const updatedUser = await this.userModel
+			.query()
+			.patchAndFetchById(id, payload);
+
+		return UserEntity.initialize(updatedUser);
+	}
 }
 
 export { UserRepository };

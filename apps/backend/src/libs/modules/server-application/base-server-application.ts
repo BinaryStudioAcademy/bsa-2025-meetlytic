@@ -1,3 +1,4 @@
+import multipart from "@fastify/multipart";
 import fastifyStatic from "@fastify/static";
 import swagger, { type StaticDocumentSpec } from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
@@ -19,7 +20,6 @@ import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { jwt } from "~/libs/modules/token/token.js";
 import { authorizationPlugin } from "~/libs/plugins/authorization/authorization.plugin.js";
-import { fpAvatarPlugin } from "~/libs/plugins/avatar/avatar.plugin.js";
 import {
 	type ServerCommonErrorResponse,
 	type ServerValidationErrorResponse,
@@ -122,6 +122,8 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	private async initPlugins(): Promise<void> {
+		await this.app.register(multipart);
+
 		await this.app.register(authorizationPlugin, {
 			routesWhiteList: WHITE_ROUTES,
 			services: {
@@ -243,12 +245,6 @@ class BaseServerApplication implements ServerApplication {
 				});
 			}),
 		);
-
-		await this.app.register(fpAvatarPlugin, {
-			services: {
-				config: this.config,
-			},
-		});
 	}
 
 	public initRoutes(): void {

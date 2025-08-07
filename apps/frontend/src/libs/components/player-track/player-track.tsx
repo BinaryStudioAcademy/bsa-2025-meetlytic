@@ -21,7 +21,7 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 	const PERCENT_MULTIPLIER = 100;
 
 	const audioReference = useRef<HTMLAudioElement>(null);
-	const progressReference = useRef<HTMLDivElement>(null);
+	const progressReference = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
 		const audio = audioReference.current;
@@ -133,13 +133,11 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 				)}
 			</button>
 
-			<div
+			<button
 				className={getValidClassNames(styles["progress"], "")}
 				onClick={handleInteraction}
 				onKeyDown={handleInteraction}
 				ref={progressReference}
-				role="button"
-				tabIndex={0}
 			>
 				<div
 					className={getValidClassNames(
@@ -148,7 +146,7 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 					)}
 					style={{ width: progressWidth }}
 				/>
-			</div>
+			</button>
 
 			<div className={styles["time"]}>
 				{formatTime(currentTime)} / {formatTime(duration)}

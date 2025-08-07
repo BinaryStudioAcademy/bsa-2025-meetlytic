@@ -1,10 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Link } from "react-router-dom";
 
 import "~/assets/css/styles.css";
 import {
 	App,
+	Link,
 	ProtectedRoute,
 	RouterProvider,
 	StoreProvider,

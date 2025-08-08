@@ -106,6 +106,11 @@ npm install
 npm run build
 echo "[+] Shared package built."
 
+# add permisions for node
+echo "[+] Fixing permissions in bot..."
+sudo chown -R $USER:$USER ../../node_modules
+sudo chown -R $USER:$USER
+
 # Return to bot folder for runtime launch
 echo "[+] Go back to apps/bot..."
 cd ../../apps/bot

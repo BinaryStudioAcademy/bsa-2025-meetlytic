@@ -37,6 +37,12 @@ class BaseConfig implements Config {
 					env: "OPEN_AI_KEY",
 					format: String,
 				},
+				SUMMARY_ACTION_POINTS_MODEL: {
+					default: null,
+					doc: "OpenAI summary/action points generation model",
+					env: "SUMMARY_ACTION_POINTS_MODEL",
+					format: String,
+				},
 				TRANSCRIPTION_MODEL: {
 					default: null,
 					doc: "OpenAI transcription model",

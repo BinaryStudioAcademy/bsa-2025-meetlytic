@@ -1,5 +1,6 @@
 import { APIPath } from "~/libs/enums/enums.js";
 import {
+	type APIHandlerOptions,
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
@@ -8,6 +9,11 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
+import {
+	type UserGetAllResponseDto,
+	type UserResponseDto,
+	type UserUpdateResponseDto,
+} from "./libs/types/types.js";
 
 /*** @swagger
  * components:
@@ -36,6 +42,24 @@ class UserController extends BaseController {
 			method: "GET",
 			path: UsersApiPath.ROOT,
 		});
+
+		this.addRoute({
+			handler: (options) => this.getCurrentUser(options),
+			method: "GET",
+			path: UsersApiPath.ME,
+		});
+
+		this.addRoute({
+			handler: (options) =>
+				this.updateProfile(
+					options as APIHandlerOptions<{
+						body: UserResponseDto;
+						user: UserResponseDto;
+					}>,
+				),
+			method: "PATCH",
+			path: UsersApiPath.ME,
+		});
 	}
 
 	/**
@@ -56,6 +80,87 @@ class UserController extends BaseController {
 	private async findAll(): Promise<APIHandlerResponse> {
 		return {
 			payload: await this.userService.findAll(),
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /users/me:
+	 *   get:
+	 *     summary: Get current user profile
+	 *     responses:
+	 *       200:
+	 *         description: Successfully retrieved user
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: '#/components/schemas/User'
+	 *       401:
+	 *         description: Unauthorized
+	 */
+	private async getCurrentUser({
+		user,
+	}: APIHandlerOptions): Promise<APIHandlerResponse> {
+		const currentUser = user as UserGetAllResponseDto["items"][number];
+
+		const fullUser = await this.userService.findProfileByEmail(
+			currentUser.email,
+		);
+
+		return {
+			payload: fullUser,
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /users/me:
+	 *   patch:
+	 *     summary: Update current user's profile
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             type: object
+	 *             properties:
+	 *               email:
+	 *                 type: string
+	 *                 format: email
+	 *               firstName:
+	 *                 type: string
+	 *               lastName:
+	 *                 type: string
+	 *     responses:
+	 *       200:
+	 *         description: Successfully updated user
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: '#/components/schemas/User'
+	 *       400:
+	 *         description: Bad request
+	 *       401:
+	 *         description: Unauthorized
+	 */
+
+	public async updateProfile({
+		body,
+		user,
+	}: APIHandlerOptions<{
+		body: UserUpdateResponseDto;
+		user: UserResponseDto;
+	}>): Promise<APIHandlerResponse> {
+		if (!user) {
+			throw new Error("User not found in request");
+		}
+
+		const updatedUser = await this.userService.update(user.id, body);
+
+		return {
+			payload: updatedUser,
 			status: HTTPCode.OK,
 		};
 	}

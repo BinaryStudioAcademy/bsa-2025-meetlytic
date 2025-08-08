@@ -15,6 +15,7 @@ import { AppRoute } from "~/libs/enums/enums.js";
 import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFoundPage } from "~/pages/not-found/not-found.js";
+import { Profile } from "~/pages/profile/profile.jsx";
 
 import { Meetings } from "./pages/meetings/meetings.js";
 
@@ -46,6 +47,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 										<Layout />
 									</ProtectedRoute>
 								),
+							},
+							{
+								element: <Profile />,
+								path: AppRoute.PROFILE,
 							},
 						],
 						element: <App />,

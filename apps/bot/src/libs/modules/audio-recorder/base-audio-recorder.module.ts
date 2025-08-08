@@ -63,7 +63,7 @@ class BaseAudioRecorder implements AudioRecorder {
 		const ffmpegArguments = [
 			"-hide_banner",
 			"-fflags",
-			"+genpts",
+			"+genpts+igndts",
 			"-use_wallclock_as_timestamps",
 			"1",
 			"-f",

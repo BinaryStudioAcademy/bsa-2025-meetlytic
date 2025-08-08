@@ -74,6 +74,7 @@ class BaseAudioRecorder implements AudioRecorder {
 			String(this.chunkDuration),
 			"-af",
 			"astats=metadata=1:reset=1",
+			"+igndts",
 		];
 
 		if (this.useMp3) {
@@ -114,9 +115,15 @@ class BaseAudioRecorder implements AudioRecorder {
 				this.recordNextChunk();
 			}
 
-			this.openAI.transcribe(filePath).catch((error: unknown) => {
-				this.logger.error(String(error));
-			});
+			const openAI_API_Key = process.env["OPENAI_API_KEY"];
+
+			if (openAI_API_Key) {
+				this.openAI.transcribe(filePath).catch((error: unknown) => {
+					this.logger.error(String(error));
+				});
+			} else {
+				this.logger.info("OpenAI API key not found. Skipping transcription.");
+			}
 		});
 	}
 

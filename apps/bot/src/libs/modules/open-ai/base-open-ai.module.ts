@@ -10,8 +10,18 @@ class BaseOpenAI {
 	private logger: Logger;
 
 	public constructor(logger: Logger) {
-		this.client = new OpenAI({ apiKey: config.ENV.OPEN_AI.KEY });
 		this.logger = logger;
+		const apiKey = config.ENV.OPEN_AI.KEY;
+
+		if (!apiKey) {
+			this.logger.error(
+				"OPEN_AI_KEY is missing: set it in .env or ENV variables",
+			);
+
+			throw new Error("OPEN_AI_KEY is missing");
+		}
+
+		this.client = new OpenAI({ apiKey: config.ENV.OPEN_AI.KEY });
 	}
 
 	public async transcribe(

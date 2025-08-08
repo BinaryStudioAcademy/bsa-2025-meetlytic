@@ -5,6 +5,7 @@ import "~/assets/css/styles.css";
 import {
 	App,
 	Layout,
+	Link,
 	ProtectedRoute,
 	RouterProvider,
 	StoreProvider,
@@ -14,7 +15,8 @@ import { AppRoute } from "~/libs/enums/enums.js";
 import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFoundPage } from "~/pages/not-found/not-found.js";
-import { RootPage } from "~/pages/root/root-page.js";
+
+import { Meetings } from "./pages/meetings/meetings.js";
 
 createRoot(document.querySelector("#root") as HTMLElement).render(
 	<StrictMode>
@@ -35,18 +37,29 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 							{
 								children: [
 									{
-										element: (
-											<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
-												<RootPage />
-											</ProtectedRoute>
-										),
-										index: true,
+										element: <Meetings />,
+										path: AppRoute.MEETINGS,
 									},
 								],
-								element: <Layout />,
+								element: (
+									<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
+										<Layout />
+									</ProtectedRoute>
+								),
 							},
 						],
 						element: <App />,
+					},
+					{
+						element: (
+							// TODO: add LandingPage component
+							<div>
+								Landing Page
+								<div>
+									<Link to={AppRoute.SIGN_IN}>Sign In</Link>
+								</div>
+							</div>
+						),
 						path: AppRoute.ROOT,
 					},
 					{

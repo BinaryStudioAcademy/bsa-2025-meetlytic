@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.1.0...frontend-v1.2.0) (2025-08-08)
+
+
+### Features
+
+* display all meetings ml-102 ([#123](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/123)) ([c2fa2f8](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/c2fa2f8fa5509f6d9e98baae85a1d381d9921ea4))
+
+
+### Bug Fixes
+
+* make logo size adaptive and visually balanced on all screens ml-121 ([#138](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/138)) ([0a68ca9](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/0a68ca9f769eb063a177db8cfe15b285ae1e8a8b))
+* update SignUp and SignIn styles ml-134 ([#140](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/140)) ([4c0c64c](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/4c0c64cf2b29151ee15c32f8acee76391e542033))
+
 ## [1.1.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.0.1...frontend-v1.1.0) (2025-08-07)
 
 

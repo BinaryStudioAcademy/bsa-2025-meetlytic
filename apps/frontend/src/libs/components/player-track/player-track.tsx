@@ -4,7 +4,7 @@ import {
 	START_TIME,
 } from "@meetlytic/shared";
 
-import { KeyboardKey } from "~/libs/enums/enums.js";
+import { AudioEvent, KeyboardKey } from "~/libs/enums/enums.js";
 import { formatDate, getValidClassNames } from "~/libs/helpers/helpers.js";
 import {
 	useCallback,
@@ -43,14 +43,17 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 			setIsPlaying(false);
 		};
 
-		audio.addEventListener("timeupdate", handleTimeUpdate);
-		audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-		audio.addEventListener("ended", handleEnded);
+		audio.addEventListener(AudioEvent.TIME_UPDATE, handleTimeUpdate);
+		audio.addEventListener(AudioEvent.LOADEDMETADATA, handleLoadedMetadata);
+		audio.addEventListener(AudioEvent.ENDED, handleEnded);
 
 		return (): void => {
-			audio.removeEventListener("timeupdate", handleTimeUpdate);
-			audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-			audio.removeEventListener("ended", handleEnded);
+			audio.removeEventListener(AudioEvent.TIME_UPDATE, handleTimeUpdate);
+			audio.removeEventListener(
+				AudioEvent.LOADEDMETADATA,
+				handleLoadedMetadata,
+			);
+			audio.removeEventListener(AudioEvent.ENDED, handleEnded);
 		};
 	}, []);
 

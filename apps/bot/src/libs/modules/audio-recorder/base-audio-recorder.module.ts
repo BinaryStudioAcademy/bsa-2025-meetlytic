@@ -74,7 +74,6 @@ class BaseAudioRecorder implements AudioRecorder {
 			String(this.chunkDuration),
 			"-af",
 			"astats=metadata=1:reset=1",
-			"+igndts",
 		];
 
 		if (this.useMp3) {

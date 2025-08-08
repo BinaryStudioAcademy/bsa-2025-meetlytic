@@ -114,10 +114,6 @@ class BaseAudioRecorder implements AudioRecorder {
 			if (this.isRecording) {
 				this.recordNextChunk();
 			}
-
-			this.openAI.transcribe(filePath).catch((error: unknown) => {
-				this.logger.error(String(error));
-			});
 		});
 	}
 

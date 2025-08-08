@@ -2,6 +2,7 @@ import puppeteer, { type Browser, type Page } from "puppeteer";
 
 import {
 	DEFAULT_PARTICIPANTS_COUNT,
+	MINIMUM_PARTICIPANTS_THRESHOLD,
 	TIMEOUTS,
 	USER_AGENT,
 } from "~/libs/constants/constants.js";
@@ -144,7 +145,6 @@ class ZoomBot {
 		await this.clickHelper(ZoomUILabel.STOP_VIDEO_LOGIN);
 		await this.clickHelper(ZoomUILabel.JOIN);
 	}
-
 	private async leaveMeeting(): Promise<void> {
 		try {
 			await this.clickHelper(ZoomUILabel.LEAVE);
@@ -156,13 +156,22 @@ class ZoomBot {
 			);
 		}
 	}
-
 	private async monitorParticipants(): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
 		}
 
 		while (this.shouldMonitor) {
+			const count = await this.getParticipantsCount();
+
+			if (count <= MINIMUM_PARTICIPANTS_THRESHOLD) {
+				this.logger.info(ZoomBotMessages.ONLY_ONE_PARTICIPANT_DETECTED);
+				this.audioRecorder.stop();
+				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
+				await this.leaveMeeting();
+				this.shouldMonitor = false;
+			}
+
 			await delay(TIMEOUTS.FIFTEEN_SECONDS);
 		}
 	}
@@ -190,7 +199,6 @@ class ZoomBot {
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
 			this.audioRecorder.start();
 			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
-			await this.monitorParticipants();
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessages.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,

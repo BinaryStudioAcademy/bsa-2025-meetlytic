@@ -112,7 +112,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					label="Password"
 					name="password"
 					onClickIcon={handleTogglePasswordView}
-					placeholder="*************"
+					placeholder="********"
 					type={inputType.password}
 					wrapperClassName={styles["input-wrapper"]}
 				/>
@@ -126,7 +126,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 					label="Confirm password"
 					name="confirmPassword"
 					onClickIcon={handleToggleConfirmPasswordView}
-					placeholder="*************"
+					placeholder="********"
 					type={inputType.confirm}
 					wrapperClassName={styles["input-wrapper"]}
 				/>

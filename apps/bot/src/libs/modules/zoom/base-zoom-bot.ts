@@ -96,7 +96,7 @@ class ZoomBot {
 		}
 
 		try {
-			await this.clickHelper(ZoomUILabel.ACCEPT_COOKIES, TIMEOUTS.FIVE_SECONDS);
+			await this.clickHelper(ZoomUILabel.ACCEPT_COOKIES, TIMEOUTS.ONE_SECOND);
 			this.logger.info(ZoomBotMessages.COOKIES_ACCEPTED);
 		} catch (error) {
 			this.logger.error(
@@ -106,7 +106,7 @@ class ZoomBot {
 
 		try {
 			await this.page.waitForSelector(ZoomUILabel.ACCEPT_TERMS, {
-				timeout: TIMEOUTS.FIVE_SECONDS,
+				timeout: TIMEOUTS.ONE_SECOND,
 				visible: true,
 			});
 
@@ -199,12 +199,13 @@ class ZoomBot {
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
 			this.audioRecorder.start();
 			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
-			await this.monitorParticipants();
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessages.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,
 			);
 		} finally {
+			this.audioRecorder.stop();
+			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
 			await this.browser?.close();
 		}
 	}

@@ -68,7 +68,11 @@
 	"Outputs": {
 		"InstanceId": {
 			"Value": { "Ref": "EC2Instance" },
-			"Export": { "Name": "InstanceId" }
+			"Export": {
+				"Name": {
+					"Fn::Sub": "InstanceId-${AWS::StackName}"
+				}
+			}
 		}
 	}
 }

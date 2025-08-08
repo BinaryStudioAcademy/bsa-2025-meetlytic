@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.0.0...shared-v1.1.0) (2025-08-08)
+
+
+### Features
+
+* display all meetings ml-102 ([#123](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/123)) ([c2fa2f8](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/c2fa2f8fa5509f6d9e98baae85a1d381d9921ea4))
+
 ## 1.0.0 (2025-08-05)
 
 

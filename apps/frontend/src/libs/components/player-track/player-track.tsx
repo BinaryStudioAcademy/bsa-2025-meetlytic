@@ -61,7 +61,7 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 	const [currentTime, setCurrentTime] = useState(START_TIME);
 	const [duration, setDuration] = useState(START_TIME);
 
-	const togglePlayback = useCallback(async (): Promise<void> => {
+	const handleTogglePlayback = useCallback(async (): Promise<void> => {
 		if (!audioReference.current) {
 			return;
 		}
@@ -75,9 +75,9 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 		setIsPlaying(!isPlaying);
 	}, [isPlaying]);
 
-	const handleTogglePlayback = useCallback((): void => {
-		void togglePlayback();
-	}, [togglePlayback]);
+	const handleClick = useCallback((): void => {
+		void handleTogglePlayback();
+	}, [handleTogglePlayback]);
 
 	const handleSeek = useCallback(
 		(event: React.KeyboardEvent | React.MouseEvent): void => {
@@ -119,7 +119,7 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 
 	return (
 		<div className={styles["root"]}>
-			<button className={styles["button"]} onClick={handleTogglePlayback}>
+			<button className={styles["button"]} onClick={handleClick}>
 				<Icon className={styles["icon"]} name={isPlaying ? "play" : "pause"} />
 			</button>
 			<button

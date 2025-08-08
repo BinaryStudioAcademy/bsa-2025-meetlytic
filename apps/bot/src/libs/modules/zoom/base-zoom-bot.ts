@@ -168,7 +168,6 @@ class ZoomBot {
 				this.logger.info(ZoomBotMessages.ONLY_ONE_PARTICIPANT_DETECTED);
 				this.audioRecorder.stop();
 				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
-				
 			}
 
 			await delay(TIMEOUTS.FIFTEEN_SECONDS);

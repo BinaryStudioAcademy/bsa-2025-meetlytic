@@ -106,15 +106,16 @@ npm install
 npm run build
 echo "[+] Shared package built."
 
-# add permisions for node
-echo "[+] Fixing permissions in bot..."
-sudo chown -R $USER:$USER ../../node_modules
-sudo chown -R $USER:$USER
 
 # Return to bot folder for runtime launch
 echo "[+] Go back to apps/bot..."
-cd apps/bot
+cd ../../apps/bot
 echo "[+] Returned to apps/bot directory."
+
+# add permisions for node
+echo "[+] Fixing permissions in bot..."
+sudo chown -R $USER:$USER ../../node_modules
+sudo chown -R $USER:$USER .
 
 # Prepare the directory where FFmpeg will write audio chunks
 echo "[+] Creating audio output directory..."

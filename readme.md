@@ -22,7 +22,7 @@ The product helps the users to automate the transcription and summarization of v
 
 ## 4. Database Schema
 
-<!-- prettier-ignore-start -->
+```mermaid
 erDiagram
    users {
       int id PK
@@ -53,7 +53,7 @@ erDiagram
    }
    users ||--|| user_details: user_id
    users ||--o{ meetings: owner_id
-<!-- prettier-ignore-end -->
+```
 
 ## 5. Architecture
 

@@ -169,7 +169,6 @@ class ZoomBot {
 				this.audioRecorder.stop();
 				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
 				await this.leaveMeeting();
-				this.shouldMonitor = false;
 			}
 
 			await delay(TIMEOUTS.FIFTEEN_SECONDS);

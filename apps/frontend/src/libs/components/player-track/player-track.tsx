@@ -1,3 +1,9 @@
+import {
+	MILLISECONDS_IN_SECOND,
+	PERCENT_MULTIPLIER,
+	START_TIME,
+} from "@meetlytic/shared";
+
 import { KeyboardKey } from "~/libs/enums/enums.js";
 import { formatDate, getValidClassNames } from "~/libs/helpers/helpers.js";
 import {
@@ -15,10 +21,6 @@ type Properties = {
 };
 
 const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
-	const MILLISECONDS_IN_SECOND = 1000;
-	const PERCENT_MULTIPLIER = 100;
-	const START_TIME = 0;
-
 	const audioReference = useRef<HTMLAudioElement>(null);
 	const progressReference = useRef<HTMLButtonElement>(null);
 

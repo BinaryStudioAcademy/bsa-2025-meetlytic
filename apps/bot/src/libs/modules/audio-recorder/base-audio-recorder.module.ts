@@ -114,16 +114,6 @@ class BaseAudioRecorder implements AudioRecorder {
 			if (this.isRecording) {
 				this.recordNextChunk();
 			}
-
-			const openAI_API_Key = process.env["OPENAI_API_KEY"];
-
-			if (openAI_API_Key) {
-				this.openAI.transcribe(filePath).catch((error: unknown) => {
-					this.logger.error(String(error));
-				});
-			} else {
-				this.logger.info("OpenAI API key not found. Skipping transcription.");
-			}
 		});
 	}
 

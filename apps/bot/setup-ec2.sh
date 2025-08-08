@@ -113,7 +113,7 @@ sudo chown -R $USER:$USER
 
 # Return to bot folder for runtime launch
 echo "[+] Go back to apps/bot..."
-cd ../../apps/bot
+cd apps/bot
 echo "[+] Returned to apps/bot directory."
 
 # Prepare the directory where FFmpeg will write audio chunks

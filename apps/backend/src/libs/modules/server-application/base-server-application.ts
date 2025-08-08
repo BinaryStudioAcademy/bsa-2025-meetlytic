@@ -1,3 +1,4 @@
+import multipart from "@fastify/multipart";
 import fastifyStatic from "@fastify/static";
 import swagger, { type StaticDocumentSpec } from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
@@ -121,6 +122,8 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	private async initPlugins(): Promise<void> {
+		await this.app.register(multipart);
+
 		await this.app.register(authorizationPlugin, {
 			routesWhiteList: WHITE_ROUTES,
 			services: {

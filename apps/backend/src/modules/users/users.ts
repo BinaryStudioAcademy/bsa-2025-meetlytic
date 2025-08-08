@@ -1,5 +1,7 @@
+import { config } from "~/libs/modules/config/config.js";
 import { logger } from "~/libs/modules/logger/logger.js";
 
+import { UserAvatarService } from "./user-avatar.service.js";
 import { UserDetailsModel } from "./user-details.model.js";
 import { UserDetailsRepository } from "./user-details.repository.js";
 import { UserController } from "./user.controller.js";
@@ -10,7 +12,12 @@ import { UserService } from "./user.service.js";
 const userRepository = new UserRepository(UserModel);
 const userDetailsRepository = new UserDetailsRepository(UserDetailsModel);
 const userService = new UserService(userRepository, userDetailsRepository);
-const userController = new UserController(logger, userService);
+const userAvatarService = new UserAvatarService(config);
+const userController = new UserController(
+	logger,
+	userService,
+	userAvatarService,
+);
 
 export { userController, userService };
 export {

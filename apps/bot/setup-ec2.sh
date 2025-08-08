@@ -34,20 +34,52 @@ apt install -y \
 	git
 
 
-echo "[+] Starting PulseAudio (root user)…"
-export HOME=/root
-export XDG_RUNTIME_DIR=/run/user/0
-mkdir -p "$XDG_RUNTIME_DIR"
-pulseaudio --daemonize=yes --exit-idle-time=-1
+echo "[+] Starting PulseAudio as ubuntu..."
+sleep 1
 
-echo "[+] Configuring virtual_sink…"
-pactl unload-module module-null-sink &>/dev/null || true
-SINK_ID=$(pactl load-module module-null-sink \
-	sink_name=virtual_sink sink_properties=device.description=Virtual_Sink)
+pulseaudio --start
+
+if [ $? -eq 0 ]; then
+	echo "[\0_0/] PulseAudio started"
+else
+	echo "[◕︵◕] Failed to start PulseAudio"
+fi
+
+echo "[+] Unloading existing sinks and loopbacks..."
+sleep 1
+
+pactl unload-module module-null-sink || echo "[i] No null-sink to unload"
+
+echo "[+] Loading virtual_sink (module-null-sink)..."
+sleep 1
+sink_id=$(sudo -u ubuntu pactl load-module module-null-sink sink_name=virtual_sink sink_properties=device.description=Virtual_Sink)
+if [ $? -eq 0 ]; then
+	echo "[\0_0/] virtual_sink loaded: module ID = $sink_id"
+else
+	echo "[◕︵◕] Failed to load virtual_sink"
+	exit 1
+fi
+
+echo "[+] Setting virtual_sink as default by sudo...."
+sleep 1
 pactl set-default-sink virtual_sink
-pactl list short sources | grep -q virtual_sink.monitor || {
-	echo "[X] virtual_sink.monitor NOT FOUND"; exit 1; }
-echo "[+] virtual_sink.monitor ready (module ID $SINK_ID)"
+
+if [ $? -eq 0 ]; then
+	echo "[\0_0/] virtual_sink set as default"
+else
+	echo "[◕︵◕] Failed to set default sink"
+fi
+
+
+echo "[+] Verifying that virtual_sink.monitor exists..."
+sleep 1
+sudo pactl list short sources | grep virtual_sink.monitor > /dev/null
+if [ $? -eq 0 ]; then
+	echo "[\0_0/] virtual_sink.monitor found"
+else
+	echo "[◕︵◕] virtual_sink.monitor NOT FOUND!"
+	exit 1
+fi
 
 echo "[+] Give permission to /home/ubuntu/bsa-2025-meetlytic..."
 sudo chown -R ubuntu:ubuntu /home/ubuntu/bsa-2025-meetlytic

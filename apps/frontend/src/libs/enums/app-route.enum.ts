@@ -1,6 +1,5 @@
 const AppRoute = {
 	ANY: "*",
-	DEMO: "/demo",
 	MEETINGS: "/meetings",
 	ROOT: "/",
 	SIGN_IN: "/sign-in",

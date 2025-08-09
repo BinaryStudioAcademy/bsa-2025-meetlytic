@@ -57,6 +57,12 @@ class BaseConfig implements Config {
 					env: "OPEN_AI_KEY",
 					format: String,
 				},
+				TEXT_GENERATION_MODEL: {
+					default: null,
+					doc: "OpenAI text generation model",
+					env: "TEXT_GENERATION_MODEL",
+					format: String,
+				},
 				TRANSCRIPTION_MODEL: {
 					default: null,
 					doc: "OpenAI transcription model",

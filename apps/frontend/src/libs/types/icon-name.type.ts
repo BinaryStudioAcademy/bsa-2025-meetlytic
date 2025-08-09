@@ -3,6 +3,8 @@ type IconName =
 	| "hidePassword"
 	| "logout"
 	| "meetings"
+	| "pause"
+	| "play"
 	| "search"
 	| "settings"
 	| "showPassword";

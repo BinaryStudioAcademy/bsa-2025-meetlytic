@@ -1,4 +1,5 @@
 export { AppRoute } from "./app-route.enum.js";
+export { AudioEvent } from "./audio-event.enum.js";
 export { AvatarSize } from "./avatar-size.enum.js";
 export { AvatarType } from "./avatar-type.enum.js";
 export { ButtonSize } from "./button-size.enum.js";

@@ -1,4 +1,5 @@
 const SUMMARY_PROMPT = `
+We will share with you a full transcript of a meeting. Generate a summary using this transcript according to the following requirements.
 Key Outcomes: Summarize the primary objectives achieved and the major insights gained during the meeting.
 Strategic Decisions: Highlight significant decisions made, including their anticipated impact on future strategies.
 Guidelines:
@@ -8,6 +9,7 @@ Guidelines:
 `;
 
 const ACTION_POINTS_PROMPT = `
+We will share with you a full transcript of a meeting. Generate an action points using this transcript according to the following requirements.
 Generate a list of actionable tasks. Each task should be clearly defined, assigned to a specific person, and have a concrete deadline. The action points should directly reflect the decisions and next steps outlined in the summary, ensuring a clear path forward.
 Guidelines:
 - Use a verb-first structure to clearly state what needs to be done (e.g., "Develop," "Research," "Finalize").

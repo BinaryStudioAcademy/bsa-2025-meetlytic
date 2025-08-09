@@ -1,6 +1,6 @@
 const AudioEvent = {
 	ENDED: "ended",
-	LOADEDMETADATA: "loadedmetadata",
+	LOADED_METADATA: "loadedmetadata",
 	TIME_UPDATE: "timeupdate",
 } as const;
 

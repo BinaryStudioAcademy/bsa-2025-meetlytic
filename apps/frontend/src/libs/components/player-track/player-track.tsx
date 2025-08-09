@@ -44,13 +44,13 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 		};
 
 		audio.addEventListener(AudioEvent.TIME_UPDATE, handleTimeUpdate);
-		audio.addEventListener(AudioEvent.LOADEDMETADATA, handleLoadedMetadata);
+		audio.addEventListener(AudioEvent.LOADED_METADATA, handleLoadedMetadata);
 		audio.addEventListener(AudioEvent.ENDED, handleEnded);
 
 		return (): void => {
 			audio.removeEventListener(AudioEvent.TIME_UPDATE, handleTimeUpdate);
 			audio.removeEventListener(
-				AudioEvent.LOADEDMETADATA,
+				AudioEvent.LOADED_METADATA,
 				handleLoadedMetadata,
 			);
 			audio.removeEventListener(AudioEvent.ENDED, handleEnded);

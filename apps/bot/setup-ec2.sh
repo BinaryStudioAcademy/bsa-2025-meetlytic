@@ -120,18 +120,25 @@ sudo chown -R $USER:$USER .
 # Prepare the directory where FFmpeg will write audio chunks
 echo "[+] Creating audio output directory..."
 mkdir -p /home/ubuntu/audio
-sudo chown -R ubuntu:ubuntu /home/ubuntu/audio your module create folder
+sudo chown -R ubuntu:ubuntu /home/ubuntu/audio
 echo "[+] /home/ubuntu/audio prepared."
 
 # Generate .env with runtime configuration (meeting IDs, etc.)
 echo "[+] Writing environment variables..."
 cat <<EOF > .env
-NODE_ENV=production
-MEETING_ID=${1}
-MEETING_PASSWORD=${2}
-BOT_NAME=Meetlytic
-OPEN_AI_KEY=
-TRANSCRIPTION_MODEL=whisper-1
+# BOT
+BOT_NAME="$1"
+
+# ZOOM
+MEETING_ID="$2"
+MEETING_PASSWORD="$3"
+
+# OPEN_AI
+OPEN_AI_KEY="$4"
+TEXT_GENERATION_MODEL="$5"
+TRANSCRIPTION_MODEL="$6"
+
+# AUDIO - RECORDER
 CHUNK_DURATION=10
 FFMPEG_PATH=/usr/bin/ffmpeg
 OUTPUT_DIRECTORY=/home/ubuntu/audio

@@ -1,6 +1,10 @@
 {
 	"AWSTemplateFormatVersion": "2010-09-09",
 	"Parameters": {
+		"BotName": {
+			"Type": "String",
+			"Description": "Bot name"
+		},
 		"ImageId": {
 			"Type": "String"
 		},
@@ -11,6 +15,18 @@
 		"MeetingPassword": {
 			"Type": "String",
 			"Description": "Meeting Password"
+		},
+		"OpenAIKey": {
+			"Type": "String",
+			"Description": "OpenAI API key"
+		},
+		"TextGenerationModel": {
+			"Type": "String",
+			"Description": "Text generation model"
+		},
+		"TranscriptionModel": {
+			"Type": "String",
+			"Description": "Transcription model"
 		}
 	},
 	"Resources": {
@@ -44,13 +60,25 @@
 				"UserData": {
 					"Fn::Base64": {
 						"Fn::Sub": [
-							"#!/bin/bash\n sudo apt update -y\n sudo apt install -y git\n cd /home/ubuntu\ngit clone --branch 44-feat-record-audio-from-ec2 https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic.git\nsudo chown -R ubuntu:ubuntu /home/ubuntu/bsa-2025-meetlytic\ncd bsa-2025-meetlytic\nbash ./apps/bot/setup-ec2.sh ${MeetingId} ${MeetingPassword}",
+							"#!/bin/bash\n sudo apt update -y\n sudo apt install -y git\n cd /home/ubuntu\ngit clone --branch 44-feat-record-audio-from-ec2 https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic.git\nsudo chown -R ubuntu:ubuntu /home/ubuntu/bsa-2025-meetlytic\ncd bsa-2025-meetlytic\nbash ./apps/bot/setup-ec2.sh ${BotName} ${MeetingId} ${MeetingPassword} ${OpenAIKey} ${TextGenerationModel} ${TranscriptionModel}",
 							{
+								"BotName": {
+									"Ref": "BotName"
+								},
 								"MeetingId": {
 									"Ref": "MeetingId"
 								},
 								"MeetingPassword": {
 									"Ref": "MeetingPassword"
+								},
+								"OpenAIKey": {
+									"Ref": "OpenAIKey"
+								},
+								"TextGenerationModel": {
+									"Ref": "TextGenerationModel"
+								},
+								"TranscriptionModel": {
+									"Ref": "TranscriptionModel"
 								}
 							}
 						]

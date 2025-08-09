@@ -14,8 +14,8 @@ class BaseOpenAI {
 	private logger: Logger;
 
 	public constructor(logger: Logger) {
-		this.logger = logger;
 		this.client = new OpenAI({ apiKey: config.ENV.OPEN_AI.KEY });
+		this.logger = logger;
 	}
 
 	private async generateTextResponse(

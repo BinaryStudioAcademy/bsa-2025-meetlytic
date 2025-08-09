@@ -7,6 +7,7 @@ type EnvironmentSchema = {
 	};
 	OPEN_AI: {
 		KEY: string;
+		TEXT_GENERATION_MODEL: string;
 		TRANSCRIPTION_MODEL: string;
 	};
 	ZOOM: {

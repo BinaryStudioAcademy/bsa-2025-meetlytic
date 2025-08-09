@@ -2,8 +2,7 @@ import {
 	MILLISECONDS_IN_SECOND,
 	PERCENT_MULTIPLIER,
 	START_TIME,
-} from "@meetlytic/shared";
-
+} from "~/libs/constants/constants.js";
 import { AudioEvent, KeyboardKey } from "~/libs/enums/enums.js";
 import { formatDate, getValidClassNames } from "~/libs/helpers/helpers.js";
 import {

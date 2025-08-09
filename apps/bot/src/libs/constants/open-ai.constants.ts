@@ -1,4 +1,4 @@
-const summaryInstructions = `
+const SUMMARY_PROMPT = `
 Key Outcomes: Summarize the primary objectives achieved and the major insights gained during the meeting.
 Strategic Decisions: Highlight significant decisions made, including their anticipated impact on future strategies.
 Guidelines:
@@ -7,7 +7,7 @@ Guidelines:
 - Incorporate relevant data discussed during the meeting to support analyses, decisions and next steps.
 `;
 
-const actionPointsInstructions = `
+const ACTION_POINTS_PROMPT = `
 Generate a list of actionable tasks. Each task should be clearly defined, assigned to a specific person, and have a concrete deadline. The action points should directly reflect the decisions and next steps outlined in the summary, ensuring a clear path forward.
 Guidelines:
 - Use a verb-first structure to clearly state what needs to be done (e.g., "Develop," "Research," "Finalize").
@@ -16,4 +16,4 @@ Guidelines:
 - Ensure each action point directly corresponds to a decision or insight from the meeting summary.
 `;
 
-export { actionPointsInstructions, summaryInstructions };
+export { ACTION_POINTS_PROMPT, SUMMARY_PROMPT };

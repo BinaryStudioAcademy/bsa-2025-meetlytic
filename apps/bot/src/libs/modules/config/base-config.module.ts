@@ -37,10 +37,10 @@ class BaseConfig implements Config {
 					env: "OPEN_AI_KEY",
 					format: String,
 				},
-				SUMMARY_ACTION_POINTS_MODEL: {
+				TEXT_GENERATION_MODEL: {
 					default: null,
-					doc: "OpenAI summary/action points generation model",
-					env: "SUMMARY_ACTION_POINTS_MODEL",
+					doc: "OpenAI text generation model",
+					env: "TEXT_GENERATION_MODEL",
 					format: String,
 				},
 				TRANSCRIPTION_MODEL: {

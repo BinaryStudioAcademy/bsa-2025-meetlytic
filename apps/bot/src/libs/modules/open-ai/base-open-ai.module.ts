@@ -2,8 +2,8 @@ import fs from "node:fs";
 import OpenAI from "openai";
 
 import {
-	actionPointsInstructions,
-	summaryInstructions,
+	ACTION_POINTS_PROMPT,
+	SUMMARY_PROMPT,
 } from "~/libs/constants/constants.js";
 import { config } from "~/libs/modules/config/config.js";
 
@@ -25,18 +25,18 @@ class BaseOpenAI {
 		const response = await this.client.responses.create({
 			input: prompt,
 			instructions,
-			model: config.ENV.OPEN_AI.SUMMARY_ACTION_POINTS_MODEL,
+			model: config.ENV.OPEN_AI.TEXT_GENERATION_MODEL,
 		});
 
 		return response.output_text;
 	}
 
 	public async createActionPoints(prompt: string): Promise<string> {
-		return await this.generateTextResponse(prompt, actionPointsInstructions);
+		return await this.generateTextResponse(prompt, ACTION_POINTS_PROMPT);
 	}
 
 	public async summarize(prompt: string): Promise<string> {
-		return await this.generateTextResponse(prompt, summaryInstructions);
+		return await this.generateTextResponse(prompt, SUMMARY_PROMPT);
 	}
 
 	public async transcribe(

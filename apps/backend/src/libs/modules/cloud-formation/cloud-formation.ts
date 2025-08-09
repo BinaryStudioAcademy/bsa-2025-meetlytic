@@ -10,11 +10,23 @@ const {
 	SECRET_ACCESS_KEY: secretAccessKey,
 } = config.ENV.AWS;
 
+const { NAME: botName } = config.ENV.BOT;
+
+const {
+	KEY: openAIKey,
+	TEXT_GENERATION_MODEL: textGenerationModel,
+	TRANSCRIPTION_MODEL: transcriptionModel,
+} = config.ENV.OPEN_AI;
+
 const cloudFormation = new BaseCloudFormation({
+	botName,
 	credentials: { accessKeyId, secretAccessKey },
 	imageId,
 	logger,
+	openAIKey,
 	region: REGION,
+	textGenerationModel,
+	transcriptionModel,
 });
 
 export { cloudFormation };

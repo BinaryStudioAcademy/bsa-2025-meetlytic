@@ -8,18 +8,28 @@ import {
 } from "~/libs/constants/constants.js";
 import { ZoomBotMessages, ZoomUILabel } from "~/libs/enums/enums.js";
 import { buildQueryParameters, delay } from "~/libs/helpers/helpers.js";
-import { type BaseConfig, type Logger } from "~/libs/types/types.js";
+import {
+	type AudioRecorder,
+	type BaseConfig,
+	type Logger,
+} from "~/libs/types/types.js";
 
 class ZoomBot {
+	private audioRecorder: AudioRecorder;
 	private browser: Browser | null = null;
 	private config: BaseConfig;
 	private logger: Logger;
 	private page: null | Page = null;
 	private shouldMonitor = true;
 
-	public constructor(config: BaseConfig, logger: Logger) {
+	public constructor(
+		config: BaseConfig,
+		logger: Logger,
+		audioRecorder: AudioRecorder,
+	) {
 		this.config = config;
 		this.logger = logger;
+		this.audioRecorder = audioRecorder;
 	}
 
 	private async clickHelper(
@@ -156,8 +166,8 @@ class ZoomBot {
 
 			if (count <= MINIMUM_PARTICIPANTS_THRESHOLD) {
 				this.logger.info(ZoomBotMessages.ONLY_ONE_PARTICIPANT_DETECTED);
-				await this.leaveMeeting();
-				this.shouldMonitor = false;
+				this.audioRecorder.stop();
+				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
 			}
 
 			await delay(TIMEOUTS.FIFTEEN_SECONDS);
@@ -185,6 +195,8 @@ class ZoomBot {
 			);
 			await delay(TIMEOUTS.FIVE_SECONDS);
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
+			this.audioRecorder.start();
+			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
 			await this.monitorParticipants();
 		} catch (error) {
 			this.logger.error(

@@ -5,3 +5,4 @@ import { BaseOpenAI } from "./base-open-ai.module.js";
 const openAI = new BaseOpenAI(logger);
 
 export { openAI };
+export { type OpenAI } from "./libs/types/types.js";

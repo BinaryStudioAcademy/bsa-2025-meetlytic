@@ -21,27 +21,48 @@ import {
 import { type CloudFormation, type CreateStack } from "./libs/type/types.js";
 
 type Constructor = {
+	botName: string;
 	credentials: {
 		accessKeyId: string;
 		secretAccessKey: string;
 	};
 	imageId: string;
 	logger: Logger;
+	openAIKey: string;
 	region: string;
+	textGenerationModel: string;
+	transcriptionModel: string;
 };
 
 class BaseCloudFormation implements CloudFormation {
+	private botName: string;
 	private client: CloudFormationClient;
 	private imageId: string;
 	private logger: Logger;
+	private openAIKey: string;
+	private textGenerationModel: string;
+	private transcriptionModel: string;
 
-	public constructor({ credentials, imageId, logger, region }: Constructor) {
+	public constructor({
+		botName,
+		credentials,
+		imageId,
+		logger,
+		openAIKey,
+		region,
+		textGenerationModel,
+		transcriptionModel,
+	}: Constructor) {
 		this.imageId = imageId;
 		this.logger = logger;
+		this.botName = botName;
 		this.client = new CloudFormationClient({
 			credentials,
 			region,
 		});
+		this.openAIKey = openAIKey;
+		this.textGenerationModel = textGenerationModel;
+		this.transcriptionModel = transcriptionModel;
 	}
 
 	private async getInstanceIdFromStack(stackName: string): Promise<string> {
@@ -77,11 +98,24 @@ class BaseCloudFormation implements CloudFormation {
 			const command = new CreateStackCommand({
 				Capabilities: [Capability.NAMED_IAM],
 				Parameters: [
+					{ ParameterKey: ParameterKey.BOT_NAME, ParameterValue: this.botName },
 					{ ParameterKey: ParameterKey.IMAGE_ID, ParameterValue: this.imageId },
 					{ ParameterKey: ParameterKey.MEETING_ID, ParameterValue: String(id) },
 					{
 						ParameterKey: ParameterKey.MEETING_PASSWORD,
 						ParameterValue: meetingPassword,
+					},
+					{
+						ParameterKey: ParameterKey.OPEN_AI_KEY,
+						ParameterValue: this.openAIKey,
+					},
+					{
+						ParameterKey: ParameterKey.TEXT_GENERATION_MODEL,
+						ParameterValue: this.textGenerationModel,
+					},
+					{
+						ParameterKey: ParameterKey.TRANSCRIPTION_MODEL,
+						ParameterValue: this.transcriptionModel,
 					},
 				],
 				StackName: stackName,

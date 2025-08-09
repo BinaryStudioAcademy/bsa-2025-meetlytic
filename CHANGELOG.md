@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.2.0...v1.3.0) (2025-08-09)
+
+
+### Features
+
+* add database schema ml-4 ([#141](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/141)) ([86b66a4](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/86b66a4ad00b633960358a65295399178674358c))
+* add summary/action items generation ml-130 ([#147](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/147)) ([64131bd](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/64131bdb7202e5d7f942145387a6401e9bb53f11))
+
 ## [1.2.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.1.0...v1.2.0) (2025-08-08)
 
 

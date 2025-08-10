@@ -8,6 +8,7 @@ import { type Service } from "~/libs/types/types.js";
 
 import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
+import { extractZoomMeetingId } from "./libs/helpers/helpers.js";
 import {
 	type MeetingCreateRequestDto,
 	type MeetingGetAllResponseDto,
@@ -55,10 +56,19 @@ class MeetingService implements Service<MeetingResponseDto> {
 	public async create(
 		payload: MeetingCreateRequestDto & { ownerId: number },
 	): Promise<MeetingResponseDto> {
+		const extractedMeetingId = extractZoomMeetingId(payload.meetingId);
+
+		if (!extractedMeetingId) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.INVALID_MEETING_LINK,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const meeting = MeetingEntity.initializeNew({
 			host: payload.host,
 			instanceId: null,
-			meetingId: payload.meetingId,
+			meetingId: extractedMeetingId,
 			meetingPassword: payload.meetingPassword ?? null,
 			ownerId: payload.ownerId,
 		});

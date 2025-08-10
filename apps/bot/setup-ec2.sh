@@ -80,15 +80,6 @@ mkdir -p "$XDG_RUNTIME_DIR"
 pulseaudio --daemonize=yes --exit-idle-time=-1
 echo "[+] PulseAudio daemon started."
 
-echo "[+] Configuring virtual_sink…"
-pactl unload-module module-null-sink &>/dev/null || true
-SINK_ID=$(pactl load-module module-null-sink \
-	sink_name=virtual_sink sink_properties=device.description=Virtual_Sink)
-pactl set-default-sink virtual_sink
-pactl list short sources | grep -q virtual_sink.monitor || {
-	echo "[X] virtual_sink.monitor NOT FOUND"; exit 1; }
-echo "[+] virtual_sink.monitor ready (module ID $SINK_ID)"
-
 # ─── Application setup ───────────────────────────────────────────────────────
 # Fix ownership so npm can write node_modules in the repo cloned by root/CFN.
 echo "[+] Give permission to /home/ubuntu/bsa-2025-meetlytic..."

@@ -98,7 +98,7 @@ class BaseConfig implements Config {
 			"--disable-setuid-sandbox",
 			"--autoplay-policy=no-user-gesture-required",
 			"--use-fake-ui-for-media-stream",
-			"--headless=false",
+			"--headless=new",
 		];
 
 		return {

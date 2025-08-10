@@ -70,7 +70,7 @@ class BaseAudioRecorder implements AudioRecorder {
 			"-f",
 			"pulse",
 			"-i",
-			"virtual_sink.monitor",
+			"auto_null.monitor",
 			"-t",
 			String(this.chunkDuration),
 			"-af",
@@ -114,10 +114,6 @@ class BaseAudioRecorder implements AudioRecorder {
 			if (this.isRecording) {
 				this.recordNextChunk();
 			}
-
-			this.openAI.transcribe(filePath).catch((error: unknown) => {
-				this.logger.error(String(error));
-			});
 		});
 	}
 

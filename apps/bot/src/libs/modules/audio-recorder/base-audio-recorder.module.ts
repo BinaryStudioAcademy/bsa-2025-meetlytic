@@ -4,7 +4,7 @@ import path from "node:path";
 
 import { type Logger, type OpenAI } from "~/libs/types/types.js";
 
-import { AudioRecordingEvents } from "./libs/enums/enums.js";
+import { AudioRecorderEvent } from "./libs/enums/enums.js";
 import {
 	type AudioRecorder,
 	type AudioRecorderOptions,
@@ -89,7 +89,7 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		const ffmpeg = spawn(this.ffmpegPath, ffmpegArguments);
 
-		ffmpeg.stderr.on(AudioRecordingEvents.DATA, (data) => {
+		ffmpeg.stderr.on(AudioRecorderEvent.DATA, (data) => {
 			const lines = String(data)
 				.trim()
 				.split("\n")
@@ -106,7 +106,7 @@ class BaseAudioRecorder implements AudioRecorder {
 			}
 		});
 
-		ffmpeg.on(AudioRecordingEvents.EXIT, (code, signal) => {
+		ffmpeg.on(AudioRecorderEvent.EXIT, (code, signal) => {
 			this.logger.info(
 				`[+] Chunk done | path=${filePath} | code=${String(code)}  signal=${String(signal)}`,
 			);

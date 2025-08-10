@@ -1,1 +1,1 @@
-export { AudioRecordingEvents } from "./audio-recorder-events.enum.js";
+export { AudioRecorderEvent } from "./audio-recorder-event.enum.js";

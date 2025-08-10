@@ -5,7 +5,7 @@ const ParameterKey = {
 	MEETING_PASSWORD: "MeetingPassword",
 	OPEN_AI_KEY: "OpenAIKey",
 	TEXT_GENERATION_MODEL: "TextGenerationModel",
-	TRANSCRIPTION_MODEL: "TranscriptionMode",
+	TRANSCRIPTION_MODEL: "TranscriptionModel",
 } as const;
 
 export { ParameterKey };

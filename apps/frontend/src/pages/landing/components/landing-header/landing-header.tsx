@@ -29,7 +29,11 @@ const LandingHeader: React.FC<Properties> = ({ className }: Properties) => {
 						<ul className={styles["landing-header__nav-list"]}>
 							{HEADER_LINKS.map(({ label, to }) => (
 								<li className={styles["landing-header__nav-item"]} key={label}>
-									<Link className={styles["landing-header__nav-link"]} to={to}>
+									<Link
+										aria-label={label}
+										className={styles["landing-header__nav-link"]}
+										to={to}
+									>
 										{label}
 									</Link>
 								</li>

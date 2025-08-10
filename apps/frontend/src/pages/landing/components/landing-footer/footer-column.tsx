@@ -14,7 +14,11 @@ const FooterColumn: React.FC<Properties> = ({ group }: Properties) => {
 			<ul className={styles["landing-footer__list"]}>
 				{group.links.map(({ label, to }) => (
 					<li className={styles["landing-footer__item"]} key={label}>
-						<Link className={styles["landing-footer__link"]} to={to}>
+						<Link
+							aria-label={label}
+							className={styles["landing-footer__link"]}
+							to={to}
+						>
 							{label}
 						</Link>
 					</li>

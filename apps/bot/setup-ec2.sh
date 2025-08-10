@@ -128,6 +128,12 @@ echo "[+] /home/ubuntu/audio prepared."
 echo "[+] Parsing settings JSON..."
 SETTINGS_JSON="$1"
 
+
+if ! command -v jq &> /dev/null; then
+echo "Error: jq is not installed. Please install jq to continue."
+exit 1
+fi
+
 # Use jq to parse JSON into bash variables
 BOT_NAME=$(echo "$SETTINGS_JSON" | jq -r '.botName')
 MEETING_ID=$(echo "$SETTINGS_JSON" | jq -r '.meetingId')
@@ -136,8 +142,15 @@ OPEN_AI_KEY=$(echo "$SETTINGS_JSON" | jq -r '.openAIKey')
 TEXT_GENERATION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.textGenerationModel')
 TRANSCRIPTION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.transcriptionModel')
 
+if [ -z "$BOT_NAME" ] || [ -z "$MEETING_ID" ]; then
+echo "Error: Missing required settings in JSON."
+exit 1
+fi
+
 echo "[+] Writing environment variables..."
 cat <<EOF > .env
+# APP
+NODE_ENV=production
 # BOT
 BOT_NAME="$BOT_NAME"
 

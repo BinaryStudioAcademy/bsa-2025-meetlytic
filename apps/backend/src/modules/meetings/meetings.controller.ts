@@ -14,6 +14,7 @@ import {
 	type DeleteMeetingOptions,
 	type FindAllMeetingOptions,
 	type FindMeetingOptions,
+	type GetPublicUrlOptions,
 	type UpdateMeetingOptions,
 } from "./libs/types/types.js";
 import {
@@ -120,6 +121,11 @@ class MeetingsController extends BaseController {
 			method: "GET",
 			path: MeetingsApiPath.ROOT,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+		});
+		this.addRoute({
+			handler: (options) => this.getPublicUrl(options as GetPublicUrlOptions),
+			method: "GET",
+			path: `${MeetingsApiPath.$ID}${MeetingsApiPath.URL}`,
 		});
 	}
 
@@ -241,6 +247,34 @@ class MeetingsController extends BaseController {
 		});
 
 		return { payload: meetings, status: HTTPCode.OK };
+	}
+
+	/**
+	 * @swagger
+	 * /meetings/{id}/url:
+	 *   getPublicUrl:
+	 *     summary: Generate a public URL for the meeting
+	 *     tags:
+	 *       - Meetings
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: number
+	 *     responses:
+	 *       200:
+	 *         description: Public URL returned
+	 *       404:
+	 *         description: Meeting not found
+	 */
+	private async getPublicUrl(
+		options: GetPublicUrlOptions,
+	): Promise<APIHandlerResponse> {
+		const id = Number(options.params.id);
+		const url = await this.meetingService.getPublicUrl(id);
+
+		return { payload: url, status: HTTPCode.OK };
 	}
 
 	/**

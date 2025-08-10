@@ -1,6 +1,8 @@
+import { APIPath } from "~/libs/enums/enums.js";
 import { type CloudFormation } from "~/libs/modules/cloud-formation/cloud-formation.js";
 import template from "~/libs/modules/cloud-formation/libs/templates/ec2-instance-template.json" with { type: "json" };
 import { HTTPCode } from "~/libs/modules/http/http.js";
+import { sharedJwt } from "~/libs/modules/token/token.js";
 import { type Service } from "~/libs/types/types.js";
 
 import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
@@ -8,6 +10,7 @@ import { MeetingError } from "./libs/exceptions/exceptions.js";
 import {
 	type MeetingCreateRequestDto,
 	type MeetingGetAllResponseDto,
+	type MeetingPublicUrlResponseDto,
 	type MeetingResponseDto,
 	type MeetingUpdateRequestDto,
 } from "./libs/types/types.js";
@@ -92,6 +95,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		return isDeleted;
 	}
+
 	public async endMeeting(id: number): Promise<MeetingResponseDto> {
 		await this.cloudFormation.delete(id);
 		const meeting = await this.meetingRepository.update(id, {
@@ -108,7 +112,6 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		return meeting.toObject();
 	}
-
 	public async find(id: number): Promise<MeetingResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
 
@@ -130,6 +133,23 @@ class MeetingService implements Service<MeetingResponseDto> {
 		const meetings = await this.meetingRepository.findAllByOwnerId(ownerId);
 
 		return { items: meetings.map((meeting) => meeting.toObject()) };
+	}
+
+	public async getPublicUrl(id: number): Promise<MeetingPublicUrlResponseDto> {
+		const meeting = await this.meetingRepository.find(id);
+
+		if (!meeting) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.MEETING_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		const token = await sharedJwt.sign({ meetingId: id });
+
+		return {
+			publicUrl: `${APIPath.PUBLIC_MEETINGS}/${String(id)}?token=${token}`,
+		};
 	}
 
 	public async update(

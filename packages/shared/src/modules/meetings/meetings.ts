@@ -7,6 +7,7 @@ export {
 export {
 	type MeetingCreateRequestDto,
 	type MeetingGetAllResponseDto,
+	type MeetingPublicUrlResponseDto,
 	type MeetingResponseDto,
 	type MeetingUpdateRequestDto,
 } from "./libs/types/types.js";

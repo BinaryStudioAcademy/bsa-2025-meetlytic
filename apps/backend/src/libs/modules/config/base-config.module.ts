@@ -76,6 +76,14 @@ class BaseConfig implements Config {
 					format: String,
 				},
 			},
+			BOT: {
+				NAME: {
+					default: null,
+					doc: "Bot name",
+					env: "BOT_NAME",
+					format: String,
+				},
+			},
 			DB: {
 				CONNECTION_STRING: {
 					default: null,
@@ -127,6 +135,25 @@ class BaseConfig implements Config {
 					default: null,
 					doc: "Secret key of shared JWT tokens",
 					env: "SHARED_JWT_SECRET",
+        },
+      },
+			OPEN_AI: {
+				KEY: {
+					default: null,
+					doc: "OpenAI API key",
+					env: "OPEN_AI_KEY",
+					format: String,
+				},
+				TEXT_GENERATION_MODEL: {
+					default: null,
+					doc: "OpenAI text generation model",
+					env: "TEXT_GENERATION_MODEL",
+					format: String,
+				},
+				TRANSCRIPTION_MODEL: {
+					default: null,
+					doc: "OpenAI transcription model",
+					env: "TRANSCRIPTION_MODEL",
 					format: String,
 				},
 			},

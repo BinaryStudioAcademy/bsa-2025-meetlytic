@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.2.0...frontend-v1.3.0) (2025-08-10)
+
+
+### Features
+
+* add audio recording from ec2 ml-44 ([#103](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/103)) ([d56c3cb](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/d56c3cb472dcf9214d6acfa3e7fbd9b8733dedb7))
+
 ## [1.2.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.1.0...frontend-v1.2.0) (2025-08-08)
 
 

@@ -19,7 +19,7 @@ const MeetingItem: React.FC<Properties> = ({
 	src,
 	title,
 }: Properties) => {
-	const to = AppRoute.MEETING_DETAILS.replace(":id", id.toString());
+	const to = AppRoute.MEETINGS_BY_ID.replace(":id", id.toString());
 
 	return (
 		<>

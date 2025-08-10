@@ -1,7 +1,7 @@
 const APIPath = {
 	AUTH: "/auth",
-	MEETING_DETAILS: "/meetings/:id",
 	MEETINGS: "/meetings",
+	MEETINGS_BY_ID: "/meetings/:id",
 	USERS: "/users",
 } as const;
 

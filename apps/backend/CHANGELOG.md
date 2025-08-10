@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.1.0...backend-v1.2.0) (2025-08-10)
+
+
+### Features
+
+* add summary/action items generation ml-130 ([#147](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/147)) ([64131bd](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/64131bdb7202e5d7f942145387a6401e9bb53f11))
+
 ## [1.1.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.0.0...backend-v1.1.0) (2025-08-08)
 
 

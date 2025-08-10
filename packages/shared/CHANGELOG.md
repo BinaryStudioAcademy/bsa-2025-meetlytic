@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.1.0...shared-v1.1.1) (2025-08-10)
+
+
+### Bug Fixes
+
+* **backend:** convert email to lowercase automatically ml-149 ([#150](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/150)) ([46616e4](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/46616e4ec4259d53be4db55e10fabf2a81110088))
+
 ## [1.1.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.0.0...shared-v1.1.0) (2025-08-08)
 
 

@@ -80,7 +80,7 @@ class BaseConfig implements Config {
 				NAME: {
 					default: null,
 					doc: "Bot name",
-					env: "NAME",
+					env: "BOT_NAME",
 					format: String,
 				},
 			},

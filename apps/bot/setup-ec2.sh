@@ -49,6 +49,7 @@ echo "[+] Node.js 22 installed."
 echo "[+] Installing system libraries and dependencies..."
 apt install -y \
 	xvfb \
+	jq \
 	ffmpeg \
 	pulseaudio \
 	pulseaudio-utils \
@@ -124,25 +125,37 @@ sudo chown -R ubuntu:ubuntu /home/ubuntu/audio
 echo "[+] /home/ubuntu/audio prepared."
 
 # Generate .env with runtime configuration (meeting IDs, etc.)
+echo "[+] Parsing settings JSON..."
+SETTINGS_JSON="$1"
+
+# Use jq to parse JSON into bash variables
+BOT_NAME=$(echo "$SETTINGS_JSON" | jq -r '.botName')
+MEETING_ID=$(echo "$SETTINGS_JSON" | jq -r '.meetingId')
+MEETING_PASSWORD=$(echo "$SETTINGS_JSON" | jq -r '.meetingPassword')
+OPEN_AI_KEY=$(echo "$SETTINGS_JSON" | jq -r '.openAIKey')
+TEXT_GENERATION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.textGenerationModel')
+TRANSCRIPTION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.transcriptionModel')
+
 echo "[+] Writing environment variables..."
 cat <<EOF > .env
 # BOT
-BOT_NAME="$1"
+BOT_NAME="$BOT_NAME"
 
 # ZOOM
-MEETING_ID="$2"
-MEETING_PASSWORD="$3"
+MEETING_ID="$MEETING_ID"
+MEETING_PASSWORD="$MEETING_PASSWORD"
 
 # OPEN_AI
-OPEN_AI_KEY="$4"
-TEXT_GENERATION_MODEL="$5"
-TRANSCRIPTION_MODEL="$6"
+OPEN_AI_KEY="$OPEN_AI_KEY"
+TEXT_GENERATION_MODEL="$TEXT_GENERATION_MODEL"
+TRANSCRIPTION_MODEL="$TRANSCRIPTION_MODEL"
 
 # AUDIO - RECORDER
 CHUNK_DURATION=10
 FFMPEG_PATH=/usr/bin/ffmpeg
 OUTPUT_DIRECTORY=/home/ubuntu/audio
 EOF
+
 echo "[+] .env file created."
 
 # Launch the bot inside Xvfb (headless virtual display) and detach

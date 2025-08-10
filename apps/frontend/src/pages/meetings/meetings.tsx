@@ -44,6 +44,7 @@ const Meetings: React.FC = () => {
 									new Date(meeting.createdAt),
 									"MMM D, YYYY, h:m A",
 								)}
+								id={meeting.id}
 								key={meeting.id}
 								title={`Meeting #${String(meeting.id)}`}
 							/>

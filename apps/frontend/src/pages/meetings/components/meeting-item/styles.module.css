@@ -3,6 +3,7 @@
 	flex-direction: column;
 	gap: 9px;
 	width: 344px;
+	height: 274px;
 	padding: 8px;
 	cursor: pointer;
 	background-color: var(--color-background-4);
@@ -37,8 +38,4 @@
 	font-size: 12px;
 	font-weight: 400;
 	color: var(--color-text-2);
-}
-
-.meeting__play-track {
-	border: thin solid var(--color-text-2);
 }

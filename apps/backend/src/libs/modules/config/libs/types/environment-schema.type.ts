@@ -22,6 +22,11 @@ type EnvironmentSchema = {
 	ENCRYPT: {
 		SALT_ROUNDS: number;
 	};
+	SHARED_TOKEN: {
+		ALGORITHM: string;
+		EXPIRES_IN: string;
+		SECRET: string;
+	};
 	TOKEN: {
 		ALGORITHM: string;
 		EXPIRES_IN: string;

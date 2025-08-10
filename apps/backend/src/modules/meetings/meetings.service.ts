@@ -1,4 +1,7 @@
-import { type CloudFormation } from "~/libs/modules/cloud-formation/cloud-formation.js";
+import {
+	type CloudFormation,
+	type CreateStack,
+} from "~/libs/modules/cloud-formation/cloud-formation.js";
 import template from "~/libs/modules/cloud-formation/libs/templates/ec2-instance-template.json" with { type: "json" };
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
@@ -28,12 +31,14 @@ class MeetingService implements Service<MeetingResponseDto> {
 		this.meetingRepository = meetingRepository;
 	}
 
-	private async createInstance(id: number): Promise<MeetingResponseDto> {
+	private async createInstance(
+		payload: Omit<CreateStack, "template">,
+	): Promise<MeetingResponseDto> {
 		const instanceId = await this.cloudFormation.create({
-			id,
+			...payload,
 			template: JSON.stringify(template),
 		});
-		const meeting = await this.meetingRepository.update(id, {
+		const meeting = await this.meetingRepository.update(payload.id, {
 			instanceId,
 		});
 
@@ -59,7 +64,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		});
 
 		const newMeeting = await this.meetingRepository.create(meeting);
-		const { id } = newMeeting.toObject();
+		const { id, meetingId, meetingPassword } = newMeeting.toObject();
 
 		if (!id) {
 			throw new MeetingError({
@@ -68,7 +73,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return await this.createInstance(id);
+		return await this.createInstance({ id, meetingId, meetingPassword });
 	}
 
 	public async delete(id: number): Promise<boolean> {

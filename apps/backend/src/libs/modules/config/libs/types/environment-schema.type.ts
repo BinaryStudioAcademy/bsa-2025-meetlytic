@@ -25,15 +25,15 @@ type EnvironmentSchema = {
 	ENCRYPT: {
 		SALT_ROUNDS: number;
 	};
-	SHARED_TOKEN: {
-		ALGORITHM: string;
-		EXPIRES_IN: string;
-		SECRET: string;
-  };
 	OPEN_AI: {
 		KEY: string;
 		TEXT_GENERATION_MODEL: string;
 		TRANSCRIPTION_MODEL: string;
+	};
+	SHARED_TOKEN: {
+		ALGORITHM: string;
+		EXPIRES_IN: string;
+		SECRET: string;
 	};
 	TOKEN: {
 		ALGORITHM: string;

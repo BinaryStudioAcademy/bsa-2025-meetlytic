@@ -118,25 +118,6 @@ class BaseConfig implements Config {
 					format: Number,
 				},
 			},
-			SHARED_TOKEN: {
-				ALGORITHM: {
-					default: null,
-					doc: "JWT signing algorithm for shared tokens",
-					env: "SHARED_JWT_ALGORITHM",
-					format: String,
-				},
-				EXPIRES_IN: {
-					default: null,
-					doc: "Shared token expiration duration in a human-readable format",
-					env: "SHARED_JWT_EXPIRES_IN",
-					format: String,
-				},
-				SECRET: {
-					default: null,
-					doc: "Secret key of shared JWT tokens",
-					env: "SHARED_JWT_SECRET",
-        },
-      },
 			OPEN_AI: {
 				KEY: {
 					default: null,
@@ -155,6 +136,25 @@ class BaseConfig implements Config {
 					doc: "OpenAI transcription model",
 					env: "TRANSCRIPTION_MODEL",
 					format: String,
+				},
+			},
+			SHARED_TOKEN: {
+				ALGORITHM: {
+					default: null,
+					doc: "JWT signing algorithm for shared tokens",
+					env: "SHARED_JWT_ALGORITHM",
+					format: String,
+				},
+				EXPIRES_IN: {
+					default: null,
+					doc: "Shared token expiration duration in a human-readable format",
+					env: "SHARED_JWT_EXPIRES_IN",
+					format: String,
+				},
+				SECRET: {
+					default: null,
+					doc: "Secret key of shared JWT tokens",
+					env: "SHARED_JWT_SECRET",
 				},
 			},
 			TOKEN: {

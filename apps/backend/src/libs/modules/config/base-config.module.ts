@@ -155,6 +155,7 @@ class BaseConfig implements Config {
 					default: null,
 					doc: "Secret key of shared JWT tokens",
 					env: "SHARED_JWT_SECRET",
+					format: String,
 				},
 			},
 			TOKEN: {

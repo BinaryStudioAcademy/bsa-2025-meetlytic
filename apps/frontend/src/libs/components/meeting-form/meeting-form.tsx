@@ -51,7 +51,7 @@ const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 						errors={errors}
 						hasVisuallyHiddenLabel={true}
 						label="Meeting invite link"
-						name="meetingId"
+						name="meetingLink"
 						placeholder="Meeting invite link"
 						type="text"
 					/>

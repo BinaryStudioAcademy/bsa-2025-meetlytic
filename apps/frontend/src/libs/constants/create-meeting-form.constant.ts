@@ -3,7 +3,7 @@ import { type MeetingCreateRequestDto } from "~/modules/meeting/meeting.js";
 
 const CREATE_MEETING_FORM_DEFAULT_VALUES: MeetingCreateRequestDto = {
 	host: MeetingHost.ZOOM,
-	meetingId: "",
+	meetingLink: "",
 	meetingPassword: "",
 };
 

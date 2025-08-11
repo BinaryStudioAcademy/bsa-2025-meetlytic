@@ -127,7 +127,7 @@ fi
 
 # Use jq to parse JSON into bash variables
 BOT_NAME=$(echo "$SETTINGS_JSON" | jq -r '.botName')
-MEETING_ID=$(echo "$SETTINGS_JSON" | jq -r '.meetingLink')
+MEETING_LINK=$(echo "$SETTINGS_JSON" | jq -r '.meetingLink')
 MEETING_PASSWORD=$(echo "$SETTINGS_JSON" | jq -r '.meetingPassword')
 OPEN_AI_KEY=$(echo "$SETTINGS_JSON" | jq -r '.openAIKey')
 TEXT_GENERATION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.textGenerationModel')

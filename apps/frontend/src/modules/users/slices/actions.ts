@@ -17,9 +17,8 @@ const getProfile = createAsyncThunk<
 	AsyncThunkConfig
 >(`${sliceName}/get-profile`, async (_, { extra }) => {
 	const { userApi } = extra;
-	const user = await userApi.getCurrent();
 
-	return user;
+	return await userApi.getCurrent();
 });
 
 const updateProfile = createAsyncThunk<

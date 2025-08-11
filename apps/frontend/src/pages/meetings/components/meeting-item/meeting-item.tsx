@@ -1,6 +1,7 @@
 import PlaceholderAvatar from "~/assets/img/meeting-placeholder.svg";
 import { Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/app-route.enum.js";
+import { configureString } from "~/libs/helpers/helpers.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
@@ -18,7 +19,9 @@ const MeetingItem: React.FC<Properties> = ({
 	src,
 	title,
 }: Properties) => {
-	const to = AppRoute.MEETINGS_$ID.replace(":id", id.toString());
+	const to = configureString(AppRoute.MEETINGS_$ID, {
+		id: String(id),
+	});
 
 	return (
 		<>

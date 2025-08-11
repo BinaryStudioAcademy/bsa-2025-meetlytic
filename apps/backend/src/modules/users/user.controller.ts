@@ -4,16 +4,11 @@ import {
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
-import { HTTPCode } from "~/libs/modules/http/http.js";
+import { HTTPCode, HTTPMethod } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
-import {
-	HTTPMethod,
-	UserError,
-	UserErrorMessage,
-	UsersApiPath,
-} from "./libs/enums/enums.js";
+import { UsersApiPath } from "./libs/enums/enums.js";
 import {
 	type UserGetAllResponseDto,
 	type UserResponseDto,
@@ -158,14 +153,9 @@ class UserController extends BaseController {
 		body: UserUpdateResponseDto;
 		user: UserResponseDto;
 	}>): Promise<APIHandlerResponse> {
-		if (!user) {
-			throw new UserError({
-				message: UserErrorMessage.USER_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
+		const userDefined = user as UserResponseDto;
 
-		const updatedUser = await this.userService.update(user.id, body);
+		const updatedUser = await this.userService.update(userDefined.id, body);
 
 		return {
 			payload: updatedUser,

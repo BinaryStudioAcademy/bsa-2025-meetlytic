@@ -7,7 +7,7 @@ import {
 	USER_AGENT,
 } from "~/libs/constants/constants.js";
 import { ZoomBotMessages, ZoomUILabel } from "~/libs/enums/enums.js";
-import { buildQueryParameters, delay } from "~/libs/helpers/helpers.js";
+import { delay } from "~/libs/helpers/helpers.js";
 import {
 	type AudioRecorder,
 	type BaseConfig,
@@ -55,20 +55,6 @@ class BaseZoomBot implements ZoomBot {
 		}
 	}
 
-	private createMeetingUrl(): string {
-		const { MEETING_ID, MEETING_PASSWORD } = this.config.ENV.ZOOM;
-
-		if (!MEETING_ID) {
-			this.logger.error(ZoomBotMessages.ZOOM_MEETING_ID_MISSING);
-
-			throw new Error(ZoomBotMessages.ZOOM_MEETING_ID_MISSING);
-		}
-
-		const query = buildQueryParameters({ pwd: MEETING_PASSWORD });
-
-		return `https://zoom.us/wc/join/${MEETING_ID}${query}`;
-	}
-
 	private extractPasscode(token: string): string {
 		const [, rawPasscode] = token.split(".");
 
@@ -86,7 +72,7 @@ class BaseZoomBot implements ZoomBot {
 			});
 			const count = await this.page.$eval(
 				ZoomUILabel.PARTISIPANTS_COUNT,
-				({ textContent }) => Number(textContent?.trim() ?? "0"),
+				({ textContent }) => Number(textContent?.trim() ?? "2"),
 			);
 
 			return count;
@@ -98,6 +84,17 @@ class BaseZoomBot implements ZoomBot {
 			return DEFAULT_PARTICIPANTS_COUNT;
 		}
 	}
+	private getSearchParams(url: string): Record<string, string> {
+		const parsedUrl = new URL(url);
+		const parameters: Record<string, string> = {};
+
+		for (const [key, value] of parsedUrl.searchParams) {
+			parameters[key] = value;
+		}
+
+		return parameters;
+	}
+
 	private async handleInitialPopups(): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
@@ -159,10 +156,9 @@ class BaseZoomBot implements ZoomBot {
 			});
 			await this.page.click(ZoomUILabel.INPUT_PASSWORD, { clickCount: 3 });
 			await this.page.keyboard.press("Backspace");
-
 			await this.page.type(
 				ZoomUILabel.INPUT_PASSWORD,
-				this.extractPasscode(this.config.ENV.ZOOM.MEETING_PASSWORD),
+				this.config.ENV.ZOOM.MEETING_PASSWORD,
 			);
 		} catch (error) {
 			this.logger.error(
@@ -210,9 +206,9 @@ class BaseZoomBot implements ZoomBot {
 			await this.page.setUserAgent(USER_AGENT);
 
 			this.logger.info(
-				`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${this.createMeetingUrl()}`,
+				`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
 			);
-			await this.page.goto(this.createMeetingUrl(), {
+			await this.page.goto(this.config.ENV.ZOOM.MEETING_LINK, {
 				timeout: TIMEOUTS.SIXTEEN_SECONDS,
 				waitUntil: "networkidle2",
 			});

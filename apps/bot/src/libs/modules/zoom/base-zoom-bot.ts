@@ -54,6 +54,7 @@ class BaseZoomBot implements ZoomBot {
 			);
 		}
 	}
+
 	private ensureZoomWebClient(url: string): string {
 		const parsed = new URL(url);
 
@@ -62,6 +63,45 @@ class BaseZoomBot implements ZoomBot {
 		}
 
 		return parsed.toString();
+	}
+	private async enterMeetingPassword(): Promise<void> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+		}
+
+		try {
+			await this.page.waitForSelector(ZoomUILabel.INPUT_PASSWORD, {
+				timeout: TIMEOUTS.FIVE_SECONDS,
+			});
+			await this.page.click(ZoomUILabel.INPUT_PASSWORD, { clickCount: 3 });
+			await this.page.keyboard.press("Backspace");
+
+			let password = this.config.ENV.ZOOM.MEETING_PASSWORD;
+
+			if (!password) {
+				const parameters = this.getSearchParams(
+					this.config.ENV.ZOOM.MEETING_LINK,
+				);
+
+				if (parameters["pwd"]) {
+					password = this.extractPasscode(parameters["pwd"]);
+					this.logger.info(`Passcode extracted from link: ${password}`);
+				} else {
+					this.logger.info(
+						"No passcode found in link, joining meeting without password",
+					);
+					password = "";
+				}
+			}
+
+			if (password) {
+				await this.page.type(ZoomUILabel.INPUT_PASSWORD, password);
+			}
+		} catch (error) {
+			this.logger.error(
+				`${ZoomBotMessages.FAILED_TO_ENTER_PASSWORD} ${error instanceof Error ? error.message : String(error)}`,
+			);
+		}
 	}
 
 	private extractPasscode(token: string): string {
@@ -159,21 +199,7 @@ class BaseZoomBot implements ZoomBot {
 		await this.clickHelper(ZoomUILabel.STOP_VIDEO_LOGIN);
 		await this.clickHelper(ZoomUILabel.JOIN);
 
-		try {
-			await this.page.waitForSelector(ZoomUILabel.INPUT_PASSWORD, {
-				timeout: TIMEOUTS.FIVE_SECONDS,
-			});
-			await this.page.click(ZoomUILabel.INPUT_PASSWORD, { clickCount: 3 });
-			await this.page.keyboard.press("Backspace");
-			await this.page.type(
-				ZoomUILabel.INPUT_PASSWORD,
-				this.config.ENV.ZOOM.MEETING_PASSWORD,
-			);
-		} catch (error) {
-			this.logger.error(
-				`${ZoomBotMessages.FAILED_TO_ENTER_PASSWORD} ${error instanceof Error ? error.message : String(error)}`,
-			);
-		}
+		await this.enterMeetingPassword();
 
 		await this.clickHelper(ZoomUILabel.JOIN);
 	}

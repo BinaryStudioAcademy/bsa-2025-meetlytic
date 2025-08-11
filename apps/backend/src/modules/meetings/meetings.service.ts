@@ -3,7 +3,10 @@ import { AuthError } from "~/libs/exceptions/exceptions.js";
 import { type CloudFormation } from "~/libs/modules/cloud-formation/cloud-formation.js";
 import template from "~/libs/modules/cloud-formation/libs/templates/ec2-instance-template.json" with { type: "json" };
 import { HTTPCode } from "~/libs/modules/http/http.js";
-import { sharedJwt } from "~/libs/modules/token/token.js";
+import {
+	type BaseToken,
+	type SharedJwtPayload,
+} from "~/libs/modules/token/token.js";
 import { type Service } from "~/libs/types/types.js";
 
 import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
@@ -22,15 +25,22 @@ import { type MeetingRepository } from "./meetings.repository.js";
 type Constructor = {
 	cloudFormation: CloudFormation;
 	meetingRepository: MeetingRepository;
+	sharedJwt: BaseToken<SharedJwtPayload>;
 };
 
 class MeetingService implements Service<MeetingResponseDto> {
 	private cloudFormation: CloudFormation;
 	private meetingRepository: MeetingRepository;
+	private sharedJwt: BaseToken<SharedJwtPayload>;
 
-	public constructor({ cloudFormation, meetingRepository }: Constructor) {
+	public constructor({
+		cloudFormation,
+		meetingRepository,
+		sharedJwt,
+	}: Constructor) {
 		this.cloudFormation = cloudFormation;
 		this.meetingRepository = meetingRepository;
+		this.sharedJwt = sharedJwt;
 	}
 
 	private async createInstance(id: number): Promise<MeetingResponseDto> {
@@ -142,7 +152,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 	): Promise<MeetingGetPublicUrlResponseDto> {
 		await this.find(id);
 
-		const token = await sharedJwt.sign({ meetingId: id });
+		const token = await this.sharedJwt.sign({ meetingId: id });
 
 		return {
 			publicUrl: `${APIPath.PUBLIC_MEETINGS}/${String(id)}?token=${token}`,
@@ -187,7 +197,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return updatedMeeting.toObject();
+		return updatedMeeting.toClientObject();
 	}
 
 	public async verifyUrl(
@@ -195,7 +205,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		token: string,
 	): Promise<MeetingResponseDto> {
 		try {
-			const { payload } = await sharedJwt.verify(token);
+			const { payload } = await this.sharedJwt.verify(token);
 
 			if (id !== payload.meetingId) {
 				throw new AuthError();

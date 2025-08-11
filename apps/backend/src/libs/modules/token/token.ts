@@ -19,4 +19,4 @@ const sharedJwt = new BaseToken<SharedJwtPayload>({
 
 export { jwt, sharedJwt };
 export { type BaseToken } from "./base-token.module.js";
-export { type JwtPayload } from "./libs/types/types.js";
+export { type JwtPayload, type SharedJwtPayload } from "./libs/types/types.js";

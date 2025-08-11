@@ -42,10 +42,6 @@ const Profile: React.FC = () => {
 		[dispatch],
 	);
 
-	if (status === DataStatus.PENDING && !user) {
-		return <Loader isLoading />;
-	}
-
 	if (!user) {
 		return status === DataStatus.PENDING || status === DataStatus.IDLE ? (
 			<Loader isLoading />

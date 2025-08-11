@@ -14,9 +14,7 @@ import {
 	type Logger,
 } from "~/libs/types/types.js";
 
-import { type ZoomBot } from "./libs/types/types.js";
-
-class BaseZoomBot implements ZoomBot {
+class BaseZoomBot {
 	private audioRecorder: AudioRecorder;
 	private browser: Browser | null = null;
 	private config: BaseConfig;
@@ -55,7 +53,7 @@ class BaseZoomBot implements ZoomBot {
 		}
 	}
 
-	private ensureZoomWebClient(url: string): string {
+	private convertToZoomWebClientUrl(url: string): string {
 		const parsed = new URL(url);
 
 		if (/\/j\/\d+/.test(parsed.pathname) && !parsed.pathname.includes("/wc/")) {
@@ -64,6 +62,7 @@ class BaseZoomBot implements ZoomBot {
 
 		return parsed.toString();
 	}
+
 	private async enterMeetingPassword(): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
@@ -133,6 +132,7 @@ class BaseZoomBot implements ZoomBot {
 			return DEFAULT_PARTICIPANTS_COUNT;
 		}
 	}
+
 	private getSearchParams(url: string): Record<string, string> {
 		const parsedUrl = new URL(url);
 		const parameters: Record<string, string> = {};
@@ -180,6 +180,9 @@ class BaseZoomBot implements ZoomBot {
 			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
 		}
 
+		this.logger.info(
+			`"${this.config.ENV.ZOOM.BOT_NAME}" ${ZoomBotMessages.JOINING_MEETING}`,
+		);
 		await this.page.waitForSelector(ZoomUILabel.INPUT_NAME, {
 			timeout: TIMEOUTS.FIVE_SECONDS,
 		});
@@ -244,7 +247,7 @@ class BaseZoomBot implements ZoomBot {
 				`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
 			);
 			await this.page.goto(
-				this.ensureZoomWebClient(this.config.ENV.ZOOM.MEETING_LINK),
+				this.convertToZoomWebClientUrl(this.config.ENV.ZOOM.MEETING_LINK),
 				{
 					timeout: TIMEOUTS.SIXTEEN_SECONDS,
 					waitUntil: "networkidle2",
@@ -253,17 +256,15 @@ class BaseZoomBot implements ZoomBot {
 			await this.page.screenshot({ path: "goto.png" });
 			await this.handleInitialPopups();
 			await this.joinMeeting();
-			this.logger.info(
-				`"${this.config.ENV.ZOOM.BOT_NAME}" ${ZoomBotMessages.JOINING_MEETING}`,
-			);
-			await delay(TIMEOUTS.FIVE_SECONDS);
+			await this.page.waitForSelector(ZoomUILabel.LEAVE, {
+				timeout: TIMEOUTS.TEN_SECONDS,
+				visible: true,
+			});
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
 			this.audioRecorder.start();
 			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
 			await delay(TIMEOUTS.FIFTEEN_SECONDS);
 			await this.monitorParticipants();
-			this.audioRecorder.stop();
-			await this.leaveMeeting();
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessages.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,

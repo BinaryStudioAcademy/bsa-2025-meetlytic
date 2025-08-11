@@ -7,6 +7,7 @@ export { type UpdateMeetingOptions } from "./update-meeting-options.type.js";
 export { type VerifyUrlOptions } from "./verify-url-options.type.js";
 export {
 	type MeetingCreateRequestDto,
+	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,

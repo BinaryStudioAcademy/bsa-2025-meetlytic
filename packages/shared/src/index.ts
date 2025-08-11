@@ -38,6 +38,7 @@ export {
 } from "./modules/meetings/meetings.js";
 export {
 	type MeetingCreateRequestDto,
+	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,

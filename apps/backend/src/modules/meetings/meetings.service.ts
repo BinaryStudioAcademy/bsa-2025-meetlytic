@@ -10,6 +10,7 @@ import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
 import {
 	type MeetingCreateRequestDto,
+	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
@@ -113,7 +114,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		return meeting.toObject();
 	}
-	public async find(id: number): Promise<MeetingResponseDto> {
+	public async find(id: number): Promise<MeetingDetailedResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
 
 		if (!meeting) {
@@ -123,7 +124,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return meeting.toObject();
+		return meeting.toDetailedObject();
 	}
 
 	public async findAll(
@@ -162,6 +163,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		}
 
 		const meeting = MeetingEntity.initialize({
+			actionItems: meetingEntity.toDetailedObject().actionItems,
 			createdAt: meetingEntity.toObject().createdAt,
 			host: payload.host,
 			id,
@@ -170,6 +172,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			meetingPassword: meetingEntity.toObject().meetingPassword,
 			ownerId: meetingEntity.toObject().ownerId,
 			status: payload.status,
+			summary: meetingEntity.toDetailedObject().summary,
 		});
 
 		const updatedMeeting = await this.meetingRepository.update(

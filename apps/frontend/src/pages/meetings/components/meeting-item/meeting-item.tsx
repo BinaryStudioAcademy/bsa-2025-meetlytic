@@ -33,7 +33,7 @@ const MeetingItem: React.FC<Properties> = ({
 
 					<div className={styles["meeting__info-wrapper"]}>
 						<h5 className={styles["meeting__title"]}>{title}</h5>
-						<div className={styles["meeting__extra-info"]}>{date}</div>
+						<span className={styles["meeting__extra-info"]}>{date}</span>
 					</div>
 				</div>
 			</Link>

@@ -1,0 +1,3 @@
+const PERCENT_MULTIPLIER = 100;
+
+export { PERCENT_MULTIPLIER };

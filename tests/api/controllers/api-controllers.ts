@@ -1,6 +1,6 @@
-import type { APIRequestContext } from '@playwright/test';
+import { type APIRequestContext } from "@playwright/test";
 
-import { AuthController } from './auth-controller';
+import { AuthController } from "./auth-controller";
 
 class ApiControllers {
 	public readonly auth: AuthController;

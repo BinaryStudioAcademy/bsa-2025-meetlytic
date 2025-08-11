@@ -1,9 +1,8 @@
-import { expect, test, request } from '@playwright/test';
+import { expect, request, test } from "@playwright/test";
 
-import { ApiControllers } from '../../../api/controllers/api-controllers';
-import type { RegisterUser } from '../../../api/controllers/auth-controller';
-
-import { generateFakeUser } from '../../../api/helpers/dynamic-user-generator';
+import { ApiControllers } from "../../../api/controllers/api-controllers";
+import { type RegisterUser } from "../../../api/controllers/auth-controller";
+import { generateFakeUser } from "../../../api/helpers/dynamic-user-generator";
 
 const HTTP_UNPROCESSABLE_ENTITY = 422;
 
@@ -15,29 +14,35 @@ test.beforeAll(async () => {
 	api = new ApiControllers(context);
 });
 
-test.describe('Password Validation - Negative Cases', () => {
-	test('Empty Password field', async () => {
-		const emptyPassword = generateFakeUser('emptyPassword', {}, {}, { emptyPassword: true }); // Register a user with emptyPassword Password
+test.describe("Password Validation - Negative Cases", () => {
+	test("Empty Password field", async () => {
+		const emptyPassword = generateFakeUser({}, {}, { emptyPassword: true }); // Register a user with emptyPassword Password
 		const validUser: RegisterUser = { ...emptyPassword };
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(HTTP_UNPROCESSABLE_ENTITY); // Check if the response status code is 422 Unprocessable Entity
+		expect(response.status(), "Expected HTTP 422 for valid signup").toBe(
+			HTTP_UNPROCESSABLE_ENTITY,
+		); // Check if the response status code is 422 Unprocessable Entity
 	});
 
-	test('Short Password', async () => {
-		const shortPassword = generateFakeUser('shortPassword', {}, {}, { shortPassword: true }); // Register a user with shortPassword Password
+	test("Short Password", async () => {
+		const shortPassword = generateFakeUser({}, {}, { shortPassword: true }); // Register a user with shortPassword Password
 		const validUser: RegisterUser = { ...shortPassword };
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(HTTP_UNPROCESSABLE_ENTITY); // Check if the response status code is 422 Unprocessable Entity
+		expect(response.status(), "Expected HTTP 422 for valid signup").toBe(
+			HTTP_UNPROCESSABLE_ENTITY,
+		); // Check if the response status code is 422 Unprocessable Entity
 	});
 
-	test('64+ Char Password', async () => {
+	test("64+ Char Password", async () => {
 		// Generate a valid user
-		const longPassword = generateFakeUser('longPassword', {}, {}, { longPassword: true }); // Register a user with longPassword Password
+		const longPassword = generateFakeUser({}, {}, { longPassword: true }); // Register a user with longPassword Password
 		const validUser: RegisterUser = { ...longPassword };
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(HTTP_UNPROCESSABLE_ENTITY); // Check if the response status code is 422 Unprocessable Entity
+		expect(response.status(), "Expected HTTP 422 for valid signup").toBe(
+			HTTP_UNPROCESSABLE_ENTITY,
+		); // Check if the response status code is 422 Unprocessable Entity
 	});
 });

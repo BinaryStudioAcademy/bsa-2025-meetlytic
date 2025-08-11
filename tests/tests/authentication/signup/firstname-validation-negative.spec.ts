@@ -1,9 +1,8 @@
-import { expect, test, request } from '@playwright/test';
+import { expect, request, test } from "@playwright/test";
 
-import { ApiControllers } from '../../../api/controllers/api-controllers';
-import type { RegisterUser } from '../../../api/controllers/auth-controller';
-
-import { generateFakeUser } from '../../../api/helpers/dynamic-user-generator';
+import { ApiControllers } from "../../../api/controllers/api-controllers";
+import { type RegisterUser } from "../../../api/controllers/auth-controller";
+import { generateFakeUser } from "../../../api/helpers/dynamic-user-generator";
 
 const HTTP_UNPROCESSABLE_ENTITY = 422;
 
@@ -15,40 +14,52 @@ test.beforeAll(async () => {
 	api = new ApiControllers(context);
 });
 
-test.describe('First Name Validation - Negative Cases', () => {
-	test('Digit in Firstname field', async () => {
-		const digitFirstName = generateFakeUser('digitFirstName', {}, { digitFirstName: true }, {}); // Register with digitFirstName Firstname
+test.describe("First Name Validation - Negative Cases", () => {
+	test("Digit in Firstname field", async () => {
+		const digitFirstName = generateFakeUser({}, { digitFirstName: true }, {}); // Register with digitFirstName Firstname
 		const validUser: RegisterUser = { ...digitFirstName };
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(HTTP_UNPROCESSABLE_ENTITY); // Check if the response status code is 422 Unprocessable Entity
+		expect(response.status(), "Expected HTTP 422 for valid signup").toBe(
+			HTTP_UNPROCESSABLE_ENTITY,
+		); // Check if the response status code is 422 Unprocessable Entity
 	});
 
-	test('Symbol in Firstname field', async () => {
+	test("Symbol in Firstname field", async () => {
 		// Generate a valid user
-		const symbolFirstname = generateFakeUser('symbolFirstname', {}, { symbolFirstname: true }, {}); // Register with symbolFirstname Firstname
+		const symbolFirstname = generateFakeUser({}, { symbolFirstname: true }, {}); // Register with symbolFirstname Firstname
 		const validUser: RegisterUser = { ...symbolFirstname };
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(HTTP_UNPROCESSABLE_ENTITY); // Check if the response status code is 422 Unprocessable Entity
+		expect(response.status(), "Expected HTTP 422 for valid signup").toBe(
+			HTTP_UNPROCESSABLE_ENTITY,
+		); // Check if the response status code is 422 Unprocessable Entity
 	});
 
-	test('Fifty one letters in Firstname field', async () => {
+	test("Fifty one letters in Firstname field", async () => {
 		// Generate a valid user
-		const fiftyoneLetterFirstName = generateFakeUser('fiftyoneLetterFirstName', {}, { fiftyoneLetterFirstName: true }, {}); // Register with fiftyoneLetterFirstName Firstname
+		const fiftyoneLetterFirstName = generateFakeUser(
+			{},
+			{ fiftyoneLetterFirstName: true },
+			{},
+		); // Register with fiftyoneLetterFirstName Firstname
 
 		const validUser: RegisterUser = { ...fiftyoneLetterFirstName };
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(HTTP_UNPROCESSABLE_ENTITY); // Check if the response status code is 422 Unprocessable Entity
+		expect(response.status(), "Expected HTTP 422 for valid signup").toBe(
+			HTTP_UNPROCESSABLE_ENTITY,
+		); // Check if the response status code is 422 Unprocessable Entity
 	});
 
-	test('Empty Firstname field', async () => {
+	test("Empty Firstname field", async () => {
 		// Generate a valid user
-		const emptyFirstName = generateFakeUser('emptyFirstName', {}, { emptyFirstName: true }, {}); // Register with emptyFirstName Firstname
+		const emptyFirstName = generateFakeUser({}, { emptyFirstName: true }, {}); // Register with emptyFirstName Firstname
 		const validUser: RegisterUser = { ...emptyFirstName };
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(HTTP_UNPROCESSABLE_ENTITY); // Check if the response status code is 422 Unprocessable Entity
+		expect(response.status(), "Expected HTTP 422 for valid signup").toBe(
+			HTTP_UNPROCESSABLE_ENTITY,
+		); // Check if the response status code is 422 Unprocessable Entity
 	});
 });

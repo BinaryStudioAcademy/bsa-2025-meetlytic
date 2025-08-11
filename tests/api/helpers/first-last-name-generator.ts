@@ -1,13 +1,14 @@
-import { faker } from '@faker-js/faker';
-import { getRandomChars } from './get-random-chars';
+import { faker } from "@faker-js/faker";
+
+import { getRandomChars } from "./get-random-chars";
 
 const ONE_CHAR = 1;
 const FIFTY = 50;
 const FIFTY_ONE = 51;
 
-const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-const symbols = '!\\"#$%&\'()*+,-./:;<=>?@[\\\\]^_`{|}~';
-const digits = '0123456789';
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const symbols = "!\\\"#$%&'()*+,-./:;<=>?@[\\\\]^_`{|}~";
+const digits = "0123456789";
 
 const randomChar = getRandomChars(digits, ONE_CHAR);
 const randomSymbol = getRandomChars(symbols, ONE_CHAR);
@@ -15,7 +16,7 @@ const fiftyoneLetterName = getRandomChars(alphabet, FIFTY_ONE);
 const fiftyLetterName = getRandomChars(alphabet, FIFTY);
 
 // Used for generating different scenarios
-export type FirstnLastNameOptions = {
+type FirstnLastNameOptions = {
 	digitFirstName?: boolean;
 	digitLastName?: boolean;
 	emptyFirstName?: boolean;
@@ -33,6 +34,7 @@ export type FirstnLastNameOptions = {
 	withSpacesFirstName?: boolean;
 	withSpacesLastName?: boolean;
 };
+
 function generateFirstName(options: FirstnLastNameOptions = {}): string {
 	if (options.singleCharFirstName) {
 		// Return a single random char as first name
@@ -58,15 +60,15 @@ function generateFirstName(options: FirstnLastNameOptions = {}): string {
 	}
 
 	if (options.fiftyLetterFirstName) {
-		firstName = `${fiftyLetterName}`;
+		firstName = fiftyLetterName;
 	}
 
 	if (options.fiftyoneLetterFirstName) {
-		firstName = `${fiftyoneLetterName}`;
+		firstName = fiftyoneLetterName;
 	}
 
 	if (options.emptyFirstName) {
-		firstName = '';
+		firstName = "";
 	}
 
 	return firstName;
@@ -97,18 +99,19 @@ function generateLastName(options: FirstnLastNameOptions = {}): string {
 	}
 
 	if (options.fiftyLetterLastName) {
-		lastName = `${fiftyLetterName}`;
+		lastName = fiftyLetterName;
 	}
 
 	if (options.fiftyoneLetterLastName) {
-		lastName = `${fiftyoneLetterName}`;
+		lastName = fiftyoneLetterName;
 	}
 
 	if (options.emptyLastName) {
-		lastName = ``;
+		lastName = "";
 	}
 
 	return lastName;
 }
 
 export { generateFirstName, generateLastName };
+export { type FirstnLastNameOptions };

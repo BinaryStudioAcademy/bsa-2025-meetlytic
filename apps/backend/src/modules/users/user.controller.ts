@@ -8,7 +8,12 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
-import { HTTPMethod, UsersApiPath } from "./libs/enums/enums.js";
+import {
+	HTTPMethod,
+	UserError,
+	UserErrorMessage,
+	UsersApiPath,
+} from "./libs/enums/enums.js";
 import {
 	type UserGetAllResponseDto,
 	type UserResponseDto,
@@ -154,7 +159,10 @@ class UserController extends BaseController {
 		user: UserResponseDto;
 	}>): Promise<APIHandlerResponse> {
 		if (!user) {
-			throw new Error("User not found in request");
+			throw new UserError({
+				message: UserErrorMessage.USER_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
 		}
 
 		const updatedUser = await this.userService.update(user.id, body);

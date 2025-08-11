@@ -80,7 +80,7 @@ class BaseCloudFormation implements CloudFormation {
 
 	public async create({
 		id,
-		meetingId,
+		meetingLink,
 		meetingPassword,
 		template,
 	}: CreateStack): Promise<string> {
@@ -96,7 +96,7 @@ class BaseCloudFormation implements CloudFormation {
 						ParameterKey: ParameterKey.SETTINGS,
 						ParameterValue: JSON.stringify({
 							...this.settings,
-							meetingId,
+							meetingLink,
 							meetingPassword,
 						}),
 					},

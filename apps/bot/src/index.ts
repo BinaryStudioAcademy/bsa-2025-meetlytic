@@ -7,7 +7,7 @@ const init = async (): Promise<void> => {
 		await openAI.transcribe("audio.mp3");
 	}
 
-	if (config.ENV.ZOOM.MEETING_ID) {
+	if (config.ENV.ZOOM.MEETING_LINK) {
 		await zoomBot.run();
 	}
 };

@@ -12,7 +12,7 @@ import {
 	useState,
 } from "~/libs/hooks/hooks.js";
 
-import { Icon } from "../components.js";
+import { Icon } from "../icon/icon.js";
 import styles from "./styles.module.css";
 
 type Properties = {

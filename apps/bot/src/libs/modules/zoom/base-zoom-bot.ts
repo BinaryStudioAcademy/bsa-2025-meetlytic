@@ -54,6 +54,15 @@ class BaseZoomBot implements ZoomBot {
 			);
 		}
 	}
+	private ensureZoomWebClient(url: string): string {
+		const parsed = new URL(url);
+
+		if (/\/j\/\d+/.test(parsed.pathname) && !parsed.pathname.includes("/wc/")) {
+			parsed.pathname = parsed.pathname.replace("/j/", "/wc/join/");
+		}
+
+		return parsed.toString();
+	}
 
 	private extractPasscode(token: string): string {
 		const [, rawPasscode] = token.split(".");
@@ -208,10 +217,13 @@ class BaseZoomBot implements ZoomBot {
 			this.logger.info(
 				`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
 			);
-			await this.page.goto(this.config.ENV.ZOOM.MEETING_LINK, {
-				timeout: TIMEOUTS.SIXTEEN_SECONDS,
-				waitUntil: "networkidle2",
-			});
+			await this.page.goto(
+				this.ensureZoomWebClient(this.config.ENV.ZOOM.MEETING_LINK),
+				{
+					timeout: TIMEOUTS.SIXTEEN_SECONDS,
+					waitUntil: "networkidle2",
+				},
+			);
 			await this.page.screenshot({ path: "goto.png" });
 			await this.handleInitialPopups();
 			await this.joinMeeting();

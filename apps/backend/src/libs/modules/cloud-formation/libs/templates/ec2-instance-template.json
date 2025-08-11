@@ -1,6 +1,10 @@
 {
 	"AWSTemplateFormatVersion": "2010-09-09",
 	"Parameters": {
+		"BotName": {
+			"Type": "String",
+			"Description": "Bot name"
+		},
 		"ImageId": {
 			"Type": "String"
 		},
@@ -11,6 +15,18 @@
 		"MeetingPassword": {
 			"Type": "String",
 			"Description": "Meeting Password"
+		},
+		"OpenAIKey": {
+			"Type": "String",
+			"Description": "OpenAI API key"
+		},
+		"TextGenerationModel": {
+			"Type": "String",
+			"Description": "Text generation model"
+		},
+		"TranscriptionModel": {
+			"Type": "String",
+			"Description": "Transcription model"
 		}
 	},
 	"Resources": {
@@ -37,26 +53,32 @@
 		"EC2Instance": {
 			"Type": "AWS::EC2::Instance",
 			"Properties": {
-				"ImageId": {
-					"Ref": "ImageId"
-				},
+				"ImageId": { "Ref": "ImageId" },
 				"InstanceType": "t3.micro",
 				"KeyName": "meetlytic-ssh",
-				"SecurityGroupIds": [
-					{
-						"Ref": "MeetlyticSecurityGroup"
-					}
-				],
+				"SecurityGroupIds": [{ "Ref": "MeetlyticSecurityGroup" }],
 				"UserData": {
 					"Fn::Base64": {
 						"Fn::Sub": [
-							"#!/bin/bash\n\n# --- 1. Install System Dependencies ---\nsudo apt update -y\nsudo apt install -y git\ncurl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -\nsudo apt install -y nodejs\n\n# Install Chromium shared libraries for Puppeteer\nsudo apt-get install -y libatk-bridge2.0-0 libgtk-3-0 libappindicator3-1 libnss3 libxss1 libasound2 libgbm1 libx11-xcb1 libxcomposite1 libxkbcommon0\n\n# --- 2. Clone the Repository and Switch Branch ---\ncd /home/ubuntu\ngit clone --branch 43-feat-join-zoom-meetings https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic.git\n\n# --- 3. Install NPM Dependencies & Puppeteer Browser ---\ncd bsa-2025-meetlytic\n/usr/bin/npm install\n/usr/bin/npx puppeteer browsers install chrome\n\n# --- 4. Configure and Run the Bot ---\ncd apps/bot\n\necho \"NODE_ENV=production\" > .env\necho \"MEETING_ID=${MeetingId}\" >> .env\necho \"MEETING_PASSWORD=${MeetingPassword}\" >> .env\necho \"BOT_NAME=Meetlytic\" >> .env\necho \"OPEN_AI_KEY=\" >> .env\necho \"TRANSCRIPTION_MODEL=whisper-1\" >> .env\n\nnohup /usr/bin/npm run start:dev > /home/ubuntu/bot.log 2>&1 &",
+							"#!/bin/bash\n sudo apt update -y\n sudo apt install -y git\n cd /home/ubuntu\ngit clone --branch 44-feat-record-audio-from-ec2 https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic.git\nsudo chown -R ubuntu:ubuntu /home/ubuntu/bsa-2025-meetlytic\ncd bsa-2025-meetlytic\nbash ./apps/bot/setup-ec2.sh ${BotName} ${MeetingId} ${MeetingPassword} ${OpenAIKey} ${TextGenerationModel} ${TranscriptionModel}",
 							{
+								"BotName": {
+									"Ref": "BotName"
+								},
 								"MeetingId": {
 									"Ref": "MeetingId"
 								},
 								"MeetingPassword": {
 									"Ref": "MeetingPassword"
+								},
+								"OpenAIKey": {
+									"Ref": "OpenAIKey"
+								},
+								"TextGenerationModel": {
+									"Ref": "TextGenerationModel"
+								},
+								"TranscriptionModel": {
+									"Ref": "TranscriptionModel"
 								}
 							}
 						]
@@ -73,11 +95,11 @@
 	},
 	"Outputs": {
 		"InstanceId": {
-			"Value": {
-				"Ref": "EC2Instance"
-			},
+			"Value": { "Ref": "EC2Instance" },
 			"Export": {
-				"Name": "InstanceId"
+				"Name": {
+					"Fn::Sub": "InstanceId-${AWS::StackName}"
+				}
 			}
 		}
 	}

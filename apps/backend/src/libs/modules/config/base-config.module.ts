@@ -82,6 +82,14 @@ class BaseConfig implements Config {
 					format: String,
 				},
 			},
+			BOT: {
+				NAME: {
+					default: null,
+					doc: "Bot name",
+					env: "BOT_NAME",
+					format: String,
+				},
+			},
 			DB: {
 				CONNECTION_STRING: {
 					default: null,
@@ -114,6 +122,26 @@ class BaseConfig implements Config {
 					doc: "Salt rounds of bcrypt hashes",
 					env: "SALT_ROUNDS",
 					format: Number,
+				},
+			},
+			"OPEN_AI": {
+				"KEY": {
+					default: null,
+					doc: "OpenAI API key",
+					env: "OPEN_AI_KEY",
+					format: String,
+				},
+				"TEXT_GENERATION_MODEL": {
+					default: null,
+					doc: "OpenAI text generation model",
+					env: "TEXT_GENERATION_MODEL",
+					format: String,
+				},
+				"TRANSCRIPTION_MODEL": {
+					default: null,
+					doc: "OpenAI transcription model",
+					env: "TRANSCRIPTION_MODEL",
+					format: String,
 				},
 			},
 			TOKEN: {

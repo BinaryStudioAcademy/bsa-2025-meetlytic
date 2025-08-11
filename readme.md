@@ -22,7 +22,38 @@ The product helps the users to automate the transcription and summarization of v
 
 ## 4. Database Schema
 
-TODO: add database schema
+```mermaid
+erDiagram
+   users {
+      int id PK
+      string email UK
+      text password_hash
+      text password_salt
+      dateTime created_at
+      dateTime updated_at
+   }
+   user_details {
+      int id PK
+      string first_name
+      string last_name
+      int user_id FK
+      dateTime created_at
+      dateTime updated_at
+   }
+   meetings {
+      int id PK
+      text instance_id
+      enum host "Values: 'zoom'"
+      enum status "Values: 'ended', 'started'"
+      int owner_id FK
+      text meeting_id
+      text meeting_password
+      dateTime created_at
+      dateTime updated_at
+   }
+   users ||--|| user_details: user_id
+   users ||--o{ meetings: owner_id
+```
 
 ## 5. Architecture
 
@@ -115,17 +146,17 @@ As we are already using js on both frontend and backend it would be useful to sh
 
 You should use .env.example files as a reference.
 
-1. Install dependencies: `npm install`.
+2. Install dependencies: `npm install`.
 
-2. Install pre-commit hooks: `npx simple-git-hooks`. This hook is used to verify code style on commit.
+3. Install pre-commit hooks: `npx simple-git-hooks`. This hook is used to verify code style on commit.
 
-3. Run database. You can run it by installing postgres on your computer.
+4. Run database. You can run it by installing postgres on your computer.
 
-4. Apply migrations: `npm run migrate:dev -w apps/backend`
+5. Apply migrations: `npm run migrate:dev -w apps/backend`
 
-5. Run backend: `npm run start:dev -w apps/backend`
+6. Run backend: `npm run start:dev -w apps/backend`
 
-6. Run frontend: `npm run start:dev -w apps/frontend`
+7. Run frontend: `npm run start:dev -w apps/frontend`
 
 ## 7. Development Flow
 

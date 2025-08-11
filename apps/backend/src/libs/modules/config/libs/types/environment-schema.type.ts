@@ -13,6 +13,9 @@ type EnvironmentSchema = {
 		REGION: string;
 		SECRET_ACCESS_KEY: string;
 	};
+	BOT: {
+		NAME: string;
+	};
 	DB: {
 		CONNECTION_STRING: string;
 		DIALECT: string;
@@ -21,6 +24,11 @@ type EnvironmentSchema = {
 	};
 	ENCRYPT: {
 		SALT_ROUNDS: number;
+	};
+	OPEN_AI: {
+		KEY: string;
+		TEXT_GENERATION_MODEL: string;
+		TRANSCRIPTION_MODEL: string;
 	};
 	TOKEN: {
 		ALGORITHM: string;

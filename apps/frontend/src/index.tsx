@@ -39,6 +39,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 							{
 								children: [
 									{
+										element: <MeetingDetails />,
+										path: AppRoute.MEETINGS_$ID,
+									},
+									{
 										element: <Meetings />,
 										path: AppRoute.MEETINGS,
 									},

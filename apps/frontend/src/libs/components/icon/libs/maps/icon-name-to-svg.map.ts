@@ -2,6 +2,8 @@ import ArrowRight from "~/assets/img/icons/arrow-right.svg?react";
 import HidePassword from "~/assets/img/icons/hide-password.svg?react";
 import Logout from "~/assets/img/icons/logout.svg?react";
 import Meetings from "~/assets/img/icons/meetings.svg?react";
+import Pause from "~/assets/img/icons/pause.svg?react";
+import Play from "~/assets/img/icons/play.svg?react";
 import Search from "~/assets/img/icons/search.svg?react";
 import Settings from "~/assets/img/icons/settings.svg?react";
 import Share from "~/assets/img/icons/share.svg?react";
@@ -16,6 +18,8 @@ const iconNameToSvg: Record<
 	hidePassword: HidePassword,
 	logout: Logout,
 	meetings: Meetings,
+	pause: Pause,
+	play: Play,
 	search: Search,
 	settings: Settings,
 	share: Share,

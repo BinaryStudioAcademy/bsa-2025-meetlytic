@@ -2,9 +2,8 @@ import {
 	Button,
 	Icon,
 	Loader,
+	PlayerTrack,
 	SearchInput,
-	useParams,
-	useSearchParams,
 } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import { formatDate } from "~/libs/helpers/helpers.js";
@@ -13,6 +12,8 @@ import {
 	useAppForm,
 	useCallback,
 	useEffect,
+	useParams,
+	useSearchParams,
 	useState,
 } from "~/libs/hooks/hooks.js";
 import { type ValueOf } from "~/libs/types/types.js";
@@ -198,7 +199,9 @@ const MeetingDetails: React.FC = () => {
 						</div>
 					</div>
 				</div>
-				<div className={styles["meeting-details__player"]}>PlayerTrack</div>
+				<div className={styles["meeting-details__player"]}>
+					<PlayerTrack audioUrl="https://audio-samples.github.io/samples/mp3/wavenet_unconditional/voxceleb2/sample-5.mp3" />
+				</div>
 			</div>
 		</>
 	);

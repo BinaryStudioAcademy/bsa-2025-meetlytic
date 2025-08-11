@@ -30,6 +30,26 @@ class BaseConfig implements Config {
 					format: Object.values(AppEnvironment),
 				},
 			},
+			AUDIO_RECORDER: {
+				CHUNK_DURATION: {
+					default: null,
+					doc: "Duration of audio chunks",
+					env: "CHUNK_DURATION",
+					format: Number,
+				},
+				FFMPEG_PATH: {
+					default: null,
+					doc: "Location of ffmpeg",
+					env: "FFMPEG_PATH",
+					format: String,
+				},
+				OUTPUT_DIRECTORY: {
+					default: null,
+					doc: "Path to the audio output directory",
+					env: "OUTPUT_DIRECTORY",
+					format: String,
+				},
+			},
 			OPEN_AI: {
 				KEY: {
 					default: null,
@@ -73,25 +93,20 @@ class BaseConfig implements Config {
 	}
 
 	public getLaunchOptions(): LaunchOptions {
-		const environment = this.ENV.APP.ENVIRONMENT;
-		const isProduction = environment === AppEnvironment.PRODUCTION;
-		const isDevelopment = environment === AppEnvironment.DEVELOPMENT;
-
 		const sharedArguments = [
-			"--use-fake-ui-for-media-stream",
-			"--use-fake-device-for-media-stream",
 			"--no-sandbox",
 			"--disable-setuid-sandbox",
+			"--autoplay-policy=no-user-gesture-required",
+			"--use-fake-ui-for-media-stream",
+			"--headless=false",
 		];
 
 		return {
 			args: sharedArguments,
+			defaultViewport: { height: 700, width: 1200 },
 			enableExtensions: true,
-			headless: isProduction,
-			...(isDevelopment && {
-				defaultViewport: { height: 700, width: 1200 },
-				headless: false,
-			}),
+			executablePath: "/usr/bin/google-chrome",
+			headless: false,
 		};
 	}
 }

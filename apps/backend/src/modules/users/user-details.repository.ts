@@ -1,9 +1,8 @@
+import { NO_ROWS_AFFECTED } from "~/libs/constants/constants.js";
 import { type Repository } from "~/libs/types/types.js";
 
 import { UserDetailsEntity } from "./user-details.entity.js";
 import { type UserDetailsModel } from "./user-details.model.js";
-
-const NO_ROWS_AFFECTED = 0;
 
 class UserDetailsRepository implements Repository {
 	private userDetailsModel: typeof UserDetailsModel;

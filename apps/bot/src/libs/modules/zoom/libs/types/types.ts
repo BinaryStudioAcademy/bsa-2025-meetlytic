@@ -1,1 +1,1 @@
-export { type ZoomBot } from "./zoom-bote.type.js";
+export { type ZoomBot } from "./zoom-bot.type.js";

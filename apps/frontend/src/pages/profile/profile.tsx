@@ -27,11 +27,7 @@ const Profile: React.FC = () => {
 
 	useEffect(() => {
 		if (status === DataStatus.IDLE) {
-			const fetchProfile = async (): Promise<void> => {
-				await dispatch(userActions.getProfile());
-			};
-
-			void fetchProfile();
+			void dispatch(userActions.getProfile());
 		}
 	}, [status, dispatch]);
 

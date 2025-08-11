@@ -1,10 +1,18 @@
+import { type RelationMappings } from "objection";
+
 import {
 	AbstractModel,
 	DatabaseTableName,
 } from "~/libs/modules/database/database.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
-import { type MeetingHost, type MeetingStatus } from "./libs/enums/enums.js";
+import {
+	MeetingAttributes,
+	type MeetingHost,
+	type MeetingStatus,
+	MeetingTranscriptionAttributes,
+} from "./libs/enums/enums.js";
+import { MeetingTranscriptionModel } from "./meeting-transcription.model.js";
 
 class MeetingModel extends AbstractModel {
 	public host!: ValueOf<typeof MeetingHost>;
@@ -18,6 +26,19 @@ class MeetingModel extends AbstractModel {
 	public ownerId!: number;
 
 	public status!: ValueOf<typeof MeetingStatus>;
+
+	public static get relationMappings(): RelationMappings {
+		return {
+			transcriptions: {
+				join: {
+					from: `${DatabaseTableName.MEETINGS}.${MeetingAttributes.ID}`,
+					to: `${DatabaseTableName.MEETING_TRANSCRIPTIONS}.${MeetingTranscriptionAttributes.MEETING_REF_ID}`,
+				},
+				modelClass: MeetingTranscriptionModel,
+				relation: this.HasManyRelation,
+			},
+		};
+	}
 
 	public static override get tableName(): string {
 		return DatabaseTableName.MEETINGS;

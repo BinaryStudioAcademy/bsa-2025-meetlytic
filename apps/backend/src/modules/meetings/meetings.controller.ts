@@ -4,7 +4,7 @@ import {
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
-import { HTTPCode } from "~/libs/modules/http/http.js";
+import { HTTPCode, HTTPMethod } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserResponseDto } from "~/modules/users/users.js";
 
@@ -89,14 +89,14 @@ class MeetingsController extends BaseController {
 
 		this.addRoute({
 			handler: (options) => this.create(options as CreateMeetingOptions),
-			method: "POST",
+			method: HTTPMethod.POST,
 			path: MeetingsApiPath.ROOT,
 			validation: { body: meetingCreateValidationSchema },
 		});
 
 		this.addRoute({
 			handler: (options) => this.update(options as UpdateMeetingOptions),
-			method: "PATCH",
+			method: HTTPMethod.PATCH,
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 			validation: { body: meetingUpdateValidationSchema },
@@ -104,27 +104,27 @@ class MeetingsController extends BaseController {
 
 		this.addRoute({
 			handler: (options) => this.delete(options as DeleteMeetingOptions),
-			method: "DELETE",
+			method: HTTPMethod.DELETE,
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 
 		this.addRoute({
 			handler: (options) => this.find(options as FindMeetingOptions),
-			method: "GET",
+			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 
 		this.addRoute({
 			handler: (options) => this.findAll(options as FindAllMeetingOptions),
-			method: "GET",
+			method: HTTPMethod.GET,
 			path: MeetingsApiPath.ROOT,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 		this.addRoute({
 			handler: (options) => this.getPublicUrl(options as GetPublicUrlOptions),
-			method: "GET",
+			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID_PUBLIC_URL,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});

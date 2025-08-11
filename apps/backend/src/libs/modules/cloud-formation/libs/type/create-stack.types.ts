@@ -1,6 +1,6 @@
 type CreateStack = {
 	id: number;
-	meetingId: string;
+	meetingLink: string;
 	meetingPassword: null | string;
 	template: string;
 };

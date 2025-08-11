@@ -56,9 +56,10 @@ class MeetingService implements Service<MeetingResponseDto> {
 	public async create(
 		payload: MeetingCreateRequestDto & { ownerId: number },
 	): Promise<MeetingResponseDto> {
-		const extractedMeetingId = extractZoomMeetingId(payload.meetingId);
+		const { meetingLink } = payload;
+		const MeetingId = extractZoomMeetingId(meetingLink);
 
-		if (!extractedMeetingId) {
+		if (!MeetingId) {
 			throw new MeetingError({
 				message: MeetingErrorMessage.INVALID_MEETING_LINK,
 				status: HTTPCode.BAD_REQUEST,
@@ -68,13 +69,13 @@ class MeetingService implements Service<MeetingResponseDto> {
 		const meeting = MeetingEntity.initializeNew({
 			host: payload.host,
 			instanceId: null,
-			meetingId: extractedMeetingId,
+			meetingId: MeetingId,
 			meetingPassword: payload.meetingPassword ?? null,
 			ownerId: payload.ownerId,
 		});
 
 		const newMeeting = await this.meetingRepository.create(meeting);
-		const { id, meetingId, meetingPassword } = newMeeting.toObject();
+		const { id, meetingPassword } = newMeeting.toObject();
 
 		if (!id) {
 			throw new MeetingError({
@@ -83,7 +84,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return await this.createInstance({ id, meetingId, meetingPassword });
+		return await this.createInstance({ id, meetingLink, meetingPassword });
 	}
 
 	public async delete(id: number): Promise<boolean> {

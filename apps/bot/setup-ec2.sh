@@ -127,13 +127,13 @@ fi
 
 # Use jq to parse JSON into bash variables
 BOT_NAME=$(echo "$SETTINGS_JSON" | jq -r '.botName')
-MEETING_ID=$(echo "$SETTINGS_JSON" | jq -r '.meetingId')
+MEETING_ID=$(echo "$SETTINGS_JSON" | jq -r '.meetingLink')
 MEETING_PASSWORD=$(echo "$SETTINGS_JSON" | jq -r '.meetingPassword')
 OPEN_AI_KEY=$(echo "$SETTINGS_JSON" | jq -r '.openAIKey')
 TEXT_GENERATION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.textGenerationModel')
 TRANSCRIPTION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.transcriptionModel')
 
-if [ -z "$BOT_NAME" ] || [ -z "$MEETING_ID" ]; then
+if [ -z "$BOT_NAME" ] || [ -z "$MEETING_LINK" ]; then
 echo "Error: Missing required settings in JSON."
 exit 1
 fi
@@ -146,7 +146,7 @@ NODE_ENV=production
 BOT_NAME="$BOT_NAME"
 
 # ZOOM
-MEETING_ID="$MEETING_ID"
+MEETING_LINK="$MEETING_LINK"
 MEETING_PASSWORD="$MEETING_PASSWORD"
 
 # OPEN_AI

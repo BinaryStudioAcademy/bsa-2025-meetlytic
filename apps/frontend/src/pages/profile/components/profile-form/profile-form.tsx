@@ -1,4 +1,5 @@
 import { Button, Input } from "~/libs/components/components.js";
+import { ButtonVariant } from "~/libs/enums/enums.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
 	type UserUpdateResponseDto,
@@ -59,7 +60,11 @@ const ProfileForm: React.FC<Properties> = ({ onSubmit, user }: Properties) => {
 				type="text"
 			/>
 			<div className={styles["profile-form__buttons"]}>
-				<Button label="Cancel" onClick={handleCancelClick} variant="outlined" />
+				<Button
+					label="Cancel"
+					onClick={handleCancelClick}
+					variant={ButtonVariant.OUTLINED}
+				/>
 				<Button label="Save changes" type="submit" />
 			</div>
 		</form>

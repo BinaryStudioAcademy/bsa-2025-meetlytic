@@ -136,8 +136,7 @@ class UserController extends BaseController {
 	): Promise<APIHandlerResponse> {
 		const { user } = options;
 
-		const userEntity = await this.userService.find(user.id);
-		const detailsId = userEntity?.details?.id ?? null;
+		const detailsId = await this.userService.getOrCreateDetailsId(user.id);
 
 		if (!detailsId) {
 			return {
@@ -216,7 +215,7 @@ class UserController extends BaseController {
 			return {
 				payload: {
 					error: "Internal Server Error",
-					message: "Failed to get current user",
+					message: "Failed to delete avatar",
 				},
 				status: HTTPCode.INTERNAL_SERVER_ERROR,
 			};

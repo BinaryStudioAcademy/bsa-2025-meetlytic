@@ -8,7 +8,6 @@ class FileModel extends Model {
 	public created_at!: string;
 	public id!: number;
 	public key!: string;
-	public type!: string;
 	public updated_at!: string;
 	public url!: string;
 	public user_details_id!: number;

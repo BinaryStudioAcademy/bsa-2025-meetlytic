@@ -56,7 +56,6 @@ class FileService {
 
 		return await this.fileRepository.create({
 			key,
-			type: "avatar",
 			url,
 			user_details_id,
 		});

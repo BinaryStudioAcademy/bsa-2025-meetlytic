@@ -10,14 +10,13 @@ class FileRepository {
 
 	public async create(payload: {
 		key: string;
-		type?: string;
 		url: string;
 		user_details_id: number;
 	}): Promise<File> {
-		const { key, type = "avatar", url, user_details_id } = payload;
+		const { key, url, user_details_id } = payload;
 		const row = await this.fileModel
 			.query()
-			.insert({ key, type, url, user_details_id })
+			.insert({ key, url, user_details_id })
 			.returning("*");
 
 		return row as unknown as File;
@@ -30,9 +29,7 @@ class FileRepository {
 	public async findByUserDetailsId(
 		user_details_id: number,
 	): Promise<File | undefined> {
-		const file = await this.fileModel
-			.query()
-			.findOne({ type: "avatar", user_details_id });
+		const file = await this.fileModel.query().findOne({ user_details_id });
 
 		return file as unknown as File | undefined;
 	}

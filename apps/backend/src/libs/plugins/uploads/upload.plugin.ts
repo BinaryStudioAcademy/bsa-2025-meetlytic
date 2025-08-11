@@ -17,14 +17,12 @@ import {
 } from "~/libs/constants/constants.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 
-/** ==== Module augmentation: додаємо метод у FastifyRequest ==== */
 declare module "fastify" {
 	interface FastifyRequest {
 		getFileOrThrow: (options?: { fieldName?: string }) => Promise<UploadedFile>;
 	}
 }
 
-/** ==== Типи ==== */
 interface HttpError extends Error {
 	statusCode?: number;
 }
@@ -44,7 +42,6 @@ type UploadPluginOptions = {
 	maxFileSize?: number;
 };
 
-/** ==== Helpers ==== */
 const httpError = (statusCode: number, message: string): HttpError => {
 	const error = new Error(message) as HttpError;
 	error.statusCode = statusCode;
@@ -52,7 +49,6 @@ const httpError = (statusCode: number, message: string): HttpError => {
 	return error;
 };
 
-/** ==== Core плагін (без інкапсуляції) ==== */
 const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 	fastify,
 	options,
@@ -116,10 +112,8 @@ const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 	done();
 };
 
-/** ==== Обгортка, що вимикає інкапсуляцію плагіна ==== */
 const uploadPlugin = fp(rawUploadPlugin, { name: "upload-plugin" });
 
-/** ==== Pre-handler для одиночного файлу: кладе { file } у request.body ==== */
 const singleFilePreHandler = (fieldName = "file") => {
 	return (
 		request: FastifyRequest,
@@ -138,5 +132,4 @@ const singleFilePreHandler = (fieldName = "file") => {
 	};
 };
 
-/** ==== Експорти наприкінці файлу ==== */
 export { type UploadedFile, singleFilePreHandler, uploadPlugin };

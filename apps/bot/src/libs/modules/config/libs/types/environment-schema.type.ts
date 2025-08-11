@@ -4,6 +4,8 @@ import { type ValueOf } from "~/libs/types/types.js";
 type EnvironmentSchema = {
 	APP: {
 		ENVIRONMENT: ValueOf<typeof AppEnvironment>;
+		HOST: string;
+		PORT: number;
 	};
 	AUDIO_RECORDER: {
 		CHUNK_DURATION: number;

@@ -29,6 +29,18 @@ class BaseConfig implements Config {
 					env: "NODE_ENV",
 					format: Object.values(AppEnvironment),
 				},
+				HOST: {
+					default: null,
+					doc: "Host for server app",
+					env: "HOST",
+					format: String,
+				},
+				PORT: {
+					default: null,
+					doc: "Port for incoming connections",
+					env: "PORT",
+					format: Number,
+				},
 			},
 			AUDIO_RECORDER: {
 				CHUNK_DURATION: {

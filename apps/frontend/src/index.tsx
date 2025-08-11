@@ -41,16 +41,16 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 										element: <Meetings />,
 										path: AppRoute.MEETINGS,
 									},
+									{
+										element: <Profile />,
+										path: AppRoute.PROFILE,
+									},
 								],
 								element: (
 									<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
 										<Layout />
 									</ProtectedRoute>
 								),
-							},
-							{
-								element: <Profile />,
-								path: AppRoute.PROFILE,
 							},
 						],
 						element: <App />,

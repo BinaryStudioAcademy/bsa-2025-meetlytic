@@ -8,7 +8,7 @@ import {
 } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
 
-import { HEADER_LINKS } from "../navigation-links.js";
+import { HEADER_LINKS } from "../../constants/constants.js";
 import styles from "./styles.module.css";
 
 type Properties = { className?: string };

@@ -1,6 +1,6 @@
 import { Link } from "~/libs/components/components.js";
 
-import { type LinkGroup } from "../navigation-links.js";
+import { type LinkGroup } from "../../types/types.js";
 import styles from "./styles.module.css";
 
 type Properties = {

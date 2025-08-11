@@ -6,19 +6,17 @@ import {
 	ABOUT_LINKS,
 	COMPANY_LINKS,
 	CONTACT_LINKS,
-} from "../navigation-links.js";
+} from "../../constants/constants.js";
 import { FooterColumn } from "./footer-column.js";
 import styles from "./styles.module.css";
 
 type Properties = {
 	className?: string;
-	year?: number;
 };
 
-const LandingFooter: React.FC<Properties> = ({
-	className,
-	year = new Date().getFullYear(),
-}: Properties) => {
+const LandingFooter: React.FC<Properties> = ({ className }: Properties) => {
+	const year = new Date().getFullYear();
+
 	return (
 		<footer className={getValidClassNames(styles["landing-footer"], className)}>
 			<div className={styles["landing-footer__inner"]}>

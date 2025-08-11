@@ -6,11 +6,13 @@ import {
 import styles from "./styles.module.css";
 
 const LandingPage: React.FC = () => (
-	<main className={styles["landing-page"]} role="main">
+	<>
 		<LandingHeader />
-		<LandingHero />
+		<main className={styles["landing-page"]} role="main">
+			<LandingHero />
+		</main>
 		<LandingFooter />
-	</main>
+	</>
 );
 
 export { LandingPage };

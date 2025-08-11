@@ -7,7 +7,7 @@ export { type UpdateMeetingOptions } from "./update-meeting-options.type.js";
 export {
 	type MeetingCreateRequestDto,
 	type MeetingGetAllResponseDto,
-	type MeetingPublicUrlResponseDto,
+	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
 	type MeetingUpdateRequestDto,
 } from "@meetlytic/shared";

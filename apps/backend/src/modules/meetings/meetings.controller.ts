@@ -125,7 +125,7 @@ class MeetingsController extends BaseController {
 		this.addRoute({
 			handler: (options) => this.getPublicUrl(options as GetPublicUrlOptions),
 			method: "GET",
-			path: `${MeetingsApiPath.$ID}${MeetingsApiPath.URL}`,
+			path: MeetingsApiPath.$ID_PUBLIC_URL,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 	}

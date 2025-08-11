@@ -10,7 +10,7 @@ import { MeetingError } from "./libs/exceptions/exceptions.js";
 import {
 	type MeetingCreateRequestDto,
 	type MeetingGetAllResponseDto,
-	type MeetingPublicUrlResponseDto,
+	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
 	type MeetingUpdateRequestDto,
 } from "./libs/types/types.js";
@@ -135,7 +135,9 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return { items: meetings.map((meeting) => meeting.toObject()) };
 	}
 
-	public async getPublicUrl(id: number): Promise<MeetingPublicUrlResponseDto> {
+	public async getPublicUrl(
+		id: number,
+	): Promise<MeetingGetPublicUrlResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
 
 		if (!meeting) {

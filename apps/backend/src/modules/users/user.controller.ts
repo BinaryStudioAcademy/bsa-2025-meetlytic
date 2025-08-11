@@ -44,7 +44,12 @@ class UserController extends BaseController {
 		});
 
 		this.addRoute({
-			handler: (options) => this.getCurrentUser(options),
+			handler: (options) =>
+				this.getCurrentUser(
+					options as APIHandlerOptions<{
+						user: UserGetAllResponseDto["items"][number];
+					}>,
+				),
 			method: HTTPMethod.GET,
 			path: UsersApiPath.ME,
 		});
@@ -101,7 +106,9 @@ class UserController extends BaseController {
 	 */
 	private async getCurrentUser({
 		user,
-	}: APIHandlerOptions): Promise<APIHandlerResponse> {
+	}: APIHandlerOptions<{
+		user: UserGetAllResponseDto["items"][number];
+	}>): Promise<APIHandlerResponse> {
 		const currentUser = user as UserGetAllResponseDto["items"][number];
 
 		const fullUser = await this.userService.findProfileByEmail(

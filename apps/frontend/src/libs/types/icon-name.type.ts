@@ -5,6 +5,7 @@ type IconName =
 	| "meetings"
 	| "search"
 	| "settings"
+	| "share"
 	| "showPassword";
 
 export { type IconName };

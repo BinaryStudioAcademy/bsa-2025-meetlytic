@@ -11,7 +11,11 @@ import { useCallback, useLogout } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
-const Header: React.FC = () => {
+type Properties = {
+	isPublic?: boolean;
+};
+
+const Header: React.FC<Properties> = ({ isPublic = false }: Properties) => {
 	const logout = useLogout();
 
 	const handleLogout = useCallback((): void => {
@@ -24,18 +28,20 @@ const Header: React.FC = () => {
 				<div className={styles["header-logo"]}>
 					<Logo hasLink size={LogoSize.SMALL} theme={LogoTheme.LIGHT} />
 				</div>
-				<div className={styles["header__avatar-logout-wrapper"]}>
-					<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
-					<Button
-						iconLeft={
-							<Icon className={styles["header__logout-icon"]} name="logout" />
-						}
-						label="Logout"
-						onClick={handleLogout}
-						size={ButtonSize.SMALL}
-						variant={ButtonVariant.OUTLINED}
-					/>
-				</div>
+				{!isPublic && (
+					<div className={styles["header__avatar-logout-wrapper"]}>
+						<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
+						<Button
+							iconLeft={
+								<Icon className={styles["header__logout-icon"]} name="logout" />
+							}
+							label="Logout"
+							onClick={handleLogout}
+							size={ButtonSize.SMALL}
+							variant={ButtonVariant.OUTLINED}
+						/>
+					</div>
+				)}
 			</div>
 		</header>
 	);

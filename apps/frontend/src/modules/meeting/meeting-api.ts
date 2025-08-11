@@ -1,5 +1,5 @@
 import { APIPath, ContentType } from "~/libs/enums/enums.js";
-import { BaseHTTPApi } from "~/libs/modules/api/api.js";
+import { BaseHTTPApi, type HTTPApiOptions } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
 import {
@@ -48,6 +48,28 @@ class MeetingApi extends BaseHTTPApi {
 		);
 
 		return await response.json<MeetingGetAllResponseDto>();
+	}
+
+	public async getMeetingById(
+		id: number,
+		token?: string,
+	): Promise<MeetingResponseDto> {
+		const options: HTTPApiOptions = {
+			contentType: ContentType.JSON,
+			hasAuth: !token,
+			method: "GET",
+		};
+
+		if (token) {
+			options.headers = { Authorization: `Bearer ${token}` };
+		}
+
+		const response = await this.load(
+			this.getFullEndpoint(MeetingsApiPath.$ID, { id: String(id) }),
+			options,
+		);
+
+		return await response.json<MeetingResponseDto>();
 	}
 }
 

@@ -7,6 +7,7 @@ import {
 	Layout,
 	Link,
 	ProtectedRoute,
+	PublicLayout,
 	RouterProvider,
 	StoreProvider,
 	ToastProvider,
@@ -16,6 +17,7 @@ import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFoundPage } from "~/pages/not-found/not-found.js";
 
+import { MeetingDetails } from "./pages/meeting-details/meeting-details.js";
 import { Meetings } from "./pages/meetings/meetings.js";
 
 createRoot(document.querySelector("#root") as HTMLElement).render(
@@ -40,6 +42,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 										element: <Meetings />,
 										path: AppRoute.MEETINGS,
 									},
+									{
+										element: <MeetingDetails />,
+										path: AppRoute.MEETINGS_BY_ID,
+									},
 								],
 								element: (
 									<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
@@ -49,6 +55,15 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 							},
 						],
 						element: <App />,
+					},
+					{
+						children: [
+							{
+								element: <MeetingDetails />,
+								path: AppRoute.PUBLIC_MEETINGS_BY_ID,
+							},
+						],
+						element: <PublicLayout />,
 					},
 					{
 						element: (

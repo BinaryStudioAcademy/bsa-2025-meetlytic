@@ -1,6 +1,6 @@
 import PlaceholderAvatar from "~/assets/img/meeting-placeholder.svg";
 import { Link } from "~/libs/components/components.js";
-import { AppRoute } from "~/libs/enums/app-route.enum.js";
+import { AppRoute } from "~/libs/enums/enums.js";
 import { configureString } from "~/libs/helpers/helpers.js";
 import { type ValueOf } from "~/libs/types/types.js";
 

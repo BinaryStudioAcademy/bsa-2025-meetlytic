@@ -6,6 +6,10 @@ const config: KnipConfig = {
 	workspaces: {
 		".": {
 			entry: ["./dangerfile.ts"],
+			"playwright-test": {
+				config: "./tests/playwright.config.ts",
+				entry: ["./tests/tests/**/*.spec.ts"],
+			},
 		},
 		"apps/backend": {
 			entry: ["src/db/migrations/*.ts", "knexfile.ts"],

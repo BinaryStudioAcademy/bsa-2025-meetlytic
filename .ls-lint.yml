@@ -20,3 +20,4 @@ ignore:
   - apps/bot/build
   - apps/bot/node_modules
   - apps/build
+  - tests

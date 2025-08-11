@@ -82,21 +82,19 @@ class UserService implements Service {
 			return null;
 		}
 
-		const userObject = user.toObject();
-		const details = await this.userDetailsRepository.findByUserId(
-			userObject.id,
-		);
-		const detailsObject = details?.toObject();
+		const userData = user.toObject();
+		const details = await this.userDetailsRepository.findByUserId(userData.id);
+		const detailsData = details?.toObject();
 
-		if (!detailsObject) {
+		if (!detailsData) {
 			return null;
 		}
 
 		return {
-			email: userObject.email,
-			firstName: detailsObject.firstName,
-			id: userObject.id,
-			lastName: detailsObject.lastName,
+			email: userData.email,
+			firstName: detailsData.firstName,
+			id: userData.id,
+			lastName: detailsData.lastName,
 		};
 	}
 

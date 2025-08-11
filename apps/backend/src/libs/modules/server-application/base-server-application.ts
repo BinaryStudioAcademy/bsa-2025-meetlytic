@@ -79,16 +79,16 @@ class BaseServerApplication implements ServerApplication {
 				if (hasZodFastifySchemaValidationErrors(error)) {
 					this.logger.error(`[Validation Error]: ${error.message}`);
 
-					for (let issue of error.validation) {
+					for (let validation of error.validation) {
 						this.logger.error(
-							`[${issue.params.issue.path.toString()}] — ${issue.message}`,
+							`[${validation.params.issue.path.toString()}] — ${validation.message}`,
 						);
 					}
 
 					const response: ServerValidationErrorResponse = {
-						details: error.validation.map((issue) => ({
-							message: issue.message,
-							path: issue.params.issue.path,
+						details: error.validation.map((validation) => ({
+							message: validation.message,
+							path: validation.params.issue.path,
 						})),
 						errorType: ServerErrorType.VALIDATION,
 						message: error.message,

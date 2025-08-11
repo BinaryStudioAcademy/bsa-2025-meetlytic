@@ -13,15 +13,16 @@ type Properties = {
 };
 
 const ProfileForm: React.FC<Properties> = ({ onSubmit, user }: Properties) => {
-	const { control, errors, handleSubmit } = useAppForm<UserUpdateResponseDto>({
-		defaultValues: {
-			email: user.email,
-			firstName: user.firstName ?? "",
-			lastName: user.lastName ?? "",
-		},
-		mode: "onBlur",
-		validationSchema: userUpdateValidationSchema,
-	});
+	const { control, errors, handleSubmit, reset } =
+		useAppForm<UserUpdateResponseDto>({
+			defaultValues: {
+				email: user.email,
+				firstName: user.firstName ?? "",
+				lastName: user.lastName ?? "",
+			},
+			mode: "onBlur",
+			validationSchema: userUpdateValidationSchema,
+		});
 
 	const handleFormSubmit = useCallback(
 		(event_: React.BaseSyntheticEvent): void => {
@@ -29,6 +30,10 @@ const ProfileForm: React.FC<Properties> = ({ onSubmit, user }: Properties) => {
 		},
 		[handleSubmit, onSubmit],
 	);
+
+	const handleCancelClick = useCallback(() => {
+		reset();
+	}, [reset]);
 
 	return (
 		<form className={styles["profile-form"]} onSubmit={handleFormSubmit}>
@@ -54,7 +59,7 @@ const ProfileForm: React.FC<Properties> = ({ onSubmit, user }: Properties) => {
 				type="text"
 			/>
 			<div className={styles["profile-form__buttons"]}>
-				<Button label="Cancel" variant="outlined" />
+				<Button label="Cancel" onClick={handleCancelClick} variant="outlined" />
 				<Button label="Save changes" type="submit" />
 			</div>
 		</form>

@@ -47,6 +47,12 @@ import { type MeetingService } from "./meetings.service.js";
  *           enum:
  *             - started
  *             - ended
+ *         createdAt:
+ *           type: string
+ *         meetingId:
+ *           type: string
+ *         meetingPassword:
+ *           type: string
  *       required:
  *         - id
  *         - host
@@ -259,7 +265,7 @@ class MeetingsController extends BaseController {
 	/**
 	 * @swagger
 	 * /meetings/{id}/url:
-	 *   getPublicUrl:
+	 *   get:
 	 *     summary: Generate a public URL for the meeting
 	 *     tags:
 	 *       - Meetings
@@ -272,6 +278,12 @@ class MeetingsController extends BaseController {
 	 *     responses:
 	 *       200:
 	 *         description: Public URL returned
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               properties:
+	 *                 publicUrl:
+	 *                   type: string
 	 *       404:
 	 *         description: Meeting not found
 	 */
@@ -325,7 +337,7 @@ class MeetingsController extends BaseController {
 	/**
 	 * @swagger
 	 * /meetings/{id}/url-verification:
-	 *   verifyUrl:
+	 *   get:
 	 *     summary: Verify a public URL for the meeting
 	 *     tags:
 	 *       - Meetings

@@ -1,4 +1,5 @@
 import { APIPath } from "~/libs/enums/enums.js";
+import { AuthError } from "~/libs/exceptions/exceptions.js";
 import { type CloudFormation } from "~/libs/modules/cloud-formation/cloud-formation.js";
 import template from "~/libs/modules/cloud-formation/libs/templates/ec2-instance-template.json" with { type: "json" };
 import { HTTPCode } from "~/libs/modules/http/http.js";
@@ -138,14 +139,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 	public async getPublicUrl(
 		id: number,
 	): Promise<MeetingGetPublicUrlResponseDto> {
-		const meeting = await this.meetingRepository.find(id);
-
-		if (!meeting) {
-			throw new MeetingError({
-				message: MeetingErrorMessage.MEETING_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
+		await this.find(id);
 
 		const token = await sharedJwt.sign({ meetingId: id });
 
@@ -191,6 +185,23 @@ class MeetingService implements Service<MeetingResponseDto> {
 		}
 
 		return updatedMeeting.toObject();
+	}
+
+	public async verifyUrl(
+		id: number,
+		token: string,
+	): Promise<MeetingResponseDto> {
+		try {
+			const { payload } = await sharedJwt.verify(token);
+
+			if (id !== payload.meetingId) {
+				throw new AuthError();
+			}
+		} catch {
+			throw new AuthError();
+		}
+
+		return await this.find(id);
 	}
 }
 

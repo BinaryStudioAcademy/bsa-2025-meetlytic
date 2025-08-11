@@ -16,6 +16,7 @@ import {
 	type FindMeetingOptions,
 	type GetPublicUrlOptions,
 	type UpdateMeetingOptions,
+	type VerifyUrlOptions,
 } from "./libs/types/types.js";
 import {
 	meetingCreateValidationSchema,
@@ -127,6 +128,11 @@ class MeetingsController extends BaseController {
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID_PUBLIC_URL,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+		});
+		this.addRoute({
+			handler: (options) => this.verifyUrl(options as VerifyUrlOptions),
+			method: HTTPMethod.GET,
+			path: MeetingsApiPath.$ID_URL_VERIFICATION,
 		});
 	}
 
@@ -314,6 +320,46 @@ class MeetingsController extends BaseController {
 		const meeting = await this.meetingService.update(id, options.body);
 
 		return { payload: meeting, status: HTTPCode.OK };
+	}
+
+	/**
+	 * @swagger
+	 * /meetings/{id}/url-verification:
+	 *   verifyUrl:
+	 *     summary: Verify a public URL for the meeting
+	 *     tags:
+	 *       - Meetings
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: number
+	 *       - in: query
+	 *         name: token
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       200:
+	 *         description: Meeting data
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: "#/components/schemas/Meeting"
+	 *       404:
+	 *         description: Meeting not found
+	 *       401:
+	 *         description: Signed URL was malformed
+	 */
+	private async verifyUrl(
+		options: VerifyUrlOptions,
+	): Promise<APIHandlerResponse> {
+		const id = Number(options.params.id);
+		const token = options.query.token;
+		const url = await this.meetingService.verifyUrl(id, token);
+
+		return { payload: url, status: HTTPCode.OK };
 	}
 }
 

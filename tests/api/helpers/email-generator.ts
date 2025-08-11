@@ -1,68 +1,73 @@
-import { getRandomChars } from './get-random-chars';
-import { generateRandomNameLikeString } from './get-random-chars';
+import { getRandomChars, generateRandomNameLikeString } from './get-random-chars';
+
+const LOCAL_SPECIAL_CHARS = "0123456789_'+-.";
+const LOCAL_ONE_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_'+-";
+const LOCAL_PART_LENGTH = 6;
+const DOMAIN_SEGMENT2_LENGTH = 4;
+const DOMAIN_SEGMENT3_LENGTH = 5;
+const DEFAULT_TLD_LENGTH = 3;
+const LONG_TLD_LENGTH = 15;
+const SINGLE_CHAR_LENGTH = 1;
 
 // Used for generating different scenarios
 export type EmailOptions = {
 	consecutiveDotsInLocal?: boolean;
 	consecutiveDotsInDomain?: boolean;
-	withSpaces?: boolean;
-	singleCharLocal?: boolean;
-	fourPartDomain?: boolean;
-	longTld?: boolean;
 	domainHyphensAtEnd?: boolean;
 	domainHyphensAtStart?: boolean;
-	emptyEmail?: boolean;
-	missingLocalPart?: boolean;
-	missingDomainPart?: boolean;
-	localStartsWithDot?: boolean;
-	localEndsWithDot?: boolean;
-	tldTooShort?: boolean;
-	emojiInLocal?: boolean;
 	emojiInDomain?: boolean;
+	emojiInLocal?: boolean;
+	emptyEmail?: boolean;
+	fourPartDomain?: boolean;
+	longTld?: boolean;
+	localEndsWithDot?: boolean;
+	localStartsWithDot?: boolean;
+	missingDomainPart?: boolean;
+	missingLocalPart?: boolean;
+	singleCharLocal?: boolean;
+	tldTooShort?: boolean;
+	withSpaces?: boolean;
 };
 
-const localSpecialChars = "0123456789_'+-.";
-const localOneChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_'+-";
-
-export function generateLocalPart(options: EmailOptions): string {
-	const randomLocalChar = getRandomChars(localSpecialChars, 1);
+function generateLocalPart(options: EmailOptions): string {
+	const randomLocalChar = getRandomChars(LOCAL_SPECIAL_CHARS, SINGLE_CHAR_LENGTH);
 
 	if (options.emojiInLocal) {
-		return `${generateRandomNameLikeString(6)}😀${randomLocalChar}${generateRandomNameLikeString(6)}`;
+		return `${generateRandomNameLikeString(LOCAL_PART_LENGTH)}😀${randomLocalChar}${generateRandomNameLikeString(LOCAL_PART_LENGTH)}`;
 	}
 	if (options.singleCharLocal) {
-		return getRandomChars(localOneChar, 1);
+		return getRandomChars(LOCAL_ONE_CHAR, SINGLE_CHAR_LENGTH);
 	}
 	if (options.consecutiveDotsInLocal) {
-		return `${generateRandomNameLikeString(6)}..${randomLocalChar}${generateRandomNameLikeString(6)}`;
+		return `${generateRandomNameLikeString(LOCAL_PART_LENGTH)}..${randomLocalChar}${generateRandomNameLikeString(LOCAL_PART_LENGTH)}`;
 	}
 	if (options.localStartsWithDot) {
-		return `.${generateRandomNameLikeString(6)}${randomLocalChar}${generateRandomNameLikeString(6)}`;
+		return `.${generateRandomNameLikeString(LOCAL_PART_LENGTH)}${randomLocalChar}${generateRandomNameLikeString(LOCAL_PART_LENGTH)}`;
 	}
 	if (options.localEndsWithDot) {
-		const randomLocalChar = getRandomChars(localSpecialChars, 1);
-		return `${generateRandomNameLikeString(6)}${randomLocalChar}${generateRandomNameLikeString(6)}.`;
+		const randomLocalChar = getRandomChars(LOCAL_SPECIAL_CHARS, SINGLE_CHAR_LENGTH);
+		return `${generateRandomNameLikeString(LOCAL_PART_LENGTH)}${randomLocalChar}${generateRandomNameLikeString(LOCAL_PART_LENGTH)}.`;
 	}
 	// normal local part
-	return `${generateRandomNameLikeString(6)}${randomLocalChar}${generateRandomNameLikeString(6)}`;
+	return `${generateRandomNameLikeString(LOCAL_PART_LENGTH)}${randomLocalChar}${generateRandomNameLikeString(LOCAL_PART_LENGTH)}`;
 }
 
-export function generateDomainPart(options: EmailOptions): string {
-	let segment1 = getRandomChars('abcdefghijklmnopqrstuvwxyz0123456789', 6);
-	let segment2 = getRandomChars('abcdefghijklmnopqrstuvwxyz0123456789', 4);
+function generateDomainPart(options: EmailOptions): string {
+	let segment1 = getRandomChars('abcdefghijklmnopqrstuvwxyz0123456789', LOCAL_PART_LENGTH);
+	let segment2 = getRandomChars('abcdefghijklmnopqrstuvwxyz0123456789', DOMAIN_SEGMENT2_LENGTH);
 
 	if (options.emojiInDomain) {
 		segment1 = `😀${segment1}`;
 	}
 
 	// default tld leength
-	let tldLength = 3;
+	let tldLength = DEFAULT_TLD_LENGTH;
 
 	// if longTld option is true, use 15 characters, else use 3
 	if (options.longTld) {
-		tldLength = 15;
+		tldLength = LONG_TLD_LENGTH;
 	} else if (options.tldTooShort) {
-		tldLength = 1;
+		tldLength = SINGLE_CHAR_LENGTH;
 	}
 
 	const tld = getRandomChars('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', tldLength);
@@ -79,7 +84,7 @@ export function generateDomainPart(options: EmailOptions): string {
 	}
 
 	if (options.fourPartDomain) {
-		const segment3 = getRandomChars('abcdefghijklmnopqrstuvwxyz0123456789', 5);
+		const segment3 = getRandomChars('abcdefghijklmnopqrstuvwxyz0123456789', DOMAIN_SEGMENT3_LENGTH);
 		return `${segment1}.${segment2}.${segment3}.${tld}`;
 	}
 
@@ -91,7 +96,7 @@ export function generateDomainPart(options: EmailOptions): string {
 	return `${segment1}.${segment2}.${tld}`;
 }
 
-export function assembleEmail(localPart: string, domainPart: string, label: string, options: EmailOptions): string {
+function assembleEmail(localPart: string, domainPart: string, label: string, options: EmailOptions): string {
 	if (options.emptyEmail) return '';
 
 	if (options.missingLocalPart) return `@${domainPart}`;
@@ -106,3 +111,5 @@ export function assembleEmail(localPart: string, domainPart: string, label: stri
 
 	return email;
 }
+
+export { generateLocalPart, generateDomainPart, assembleEmail };

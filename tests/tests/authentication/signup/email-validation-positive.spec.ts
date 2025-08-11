@@ -1,9 +1,14 @@
-import { test, expect, request } from '@playwright/test';
+import { expect, test, request } from '@playwright/test';
+
 import { ApiControllers } from '../../../api/controllers/api-controllers';
-import { validsignUpSchema } from '../../../api/schemas/valid-signup-response.js';
+import type { RegisterUser } from '../../../api/controllers/auth-controller';
+
 import { expectToMatchSchema } from '../../../api/schemas/schema-validator.js';
+import { validsignUpSchema } from '../../../api/schemas/valid-signup-response.js';
+
 import { generateFakeUser } from '../../../api/helpers/dynamic-user-generator';
-import { RegisterUser } from '../../../api/controllers/auth-controller';
+
+const HTTP_CREATED = 201;
 
 let api: ApiControllers; // declares global variables to hold API controller and test user state
 
@@ -19,7 +24,7 @@ test.describe('Email Validation - Positive Cases', () => {
 		const validUser: RegisterUser = { ...baseUser };
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(201); // Check if the response status code is 201 Created
+		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(HTTP_CREATED); // Check if the response status code is 201 Created
 		const body = await response.json(); // Check response structure
 		expectToMatchSchema(body, validsignUpSchema); // Schema validation for valid signup
 		expect(body.user.email).toBe(validUser.email.toLowerCase()); // convert our email to lower case and expect it to equal what the server responded with
@@ -30,7 +35,7 @@ test.describe('Email Validation - Positive Cases', () => {
 		const validUser: RegisterUser = { ...validUserSpaces };
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(201); // Check if the response status code is 201 Created
+		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(HTTP_CREATED); // Check if the response status code is 201 Created
 		const body = await response.json(); // Check response structure
 		expectToMatchSchema(body, validsignUpSchema); // Schema validation for valid signup
 		expect(body.user.email).toBe(validUser.email.trim().toLowerCase()); // trim the email and compare it to what was returned
@@ -43,7 +48,7 @@ test.describe('Email Validation - Positive Cases', () => {
 		console.log('Request body:', JSON.stringify(validUser, null, 2));
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(201); // Check if the response status code is 201 Created
+		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(HTTP_CREATED); // Check if the response status code is 201 Created
 		const body = await response.json(); // Check response structure
 		expectToMatchSchema(body, validsignUpSchema); // Schema validation for valid signup
 		expect(body.user.email).toBe(validUser.email.toLowerCase()); // compare it to what was returned
@@ -55,7 +60,7 @@ test.describe('Email Validation - Positive Cases', () => {
 		console.log('Request body:', JSON.stringify(validUser, null, 2));
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(201); // Check if the response status code is 201 Created
+		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(HTTP_CREATED); // Check if the response status code is 201 Created
 		const body = await response.json(); // Check response structure
 		expectToMatchSchema(body, validsignUpSchema); // Schema validation for valid signup
 		expect(body.user.email).toBe(validUser.email.toLowerCase()); // compare it to what was returned
@@ -67,7 +72,7 @@ test.describe('Email Validation - Positive Cases', () => {
 		console.log('Request body:', JSON.stringify(validUser, null, 2));
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(201); // Check if the response status code is 201 Created
+		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(HTTP_CREATED); // Check if the response status code is 201 Created
 		const body = await response.json(); // Check response structure
 		expectToMatchSchema(body, validsignUpSchema); // Schema validation for valid signup
 		expect(body.user.email).toBe(validUser.email.toLowerCase()); // compare it to what was returned
@@ -78,7 +83,7 @@ test.describe('Email Validation - Positive Cases', () => {
 		const validUser: RegisterUser = { ...domainHyphensAtEnd };
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(201); // Check if the response status code is 201 Created
+		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(HTTP_CREATED); // Check if the response status code is 201 Created
 		const body = await response.json(); // Check response structure
 		expect(body.user.email).toBe(validUser.email.toLowerCase()); // compare it to what was returned
 	});

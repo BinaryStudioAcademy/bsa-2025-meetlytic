@@ -1,15 +1,17 @@
-export const validsignUpSchema = {
-	type: 'object',
+const validsignUpSchema = {
 	properties: {
 		token: { type: 'string' },
 		user: {
-			type: 'object',
 			properties: {
-				email: { type: 'string', format: 'email' },
+				email: { format: 'email', type: 'string' },
 				id: { type: 'number' },
 			},
 			required: ['email', 'id'],
+			type: 'object',
 		},
 	},
 	required: ['token', 'user'],
+	type: 'object',
 };
+
+export { validsignUpSchema };

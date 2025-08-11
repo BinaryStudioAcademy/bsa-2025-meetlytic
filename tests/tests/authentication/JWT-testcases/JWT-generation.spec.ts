@@ -1,10 +1,10 @@
 import { test, expect, request } from '@playwright/test';
-import { ApiControllers } from '../../../api/controllers/api-controllers';
-import { generateFakeUser } from '../../../api/helpers/dynamic-user-generator.js';
-import { validsignUpSchema } from '../../../api/schemas/valid-signup-response.js';
-import { expectToMatchSchema } from '../../../api/schemas/schema-validator.js';
 import { RegisterUser } from '../../../api/controllers/auth-controller.js';
+import { ApiControllers } from '../../../api/controllers/api-controllers';
+import { expectToMatchSchema } from '../../../api/schemas/schema-validator.js';
+import { validsignUpSchema } from '../../../api/schemas/valid-signup-response.js';
 import { validateJwtToken } from '../../../api/helpers/jwt-validator';
+import { generateFakeUser } from '../../../api/helpers/dynamic-user-generator.js';
 
 let api: ApiControllers; // declares global variables to hold API controller and test user state
 
@@ -23,12 +23,11 @@ test.describe('JWT Validation', () => {
 
 		// Check if the response status code is 201 Created
 		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(201);
-		const body = await response.json(); // Check response structure
+		const body: { token: string; user: unknown } = await response.json(); // Check response structure
 
 		// Schema validation for valid signup
 		expectToMatchSchema(body, validsignUpSchema);
 		validateJwtToken(body.token); //using the helper to validate the JWT token
-		console.log('Generated email:', validUser.email);
 	});
 
 	test('Sign-in with valid fields and validate JWT token', async () => {
@@ -41,7 +40,7 @@ test.describe('JWT Validation', () => {
 
 		// 200 OK status code expected for a valid sign in
 		expect(response.status(), 'Expected HTTP 200 for valid sign in').toBe(200);
-		const body = await response.json();
+		const body: { token: string; user: unknown } = await response.json(); // Check response structure
 		validateJwtToken(body.token); // validate token using our helper function
 	});
 });

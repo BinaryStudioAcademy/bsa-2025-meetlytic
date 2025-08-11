@@ -1,8 +1,7 @@
 import { getRandomChars } from './get-random-chars';
-import { faker } from '@faker-js/faker';
 
 // Used for generating different scenarios
-export type PasswordOptions = {
+type PasswordOptions = {
 	emptyPassword?: boolean;
 	shortPassword?: boolean; // less than 8 characters
 	longPassword?: boolean; // more than 64 characters
@@ -10,7 +9,7 @@ export type PasswordOptions = {
 
 const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\\"#$%&\'()*+,-./:;<=>?@[\\\\]^_`{|}~0123456789';
 
-export function generatePassword(options: PasswordOptions = {}): string {
+function generatePassword(options: PasswordOptions = {}): string {
 	if (options.emptyPassword) {
 		return '';
 	}
@@ -26,6 +25,9 @@ export function generatePassword(options: PasswordOptions = {}): string {
 		const length = Math.floor(Math.random() * 16) + 65;
 		return getRandomChars(characters, length);
 	}
+
 	// default password length 8
 	return getRandomChars(characters, 8);
 }
+
+export { generatePassword, type PasswordOptions };

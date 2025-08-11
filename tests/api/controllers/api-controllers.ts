@@ -1,10 +1,13 @@
-import { APIRequestContext } from '@playwright/test';
+import type { APIRequestContext } from '@playwright/test';
+
 import { AuthController } from './auth-controller';
 
-export class ApiControllers {
+class ApiControllers {
 	public readonly auth: AuthController;
 
-	constructor(request: APIRequestContext) {
+	public constructor(request: APIRequestContext) {
 		this.auth = new AuthController(request);
 	}
 }
+
+export { ApiControllers };

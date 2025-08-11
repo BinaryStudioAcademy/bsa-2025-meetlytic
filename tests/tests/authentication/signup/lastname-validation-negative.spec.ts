@@ -1,7 +1,11 @@
-import { test, expect, request } from '@playwright/test';
+import { expect, test, request } from '@playwright/test';
+
 import { ApiControllers } from '../../../api/controllers/api-controllers';
+import type { RegisterUser } from '../../../api/controllers/auth-controller';
+
 import { generateFakeUser } from '../../../api/helpers/dynamic-user-generator';
-import { RegisterUser } from '../../../api/controllers/auth-controller';
+
+const HTTP_UNPROCESSABLE_ENTITY = 422;
 
 let api: ApiControllers; // declares global variables to hold API controller and test user state
 
@@ -16,20 +20,18 @@ test.describe('Last Name Validation - Negative Cases', () => {
 		// Generate a valid user
 		const digitLastName = generateFakeUser('digitLastName', {}, { digitLastName: true }, {}); // Register with digitLastName LastName
 		const validUser: RegisterUser = { ...digitLastName };
-		console.log('Request body:', JSON.stringify(validUser, null, 2));
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(422); // Check if the response status code is 422 Unprocessable Entity
+		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(HTTP_UNPROCESSABLE_ENTITY); // Check if the response status code is 422 Unprocessable Entity
 	});
 
 	test('Symbol in LastName field', async () => {
 		// Generate a valid user
 		const symbolLastname = generateFakeUser('symbolLastname', {}, { symbolLastname: true }, {}); // Register with symbolLastname LastName
 		const validUser: RegisterUser = { ...symbolLastname };
-		console.log('Request body:', JSON.stringify(validUser, null, 2));
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(422); // Check if the response status code is 422 Unprocessable Entity
+		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(HTTP_UNPROCESSABLE_ENTITY); // Check if the response status code is 422 Unprocessable Entity
 	});
 
 	test('Fifty one letters in Lastname field', async () => {
@@ -37,19 +39,17 @@ test.describe('Last Name Validation - Negative Cases', () => {
 		const fiftyoneLetterLastName = generateFakeUser('fiftyoneLetterLastName', {}, { fiftyoneLetterLastName: true }, {}); // Register with fiftyoneLetterLastName LastName
 
 		const validUser: RegisterUser = { ...fiftyoneLetterLastName };
-		console.log('Request body:', JSON.stringify(validUser, null, 2));
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(422); // Check if the response status code is 422 Unprocessable Entity
+		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(HTTP_UNPROCESSABLE_ENTITY); // Check if the response status code is 422 Unprocessable Entity
 	});
 
 	test('Empty Lastname field', async () => {
 		// Generate a valid user
 		const emptyLastName = generateFakeUser('emptyLastName', {}, { emptyLastName: true }, {}); // Register with emptyLastName LastName
 		const validUser: RegisterUser = { ...emptyLastName };
-		console.log('Request body:', JSON.stringify(validUser, null, 2));
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(422); // Check if the response status code is 422 Unprocessable Entity
+		expect(response.status(), 'Expected HTTP 422 for valid signup').toBe(HTTP_UNPROCESSABLE_ENTITY); // Check if the response status code is 422 Unprocessable Entity
 	});
 });

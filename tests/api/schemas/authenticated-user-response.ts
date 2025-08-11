@@ -1,8 +1,10 @@
-export const validAuthenticatedUserSchema = {
-	type: 'object',
+const validAuthenticatedUserSchema = {
 	properties: {
-		email: { type: 'string', format: 'email' },
+		email: { format: 'email', type: 'string' },
 		id: { type: 'number' },
 	},
 	required: ['email', 'id'],
+	type: 'object',
 };
+
+export { validAuthenticatedUserSchema };

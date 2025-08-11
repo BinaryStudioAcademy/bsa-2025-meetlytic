@@ -1,9 +1,14 @@
-import { test, expect, request } from '@playwright/test';
+import { expect, test, request } from '@playwright/test';
+
 import { ApiControllers } from '../../../api/controllers/api-controllers';
+import type { RegisterUser } from '../../../api/controllers/auth-controller';
+
 import { generateFakeUser } from '../../../api/helpers/dynamic-user-generator';
-import { RegisterUser } from '../../../api/controllers/auth-controller';
 import { validsignUpSchema } from '../../../api/schemas/valid-signup-response.js';
+
 import { expectToMatchSchema } from '../../../api/schemas/schema-validator.js';
+
+const HTTP_CREATED = 201;
 
 let api: ApiControllers; // declares global variables to hold API controller and test user state
 
@@ -19,7 +24,7 @@ test.describe('Last Name Validation - Positive Cases', () => {
 		const validUser: RegisterUser = { ...baseUser };
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(201); // Check if the response status code is 201 Created
+		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(HTTP_CREATED); // Check if the response status code is 201 Created
 		const body = await response.json(); // Check response structure
 		expectToMatchSchema(body, validsignUpSchema); // Schema validation for valid signup
 	});
@@ -28,10 +33,9 @@ test.describe('Last Name Validation - Positive Cases', () => {
 		// generate single-char first name
 		const singleCharLastName = generateFakeUser('singleCharLastName', {}, { singleCharLastName: true }, {}); // Register with a singleCharLastName LastName
 		const validUser: RegisterUser = { ...singleCharLastName };
-		console.log('Request body:', JSON.stringify(validUser, null, 2));
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(201); // Check if the response status code is 201 Created
+		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(HTTP_CREATED); // Check if the response status code is 201 Created
 		const body = await response.json(); // Check response structure
 		expectToMatchSchema(body, validsignUpSchema); // Schema validation for valid signup
 	});
@@ -41,7 +45,7 @@ test.describe('Last Name Validation - Positive Cases', () => {
 		const validUser: RegisterUser = { ...withSpacesLastName };
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(201); // Check if the response status code is 201 Created
+		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(HTTP_CREATED); // Check if the response status code is 201 Created
 		const body = await response.json(); // Check response structure
 		expectToMatchSchema(body, validsignUpSchema); // Schema validation for valid signup
 	});
@@ -50,10 +54,9 @@ test.describe('Last Name Validation - Positive Cases', () => {
 		// generate single-char first name
 		const withHyphenLastName = generateFakeUser('withHyphenLastName', {}, { withHyphenLastName: true }, {}); // Register with a withHyphenLastName LastName
 		const validUser: RegisterUser = { ...withHyphenLastName };
-		console.log('Request body:', JSON.stringify(validUser, null, 2));
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(201); // Check if the response status code is 201 Created
+		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(HTTP_CREATED); // Check if the response status code is 201 Created
 		const body = await response.json(); // Check response structure
 		expectToMatchSchema(body, validsignUpSchema); // Schema validation for valid signup
 	});
@@ -62,10 +65,9 @@ test.describe('Last Name Validation - Positive Cases', () => {
 		// generate single-char first name
 		const fiftyLetterLastName = generateFakeUser('fiftyLetterLastName', {}, { fiftyLetterLastName: true }, {}); // Register with a fiftyLetterLastName LastName
 		const validUser: RegisterUser = { ...fiftyLetterLastName };
-		console.log('Request body:', JSON.stringify(validUser, null, 2));
 		const response = await api.auth.sign_up(validUser); // Make API call
 
-		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(201); // Check if the response status code is 201 Created
+		expect(response.status(), 'Expected HTTP 201 for valid signup').toBe(HTTP_CREATED); // Check if the response status code is 201 Created
 		const body = await response.json(); // Check response structure
 		expectToMatchSchema(body, validsignUpSchema); // Schema validation for valid signup
 	});

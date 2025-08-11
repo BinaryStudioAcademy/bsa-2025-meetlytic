@@ -1,7 +1,13 @@
+import type { APIRequestContext } from '@playwright/test';
+import { test, expect, request } from '@playwright/test';
+import type { RegisterUser } from '../../../api/controllers/auth-controller';
 import { ApiControllers } from '../../../api/controllers/api-controllers';
 import { generateFakeUser } from '../../../api/helpers/dynamic-user-generator';
-import { RegisterUser } from '../../../api/controllers/auth-controller';
-import { APIRequestContext, test, expect, request } from '@playwright/test';
+
+const HTTP_METHOD_NOT_ALLOWED = 405;
+const HTTP_UNAUTHORIZED = 401;
+const HTTP_UNPROCESSABLE_ENTITY = 422;
+const HTTP_CREATED = 201;
 
 let api: ApiControllers; // declares global variables to hold API controller and test user state
 let requestContext: APIRequestContext; // declared to make requests that do not comply with controller template
@@ -14,7 +20,7 @@ test.beforeAll(async () => {
 	api = new ApiControllers(requestContext);
 	baseUser = generateFakeUser('validSignUp');
 	const signUpResponse = await api.auth.sign_up(baseUser);
-	expect(signUpResponse.status(), 'User signup should succeed').toBe(201);
+	expect(signUpResponse.status(), 'User signup should succeed').toBe(HTTP_CREATED);
 });
 
 test.describe('Sign-in - Negative Cases', () => {
@@ -25,7 +31,7 @@ test.describe('Sign-in - Negative Cases', () => {
 				password: baseUser.password,
 			},
 		});
-		expect(response.status(), 'GET method should be rejected').toBe(405); // 405 Method Not Allowed
+		expect(response.status(), 'GET method should be rejected').toBe(HTTP_METHOD_NOT_ALLOWED); // 405 Method Not Allowed
 	});
 
 	test('PUT method is rejected', async () => {
@@ -35,22 +41,22 @@ test.describe('Sign-in - Negative Cases', () => {
 				password: baseUser.password,
 			},
 		});
-		expect(response.status(), 'PUT method should be rejected').toBe(405); // 405 Method Not Allowed
+		expect(response.status(), 'PUT method should be rejected').toBe(HTTP_METHOD_NOT_ALLOWED); // 405 Method Not Allowed
 	});
 
 	test('Wrong password returns 422', async () => {
 		const response = await api.auth.login(baseUser.email, 'wrongPassword123!');
-		expect(response.status(), 'Wrong password should return 401').toBe(401); // 401 Unauthorized
+		expect(response.status(), 'Wrong password should return 401').toBe(HTTP_UNAUTHORIZED); // 401 Unauthorized
 	});
 
 	test('Empty password returns 422', async () => {
 		const response = await api.auth.login(baseUser.email, '');
-		expect(response.status(), 'Empty password should return 422').toBe(422); // 422 Unprocessable Entity
+		expect(response.status(), 'Empty password should return 422').toBe(HTTP_UNPROCESSABLE_ENTITY); // 422 Unprocessable Entity
 	});
 
 	test('Empty email returns 422', async () => {
 		const response = await api.auth.login('', baseUser.password);
-		expect(response.status(), 'Empty email should return 422').toBe(422); // 422 Unprocessable Entity
+		expect(response.status(), 'Empty email should return 422').toBe(HTTP_UNPROCESSABLE_ENTITY); // 422 Unprocessable Entity
 	});
 
 	test('Missing email field returns 422', async () => {
@@ -61,7 +67,7 @@ test.describe('Sign-in - Negative Cases', () => {
 				// no email field
 			},
 		});
-		expect(response.status(), 'Missing email should return 422').toBe(422); // 422 Unprocessable Entity
+		expect(response.status(), 'Missing email should return 422').toBe(HTTP_UNPROCESSABLE_ENTITY); // 422 Unprocessable Entity
 	});
 
 	test('Missing password field returns 422', async () => {
@@ -71,11 +77,11 @@ test.describe('Sign-in - Negative Cases', () => {
 				// no password field
 			},
 		});
-		expect(response.status(), 'Missing password should return 422').toBe(422); // 422 Unprocessable Entity
+		expect(response.status(), 'Missing password should return 422').toBe(HTTP_UNPROCESSABLE_ENTITY); // 422 Unprocessable Entity
 	});
 
 	test('Empty email and password returns 422', async () => {
 		const response = await api.auth.login('', '');
-		expect(response.status(), 'Empty email and password should return 422').toBe(422); // 422 Unprocessable Entity
+		expect(response.status(), 'Empty email and password should return 422').toBe(HTTP_UNPROCESSABLE_ENTITY); // 422 Unprocessable Entity
 	});
 });

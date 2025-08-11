@@ -4,9 +4,13 @@
 	--color-background-3: rgb(246 245 245);
 	--color-background-4: rgb(255 255 255);
 	--color-background-5: rgb(50 34 43);
+	--color-background-6: rgb(236 237 238);
 	--color-text-1: rgb(41 45 50);
 	--color-text-2: rgb(175 175 175);
 	--color-text-3: rgb(255 255 255);
+	--color-text-4: rgb(19 34 56);
+	--color-text-5: rgb(71 51 62);
+	--color-text-6: rgb(105 116 132);
 	--color-brand: rgb(16 173 216);
 	--color-brand-hover: rgb(15 143 178);
 	--color-accent-1: rgb(255 94 94);
@@ -14,6 +18,7 @@
 	--border-radius-sm: 5px;
 	--border-radius-md: 8px;
 	--border-radius-lg: 10px;
+	--border-radius-xl: 20px;
 	--font-family: "Inter", sans-serif;
 	--second-font-family: "Nunito", sans-serif;
 	--third-font-family: "Roboto", sans-serif;

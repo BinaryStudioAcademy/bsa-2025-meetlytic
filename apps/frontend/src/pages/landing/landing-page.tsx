@@ -1,4 +1,5 @@
 import {
+	LandingFeatures,
 	LandingFooter,
 	LandingHeader,
 	LandingHero,
@@ -10,6 +11,7 @@ const LandingPage: React.FC = () => (
 		<LandingHeader />
 		<main className={styles["landing-page"]} role="main">
 			<LandingHero />
+			<LandingFeatures />
 		</main>
 		<LandingFooter />
 	</>

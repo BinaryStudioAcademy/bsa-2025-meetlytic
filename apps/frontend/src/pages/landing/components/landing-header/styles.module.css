@@ -1,13 +1,14 @@
 .landing-header {
-	max-width: 1440px;
-	margin: 0 auto;
+	background-color: var(--color-background-1);
 }
 
 .landing-header__inner {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 24px 95px 34px;
+	max-width: 1440px;
+	padding: 24px 92px 34px;
+	margin: 0 auto;
 }
 
 .landing-header__left {

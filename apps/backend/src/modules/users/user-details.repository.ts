@@ -1,6 +1,7 @@
 import { NO_ROWS_AFFECTED } from "~/libs/constants/constants.js";
 import { type Repository } from "~/libs/types/types.js";
 
+import { type UserDetails } from "./libs/types/types.js";
 import { UserDetailsEntity } from "./user-details.entity.js";
 import { type UserDetailsModel } from "./user-details.model.js";
 
@@ -73,7 +74,7 @@ class UserDetailsRepository implements Repository {
 
 	public async updateByUserId(
 		userId: number,
-		payload: Partial<{ firstName: string; lastName: string }>,
+		payload: Partial<UserDetails>,
 	): Promise<boolean> {
 		const updatedRows = await this.userDetailsModel
 			.query()

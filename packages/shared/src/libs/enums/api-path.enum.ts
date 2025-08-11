@@ -1,8 +1,8 @@
 const APIPath = {
 	AUTH: "/auth",
 	MEETINGS: "/meetings",
-	PUBLIC_MEETINGS: "/public/meetings",
 	MEETINGS_$ID: "/meetings/:id",
+	PUBLIC_MEETINGS: "/public/meetings",
 	USERS: "/users",
 } as const;
 

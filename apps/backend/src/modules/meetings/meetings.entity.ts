@@ -122,12 +122,31 @@ class MeetingEntity implements Entity {
 		});
 	}
 
+	public toClientObject(): {
+		createdAt: string;
+		host: ValueOf<typeof MeetingHost>;
+		id: number;
+		meetingId: string;
+		meetingPassword: null | string;
+		ownerId: number;
+		status: ValueOf<typeof MeetingStatus>;
+	} {
+		return {
+			createdAt: this.createdAt as string,
+			host: this.host,
+			id: this.id as number,
+			meetingId: this.meetingId,
+			meetingPassword: this.meetingPassword,
+			ownerId: this.ownerId,
+			status: this.status,
+		};
+	}
+
 	public toDetailedObject(): {
 		actionItems: null | string;
 		createdAt: string;
 		host: ValueOf<typeof MeetingHost>;
 		id: number;
-		instanceId: null | string;
 		meetingId: string;
 		meetingPassword: null | string;
 		ownerId: number;
@@ -139,7 +158,6 @@ class MeetingEntity implements Entity {
 			createdAt: this.createdAt as string,
 			host: this.host,
 			id: this.id as number,
-			instanceId: this.instanceId,
 			meetingId: this.meetingId,
 			meetingPassword: this.meetingPassword,
 			ownerId: this.ownerId,

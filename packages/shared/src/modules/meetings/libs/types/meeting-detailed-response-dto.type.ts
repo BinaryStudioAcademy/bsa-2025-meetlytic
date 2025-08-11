@@ -6,7 +6,6 @@ type MeetingDetailedResponseDto = {
 	createdAt: string;
 	host: ValueOf<typeof MeetingHost>;
 	id: number;
-	instanceId: null | string;
 	meetingId: string;
 	ownerId: number;
 	status: ValueOf<typeof MeetingStatus>;

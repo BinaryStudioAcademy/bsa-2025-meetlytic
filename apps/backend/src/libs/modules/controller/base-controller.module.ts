@@ -1,4 +1,8 @@
-import { type FastifyReply, type FastifyRequest } from "fastify";
+import {
+	type FastifyReply,
+	type FastifyRequest,
+	type preHandlerHookHandler,
+} from "fastify";
 
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type ServerApplicationRouteParameters } from "~/libs/modules/server-application/server-application.js";
@@ -43,7 +47,6 @@ class BaseController implements Controller {
 			body,
 			params,
 			query,
-			request,
 			user,
 		};
 	}
@@ -52,11 +55,21 @@ class BaseController implements Controller {
 		const { handler, path, preHandlers } = options;
 		const fullPath = this.apiUrl + path;
 
+		let processedPreHandlers: preHandlerHookHandler[];
+
+		if (Array.isArray(preHandlers)) {
+			processedPreHandlers = preHandlers;
+		} else if (preHandlers) {
+			processedPreHandlers = [preHandlers];
+		} else {
+			processedPreHandlers = [];
+		}
+
 		this.routes.push({
 			...options,
 			handler: (request, reply) => this.mapHandler(handler, request, reply),
 			path: fullPath,
-			preHandlers: preHandlers,
+			preHandlers: processedPreHandlers,
 		});
 	}
 }

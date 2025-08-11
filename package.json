@@ -41,7 +41,6 @@
 		"@ls-lint/ls-lint": "2.3.1",
 		"@stylistic/eslint-plugin": "5.2.2",
 		"@types/lint-staged": "13.3.0",
-		"@types/node": "24.1.0",
 		"@typescript-eslint/eslint-plugin": "8.36.0",
 		"@typescript-eslint/parser": "8.36.0",
 		"concurrently": "9.2.0",
@@ -68,9 +67,5 @@
 	"simple-git-hooks": {
 		"pre-commit": "npm run lint:type && npm run git:hook:precommit",
 		"commit-msg": "npm run git:hook:commit"
-	},
-	"dependencies": {
-		"@aws-sdk/client-s3": "3.859.0",
-		"@fastify/multipart": "9.0.3"
 	}
 }

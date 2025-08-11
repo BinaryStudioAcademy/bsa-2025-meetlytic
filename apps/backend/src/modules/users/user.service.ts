@@ -67,24 +67,28 @@ class UserService implements Service {
 
 		return user ? user.toObject() : null;
 	}
-
 	public async getCredentials(id: number): Promise<null | UserCredentials> {
 		const credentials = await this.userRepository.getCredentials(id);
 
 		return credentials ?? null;
 	}
 
-	public update(): ReturnType<Service["update"]> {
-		return Promise.resolve(null);
+	public async getOrCreateDetailsId(userId: number): Promise<number> {
+		const existingId = await this.userDetailsRepository.findIdByUserId(userId);
+
+		if (existingId) {
+			return existingId;
+		}
+
+		const created = await this.userDetailsRepository.create(
+			UserDetailsEntity.initializeNew({ firstName: "", lastName: "", userId }),
+		);
+
+		return created.toObject().id;
 	}
 
-	public async updateById(
-		id: number,
-		payload: { avatarKey?: null | string; avatarUrl?: null | string },
-	): Promise<UserResponseDto> {
-		const updatedUser = await this.userRepository.updateById(id, payload);
-
-		return updatedUser.toObject();
+	public update(): ReturnType<Service["update"]> {
+		return Promise.resolve(null);
 	}
 }
 

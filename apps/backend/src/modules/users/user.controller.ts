@@ -6,13 +6,26 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import {
+	singleFilePreHandler,
+	type UploadedFile,
+} from "~/libs/plugins/uploads/upload.plugin.js";
+import { type FileService } from "~/modules/files/file.service.js";
 import { type UserAvatarService } from "~/modules/users/user-avatar.service.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
 
-/**
- * @swagger
+type Deps = {
+	fileService: FileService;
+	logger: Logger;
+	userAvatarService: UserAvatarService;
+	userService: UserService;
+};
+
+type UploadBody = { file: UploadedFile };
+
+/*** @swagger
  * components:
  *   schemas:
  *     User:
@@ -36,10 +49,8 @@ import { UsersApiPath } from "./libs/enums/enums.js";
  *           properties:
  *             key:
  *               type: string
- *               example: "avatars/1234567890-avatar.jpg"
  *             url:
  *               type: string
- *               example: "https://your-bucket.s3.amazonaws.com/avatars/1234567890-avatar.jpg"
  *     AvatarDeleteResponse:
  *       type: object
  *       properties:
@@ -48,29 +59,23 @@ import { UsersApiPath } from "./libs/enums/enums.js";
  *           example: true
  *         message:
  *           type: string
- *           example: "Avatar deleted successfully"
- *     ErrorResponse:
- *       type: object
- *       properties:
- *         error:
- *           type: string
- *         message:
- *           type: string
  */
-
 class UserController extends BaseController {
-	private userAvatarService: UserAvatarService;
-	private userService: UserService;
+	private readonly fileService: FileService;
+	private readonly userAvatarService: UserAvatarService;
+	private readonly userService: UserService;
 
-	public constructor(
-		logger: Logger,
-		userService: UserService,
-		userAvatarService: UserAvatarService,
-	) {
+	public constructor({
+		fileService,
+		logger,
+		userAvatarService,
+		userService,
+	}: Deps) {
 		super(logger, APIPath.USERS);
 
 		this.userService = userService;
 		this.userAvatarService = userAvatarService;
+		this.fileService = fileService;
 
 		this.addRoute({
 			handler: () => this.findAll(),
@@ -79,79 +84,82 @@ class UserController extends BaseController {
 		});
 
 		this.addRoute({
-			handler: (options) => this.uploadAvatar(options),
+			handler: (options) =>
+				this.getCurrentUser(
+					options as APIHandlerOptions<{ user: { id: number } }>,
+				),
+			method: "GET",
+			path: "/me",
+		});
+
+		this.addRoute({
+			handler: (options) =>
+				this.uploadAvatar(
+					options as APIHandlerOptions<{
+						body: UploadBody;
+						user: { id: number };
+					}>,
+				),
 			method: "POST",
 			path: UsersApiPath.AVATAR,
+			preHandlers: [singleFilePreHandler("file")],
 		});
 
 		this.addRoute({
 			handler: (options) =>
 				this.deleteAvatar(
-					options as APIHandlerOptions<{
-						params: { key: string };
-						user: { id: number };
-					}>,
+					options as APIHandlerOptions<{ user: { id: number } }>,
 				),
 			method: "DELETE",
-			path: UsersApiPath.AVATAR_BY_KEY,
+			path: UsersApiPath.AVATAR, // без :key — беремо поточний аватар з БД
 		});
 	}
 
 	/**
 	 * @swagger
-	 * /users/avatar/{key}:
+	 * /users/avatar:
 	 *   delete:
-	 *     tags:
-	 *       - Users
+	 *     tags: [Users]
 	 *     summary: Delete user avatar
-	 *     description: Delete an existing avatar by its key
-	 *     parameters:
-	 *       - in: path
-	 *         name: key
-	 *         required: true
-	 *         description: Avatar key (file path in S3)
-	 *         schema:
-	 *           type: string
-	 *           example: "avatars/1234567890-avatar.jpg"
+	 *     security:
+	 *       - bearerAuth: []
 	 *     responses:
 	 *       200:
-	 *         description: Avatar deleted successfully
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               $ref: "#/components/schemas/AvatarDeleteResponse"
-	 *       400:
-	 *         description: Bad request - missing or invalid key
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               $ref: "#/components/schemas/ErrorResponse"
+	 *         description: Avatar deleted
+	 *       404:
+	 *         description: Not found
 	 *       500:
-	 *         description: Internal server error
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               $ref: "#/components/schemas/ErrorResponse"
+	 *         description: Server error
 	 */
 	private async deleteAvatar(
-		options: APIHandlerOptions<{
-			params: { key: string };
-			user: { id: number };
-		}>,
+		options: APIHandlerOptions<{ user: { id: number } }>,
 	): Promise<APIHandlerResponse> {
-		const { params, user } = options;
+		const { user } = options;
 
-		const updatedUser = await this.userService.updateById(user.id, {
-			avatarKey: null,
-			avatarUrl: null,
-		});
+		const userEntity = await this.userService.find(user.id);
+		const detailsId = userEntity?.details?.id ?? null;
 
-		await this.userAvatarService.deleteAvatar(params.key);
+		if (!detailsId) {
+			return {
+				payload: { error: "Not Found", message: "User details not found" },
+				status: HTTPCode.NOT_FOUND,
+			};
+		}
+
+		const existing = await this.fileService.findByUserDetailsId(detailsId);
+
+		if (!existing) {
+			return {
+				payload: { error: "Not Found", message: "Avatar not set" },
+				status: HTTPCode.NOT_FOUND,
+			};
+		}
+
+		await this.userAvatarService.deleteAvatar(existing.key);
+		await this.fileService.removeAvatarRecord(detailsId);
 
 		return {
-			payload: {
-				user: updatedUser,
-			},
+			payload: { message: "Avatar deleted successfully", success: true },
 			status: HTTPCode.OK,
 		};
 	}
@@ -160,18 +168,10 @@ class UserController extends BaseController {
 	 * @swagger
 	 * /users:
 	 *   get:
-	 *     tags:
-	 *       - Users
 	 *     description: Returns an array of users
 	 *     responses:
 	 *       200:
 	 *         description: Successful operation
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               type: array
-	 *               items:
-	 *                 $ref: "#/components/schemas/User"
 	 */
 	private async findAll(): Promise<APIHandlerResponse> {
 		return {
@@ -182,86 +182,106 @@ class UserController extends BaseController {
 
 	/**
 	 * @swagger
+	 * /users/me:
+	 *   get:
+	 *     tags: [Users]
+	 *     summary: Get current authenticated user
+	 *     security:
+	 *       - bearerAuth: []
+	 *     responses:
+	 *       200:
+	 *         description: Current user data
+	 *       404:
+	 *         description: User not found
+	 */
+	private async getCurrentUser(
+		options: APIHandlerOptions<{ user: { id: number } }>,
+	): Promise<APIHandlerResponse> {
+		try {
+			const userId = options.user.id;
+			const user = await this.userService.find(userId);
+
+			if (!user) {
+				return {
+					payload: {
+						error: "User not found",
+						message: `User with id ${String(userId)} does not exist`,
+					},
+					status: HTTPCode.NOT_FOUND,
+				};
+			}
+
+			return { payload: user, status: HTTPCode.OK };
+		} catch {
+			return {
+				payload: {
+					error: "Internal Server Error",
+					message: "Failed to get current user",
+				},
+				status: HTTPCode.INTERNAL_SERVER_ERROR,
+			};
+		}
+	}
+
+	/**
+	 * @swagger
 	 * /users/avatar:
 	 *   post:
-	 *     tags:
-	 *       - Users
+	 *     tags: [Users]
 	 *     summary: Upload user avatar
-	 *     description: Upload a new avatar image for the user
+	 *     security:
+	 *       - bearerAuth: []
 	 *     requestBody:
 	 *       content:
 	 *         multipart/form-data:
 	 *           schema:
 	 *             type: object
 	 *             properties:
-	 *               avatar:
+	 *               file:
 	 *                 type: string
 	 *                 format: binary
-	 *                 description: Avatar image file (JPEG, PNG, GIF, WebP, max 5MB)
-	 *             required:
-	 *               - avatar
+	 *                 description: Avatar file
 	 *     responses:
 	 *       201:
-	 *         description: Avatar uploaded successfully
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               $ref: "#/components/schemas/AvatarUploadResponse"
+	 *         description: Avatar uploaded
 	 *       400:
-	 *         description: Bad request - invalid file or no file uploaded
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               $ref: "#/components/schemas/ErrorResponse"
+	 *         description: Bad request
 	 *       500:
-	 *         description: Internal server error
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               $ref: "#/components/schemas/ErrorResponse"
+	 *         description: Server error
 	 */
 	private async uploadAvatar(
-		options: APIHandlerOptions,
+		options: APIHandlerOptions<{ body: UploadBody; user: { id: number } }>,
 	): Promise<APIHandlerResponse> {
 		try {
-			const { request } = options;
+			const { body, user } = options;
+			const { buffer, filename, mimetype, size } = body.file;
 
-			const file = await request.file();
+			this.userAvatarService.validate(mimetype, size);
 
-			if (!file) {
+			const { key, url } = await this.userAvatarService.uploadAvatar({
+				buffer,
+				filename,
+				mimetype,
+				userId: user.id,
+			});
+
+			const detailsId = await this.userService.getOrCreateDetailsId(user.id);
+
+			if (!detailsId) {
 				return {
-					payload: {
-						error: "Bad Request",
-						message: "No file uploaded",
-					},
-					status: HTTPCode.BAD_REQUEST,
+					payload: { error: "Not Found", message: "User details not found" },
+					status: HTTPCode.NOT_FOUND,
 				};
 			}
 
-			if (!this.userAvatarService.isValidFileType(file.mimetype)) {
-				return {
-					payload: {
-						error: "Bad Request",
-						message:
-							"Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed",
-					},
-					status: HTTPCode.BAD_REQUEST,
-				};
-			}
-
-			const fileBuffer = await file.toBuffer();
-
-			const result = await this.userAvatarService.uploadAvatar({
-				buffer: fileBuffer,
-				filename: file.filename,
-				mimetype: file.mimetype,
+			await this.fileService.replaceAvatarRecord({
+				key,
+				url,
+				user_details_id: detailsId,
 			});
 
 			return {
-				payload: {
-					data: result,
-					success: true,
-				},
+				payload: { data: { key, url }, success: true },
 				status: HTTPCode.CREATED,
 			};
 		} catch {

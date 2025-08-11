@@ -1,10 +1,6 @@
 import { type Entity } from "~/libs/types/types.js";
 
 class UserEntity implements Entity {
-	private avatarKey: null | string;
-
-	private avatarUrl: null | string;
-
 	private email: string;
 
 	private id: null | number;
@@ -14,15 +10,11 @@ class UserEntity implements Entity {
 	private passwordSalt: string;
 
 	private constructor({
-		avatarKey,
-		avatarUrl,
 		email,
 		id,
 		passwordHash,
 		passwordSalt,
 	}: {
-		avatarKey?: null | string | undefined;
-		avatarUrl?: null | string | undefined;
 		email: string;
 		id: null | number;
 		passwordHash: string;
@@ -32,28 +24,20 @@ class UserEntity implements Entity {
 		this.email = email;
 		this.passwordHash = passwordHash;
 		this.passwordSalt = passwordSalt;
-		this.avatarKey = avatarKey ?? null;
-		this.avatarUrl = avatarUrl ?? null;
 	}
 
 	public static initialize({
-		avatarKey,
-		avatarUrl,
 		email,
 		id,
 		passwordHash,
 		passwordSalt,
 	}: {
-		avatarKey?: null | string;
-		avatarUrl?: null | string;
 		email: string;
 		id: number;
 		passwordHash: string;
 		passwordSalt: string;
 	}): UserEntity {
 		return new UserEntity({
-			avatarKey,
-			avatarUrl,
 			email,
 			id,
 			passwordHash,
@@ -91,14 +75,10 @@ class UserEntity implements Entity {
 	}
 
 	public toObject(): {
-		avatarKey: null | string;
-		avatarUrl: null | string;
 		email: string;
 		id: number;
 	} {
 		return {
-			avatarKey: this.avatarKey,
-			avatarUrl: this.avatarUrl,
 			email: this.email,
 			id: this.id as number,
 		};

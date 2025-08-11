@@ -101,6 +101,13 @@
 					"Fn::Sub": "InstanceId-${AWS::StackName}"
 				}
 			}
+		},
+		"InstancePublicDns": {
+			"Description": "Public DNS of the EC2 instance",
+			"Value": { "Fn::GetAtt": ["EC2Instance", "PublicDnsName"] },
+			"Export": {
+				"Name": { "Fn::Sub": "InstancePublicDns-${AWS::StackName}" }
+			}
 		}
 	}
 }

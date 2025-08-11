@@ -8,7 +8,7 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
-import { UsersApiPath } from "./libs/enums/enums.js";
+import { HTTPMethod, UsersApiPath } from "./libs/enums/enums.js";
 import {
 	type UserGetAllResponseDto,
 	type UserResponseDto,
@@ -39,13 +39,13 @@ class UserController extends BaseController {
 
 		this.addRoute({
 			handler: () => this.findAll(),
-			method: "GET",
+			method: HTTPMethod.GET,
 			path: UsersApiPath.ROOT,
 		});
 
 		this.addRoute({
 			handler: (options) => this.getCurrentUser(options),
-			method: "GET",
+			method: HTTPMethod.GET,
 			path: UsersApiPath.ME,
 		});
 
@@ -57,7 +57,7 @@ class UserController extends BaseController {
 						user: UserResponseDto;
 					}>,
 				),
-			method: "PATCH",
+			method: HTTPMethod.PUT,
 			path: UsersApiPath.ME,
 		});
 	}

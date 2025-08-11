@@ -1,8 +1,7 @@
-import { type ValueOf } from "@meetlytic/shared";
-
 import PlaceholderAvatar from "~/assets/img/meeting-placeholder.svg";
 import { Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/app-route.enum.js";
+import { type ValueOf } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 

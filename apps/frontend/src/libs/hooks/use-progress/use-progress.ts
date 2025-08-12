@@ -25,7 +25,7 @@ const useProgress = (
 		} else {
 			if (isFirstMount) {
 				setProgress(LoaderProgressConfig.START);
-			} else if (hasPreviousLoadingReference.current === true) {
+			} else if (hasPreviousLoadingReference.current) {
 				setProgress(LoaderProgressConfig.MAX);
 				timeout = setTimeout(() => {
 					setProgress(LoaderProgressConfig.START);

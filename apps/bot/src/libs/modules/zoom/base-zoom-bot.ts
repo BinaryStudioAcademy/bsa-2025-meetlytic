@@ -6,7 +6,11 @@ import {
 	TIMEOUTS,
 	USER_AGENT,
 } from "~/libs/constants/constants.js";
-import { ZoomBotMessages, ZoomUILabel } from "~/libs/enums/enums.js";
+import {
+	KeyboardKey,
+	ZoomBotMessages,
+	ZoomUILabel,
+} from "~/libs/enums/enums.js";
 import { delay } from "~/libs/helpers/helpers.js";
 import {
 	type AudioRecorder,
@@ -73,7 +77,7 @@ class BaseZoomBot {
 				timeout: TIMEOUTS.FIVE_SECONDS,
 			});
 			await this.page.click(ZoomUILabel.INPUT_PASSWORD, { clickCount: 3 });
-			await this.page.keyboard.press("Backspace");
+			await this.page.keyboard.press(KeyboardKey.BACKSPACE);
 
 			let password = this.config.ENV.ZOOM.MEETING_PASSWORD;
 

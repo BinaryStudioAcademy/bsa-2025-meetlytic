@@ -21,9 +21,7 @@ const Layout: React.FC = () => {
 				</Sidebar>
 			</div>
 
-			<main className={styles["layout__main"]}>
-				<RouterOutlet />
-			</main>
+			<main className={styles["layout__main"]}>{<RouterOutlet />}</main>
 		</div>
 	);
 };

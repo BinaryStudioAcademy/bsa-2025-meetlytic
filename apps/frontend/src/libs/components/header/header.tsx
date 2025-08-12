@@ -46,7 +46,7 @@ const Header: React.FC = () => {
 					<Logo hasLink size={LogoSize.SMALL} theme={LogoTheme.LIGHT} />
 				</div>
 				<div className={styles["header__avatar-logout-wrapper"]}>
-					<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
+					<Avatar size={AvatarSize.MOBILE} type={AvatarType.MAIN} />
 					<Button
 						iconLeft={
 							<Icon className={styles["header__logout-icon"]} name="logout" />

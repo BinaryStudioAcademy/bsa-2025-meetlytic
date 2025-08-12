@@ -168,6 +168,27 @@ class ZoomBot {
 				this.logger.info(ZoomBotMessages.ONLY_ONE_PARTICIPANT_DETECTED);
 				this.audioRecorder.stop();
 				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
+				await this.audioRecorder.stopFull();
+
+				const meetingId = this.config.ENV.ZOOM.MEETING_ID;
+				const prefix = this.config.ENV.S3.PREFIX_AUDIO
+					? `${this.config.ENV.S3.PREFIX_AUDIO}/${meetingId}`
+					: `meetings/${meetingId}`;
+				const contentType = "audio/mpeg";
+				const result = await this.audioRecorder.finalize({
+					contentType,
+					meetingId,
+					prefix,
+				});
+
+				if (result.s3) {
+					this.logger.info(
+						`[S3] Uploaded: key=${result.s3.key} version=${String(result.s3.versionId)} etag=${String(result.s3.etag)}`,
+					);
+				}
+
+				this.shouldMonitor = false;
+				break;
 			}
 
 			await delay(TIMEOUTS.FIFTEEN_SECONDS);
@@ -196,6 +217,10 @@ class ZoomBot {
 			await delay(TIMEOUTS.FIVE_SECONDS);
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
 			this.audioRecorder.start();
+
+			const meetingId = this.config.ENV.ZOOM.MEETING_ID;
+			this.audioRecorder.startFull(meetingId);
+
 			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
 			await this.monitorParticipants();
 		} catch (error) {

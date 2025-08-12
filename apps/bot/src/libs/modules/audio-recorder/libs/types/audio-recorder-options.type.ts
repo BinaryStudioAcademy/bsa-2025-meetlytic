@@ -1,4 +1,4 @@
-import { type Logger, type OpenAI } from "~/libs/types/types.js";
+import { type Logger, type OpenAI, type S3 } from "~/libs/types/types.js";
 
 type AudioRecorderOptions = {
 	chunkDuration: number;
@@ -6,6 +6,7 @@ type AudioRecorderOptions = {
 	logger: Logger;
 	openAI: OpenAI;
 	outputDir: string;
+	s3: S3;
 };
 
 export { type AudioRecorderOptions };

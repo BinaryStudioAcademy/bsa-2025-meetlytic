@@ -1,4 +1,7 @@
 const ParameterKey = {
+	AWS_ACCESS_KEY_ID: "AWSAccessKeyId",
+	AWS_REGION: "AWSRegion",
+	AWS_SECRET_ACCESS_KEY: "AWSSecretAccessKey",
 	BOT_NAME: "BotName",
 	IMAGE_ID: "ImageId",
 	MEETING_ID: "MeetingId",

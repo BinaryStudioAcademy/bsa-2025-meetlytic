@@ -35,11 +35,14 @@ type Constructor = {
 };
 
 class BaseCloudFormation implements CloudFormation {
+	private accessKeyId: string;
 	private botName: string;
 	private client: CloudFormationClient;
 	private imageId: string;
 	private logger: Logger;
 	private openAIKey: string;
+	private region: string;
+	private secretAccessKey: string;
 	private textGenerationModel: string;
 	private transcriptionModel: string;
 
@@ -56,6 +59,9 @@ class BaseCloudFormation implements CloudFormation {
 		this.imageId = imageId;
 		this.logger = logger;
 		this.botName = botName;
+		this.accessKeyId = credentials.accessKeyId;
+		this.secretAccessKey = credentials.secretAccessKey;
+		this.region = region;
 		this.client = new CloudFormationClient({
 			credentials,
 			region,
@@ -98,6 +104,18 @@ class BaseCloudFormation implements CloudFormation {
 			const command = new CreateStackCommand({
 				Capabilities: [Capability.NAMED_IAM],
 				Parameters: [
+					{
+						ParameterKey: ParameterKey.AWS_ACCESS_KEY_ID,
+						ParameterValue: this.accessKeyId,
+					},
+					{
+						ParameterKey: ParameterKey.AWS_REGION,
+						ParameterValue: this.region,
+					},
+					{
+						ParameterKey: ParameterKey.AWS_SECRET_ACCESS_KEY,
+						ParameterValue: this.secretAccessKey,
+					},
 					{ ParameterKey: ParameterKey.BOT_NAME, ParameterValue: this.botName },
 					{ ParameterKey: ParameterKey.IMAGE_ID, ParameterValue: this.imageId },
 					{ ParameterKey: ParameterKey.MEETING_ID, ParameterValue: String(id) },

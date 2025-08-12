@@ -1,6 +1,18 @@
 {
 	"AWSTemplateFormatVersion": "2010-09-09",
 	"Parameters": {
+		"AWSAccessKeyId": {
+			"Type": "Sting",
+			"Description": "aws access key id"
+		},
+		"AWSRegion": {
+			"Type": "String",
+			"Description": "aws region"
+		},
+		"AWSSecretAccessKey": {
+			"Type": "Sting",
+			"Description": "aws secret access key"
+		},
 		"BotName": {
 			"Type": "String",
 			"Description": "Bot name"
@@ -60,8 +72,17 @@
 				"UserData": {
 					"Fn::Base64": {
 						"Fn::Sub": [
-							"#!/bin/bash\n sudo apt update -y\n sudo apt install -y git\n cd /home/ubuntu\ngit clone --branch 44-feat-record-audio-from-ec2 https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic.git\nsudo chown -R ubuntu:ubuntu /home/ubuntu/bsa-2025-meetlytic\ncd bsa-2025-meetlytic\nbash ./apps/bot/setup-ec2.sh ${BotName} ${MeetingId} ${MeetingPassword} ${OpenAIKey} ${TextGenerationModel} ${TranscriptionModel}",
+							"#!/bin/bash\n sudo apt update -y\n sudo apt install -y git\n cd /home/ubuntu\ngit clone --branch 44-feat-record-audio-from-ec2 https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic.git\nsudo chown -R ubuntu:ubuntu /home/ubuntu/bsa-2025-meetlytic\ncd bsa-2025-meetlytic\nbash ./apps/bot/setup-ec2.sh ${BotName} ${MeetingId} ${MeetingPassword} ${OpenAIKey} ${TextGenerationModel} ${TranscriptionModel} ${AWSRegion} ${AWSSecretAccessKey} ${AWSAccessKeyId}",
 							{
+								"AWSAccessKeyId": {
+									"Ref": "AWSAccessKeyId"
+								},
+								"AWSRegion": {
+									"Ref": "AWSRegion"
+								},
+								"AWSSecretAccessKey": {
+									"Ref": "AWSSecretAccessKey"
+								},
 								"BotName": {
 									"Ref": "BotName"
 								},

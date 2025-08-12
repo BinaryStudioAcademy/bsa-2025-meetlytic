@@ -50,6 +50,26 @@ class BaseConfig implements Config {
 					format: String,
 				},
 			},
+			AWS: {
+				ACCESS_KEY_ID: {
+					default: null,
+					doc: "AWS Access Key ID",
+					env: "AWS_ACCESS_KEY_ID",
+					format: String,
+				},
+				REGION: {
+					default: null,
+					doc: "AWS Region",
+					env: "AWS_REGION",
+					format: String,
+				},
+				SECRET_ACCESS_KEY: {
+					default: null,
+					doc: "AWS Secret Access Key",
+					env: "AWS_SECRET_ACCESS_KEY",
+					format: String,
+				},
+			},
 			OPEN_AI: {
 				KEY: {
 					default: null,
@@ -67,6 +87,20 @@ class BaseConfig implements Config {
 					default: null,
 					doc: "OpenAI transcription model",
 					env: "TRANSCRIPTION_MODEL",
+					format: String,
+				},
+			},
+			S3: {
+				BUCKET_NAME: {
+					default: null,
+					doc: "S3 Bucket Name",
+					env: "S3_BUCKET_NAME",
+					format: String,
+				},
+				PREFIX_AUDIO: {
+					default: null,
+					doc: "S3 Prefix for audio files",
+					env: "S3_PREFIX_AUDIO",
 					format: String,
 				},
 			},

@@ -52,10 +52,7 @@ class UserRepository implements Repository {
 		return user ? UserEntity.initialize(user) : null;
 	}
 
-	public async findByIdWithDetails(id: number): Promise<null | {
-		details: null | UserDetailsEntity;
-		user: UserEntity;
-	}> {
+	public async findByIdWithDetails(id: number): Promise<null | UserEntity> {
 		const userWithDetails = await this.userModel
 			.query()
 			.findById(id)
@@ -65,21 +62,18 @@ class UserRepository implements Repository {
 			return null;
 		}
 
-		const user = UserEntity.initialize({
+		return UserEntity.initialize({
+			details: UserDetailsEntity.initialize({
+				firstName: userWithDetails.userDetails.firstName,
+				id: userWithDetails.userDetails.id,
+				lastName: userWithDetails.userDetails.lastName,
+				userId: userWithDetails.userDetails.userId,
+			}),
 			email: userWithDetails.email,
 			id: userWithDetails.id,
 			passwordHash: userWithDetails.passwordHash,
 			passwordSalt: userWithDetails.passwordSalt,
 		});
-
-		const details = UserDetailsEntity.initialize({
-			firstName: userWithDetails.userDetails.firstName,
-			id: userWithDetails.userDetails.id,
-			lastName: userWithDetails.userDetails.lastName,
-			userId: userWithDetails.userDetails.userId,
-		});
-
-		return { details, user };
 	}
 
 	public async getCredentials(id: number): Promise<null | UserCredentials> {

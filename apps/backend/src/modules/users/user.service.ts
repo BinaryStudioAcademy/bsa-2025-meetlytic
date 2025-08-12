@@ -107,17 +107,20 @@ class UserService implements Service {
 	public async update(
 		userId: number,
 		payload: UserUpdateResponseDto,
-	): Promise<UserWithDetailsDto> {
-		const result = await this.userRepository.findByIdWithDetails(userId);
+	): Promise<null | UserEntity> {
+		const user = await this.userRepository.findByIdWithDetails(userId);
+		const details = user?.getDetails();
 
-		if (!result) {
+		if (!user) {
 			throw new UserError({
 				message: UserErrorMessage.USER_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
-		const { details, user } = result;
+		if (!details) {
+			return null;
+		}
 
 		if (payload.email !== user.toObject().email) {
 			const userWithEmail = await this.userRepository.findByEmail(
@@ -136,19 +139,14 @@ class UserService implements Service {
 			});
 		}
 
-		if (details) {
-			await this.userDetailsRepository.update(details.toObject().id, {
-				firstName: payload.firstName ?? details.toObject().firstName,
-				lastName: payload.lastName ?? details.toObject().lastName,
-			});
-		}
+		await this.userDetailsRepository.update(details.toObject().id, {
+			firstName: payload.firstName,
+			lastName: payload.lastName,
+		});
 
-		return {
-			email: payload.email,
-			firstName: payload.firstName ?? details?.toObject().firstName ?? "",
-			id: user.toObject().id,
-			lastName: payload.lastName ?? details?.toObject().lastName ?? "",
-		};
+		const updatedUser = await this.userRepository.findByIdWithDetails(userId);
+
+		return updatedUser;
 	}
 }
 

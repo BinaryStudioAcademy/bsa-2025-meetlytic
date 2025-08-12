@@ -1,0 +1,29 @@
+.cta {
+	display: flex;
+	align-items: center;
+	min-height: 530px;
+	padding: 20px;
+	color: var(--color-text-3);
+	text-align: center;
+}
+
+.cta__inner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	max-width: 980px;
+	margin: 0 auto;
+}
+
+.cta__title {
+	margin: 0 0 28px;
+	font-family: var(--second-font-family);
+	font-size: 48px;
+	font-weight: 700;
+	line-height: 1.46;
+}
+
+.cta__button {
+	min-width: 213px;
+	height: 48px;
+}

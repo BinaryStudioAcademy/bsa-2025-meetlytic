@@ -20,3 +20,4 @@ const s3 = new BaseS3({
 
 export { s3 };
 export { type S3 } from "./libs/types/types.js";
+export { type UploadResult } from "./libs/types/types.js";

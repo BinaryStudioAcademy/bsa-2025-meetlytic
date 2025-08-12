@@ -35,19 +35,22 @@ class BaseS3 {
 		this.client = new S3Client({ credentials, region });
 	}
 
-	private buildKey(prefix: string, fileName: string): string {
-		const p = this.normalize(prefix);
-		const f = this.normalize(fileName);
-		const encodedName = f
+	private buildKey(folderPrefix: string, originalFileName: string): string {
+		const normalizedPrefix = this.normalizePathSegment(folderPrefix);
+		const normalizedFileName = this.normalizePathSegment(originalFileName);
+
+		const encodedFileName = normalizedFileName
 			.split("/")
-			.map((segment) => encodeURIComponent(segment))
+			.map((pathSegment) => encodeURIComponent(pathSegment))
 			.join("/");
 
-		return p ? `${p}/${encodedName}` : encodedName;
+		return normalizedPrefix
+			? `${normalizedPrefix}/${encodedFileName}`
+			: encodedFileName;
 	}
 
-	private normalize(s: string = ""): string {
-		return s.replaceAll("\\", "/").split("/").filter(Boolean).join("/");
+	private normalizePathSegment(inputPath: string = ""): string {
+		return inputPath.replaceAll("\\", "/").split("/").filter(Boolean).join("/");
 	}
 
 	public async delete(parameters: S3KeyParameters): Promise<void> {
@@ -60,23 +63,23 @@ class BaseS3 {
 	}
 
 	public async upload(parameters: UploadParameters): Promise<UploadResult> {
-		const key = this.buildKey(parameters.prefix, parameters.fileName);
+		const objectKey = this.buildKey(parameters.prefix, parameters.fileName);
 
-		this.logger.info(`[S3] PUT s3://${this.bucketName}/${key}`);
+		this.logger.info(`[S3] PUT s3://${this.bucketName}/${objectKey}`);
 
-		const out: PutObjectCommandOutput = await this.client.send(
+		const uploadResultAws: PutObjectCommandOutput = await this.client.send(
 			new PutObjectCommand({
 				Body: parameters.body,
 				Bucket: this.bucketName,
 				ContentType: parameters.contentType ?? "audio/mpeg",
-				Key: key,
+				Key: objectKey,
 			}),
 		);
 
 		return {
-			etag: out.ETag ?? undefined,
-			key,
-			versionId: out.VersionId ?? undefined,
+			etag: uploadResultAws.ETag ?? undefined,
+			key: objectKey,
+			versionId: uploadResultAws.VersionId ?? undefined,
 		};
 	}
 }

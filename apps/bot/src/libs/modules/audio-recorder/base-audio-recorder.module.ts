@@ -1,10 +1,9 @@
 import { type ChildProcessWithoutNullStreams, spawn } from "node:child_process";
-import { mkdirSync } from "node:fs";
+import { accessSync, mkdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 
 import { TIMEOUTS } from "~/libs/constants/constants.js";
-//mport { delay } from "~/libs/helpers/helpers.js";
-import { type UploadResult } from "~/libs/modules/s3/libs/types/types.js";
+import { type UploadResult } from "~/libs/modules/s3/s3.js";
 import { type Logger, type OpenAI, type S3 } from "~/libs/types/types.js";
 
 import { AudioRecorderEvent } from "./libs/enums/enums.js";
@@ -19,7 +18,7 @@ class BaseAudioRecorder implements AudioRecorder {
 	private chunkDuration: number;
 	private ffmpegPath: string;
 	private fullPath: null | string = null;
-	private fullProc: ChildProcessWithoutNullStreams | null = null;
+	private fullRecordingProccess: ChildProcessWithoutNullStreams | null = null;
 	private isRecording = false;
 	private logger: Logger;
 	private openAI: OpenAI;
@@ -136,12 +135,10 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		const extension = this.useMp3 ? "mp3" : "wav";
 		const expectedName = `${options.meetingId}-audio.${extension}`;
-		const outPath = this.fullPath ?? path.join(this.outputDir, expectedName);
-
-		const fs = await import("node:fs/promises");
+		const filePath = this.fullPath ?? path.join(this.outputDir, expectedName);
 
 		try {
-			await fs.access(outPath);
+			accessSync(filePath);
 		} catch {
 			throw new Error("[finalize] full-session file not found");
 		}
@@ -150,10 +147,10 @@ class BaseAudioRecorder implements AudioRecorder {
 		const contentType = options.contentType;
 
 		this.logger.info(
-			`[S3] Uploading ${outPath} -> s3://${prefix}/${expectedName}`,
+			`[S3] Uploading ${filePath} -> s3://${prefix}/${expectedName}`,
 		);
 
-		const buffer = await fs.readFile(outPath);
+		const buffer = readFileSync(filePath);
 
 		const uploaded: UploadResult = await this.s3.upload({
 			body: buffer,
@@ -163,7 +160,7 @@ class BaseAudioRecorder implements AudioRecorder {
 		});
 
 		return {
-			localPath: outPath,
+			localPath: filePath,
 			s3: uploaded,
 		};
 	}
@@ -185,8 +182,8 @@ class BaseAudioRecorder implements AudioRecorder {
 		this.recordNextChunk();
 	}
 
-	public startFull(meetingId: string): void {
-		if (this.fullProc) {
+	public startFullMeetingRecording(meetingId: string): void {
+		if (this.fullRecordingProccess) {
 			this.logger.warn("[full] already running, ignore startFull()");
 
 			return;
@@ -220,9 +217,9 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		this.logger.info(`[full] start -> ${this.fullPath}`);
 
-		this.fullProc = spawn(this.ffmpegPath, ffmpegArguments);
+		this.fullRecordingProccess = spawn(this.ffmpegPath, ffmpegArguments);
 
-		this.fullProc.stderr.on(AudioRecorderEvent.DATA, (data) => {
+		this.fullRecordingProccess.stderr.on(AudioRecorderEvent.DATA, (data) => {
 			const lines = String(data)
 				.trim()
 				.split("\n")
@@ -241,26 +238,28 @@ class BaseAudioRecorder implements AudioRecorder {
 		this.isRecording = false;
 	}
 
-	public async stopFull(): Promise<void> {
-		if (!this.fullProc) {
+	public async stopFullMeetingRecording(): Promise<void> {
+		if (!this.fullRecordingProccess) {
 			return;
 		}
 
 		try {
-			this.fullProc.stdin.write("q");
+			this.fullRecordingProccess.stdin.write("q");
 		} catch {
-			this.fullProc.kill("SIGINT");
+			this.fullRecordingProccess.kill("SIGINT");
 		}
 
 		await Promise.race([
-			new Promise<void>((resolve) => this.fullProc?.once("exit", resolve)),
+			new Promise<void>((resolve) =>
+				this.fullRecordingProccess?.once("exit", resolve),
+			),
 			new Promise<void>((resolve) =>
 				setTimeout(resolve, TIMEOUTS.FIVE_SECONDS),
 			),
 		]);
 
 		this.logger.info("[-] Full recording stopped by caller");
-		this.fullProc = null;
+		this.fullRecordingProccess = null;
 	}
 }
 

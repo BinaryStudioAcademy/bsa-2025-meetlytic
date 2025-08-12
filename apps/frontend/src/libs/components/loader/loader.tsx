@@ -6,15 +6,15 @@ import { CircularProgress } from "./libs/comnponents/circular-progress/circular-
 import styles from "./styles.module.css";
 
 type Properties = {
+	hasOverlay?: boolean;
 	isLoading: boolean;
 	loaderClassName?: string;
-	withOverlay?: boolean;
 };
 
 const Loader: React.FC<Properties> = ({
+	hasOverlay = false,
 	isLoading,
 	loaderClassName,
-	withOverlay = false,
 }: Properties) => {
 	const progress = useProgress(isLoading);
 
@@ -23,9 +23,7 @@ const Loader: React.FC<Properties> = ({
 	}
 
 	return (
-		<div
-			className={getValidClassNames(withOverlay && styles["loader-overlay"])}
-		>
+		<div className={getValidClassNames(hasOverlay && styles["loader-overlay"])}>
 			<div
 				className={getValidClassNames(
 					styles["loader"],

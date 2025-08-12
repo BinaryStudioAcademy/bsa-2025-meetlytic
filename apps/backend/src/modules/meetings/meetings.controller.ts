@@ -129,14 +129,14 @@ class MeetingsController extends BaseController {
 		this.addRoute({
 			handler: (options) => this.getPublicUrl(options as GetPublicUrlOptions),
 			method: HTTPMethod.GET,
-			path: MeetingsApiPath.$ID_PUBLIC_URL,
+			path: MeetingsApiPath.$ID_URL,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 		this.addRoute({
 			handler: (options) =>
 				this.findBySignedUrl(options as FindBySignedUrlOptions),
 			method: HTTPMethod.GET,
-			path: MeetingsApiPath.$ID_TOKEN,
+			path: MeetingsApiPath.$ID_PUBLIC,
 		});
 	}
 

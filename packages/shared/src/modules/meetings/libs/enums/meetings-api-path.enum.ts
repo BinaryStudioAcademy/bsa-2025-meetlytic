@@ -1,7 +1,7 @@
 const MeetingsApiPath = {
 	$ID: "/:id",
-	$ID_PUBLIC_URL: "/:id/url",
-	$ID_TOKEN: "/:id/token",
+	$ID_PUBLIC: "/:id/public",
+	$ID_URL: "/:id/url",
 	ROOT: "/",
 } as const;
 

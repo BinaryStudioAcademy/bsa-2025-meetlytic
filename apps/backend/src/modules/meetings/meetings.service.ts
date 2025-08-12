@@ -167,16 +167,8 @@ class MeetingService implements Service<MeetingResponseDto> {
 	public async getPublicUrl(
 		id: number,
 	): Promise<MeetingGetPublicUrlResponseDto> {
-		const meeting = await this.meetingRepository.find(id);
-
-		if (!meeting) {
-			throw new MeetingError({
-				message: MeetingErrorMessage.MEETING_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		const token = await this.sharedJwt.sign({ meetingId: id });
+		const meeting = await this.find(id);
+		const token = await this.sharedJwt.sign({ meetingId: meeting.id });
 
 		return {
 			publicUrl: `${APIPath.PUBLIC_MEETINGS}/${String(id)}?token=${token}`,

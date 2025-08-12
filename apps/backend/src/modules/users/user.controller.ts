@@ -10,7 +10,7 @@ import { type UserService } from "~/modules/users/user.service.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
 import {
-	type UserGetAllResponseDto,
+	type UserGetAllItemResponseDto,
 	type UserResponseDto,
 	type UserUpdateResponseDto,
 } from "./libs/types/types.js";
@@ -47,7 +47,7 @@ class UserController extends BaseController {
 			handler: (options) =>
 				this.getCurrentUser(
 					options as APIHandlerOptions<{
-						user: UserGetAllResponseDto["items"][number];
+						user: UserGetAllItemResponseDto;
 					}>,
 				),
 			method: HTTPMethod.GET,
@@ -107,9 +107,9 @@ class UserController extends BaseController {
 	private async getCurrentUser({
 		user,
 	}: APIHandlerOptions<{
-		user: UserGetAllResponseDto["items"][number];
+		user: UserGetAllItemResponseDto;
 	}>): Promise<APIHandlerResponse> {
-		const currentUser = user as UserGetAllResponseDto["items"][number];
+		const currentUser = user as UserGetAllItemResponseDto;
 
 		const fullUser = await this.userService.findProfileByEmail(
 			currentUser.email,
@@ -160,9 +160,9 @@ class UserController extends BaseController {
 		body: UserUpdateResponseDto;
 		user: UserResponseDto;
 	}>): Promise<APIHandlerResponse> {
-		const userDefined = user as UserResponseDto;
+		const definedUser = user as UserResponseDto;
 
-		const updatedUser = await this.userService.update(userDefined.id, body);
+		const updatedUser = await this.userService.update(definedUser.id, body);
 
 		return {
 			payload: updatedUser,

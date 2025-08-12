@@ -7,13 +7,13 @@ const useProgress = (
 	intervalMs = LoaderProgressConfig.INTERVAL_MS,
 ): number => {
 	const [progress, setProgress] = useState<number>(LoaderProgressConfig.START);
-	const previousLoadingReference = useRef<boolean | null>(null);
+	const hasPreviousLoadingReference = useRef<boolean | null>(null);
 
 	useEffect(() => {
 		let interval: null | ReturnType<typeof setInterval> = null;
 		let timeout: null | ReturnType<typeof setTimeout> = null;
 
-		const isFirstMount = previousLoadingReference.current === null;
+		const isFirstMount = hasPreviousLoadingReference.current === null;
 
 		if (isLoading) {
 			setProgress(LoaderProgressConfig.START);
@@ -25,7 +25,7 @@ const useProgress = (
 		} else {
 			if (isFirstMount) {
 				setProgress(LoaderProgressConfig.START);
-			} else if (previousLoadingReference.current === true) {
+			} else if (hasPreviousLoadingReference.current === true) {
 				setProgress(LoaderProgressConfig.MAX);
 				timeout = setTimeout(() => {
 					setProgress(LoaderProgressConfig.START);
@@ -35,7 +35,7 @@ const useProgress = (
 			}
 		}
 
-		previousLoadingReference.current = isLoading;
+		hasPreviousLoadingReference.current = isLoading;
 
 		return (): void => {
 			if (interval) {

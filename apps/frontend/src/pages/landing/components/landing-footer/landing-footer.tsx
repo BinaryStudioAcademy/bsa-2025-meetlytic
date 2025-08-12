@@ -38,7 +38,7 @@ const LandingFooter: React.FC<Properties> = ({ className }: Properties) => {
 				<p className={styles["landing-footer__copyright"]}>
 					Copyright © {year}{" "}
 					<Link className={styles["landing-footer__link"]} to={AppRoute.ROOT}>
-						Company name
+						Meetlytic
 					</Link>
 				</p>
 			</div>

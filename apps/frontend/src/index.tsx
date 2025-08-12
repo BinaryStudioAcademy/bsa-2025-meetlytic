@@ -16,6 +16,7 @@ import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFoundPage } from "~/pages/not-found/not-found.js";
 
+import { MeetingDetails } from "./pages/meeting-details/meeting-details.js";
 import { Meetings } from "./pages/meetings/meetings.js";
 
 createRoot(document.querySelector("#root") as HTMLElement).render(
@@ -36,6 +37,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 						children: [
 							{
 								children: [
+									{
+										element: <MeetingDetails />,
+										path: AppRoute.MEETINGS_$ID,
+									},
 									{
 										element: <Meetings />,
 										path: AppRoute.MEETINGS,

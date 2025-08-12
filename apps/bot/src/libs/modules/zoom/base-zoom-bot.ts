@@ -113,6 +113,20 @@ class BaseZoomBot {
 		return rawPasscode?.replace(/^\d/, "") || "";
 	}
 
+	private getMeetingId(): string {
+		const ONE = 1;
+
+		const url = new URL(this.config.ENV.ZOOM.MEETING_LINK);
+		const meetingIdRegex = /\/(?:wc\/join|j)\/(\d+)/;
+		const regexMatchArray = meetingIdRegex.exec(url.pathname);
+
+		if (regexMatchArray?.[ONE]) {
+			return regexMatchArray[ONE];
+		}
+
+		return "unknown";
+	}
+
 	private async getParticipantsCount(): Promise<number> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
@@ -235,6 +249,7 @@ class BaseZoomBot {
 				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
 				await this.leaveMeeting();
 				this.shouldMonitor = false;
+				break;
 			}
 
 			await delay(TIMEOUTS.FIFTEEN_SECONDS);
@@ -242,6 +257,8 @@ class BaseZoomBot {
 	}
 
 	public async run(): Promise<void> {
+		const meetingId = this.getMeetingId();
+
 		try {
 			this.browser = await puppeteer.launch(this.config.getLaunchOptions());
 			this.page = await this.browser.newPage();
@@ -266,10 +283,26 @@ class BaseZoomBot {
 			});
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
 			this.audioRecorder.start();
-
+			this.audioRecorder.startFullMeetingRecording(meetingId);
 			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
 			await delay(TIMEOUTS.FIFTEEN_SECONDS);
 			await this.monitorParticipants();
+
+			const audioPrefix = this.config.ENV.S3.PREFIX_AUDIO;
+			const prefix = `${audioPrefix}/${meetingId}`;
+			await this.audioRecorder.stopFullMeetingRecording();
+			const contentType = "audio/mpeg";
+			const result = await this.audioRecorder.finalize({
+				contentType,
+				meetingId,
+				prefix,
+			});
+
+			if (result.s3) {
+				this.logger.info(
+					`[S3] Uploaded: key=${result.s3.key} version=${String(result.s3.versionId)} etag=${String(result.s3.etag)}`,
+				);
+			}
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessages.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,

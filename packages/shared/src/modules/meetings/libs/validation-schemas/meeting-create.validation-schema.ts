@@ -1,7 +1,6 @@
 import { z } from "zod";
 
-const PATH_REGEX = /^\/(j|wc\/join)\/(\d{9,11})$/;
-
+import { isZoomLink } from "../../../../libs/helpers/helpers.js";
 import { type ValueOf } from "../../../../libs/types/types.js";
 import {
 	MeetingHost,
@@ -27,28 +26,11 @@ const meetingCreate = z
 			),
 		meetingLink: z
 			.string()
-			.nonempty("Zoom meeting link is required")
+			.nonempty(MeetingValidationMessage.ZOOM_LINK_REQUIRE)
 			.url()
-			.refine(
-				(url) => {
-					try {
-						const parsedUrl = new URL(url);
-
-						if (!parsedUrl.hostname.endsWith("zoom.us")) {
-							return false;
-						}
-
-						const match = PATH_REGEX.exec(parsedUrl.pathname);
-
-						return match !== null;
-					} catch {
-						return false;
-					}
-				},
-				{
-					message: "Invalid Zoom meeting link",
-				},
-			),
+			.refine(isZoomLink, {
+				message: MeetingValidationMessage.ZOOM_LINK_INVALID,
+			}),
 		meetingPassword: z.string().nullable().optional(),
 	})
 	.required();

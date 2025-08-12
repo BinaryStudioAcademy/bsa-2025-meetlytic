@@ -1,4 +1,4 @@
-const ProgressConfig = {
+const LoaderProgressConfig = {
 	CIRCLE_RADIUS_MULTIPLIER: 2,
 	FAKE_LIMIT: 90,
 	INTERVAL_MS: 200,
@@ -9,4 +9,4 @@ const ProgressConfig = {
 	STEP: 5,
 } as const;
 
-export { ProgressConfig };
+export { LoaderProgressConfig };

@@ -1,12 +1,12 @@
-import { ProgressConfig } from "~/libs/enums/enums.js";
+import { LoaderProgressConfig } from "~/libs/enums/enums.js";
 import { useEffect, useRef, useState } from "~/libs/hooks/hooks.js";
 
 const useProgress = (
 	isLoading: boolean,
-	step = ProgressConfig.STEP,
-	intervalMs = ProgressConfig.INTERVAL_MS,
+	step = LoaderProgressConfig.STEP,
+	intervalMs = LoaderProgressConfig.INTERVAL_MS,
 ): number => {
-	const [progress, setProgress] = useState<number>(ProgressConfig.START);
+	const [progress, setProgress] = useState<number>(LoaderProgressConfig.START);
 	const previousLoadingReference = useRef<boolean | null>(null);
 
 	useEffect(() => {
@@ -16,20 +16,22 @@ const useProgress = (
 		const isFirstMount = previousLoadingReference.current === null;
 
 		if (isLoading) {
-			setProgress(ProgressConfig.START);
+			setProgress(LoaderProgressConfig.START);
 			interval = setInterval(() => {
-				setProgress((p) => (p < ProgressConfig.FAKE_LIMIT ? p + step : p));
+				setProgress((p) =>
+					p < LoaderProgressConfig.FAKE_LIMIT ? p + step : p,
+				);
 			}, intervalMs);
 		} else {
 			if (isFirstMount) {
-				setProgress(ProgressConfig.START);
+				setProgress(LoaderProgressConfig.START);
 			} else if (previousLoadingReference.current === true) {
-				setProgress(ProgressConfig.MAX);
+				setProgress(LoaderProgressConfig.MAX);
 				timeout = setTimeout(() => {
-					setProgress(ProgressConfig.START);
-				}, ProgressConfig.RESET_DELAY_MS);
+					setProgress(LoaderProgressConfig.START);
+				}, LoaderProgressConfig.RESET_DELAY_MS);
 			} else {
-				setProgress(ProgressConfig.START);
+				setProgress(LoaderProgressConfig.START);
 			}
 		}
 

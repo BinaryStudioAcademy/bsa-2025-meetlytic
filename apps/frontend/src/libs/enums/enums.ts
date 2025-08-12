@@ -7,10 +7,10 @@ export { ButtonVariant } from "./button-variant.enum.js";
 export { DataStatus } from "./data-status.enum.js";
 export { InputPasswordType } from "./input-password.enum.js";
 export { KeyboardKey } from "./keyboard-key.enum.js";
+export { LoaderProgressConfig } from "./loader-progress-config.enum.js";
 export { LogoSize } from "./logo-size.enum.js";
 export { LogoTheme } from "./logo-theme.enum.js";
 export { NotificationMessage } from "./notification-massage.enum.js";
-export { ProgressConfig } from "./progress-config.enum.js";
 export { SearchDebounceDelay } from "./search-debounce-delay.enum.js";
 export {
 	APIPath,

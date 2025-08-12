@@ -1,4 +1,4 @@
-import { ProgressConfig } from "~/libs/enums/enums.js";
+import { LoaderProgressConfig } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { useProgress } from "~/libs/hooks/hooks.js";
 
@@ -18,7 +18,7 @@ const Loader: React.FC<Properties> = ({
 }: Properties) => {
 	const progress = useProgress(isLoading);
 
-	if (!isLoading && progress === ProgressConfig.START) {
+	if (!isLoading && progress === LoaderProgressConfig.START) {
 		return null;
 	}
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ProgressConfig } from "~/libs/enums/enums.js";
+import { LoaderProgressConfig } from "~/libs/enums/enums.js";
 
 import styles from "./styles.module.css";
 
@@ -11,10 +11,11 @@ type Properties = {
 
 const CircularProgress: React.FC<Properties> = ({ progress, radius }) => {
 	const circumference =
-		ProgressConfig.CIRCLE_RADIUS_MULTIPLIER * Math.PI * radius;
+		LoaderProgressConfig.CIRCLE_RADIUS_MULTIPLIER * Math.PI * radius;
 	const offset =
 		circumference *
-		(ProgressConfig.PERCENT_DIVISOR - progress / ProgressConfig.MAX);
+		(LoaderProgressConfig.PERCENT_DIVISOR -
+			progress / LoaderProgressConfig.MAX);
 
 	return (
 		<div aria-valuenow={progress} className={styles["progress"]}>

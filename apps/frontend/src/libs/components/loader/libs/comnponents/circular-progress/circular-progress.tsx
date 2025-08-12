@@ -1,5 +1,3 @@
-import React from "react";
-
 import { LoaderProgressConfig } from "~/libs/enums/enums.js";
 
 import styles from "./styles.module.css";
@@ -9,7 +7,10 @@ type Properties = {
 	radius: number;
 };
 
-const CircularProgress: React.FC<Properties> = ({ progress, radius }) => {
+const CircularProgress: React.FC<Properties> = ({
+	progress,
+	radius,
+}: Properties) => {
 	const circumference =
 		LoaderProgressConfig.CIRCLE_RADIUS_MULTIPLIER * Math.PI * radius;
 	const offset =

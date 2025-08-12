@@ -111,10 +111,10 @@ class BaseConfig implements Config {
 					env: "BOT_NAME",
 					format: String,
 				},
-				MEETING_ID: {
+				MEETING_LINK: {
 					default: null,
-					doc: "meeting ID",
-					env: "MEETING_ID",
+					doc: "Zoom meeting link",
+					env: "MEETING_LINK",
 					format: String,
 				},
 				MEETING_PASSWORD: {
@@ -132,7 +132,7 @@ class BaseConfig implements Config {
 			"--disable-setuid-sandbox",
 			"--autoplay-policy=no-user-gesture-required",
 			"--use-fake-ui-for-media-stream",
-			"--headless=false",
+			"--headless=true",
 		];
 
 		return {

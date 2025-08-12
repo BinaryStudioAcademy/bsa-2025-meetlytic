@@ -19,15 +19,17 @@ const {
 } = config.ENV.OPEN_AI;
 
 const cloudFormation = new BaseCloudFormation({
-	botName,
 	credentials: { accessKeyId, secretAccessKey },
 	imageId,
 	logger,
-	openAIKey,
 	region: REGION,
-	textGenerationModel,
-	transcriptionModel,
+	settings: {
+		botName,
+		openAIKey,
+		textGenerationModel,
+		transcriptionModel,
+	},
 });
 
 export { cloudFormation };
-export { type CloudFormation } from "./libs/type/types.js";
+export { type CloudFormation, type CreateStack } from "./libs/type/types.js";

@@ -12,37 +12,62 @@
 	backdrop-filter: blur(0);
 }
 
-.dot-loader {
-	display: flex;
-	gap: 8px;
+.loader {
+	position: relative;
+	display: grid;
+	place-items: center;
+	width: 180px;
+	height: 180px;
 }
 
-.dot {
-	width: 12px;
-	height: 12px;
-	background-color: #10add8;
-	border-radius: 50%;
-	animation: bounce 1.2s infinite ease-in-out both;
+.loader__square {
+	position: absolute;
+	width: 7px;
+	height: 7px;
+	background: var(--color-brand);
 }
 
-.dot-second {
-	animation-delay: 0.2s;
+.loader__square--top {
+	top: 11px;
+	left: 79%;
+	transform: translate(-50%, -50%);
 }
 
-.dot-third {
-	animation-delay: 0.4s;
+.loader__square--bottom {
+	right: 6px;
+	bottom: 53px;
+	transform: translate(-50%, 50%);
 }
 
-@keyframes bounce {
+.loader__square--left {
+	top: 48%;
+	left: 1px;
+	transform: translate(-50%, -50%);
+}
+
+@keyframes pulse {
 	0%,
-	80%,
 	100% {
-		opacity: 0.3;
-		transform: scale(0);
-	}
-
-	40% {
-		opacity: 1;
 		transform: scale(1);
 	}
+
+	50% {
+		opacity: 1;
+		transform: scale(1.3);
+	}
+}
+
+.loader--pending .loader__square--top {
+	animation: pulse 1s infinite;
+	animation-delay: 0s;
+}
+
+.loader--pending .loader__square--bottom {
+	animation: pulse 1s infinite;
+	animation-delay: 0.25s;
+}
+
+.loader--pending .loader__square--left {
+	animation: pulse 1s infinite;
+	animation-delay: 0.5s;
 }

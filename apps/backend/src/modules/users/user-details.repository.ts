@@ -1,6 +1,7 @@
 import { NO_ROWS_AFFECTED } from "~/libs/constants/constants.js";
 import { type Repository } from "~/libs/types/types.js";
 
+import { ColumnName } from "./libs/enums/enums.js";
 import { type UserDetails } from "./libs/types/types.js";
 import { UserDetailsEntity } from "./user-details.entity.js";
 import { type UserDetailsModel } from "./user-details.model.js";
@@ -49,7 +50,7 @@ class UserDetailsRepository implements Repository {
 	public async findByUserId(userId: number): Promise<null | UserDetailsEntity> {
 		const userDetails = await this.userDetailsModel
 			.query()
-			.where("userId", userId)
+			.where(ColumnName.USER_ID, userId)
 			.first();
 
 		return userDetails ? UserDetailsEntity.initialize(userDetails) : null;
@@ -79,7 +80,7 @@ class UserDetailsRepository implements Repository {
 		const updatedRows = await this.userDetailsModel
 			.query()
 			.patch(payload)
-			.where("userId", userId);
+			.where(ColumnName.USER_ID, userId);
 
 		return updatedRows > NO_ROWS_AFFECTED;
 	}

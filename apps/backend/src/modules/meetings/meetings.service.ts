@@ -1,6 +1,6 @@
 import { APIPath } from "~/libs/enums/enums.js";
 import { AuthError } from "~/libs/exceptions/exceptions.js";
-import { type CloudFormation } from "~/libs/modules/cloud-formation/cloud-formation.js";
+import { type CloudFormation, type CreateStack, } from "~/libs/modules/cloud-formation/cloud-formation.js";
 import template from "~/libs/modules/cloud-formation/libs/templates/ec2-instance-template.json" with { type: "json" };
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import {
@@ -11,6 +11,7 @@ import { type Service } from "~/libs/types/types.js";
 
 import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
+import { extractZoomMeetingId } from "./libs/helpers/helpers.js";
 import {
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
@@ -43,12 +44,14 @@ class MeetingService implements Service<MeetingResponseDto> {
 		this.sharedJwt = sharedJwt;
 	}
 
-	private async createInstance(id: number): Promise<MeetingResponseDto> {
+	private async createInstance(
+		payload: Omit<CreateStack, "template">,
+	): Promise<MeetingResponseDto> {
 		const instanceId = await this.cloudFormation.create({
-			id,
+			...payload,
 			template: JSON.stringify(template),
 		});
-		const meeting = await this.meetingRepository.update(id, {
+		const meeting = await this.meetingRepository.update(payload.id, {
 			instanceId,
 		});
 
@@ -65,16 +68,26 @@ class MeetingService implements Service<MeetingResponseDto> {
 	public async create(
 		payload: MeetingCreateRequestDto & { ownerId: number },
 	): Promise<MeetingResponseDto> {
+		const { meetingLink } = payload;
+		const meetingId = extractZoomMeetingId(meetingLink);
+
+		if (!meetingId) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.INVALID_MEETING_LINK,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const meeting = MeetingEntity.initializeNew({
 			host: payload.host,
 			instanceId: null,
-			meetingId: payload.meetingId,
+			meetingId,
 			meetingPassword: payload.meetingPassword ?? null,
 			ownerId: payload.ownerId,
 		});
 
 		const newMeeting = await this.meetingRepository.create(meeting);
-		const { id } = newMeeting.toObject();
+		const { id, meetingPassword } = newMeeting.toObject();
 
 		if (!id) {
 			throw new MeetingError({
@@ -83,7 +96,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return await this.createInstance(id);
+		return await this.createInstance({ id, meetingLink, meetingPassword });
 	}
 
 	public async delete(id: number): Promise<boolean> {

@@ -35,7 +35,7 @@ const App: React.FC = () => {
 
 	return (
 		<>
-			<Loader isLoading={dataStatus === DataStatus.PENDING} withOverlay />
+			<Loader hasOverlay isLoading={dataStatus === DataStatus.PENDING} />
 			<RouterOutlet />
 			<div className="visually-hidden">
 				<SearchInput

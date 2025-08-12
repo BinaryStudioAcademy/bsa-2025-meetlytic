@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.2.0...shared-v1.3.0) (2025-08-11)
+
+
+### Features
+
+* create player track component ml-62 ([#135](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/135)) ([71b41c9](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/71b41c9f92028772183682f2a6ab89ead1318ec8))
+
 ## [1.2.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.1.1...shared-v1.2.0) (2025-08-10)
 
 

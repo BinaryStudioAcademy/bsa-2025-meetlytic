@@ -3,7 +3,7 @@ import { type MeetingHost } from "../enums/enums.js";
 
 type MeetingCreateRequestDto = {
 	host: ValueOf<typeof MeetingHost>;
-	meetingId: string;
+	meetingLink: string;
 	meetingPassword: null | string;
 };
 

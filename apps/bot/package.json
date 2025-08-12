@@ -23,6 +23,7 @@
 		"socket.io": "4.8.1"
 	},
 	"devDependencies": {
+		"tsc-alias": "1.8.16",
 		"tsx": "4.20.3"
 	}
 }

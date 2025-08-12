@@ -15,15 +15,13 @@ const extractZoomMeetingId = (url: string): null | string => {
 	const pathParts = parsedUrl.pathname.split("/").filter(Boolean);
 
 	const joinIndex = pathParts.findIndex((segment) => isJoinSegment(segment));
+	const meetingIdIndex = joinIndex + NEXT_INDEX_OFFSET;
 
-	if (
-		joinIndex === NOT_FOUND ||
-		joinIndex + NEXT_INDEX_OFFSET >= pathParts.length
-	) {
+	if (joinIndex === NOT_FOUND || meetingIdIndex >= pathParts.length) {
 		return null;
 	}
 
-	const meetingId = pathParts[joinIndex + NEXT_INDEX_OFFSET];
+	const meetingId = pathParts[meetingIdIndex];
 
 	if (!isValidMeetingId(meetingId)) {
 		return null;

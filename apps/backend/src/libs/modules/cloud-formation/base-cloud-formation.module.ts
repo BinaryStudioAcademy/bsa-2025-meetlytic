@@ -18,51 +18,43 @@ import {
 	ParameterKey,
 	StackPrefix,
 } from "./libs/enums/enums.js";
-import { type CloudFormation, type CreateStack } from "./libs/type/types.js";
+import {
+	type CloudFormation,
+	type CreateStack,
+	type Settings,
+} from "./libs/type/types.js";
 
 type Constructor = {
-	botName: string;
 	credentials: {
 		accessKeyId: string;
 		secretAccessKey: string;
 	};
 	imageId: string;
 	logger: Logger;
-	openAIKey: string;
 	region: string;
-	textGenerationModel: string;
-	transcriptionModel: string;
+	settings: Settings;
 };
 
 class BaseCloudFormation implements CloudFormation {
-	private botName: string;
 	private client: CloudFormationClient;
 	private imageId: string;
 	private logger: Logger;
-	private openAIKey: string;
-	private textGenerationModel: string;
-	private transcriptionModel: string;
+	private settings: Settings;
 
 	public constructor({
-		botName,
 		credentials,
 		imageId,
 		logger,
-		openAIKey,
 		region,
-		textGenerationModel,
-		transcriptionModel,
+		settings,
 	}: Constructor) {
-		this.imageId = imageId;
 		this.logger = logger;
-		this.botName = botName;
+		this.imageId = imageId;
 		this.client = new CloudFormationClient({
 			credentials,
 			region,
 		});
-		this.openAIKey = openAIKey;
-		this.textGenerationModel = textGenerationModel;
-		this.transcriptionModel = transcriptionModel;
+		this.settings = settings;
 	}
 
 	private async getInstanceIdFromStack(stackName: string): Promise<string> {
@@ -88,7 +80,8 @@ class BaseCloudFormation implements CloudFormation {
 
 	public async create({
 		id,
-		meetingPassword = "",
+		meetingLink,
+		meetingPassword,
 		template,
 	}: CreateStack): Promise<string> {
 		const stackName = this.getStackName(id);
@@ -98,24 +91,14 @@ class BaseCloudFormation implements CloudFormation {
 			const command = new CreateStackCommand({
 				Capabilities: [Capability.NAMED_IAM],
 				Parameters: [
-					{ ParameterKey: ParameterKey.BOT_NAME, ParameterValue: this.botName },
 					{ ParameterKey: ParameterKey.IMAGE_ID, ParameterValue: this.imageId },
-					{ ParameterKey: ParameterKey.MEETING_ID, ParameterValue: String(id) },
 					{
-						ParameterKey: ParameterKey.MEETING_PASSWORD,
-						ParameterValue: meetingPassword,
-					},
-					{
-						ParameterKey: ParameterKey.OPEN_AI_KEY,
-						ParameterValue: this.openAIKey,
-					},
-					{
-						ParameterKey: ParameterKey.TEXT_GENERATION_MODEL,
-						ParameterValue: this.textGenerationModel,
-					},
-					{
-						ParameterKey: ParameterKey.TRANSCRIPTION_MODEL,
-						ParameterValue: this.transcriptionModel,
+						ParameterKey: ParameterKey.SETTINGS,
+						ParameterValue: JSON.stringify({
+							...this.settings,
+							meetingLink,
+							meetingPassword,
+						}),
 					},
 				],
 				StackName: stackName,

@@ -1,4 +1,4 @@
-import { LoaderProgressConfig } from "~/libs/enums/enums.js";
+import { LoaderIconConfig, LoaderProgressConfig } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { useProgress } from "~/libs/hooks/hooks.js";
 
@@ -49,7 +49,10 @@ const Loader: React.FC<Properties> = ({
 						styles["loader__square--left"],
 					)}
 				/>
-				<CircularProgress progress={progress} radius={53} />
+				<CircularProgress
+					progress={progress}
+					radius={LoaderIconConfig.RADIUS}
+				/>
 			</div>
 		</div>
 	);

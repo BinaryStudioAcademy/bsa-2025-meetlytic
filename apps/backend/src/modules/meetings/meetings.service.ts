@@ -147,10 +147,34 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return { items: meetings.map((meeting) => meeting.toObject()) };
 	}
 
+	public async findBySignedUrl(
+		id: number,
+		token: string,
+	): Promise<MeetingResponseDto> {
+		try {
+			const { payload } = await this.sharedJwt.verify(token);
+
+			if (id !== payload.meetingId) {
+				throw new AuthError();
+			}
+		} catch {
+			throw new AuthError();
+		}
+
+		return await this.find(id);
+	}
+
 	public async getPublicUrl(
 		id: number,
 	): Promise<MeetingGetPublicUrlResponseDto> {
-		await this.find(id);
+		const meeting = await this.meetingRepository.find(id);
+
+		if (!meeting) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.MEETING_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
 
 		const token = await this.sharedJwt.sign({ meetingId: id });
 
@@ -198,23 +222,6 @@ class MeetingService implements Service<MeetingResponseDto> {
 		}
 
 		return updatedMeeting.toClientObject();
-	}
-
-	public async verifyUrl(
-		id: number,
-		token: string,
-	): Promise<MeetingResponseDto> {
-		try {
-			const { payload } = await this.sharedJwt.verify(token);
-
-			if (id !== payload.meetingId) {
-				throw new AuthError();
-			}
-		} catch {
-			throw new AuthError();
-		}
-
-		return await this.find(id);
 	}
 }
 

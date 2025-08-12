@@ -4,7 +4,7 @@ export { type FindAllMeetingOptions } from "./find-all-options.type.js";
 export { type FindMeetingOptions } from "./find-meeting-options.type.js";
 export { type GetPublicUrlOptions } from "./get-public-url-options.type.js";
 export { type UpdateMeetingOptions } from "./update-meeting-options.type.js";
-export { type VerifyUrlOptions } from "./verify-url-options.type.js";
+export { type FindBySignedUrlOptions } from "./verify-url-options.type.js";
 export {
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,

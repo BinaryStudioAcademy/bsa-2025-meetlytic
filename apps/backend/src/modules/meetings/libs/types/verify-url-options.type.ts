@@ -1,8 +1,8 @@
 import { type APIHandlerOptions } from "~/libs/modules/controller/controller.js";
 
-type VerifyUrlOptions = APIHandlerOptions<{
+type FindBySignedUrlOptions = APIHandlerOptions<{
 	params: { id: string };
 	query: { token: string };
 }>;
 
-export { type VerifyUrlOptions };
+export { type FindBySignedUrlOptions };

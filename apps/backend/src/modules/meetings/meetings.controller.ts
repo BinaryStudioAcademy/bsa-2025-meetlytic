@@ -13,10 +13,10 @@ import {
 	type CreateMeetingOptions,
 	type DeleteMeetingOptions,
 	type FindAllMeetingOptions,
+	type FindBySignedUrlOptions,
 	type FindMeetingOptions,
 	type GetPublicUrlOptions,
 	type UpdateMeetingOptions,
-	type VerifyUrlOptions,
 } from "./libs/types/types.js";
 import {
 	meetingCreateValidationSchema,
@@ -37,8 +37,6 @@ import { type MeetingService } from "./meetings.service.js";
  *           type: string
  *           enum:
  *             - zoom
- *         instanceId:
- *           type: string
  *           nullable: true
  *         ownerId:
  *           type: number
@@ -56,7 +54,6 @@ import { type MeetingService } from "./meetings.service.js";
  *       required:
  *         - id
  *         - host
- *         - instanceId
  *         - ownerId
  *         - status
  *     MeetingCreateRequest:
@@ -136,9 +133,10 @@ class MeetingsController extends BaseController {
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 		this.addRoute({
-			handler: (options) => this.verifyUrl(options as VerifyUrlOptions),
+			handler: (options) =>
+				this.findBySignedUrl(options as FindBySignedUrlOptions),
 			method: HTTPMethod.GET,
-			path: MeetingsApiPath.$ID_URL_VERIFICATION,
+			path: MeetingsApiPath.$ID_TOKEN,
 		});
 	}
 
@@ -264,6 +262,46 @@ class MeetingsController extends BaseController {
 
 	/**
 	 * @swagger
+	 * /meetings/{id}/token:
+	 *   get:
+	 *     summary: Get a meeting using signed URL
+	 *     tags:
+	 *       - Meetings
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: number
+	 *       - in: query
+	 *         name: token
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       200:
+	 *         description: Meeting data
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: "#/components/schemas/Meeting"
+	 *       404:
+	 *         description: Meeting not found
+	 *       401:
+	 *         description: Signed URL was malformed
+	 */
+	private async findBySignedUrl(
+		options: FindBySignedUrlOptions,
+	): Promise<APIHandlerResponse> {
+		const id = Number(options.params.id);
+		const token = options.query.token;
+		const url = await this.meetingService.findBySignedUrl(id, token);
+
+		return { payload: url, status: HTTPCode.OK };
+	}
+
+	/**
+	 * @swagger
 	 * /meetings/{id}/url:
 	 *   get:
 	 *     summary: Generate a public URL for the meeting
@@ -332,46 +370,6 @@ class MeetingsController extends BaseController {
 		const meeting = await this.meetingService.update(id, options.body);
 
 		return { payload: meeting, status: HTTPCode.OK };
-	}
-
-	/**
-	 * @swagger
-	 * /meetings/{id}/url-verification:
-	 *   get:
-	 *     summary: Verify a public URL for the meeting
-	 *     tags:
-	 *       - Meetings
-	 *     parameters:
-	 *       - in: path
-	 *         name: id
-	 *         required: true
-	 *         schema:
-	 *           type: number
-	 *       - in: query
-	 *         name: token
-	 *         required: true
-	 *         schema:
-	 *           type: string
-	 *     responses:
-	 *       200:
-	 *         description: Meeting data
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               $ref: "#/components/schemas/Meeting"
-	 *       404:
-	 *         description: Meeting not found
-	 *       401:
-	 *         description: Signed URL was malformed
-	 */
-	private async verifyUrl(
-		options: VerifyUrlOptions,
-	): Promise<APIHandlerResponse> {
-		const id = Number(options.params.id);
-		const token = options.query.token;
-		const url = await this.meetingService.verifyUrl(id, token);
-
-		return { payload: url, status: HTTPCode.OK };
 	}
 }
 

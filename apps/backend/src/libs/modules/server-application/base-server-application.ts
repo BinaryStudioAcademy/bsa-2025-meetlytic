@@ -85,14 +85,6 @@ class BaseServerApplication implements ServerApplication {
 						);
 					}
 
-					const missingKey = error.validation.some(
-						(validation) => validation.message === "Required",
-					);
-
-					const status = missingKey
-						? HTTPCode.BAD_REQUEST
-						: HTTPCode.UNPROCESSED_ENTITY;
-
 					const response: ServerValidationErrorResponse = {
 						details: error.validation.map((validation) => ({
 							message: validation.message,
@@ -102,7 +94,7 @@ class BaseServerApplication implements ServerApplication {
 						message: error.message,
 					};
 
-					return reply.status(status).send(response);
+					return reply.status(HTTPCode.UNPROCESSED_ENTITY).send(response);
 				}
 
 				if (error instanceof HTTPError) {

@@ -126,12 +126,16 @@ exit 1
 fi
 
 # Use jq to parse JSON into bash variables
+AWS_ACCESS_KEY_ID=$(echo "$SETTINGS_JSON" | jq -r '.accessKeyId')
 BOT_NAME=$(echo "$SETTINGS_JSON" | jq -r '.botName')
 MEETING_LINK=$(echo "$SETTINGS_JSON" | jq -r '.meetingLink')
 MEETING_PASSWORD=$(echo "$SETTINGS_JSON" | jq -r '.meetingPassword')
 OPEN_AI_KEY=$(echo "$SETTINGS_JSON" | jq -r '.openAIKey')
+AWS_REGION=$(echo "$SETTINGS_JSON" | jq -r '.region')
+AWS_SECRET_ACCESS_KEY=$(echo "$SETTINGS_JSON" | jq -r '.secretAccessKey')
 TEXT_GENERATION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.textGenerationModel')
 TRANSCRIPTION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.transcriptionModel')
+BUCKET_NAME=$(echo"$SETTINGS_JSON" | jq -r '.bucketName')
 
 if [ -z "$BOT_NAME" ] || [ -z "$MEETING_LINK" ]; then
 echo "Error: Missing required settings in JSON."
@@ -160,12 +164,12 @@ FFMPEG_PATH=/usr/bin/ffmpeg
 OUTPUT_DIRECTORY=/home/ubuntu/audio
 
 # AWS
-AWS_REGION= "$7"
-AWS_SECRET_ACCESS_KEY="$8"
-AWS_ACCESS_KEY_ID=#"$9"
+AWS_REGION= "$AWS_REGION"
+AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
+AWS_ACCESS_KEY_ID=#"$AWS_ACCESS_KEY_ID"
 
 # S3
-S3_BUCKET_NAME=meetlytic-s3
+S3_BUCKET_NAME="$BUCKET_NAME"
 S3_AUDIO_PREFIX=audio
 
 EOF

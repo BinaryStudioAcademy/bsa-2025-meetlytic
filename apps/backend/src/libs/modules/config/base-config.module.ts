@@ -63,6 +63,12 @@ class BaseConfig implements Config {
 					env: "AMI_ID",
 					format: String,
 				},
+				BUCKET_NAME: {
+					default: null,
+					doc: "AWS Bucket name",
+					env: "BUCKET_NAME",
+					format: String,
+				},
 				REGION: {
 					default: null,
 					doc: "AWS Region",

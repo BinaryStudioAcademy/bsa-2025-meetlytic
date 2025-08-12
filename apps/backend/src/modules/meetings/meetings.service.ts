@@ -1,6 +1,9 @@
 import { APIPath } from "~/libs/enums/enums.js";
 import { AuthError } from "~/libs/exceptions/exceptions.js";
-import { type CloudFormation, type CreateStack, } from "~/libs/modules/cloud-formation/cloud-formation.js";
+import {
+	type CloudFormation,
+	type CreateStack,
+} from "~/libs/modules/cloud-formation/cloud-formation.js";
 import template from "~/libs/modules/cloud-formation/libs/templates/ec2-instance-template.json" with { type: "json" };
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import {

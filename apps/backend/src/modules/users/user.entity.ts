@@ -75,10 +75,6 @@ class UserEntity implements Entity {
 		return this.details;
 	}
 
-	public setDetails(details: UserDetailsEntity): void {
-		this.details = details;
-	}
-
 	public toNewObject(): {
 		email: string;
 		passwordHash: string;

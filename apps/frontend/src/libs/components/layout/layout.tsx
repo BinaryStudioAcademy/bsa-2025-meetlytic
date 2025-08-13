@@ -15,7 +15,7 @@ const Layout: React.FC = () => {
 
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-	const onToggleMenu = useCallback(() => {
+	const handleToggleMenu = useCallback(() => {
 		setIsMenuOpen((previous) => !previous);
 	}, []);
 
@@ -29,7 +29,7 @@ const Layout: React.FC = () => {
 				<Header
 					isMenuOpen={isMenuOpen}
 					onLogout={onLogout}
-					onToggleMenu={onToggleMenu}
+					onToggleMenu={handleToggleMenu}
 				/>
 			</div>
 
@@ -45,7 +45,7 @@ const Layout: React.FC = () => {
 
 			<MobileMenu
 				isOpen={isMenuOpen}
-				onClose={onToggleMenu}
+				onClose={handleToggleMenu}
 				onLogout={onLogout}
 			/>
 		</div>

@@ -7,7 +7,11 @@ import {
 	SearchInput,
 } from "~/libs/components/components.js";
 import { ZERO_LENGTH } from "~/libs/constants/constants.js";
-import { DataStatus, MeetingErrorMessage } from "~/libs/enums/enums.js";
+import {
+	AppRoute,
+	DataStatus,
+	MeetingErrorMessage,
+} from "~/libs/enums/enums.js";
 import { formatDate, getOffsetHours } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
@@ -88,7 +92,7 @@ const MeetingDetails: React.FC = () => {
 	}, []);
 
 	if (!id || dataStatus === DataStatus.REJECTED) {
-		return <Navigate replace to={"404"} />;
+		return <Navigate replace to={AppRoute.ANY} />;
 	}
 
 	if (dataStatus === DataStatus.PENDING) {

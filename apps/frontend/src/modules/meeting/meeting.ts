@@ -15,6 +15,7 @@ export {
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
+	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
 } from "./libs/types/types.js";
 export { meetingCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";

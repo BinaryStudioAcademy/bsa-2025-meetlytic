@@ -2,6 +2,7 @@ import {
 	Button,
 	Icon,
 	Loader,
+	Navigate,
 	PlayerTrack,
 	SearchInput,
 } from "~/libs/components/components.js";
@@ -10,15 +11,16 @@ import { formatDate } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
+	useAppSelector,
 	useCallback,
 	useEffect,
 	useParams,
 	useSearchParams,
-	useState,
 } from "~/libs/hooks/hooks.js";
-import { type ValueOf } from "~/libs/types/types.js";
-import { type MeetingDetailedResponseDto } from "~/modules/meeting/meeting.js";
-import { meetingApi } from "~/modules/meeting/meeting.js";
+import {
+	actions as meetingActions,
+	meetingApi,
+} from "~/modules/meeting/meeting.js";
 
 import styles from "./styles.module.css";
 
@@ -27,13 +29,9 @@ const MeetingDetails: React.FC = () => {
 	const [searchParameters] = useSearchParams();
 	const dispatch = useAppDispatch();
 
-	const [meeting, setMeeting] = useState<MeetingDetailedResponseDto | null>(
-		null,
-	);
-	const [dataStatus, setDataStatus] = useState<ValueOf<typeof DataStatus>>(
-		DataStatus.IDLE,
-	);
-	const [error, setError] = useState<null | string>(null);
+	const { selectedMeeting: meeting, selectedMeetingDataStatus: dataStatus } =
+		useAppSelector((state) => state.meeting);
+
 	const { control, errors } = useAppForm({
 		defaultValues: {
 			search: "",
@@ -41,35 +39,17 @@ const MeetingDetails: React.FC = () => {
 	});
 
 	useEffect(() => {
-		const fetchMeetingDetails = async (): Promise<void> => {
-			if (!id) {
-				setError("Meeting ID is missing.");
-				setDataStatus(DataStatus.REJECTED);
+		if (!id) {
+			return;
+		}
 
-				return;
-			}
-
-			setDataStatus(DataStatus.PENDING);
-			setError(null);
-
-			try {
-				const shareToken = searchParameters.get("token");
-
-				const fetchedMeeting: MeetingDetailedResponseDto = shareToken
-					? await meetingApi.getMeetingById(Number(id), shareToken)
-					: await meetingApi.getMeetingById(Number(id));
-
-				setMeeting(fetchedMeeting);
-				setDataStatus(DataStatus.FULFILLED);
-				// eslint-disable-next-line sonarjs/no-ignored-exceptions, unicorn/prefer-optional-catch-binding, @typescript-eslint/no-unused-vars
-			} catch (error_: unknown) {
-				// TODO: console.log("Failed to fetch meeting details:", error_);
-				setError("Failed to load meeting details. Please try again.");
-				setDataStatus(DataStatus.REJECTED);
-			}
-		};
-
-		void fetchMeetingDetails();
+		const shareToken = searchParameters.get("token");
+		void dispatch(
+			meetingActions.getMeetingDetailsById({
+				id: Number(id),
+				token: shareToken ?? undefined,
+			}),
+		);
 	}, [id, dispatch, searchParameters]);
 
 	const handleTranscriptionSearch = useCallback((value: string) => {
@@ -78,25 +58,41 @@ const MeetingDetails: React.FC = () => {
 	}, []);
 
 	const handleShareClick = useCallback(() => {
-		// TODO: implement handleShareClick logic
-		return;
-	}, []);
+		if (!meeting || !meeting.id) {
+			// TODO:
+			// console.error("No meeting ID to share.");
+
+			return;
+		}
+
+		const shareMeeting = async (): Promise<void> => {
+			try {
+				const { publicUrl } = await meetingApi.getPublicShareUrl(meeting.id);
+				void navigator.clipboard.writeText(publicUrl);
+				alert("Public link copied to clipboard!");
+			} catch (error) {
+				// TODO:
+				// console.error("Failed to generate share link:", error);
+				alert("Failed to generate share link.");
+
+				throw error;
+			}
+		};
+
+		void shareMeeting();
+	}, [meeting]);
 
 	const handleExportClick = useCallback(() => {
 		// TODO: implement handleExportClick logic
 		return;
 	}, []);
 
-	if (dataStatus === DataStatus.PENDING) {
-		return <Loader isLoading withOverlay />;
+	if (!id || dataStatus === DataStatus.REJECTED) {
+		return <Navigate replace to={"404"} />;
 	}
 
-	if (dataStatus === DataStatus.REJECTED) {
-		return (
-			<div className={styles["meeting-details__error"]}>
-				{error ?? "An unexpected error occurred."}
-			</div>
-		);
+	if (dataStatus === DataStatus.PENDING) {
+		return <Loader isLoading withOverlay />;
 	}
 
 	if (!meeting) {

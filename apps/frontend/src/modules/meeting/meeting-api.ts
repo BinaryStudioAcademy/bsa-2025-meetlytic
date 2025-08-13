@@ -6,6 +6,7 @@ import {
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
+	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
 } from "~/modules/meeting/meeting.js";
 
@@ -59,7 +60,6 @@ class MeetingApi extends BaseHTTPApi {
 			? this.load(
 					this.getFullEndpoint(`${MeetingsApiPath.$ID_PUBLIC}?token=${token}`, {
 						id: String(id),
-						// token: `?token=${token}`,
 					}),
 					{
 						contentType: ContentType.JSON,
@@ -77,6 +77,21 @@ class MeetingApi extends BaseHTTPApi {
 				));
 
 		return await response.json<MeetingDetailedResponseDto>();
+	}
+
+	public async getPublicShareUrl(
+		id: number,
+	): Promise<MeetingGetPublicUrlResponseDto> {
+		const response = await this.load(
+			this.getFullEndpoint(MeetingsApiPath.$ID_URL, { id: String(id) }),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "GET",
+			},
+		);
+
+		return await response.json<MeetingGetPublicUrlResponseDto>();
 	}
 }
 

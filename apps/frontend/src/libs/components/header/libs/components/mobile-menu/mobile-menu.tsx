@@ -24,7 +24,7 @@ const MobileMenu: React.FC<Properties> = ({
 					isOpen ? styles["mobile-menu--open"] : null,
 				)}
 			>
-				<Navigation items={NAVIGATION_ITEMS} />
+				<Navigation items={NAVIGATION_ITEMS} onClick={onClose} />
 
 				<div className={styles["mobile-menu__actions"]}>
 					<Button

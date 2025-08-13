@@ -33,3 +33,9 @@
 	display: flex;
 	opacity: 1;
 }
+
+@media (width <= 768px) {
+	.hide-on-mobile {
+		display: none;
+	}
+}

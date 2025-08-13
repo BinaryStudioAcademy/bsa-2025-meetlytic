@@ -79,7 +79,10 @@ class UserService implements Service {
 		const user = await this.userRepository.findByEmail(email);
 
 		if (!user) {
-			return null;
+			throw new UserError({
+				message: UserErrorMessage.USER_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
 		}
 
 		const userData = user.toObject();

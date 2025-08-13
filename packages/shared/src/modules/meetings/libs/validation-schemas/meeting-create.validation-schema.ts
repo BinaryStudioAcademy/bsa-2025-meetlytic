@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { isZoomLink } from "../../../../libs/helpers/helpers.js";
 import { type ValueOf } from "../../../../libs/types/types.js";
 import {
 	MeetingHost,
@@ -23,7 +24,13 @@ const meetingCreate = z
 					message: MeetingValidationMessage.HOST_WRONG,
 				},
 			),
-		meetingId: z.string().min(MeetingValidationRule.MINIMAL_MEETING_ID_LENGTH),
+		meetingLink: z
+			.string()
+			.nonempty(MeetingValidationMessage.ZOOM_LINK_REQUIRE)
+			.url()
+			.refine(isZoomLink, {
+				message: MeetingValidationMessage.ZOOM_LINK_INVALID,
+			}),
 		meetingPassword: z.string().nullable().optional(),
 	})
 	.required();

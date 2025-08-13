@@ -5,6 +5,7 @@ const ZoomBotMessages = {
 	FAILED_TO_ACCEPT_COOKIES: "Failed to accept cookies: ",
 	FAILED_TO_ACCEPT_TERMS: "Failed to accept terms and conditions: ",
 	FAILED_TO_CLICK_SELECTOR: "Failed to click selector",
+	FAILED_TO_ENTER_PASSWORD: "Failed to enter password:",
 	FAILED_TO_GET_PARTICIPANTS_COUNT: "Failed to get participants count:",
 	FAILED_TO_JOIN_MEETING: "Failed to join the meeting:",
 	FAILED_TO_LEAVE_MEETING: "Failed to leave meeting:",

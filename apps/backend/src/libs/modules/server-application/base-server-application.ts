@@ -3,6 +3,7 @@ import swagger, { type StaticDocumentSpec } from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
 import {
+	hasZodFastifySchemaValidationErrors,
 	serializerCompiler,
 	validatorCompiler,
 	type ZodTypeProvider,
@@ -73,6 +74,7 @@ class BaseServerApplication implements ServerApplication {
 			ignoreTrailingSlash: true,
 		})
 			.setValidatorCompiler(validatorCompiler)
+
 			.setSerializerCompiler(serializerCompiler)
 			.withTypeProvider<ZodTypeProvider>();
 	}
@@ -80,17 +82,19 @@ class BaseServerApplication implements ServerApplication {
 	private initErrorHandler(): void {
 		this.app.setErrorHandler(
 			(error: FastifyError | ValidationError, _request, reply) => {
-				if ("issues" in error) {
+				if (hasZodFastifySchemaValidationErrors(error)) {
 					this.logger.error(`[Validation Error]: ${error.message}`);
 
-					for (let issue of error.issues) {
-						this.logger.error(`[${issue.path.toString()}] — ${issue.message}`);
+					for (let validation of error.validation) {
+						this.logger.error(
+							`[${validation.params.issue.path.toString()}] — ${validation.message}`,
+						);
 					}
 
 					const response: ServerValidationErrorResponse = {
-						details: error.issues.map((issue) => ({
-							message: issue.message,
-							path: issue.path,
+						details: error.validation.map((validation) => ({
+							message: validation.message,
+							path: validation.params.issue.path,
 						})),
 						errorType: ServerErrorType.VALIDATION,
 						message: error.message,
@@ -119,9 +123,12 @@ class BaseServerApplication implements ServerApplication {
 					message: error.message,
 				};
 
-				return reply
-					.status(error.statusCode || HTTPCode.INTERNAL_SERVER_ERROR)
-					.send(response);
+				const statusCode =
+					"statusCode" in error && typeof error.statusCode === "number"
+						? error.statusCode
+						: HTTPCode.INTERNAL_SERVER_ERROR;
+
+				return reply.status(statusCode).send(response);
 			},
 		);
 	}

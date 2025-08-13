@@ -1,3 +1,4 @@
+import { CarouselConfig } from "~/libs/enums/enums.js";
 import { useEffect, useState } from "~/libs/hooks/hooks.js";
 
 type UseCarouselProperties = {
@@ -5,10 +6,6 @@ type UseCarouselProperties = {
 	isPaused?: boolean;
 	length: number;
 };
-
-const INCREMENT = 1;
-const INITIAL_INDEX = 0;
-const MIN_CAROUSEL_LENGTH = 2;
 
 const useCarousel = ({
 	delayMs,
@@ -18,21 +15,21 @@ const useCarousel = ({
 	index: number;
 	setIndex: (value: number) => void;
 } => {
-	const [index, setIndex] = useState(INITIAL_INDEX);
+	const [index, setIndex] = useState<number>(CarouselConfig.INITIAL_INDEX);
 
 	useEffect(() => {
 		if (index >= length) {
-			setIndex(INITIAL_INDEX);
+			setIndex(CarouselConfig.INITIAL_INDEX);
 		}
 	}, [length, index]);
 
 	useEffect(() => {
-		if (isPaused || length < MIN_CAROUSEL_LENGTH) {
+		if (isPaused || length < CarouselConfig.MIN_CAROUSEL_LENGTH) {
 			return;
 		}
 
 		const id = globalThis.setInterval(() => {
-			setIndex((previous) => (previous + INCREMENT) % length);
+			setIndex((previous) => (previous + CarouselConfig.INCREMENT) % length);
 		}, delayMs);
 
 		return (): void => {

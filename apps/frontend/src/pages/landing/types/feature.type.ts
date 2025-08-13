@@ -5,7 +5,7 @@ type Feature = {
 		alt: string;
 		src: string;
 	};
-	reversed?: boolean;
+	isReversed?: boolean;
 	text: string;
 	title: string;
 };

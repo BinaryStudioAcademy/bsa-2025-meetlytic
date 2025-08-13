@@ -38,11 +38,11 @@
 	margin-right: 35px;
 }
 
-.features__item--reversed {
+.features__item--isReversed {
 	flex-direction: row-reverse;
 }
 
-.features__item--reversed .features__content {
+.features__item--isReversed .features__content {
 	margin-right: 0;
 	margin-left: 35px;
 }

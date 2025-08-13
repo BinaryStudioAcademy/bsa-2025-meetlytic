@@ -22,7 +22,7 @@ const FEATURE_DATA: Feature[] = [
 			alt: "Meeting summary",
 			src: imgSummary,
 		},
-		reversed: true,
+		isReversed: true,
 		text: "Get concise summaries and clear next steps. Keep meetings aligned and decisions documented — automatically and consistently.",
 		title: "Summary & Action items",
 	},

@@ -1,4 +1,5 @@
 import { Button } from "~/libs/components/components.js";
+import { LandingTestimonialConfig } from "~/libs/enums/enums.js";
 import { useCallback, useCarousel, useState } from "~/libs/hooks/hooks.js";
 
 import { TESTIMONIAL_ITEMS } from "../../constants/constants.js";
@@ -11,11 +12,8 @@ type Properties = {
 	items?: Testimonial[];
 };
 
-const AUTOPLAY_DELAY_MS = 4000;
-const SLIDE_WIDTH_PERCENT = 100;
-
 const LandingTestimonial: React.FC<Properties> = ({
-	autoplayDelayMs = AUTOPLAY_DELAY_MS,
+	autoplayDelayMs = LandingTestimonialConfig.AUTOPLAY_DELAY_MS,
 	items = TESTIMONIAL_ITEMS,
 }: Properties) => {
 	const [isPaused, setIsPaused] = useState<boolean>(false);
@@ -65,7 +63,7 @@ const LandingTestimonial: React.FC<Properties> = ({
 					<div
 						className={styles["testimonials__track"]}
 						style={{
-							transform: `translateX(-${String(index * SLIDE_WIDTH_PERCENT)}%)`,
+							transform: `translateX(-${String(index * LandingTestimonialConfig.SLIDE_WIDTH_PERCENT)}%)`,
 						}}
 					>
 						{items.map((item) => (

@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 const FeatureItem: React.FC<Feature> = ({
 	eyebrow,
 	image,
-	reversed,
+	isReversed,
 	text,
 	title,
 }: Feature) => {
@@ -14,7 +14,7 @@ const FeatureItem: React.FC<Feature> = ({
 		<div
 			className={getValidClassNames(
 				styles["features__item"],
-				reversed && styles["features__item--reversed"],
+				isReversed && styles["features__item--isReversed"],
 			)}
 		>
 			<div className={styles["features__content"]}>

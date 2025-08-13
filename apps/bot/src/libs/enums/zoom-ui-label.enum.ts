@@ -4,6 +4,7 @@ const ZoomUILabel = {
 	CONFIRM_LEAVE: "button.leave-meeting-options__btn--danger",
 	GET_PARTICIPANTS_COUNT: ".footer-button__number-counter span",
 	INPUT_NAME: "#input-for-name",
+	INPUT_PASSWORD: "#input-for-pwd",
 	JOIN: "button[type='button']",
 	LEAVE: "button[aria-label='Leave']",
 	MUTE: "button[aria-label='mute my microphone']",

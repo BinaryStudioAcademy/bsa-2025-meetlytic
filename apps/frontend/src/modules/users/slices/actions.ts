@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { NotificationMessage } from "~/libs/enums/enums.js";
-import { extractErrorMessage } from "~/libs/helpers/helpers.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
 import { type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
@@ -25,25 +24,13 @@ const updateProfile = createAsyncThunk<
 	UserWithDetailsDto,
 	UserUpdateResponseDto,
 	AsyncThunkConfig
->(
-	`${sliceName}/edit-user-profile`,
-	async (payload, { extra, rejectWithValue }) => {
-		const { userApi } = extra;
+>(`${sliceName}/edit-user-profile`, async (payload, { extra }) => {
+	const { userApi } = extra;
 
-		try {
-			const updatedUser = await userApi.updateProfile(payload);
-			notification.success(NotificationMessage.EDIT_PROFILE_SUCCESS);
+	const updatedUser = await userApi.updateProfile(payload);
+	notification.success(NotificationMessage.EDIT_PROFILE_SUCCESS);
 
-			return updatedUser;
-		} catch (error: unknown) {
-			const message = extractErrorMessage(
-				error,
-				NotificationMessage.EDIT_PROFILE_FAILED,
-			);
-
-			return rejectWithValue(message);
-		}
-	},
-);
+	return updatedUser;
+});
 
 export { getProfile, updateProfile };

@@ -76,7 +76,8 @@ class UserService implements Service {
 	public async findProfileByEmail(
 		email: string,
 	): Promise<null | UserWithDetailsDto> {
-		const user = await this.userRepository.findByEmail(email);
+		const user = await this.userRepository.findByEmailWithDetails(email);
+		const details = user?.getDetails();
 
 		if (!user) {
 			throw new UserError({
@@ -85,19 +86,15 @@ class UserService implements Service {
 			});
 		}
 
-		const userData = user.toObject();
-		const details = await this.userDetailsRepository.findByUserId(userData.id);
-		const detailsData = details?.toObject();
-
-		if (!detailsData) {
+		if (!details) {
 			return null;
 		}
 
 		return {
-			email: userData.email,
-			firstName: detailsData.firstName,
-			id: userData.id,
-			lastName: detailsData.lastName,
+			email: user.toObject().email,
+			firstName: details.toObject().firstName,
+			id: user.toObject().id,
+			lastName: details.toObject().lastName,
 		};
 	}
 

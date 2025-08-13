@@ -52,6 +52,32 @@ class UserRepository implements Repository {
 		return user ? UserEntity.initialize(user) : null;
 	}
 
+	public async findByEmailWithDetails(
+		email: string,
+	): Promise<null | UserEntity> {
+		const userWithDetails = await this.userModel
+			.query()
+			.findOne(UserAttribute.EMAIL, email)
+			.withGraphFetched("userDetails");
+
+		if (!userWithDetails) {
+			return null;
+		}
+
+		return UserEntity.initialize({
+			details: UserDetailsEntity.initialize({
+				firstName: userWithDetails.userDetails.firstName,
+				id: userWithDetails.userDetails.id,
+				lastName: userWithDetails.userDetails.lastName,
+				userId: userWithDetails.userDetails.userId,
+			}),
+			email: userWithDetails.email,
+			id: userWithDetails.id,
+			passwordHash: userWithDetails.passwordHash,
+			passwordSalt: userWithDetails.passwordSalt,
+		});
+	}
+
 	public async findByIdWithDetails(id: number): Promise<null | UserEntity> {
 		const userWithDetails = await this.userModel
 			.query()

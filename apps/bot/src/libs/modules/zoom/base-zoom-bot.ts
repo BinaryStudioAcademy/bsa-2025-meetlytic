@@ -246,6 +246,7 @@ class BaseZoomBot {
 			if (count <= MINIMUM_PARTICIPANTS_THRESHOLD) {
 				this.logger.info(ZoomBotMessages.ONLY_ONE_PARTICIPANT_DETECTED);
 				this.audioRecorder.stop();
+				await this.audioRecorder.stopFullMeetingRecording();
 				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
 				await this.leaveMeeting();
 				this.shouldMonitor = false;
@@ -257,15 +258,14 @@ class BaseZoomBot {
 
 	public async run(): Promise<void> {
 		const meetingId = this.getMeetingId();
+		let fullStarted = false;
+		let fullStopped = false;
 
 		try {
 			this.browser = await puppeteer.launch(this.config.getLaunchOptions());
 			this.page = await this.browser.newPage();
 			await this.page.setUserAgent(USER_AGENT);
 
-			this.logger.info(
-				`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
-			);
 			await this.page.goto(
 				this.convertToZoomWebClientUrl(this.config.ENV.ZOOM.MEETING_LINK),
 				{
@@ -273,7 +273,7 @@ class BaseZoomBot {
 					waitUntil: "networkidle2",
 				},
 			);
-			await this.page.screenshot({ path: "goto.png" });
+
 			await this.handleInitialPopups();
 			await this.joinMeeting();
 			await this.page.waitForSelector(ZoomUILabel.LEAVE, {
@@ -283,30 +283,40 @@ class BaseZoomBot {
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
 			this.audioRecorder.start();
 			this.audioRecorder.startFullMeetingRecording(meetingId);
+			fullStarted = true;
 			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
 			await delay(TIMEOUTS.FIFTEEN_SECONDS);
 			await this.monitorParticipants();
+			fullStopped = true;
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessages.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,
 			);
 		} finally {
-			this.logger.info(
-				`strarting finalizing full meeting recording for ${meetingId}`,
-			);
-			const audioPrefix = this.config.ENV.S3.PREFIX_AUDIO;
-			const prefix = `${audioPrefix}/${meetingId}`;
-			await this.audioRecorder.stopFullMeetingRecording();
-			const contentType = "audio/mpeg";
-			const result = await this.audioRecorder.finalize({
-				contentType,
-				meetingId,
-				prefix,
-			});
+			if (fullStarted && !fullStopped) {
+				await this.audioRecorder.stopFullMeetingRecording();
+			}
 
-			if (result.s3) {
-				this.logger.info(
-					`[S3] Uploaded: key=${result.s3.key} version=${String(result.s3.versionId)} etag=${String(result.s3.etag)}`,
+			try {
+				if (fullStarted) {
+					const audioPrefix = this.config.ENV.S3.PREFIX_AUDIO;
+					const prefix = `${audioPrefix}/${meetingId}`;
+					const contentType = "audio/mpeg";
+					const result = await this.audioRecorder.finalize({
+						contentType,
+						meetingId,
+						prefix,
+					});
+
+					if (result.s3) {
+						this.logger.info(
+							`[S3] Uploaded: key=${result.s3.key} version=${String(result.s3.versionId)} etag=${String(result.s3.etag)}`,
+						);
+					}
+				}
+			} catch (error) {
+				this.logger.error(
+					`Finalize failed: ${error instanceof Error ? error.message : String(error)}`,
 				);
 			}
 

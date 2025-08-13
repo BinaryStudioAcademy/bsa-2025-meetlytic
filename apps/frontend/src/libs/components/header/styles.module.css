@@ -65,10 +65,6 @@
 		justify-self: end;
 	}
 
-	.header__avatar-logout-wrapper button {
-		display: none;
-	}
-
 	.variable-component__desktop {
 		display: none;
 	}

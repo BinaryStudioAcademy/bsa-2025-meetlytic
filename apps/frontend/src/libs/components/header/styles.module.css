@@ -71,5 +71,6 @@
 
 	.variable-component__mobile {
 		display: block;
+		width: 100%;
 	}
 }

@@ -8,23 +8,20 @@ import {
 	LogoTheme,
 	LogoType,
 } from "~/libs/enums/enums.js";
-import { useCallback, useLogout, useState } from "~/libs/hooks/hooks.js";
 
-import { MobileMenu } from "./libs/components/mobile-menu/mobile-menu.js";
 import styles from "./styles.module.css";
 
-const Header: React.FC = () => {
-	const logout = useLogout();
-	const [menuOpen, setMenuOpen] = useState(false);
+type Properties = {
+	handleLogout: () => void;
+	menuOpen: boolean;
+	toggleMenu: () => void;
+};
 
-	const handleLogout = useCallback((): void => {
-		void logout();
-	}, [logout]);
-
-	const toggleMenu = useCallback(() => {
-		setMenuOpen((previous) => !previous);
-	}, []);
-
+const Header: React.FC<Properties> = ({
+	handleLogout,
+	menuOpen,
+	toggleMenu,
+}: Properties) => {
 	return (
 		<header className={styles["header"]}>
 			<div className={styles["header__inner"]}>
@@ -62,23 +59,19 @@ const Header: React.FC = () => {
 						<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
 					</div>
 
-					<Button
-						iconLeft={
-							<Icon className={styles["header__logout-icon"]} name="logout" />
-						}
-						label="Logout"
-						onClick={handleLogout}
-						size={ButtonSize.SMALL}
-						variant={ButtonVariant.OUTLINED}
-					/>
+					<div className={styles["variable-component__desktop"]}>
+						<Button
+							iconLeft={
+								<Icon className={styles["header__logout-icon"]} name="logout" />
+							}
+							label="Logout"
+							onClick={handleLogout}
+							size={ButtonSize.SMALL}
+							variant={ButtonVariant.OUTLINED}
+						/>
+					</div>
 				</div>
 			</div>
-
-			<MobileMenu
-				isOpen={menuOpen}
-				onClose={toggleMenu}
-				onLogout={handleLogout}
-			/>
 		</header>
 	);
 };

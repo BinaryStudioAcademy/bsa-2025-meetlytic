@@ -13,23 +13,32 @@ import {
 	type MeetingCreateRequestDto,
 	type MeetingGetAllResponseDto,
 	type MeetingResponseDto,
+	type MeetingTranscriptionResponseDto,
 	type MeetingUpdateRequestDto,
 } from "./libs/types/types.js";
+import { type MeetingTranscriptionService } from "./meeting-transcription.service.js";
 import { MeetingEntity } from "./meetings.entity.js";
 import { type MeetingRepository } from "./meetings.repository.js";
 
 type Constructor = {
 	cloudFormation: CloudFormation;
 	meetingRepository: MeetingRepository;
+	meetingTranscriptionService: MeetingTranscriptionService;
 };
 
 class MeetingService implements Service<MeetingResponseDto> {
 	private cloudFormation: CloudFormation;
 	private meetingRepository: MeetingRepository;
+	private meetingTranscriptionService: MeetingTranscriptionService;
 
-	public constructor({ cloudFormation, meetingRepository }: Constructor) {
+	public constructor({
+		cloudFormation,
+		meetingRepository,
+		meetingTranscriptionService,
+	}: Constructor) {
 		this.cloudFormation = cloudFormation;
 		this.meetingRepository = meetingRepository;
+		this.meetingTranscriptionService = meetingTranscriptionService;
 	}
 
 	private async createInstance(
@@ -146,6 +155,31 @@ class MeetingService implements Service<MeetingResponseDto> {
 		const meetings = await this.meetingRepository.findAllByOwnerId(ownerId);
 
 		return { items: meetings.map((meeting) => meeting.toObject()) };
+	}
+	public async saveChunk({
+		chunkText,
+		zoomMeetingId,
+	}: {
+		chunkText: string;
+		zoomMeetingId: string;
+	}): Promise<MeetingTranscriptionResponseDto> {
+		const meeting =
+			await this.meetingRepository.findByZoomMeetingId(zoomMeetingId);
+
+		if (!meeting) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.MEETING_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		const { id: meetingId } = meeting.toObject();
+		const transcription = await this.meetingTranscriptionService.create({
+			chunkText,
+			meetingId,
+		});
+
+		return transcription;
 	}
 
 	public async update(

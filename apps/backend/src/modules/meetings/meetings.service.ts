@@ -158,22 +158,11 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 	public async saveChunk({
 		chunkText,
-		zoomMeetingId,
+		zoomMeetingId: meetingId,
 	}: {
 		chunkText: string;
-		zoomMeetingId: string;
+		zoomMeetingId: number;
 	}): Promise<MeetingTranscriptionResponseDto> {
-		const meeting =
-			await this.meetingRepository.findByZoomMeetingId(zoomMeetingId);
-
-		if (!meeting) {
-			throw new MeetingError({
-				message: MeetingErrorMessage.MEETING_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		const { id: meetingId } = meeting.toObject();
 		const transcription = await this.meetingTranscriptionService.create({
 			chunkText,
 			meetingId,

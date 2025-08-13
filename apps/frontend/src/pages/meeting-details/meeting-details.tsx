@@ -92,7 +92,7 @@ const MeetingDetails: React.FC = () => {
 	}
 
 	if (dataStatus === DataStatus.PENDING) {
-		return <Loader isLoading withOverlay />;
+		return <Loader hasOverlay isLoading />;
 	}
 
 	if (!meeting) {

@@ -13,9 +13,6 @@ const WHITE_ROUTES: WhiteRoute[] = [
 	},
 	{
 		method: HTTPMethod.GET,
-		// path: new RegExp(
-		// 	`^/meetings${"/:id/".replace(":id", "[1-9]+")}/public\\?token=.+$`,
-		// ),
 		path: new RegExp(
 			`^/meetings${MeetingsApiPath.$ID_PUBLIC.replace(":id", "[1-9]+")}\\?token=.+$`,
 		),

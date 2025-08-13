@@ -51,6 +51,12 @@ import { type MeetingService } from "./meetings.service.js";
  *           type: string
  *         meetingPassword:
  *           type: string
+ *         createdAt:
+ *           type: string
+ *         meetingId:
+ *           type: string
+ *         meetingPassword:
+ *           type: string
  *       required:
  *         - id
  *         - host
@@ -125,6 +131,18 @@ class MeetingsController extends BaseController {
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.ROOT,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+		});
+		this.addRoute({
+			handler: (options) => this.getPublicUrl(options as GetPublicUrlOptions),
+			method: HTTPMethod.GET,
+			path: MeetingsApiPath.$ID_URL,
+			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+		});
+		this.addRoute({
+			handler: (options) =>
+				this.findBySignedUrl(options as FindBySignedUrlOptions),
+			method: HTTPMethod.GET,
+			path: MeetingsApiPath.$ID_PUBLIC,
 		});
 		this.addRoute({
 			handler: (options) => this.getPublicUrl(options as GetPublicUrlOptions),
@@ -262,7 +280,7 @@ class MeetingsController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /meetings/{id}/token:
+	 *  /meetings/{id}/public:
 	 *   get:
 	 *     summary: Get a meeting using signed URL
 	 *     tags:
@@ -295,9 +313,9 @@ class MeetingsController extends BaseController {
 	): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
 		const token = options.query.token;
-		const url = await this.meetingService.findBySignedUrl(id, token);
+		const meeting = await this.meetingService.findBySignedUrl(id, token);
 
-		return { payload: url, status: HTTPCode.OK };
+		return { payload: meeting, status: HTTPCode.OK };
 	}
 
 	/**

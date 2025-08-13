@@ -8,15 +8,21 @@ export {
 	AppEnvironment,
 	ContentType,
 	ExceptionMessage,
+	KeyboardKey,
 	ServerErrorType,
 } from "./libs/enums/enums.js";
 export {
 	AuthError,
 	HTTPError,
 	MeetingError,
+	UserError,
 	ValidationError,
 } from "./libs/exceptions/exceptions.js";
-export { configureString, formatDate } from "./libs/helpers/helpers.js";
+export {
+	configureString,
+	extractZoomMeetingId,
+	formatDate,
+} from "./libs/helpers/helpers.js";
 export { type Config } from "./libs/modules/config/config.js";
 export {
 	type HTTP,
@@ -55,12 +61,17 @@ export {
 } from "./modules/meetings/meetings.js";
 export {
 	type AuthResponseDto,
+	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignInRequestDto,
 	type UserSignUpRequestDto,
+	type UserUpdateResponseDto,
+	type UserWithDetailsDto,
+	UserErrorMessage,
 	UsersApiPath,
 	userSignInValidationSchema,
 	userSignUpValidationSchema,
+	userUpdateValidationSchema,
 	UserValidationRule,
 } from "./modules/users/users.js";

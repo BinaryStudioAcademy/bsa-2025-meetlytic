@@ -49,6 +49,7 @@ echo "[+] Node.js 22 installed."
 echo "[+] Installing system libraries and dependencies..."
 apt install -y \
 	xvfb \
+	jq \
 	ffmpeg \
 	pulseaudio \
 	pulseaudio-utils \
@@ -78,15 +79,6 @@ export XDG_RUNTIME_DIR=/run/user/0
 mkdir -p "$XDG_RUNTIME_DIR"
 pulseaudio --daemonize=yes --exit-idle-time=-1
 echo "[+] PulseAudio daemon started."
-
-echo "[+] Configuring virtual_sink…"
-pactl unload-module module-null-sink &>/dev/null || true
-SINK_ID=$(pactl load-module module-null-sink \
-	sink_name=virtual_sink sink_properties=device.description=Virtual_Sink)
-pactl set-default-sink virtual_sink
-pactl list short sources | grep -q virtual_sink.monitor || {
-	echo "[X] virtual_sink.monitor NOT FOUND"; exit 1; }
-echo "[+] virtual_sink.monitor ready (module ID $SINK_ID)"
 
 # ─── Application setup ───────────────────────────────────────────────────────
 # Fix ownership so npm can write node_modules in the repo cloned by root/CFN.
@@ -124,25 +116,50 @@ sudo chown -R ubuntu:ubuntu /home/ubuntu/audio
 echo "[+] /home/ubuntu/audio prepared."
 
 # Generate .env with runtime configuration (meeting IDs, etc.)
+echo "[+] Parsing settings JSON..."
+SETTINGS_JSON="$1"
+
+
+if ! command -v jq &> /dev/null; then
+echo "Error: jq is not installed. Please install jq to continue."
+exit 1
+fi
+
+# Use jq to parse JSON into bash variables
+BOT_NAME=$(echo "$SETTINGS_JSON" | jq -r '.botName')
+MEETING_LINK=$(echo "$SETTINGS_JSON" | jq -r '.meetingLink')
+MEETING_PASSWORD=$(echo "$SETTINGS_JSON" | jq -r '.meetingPassword')
+OPEN_AI_KEY=$(echo "$SETTINGS_JSON" | jq -r '.openAIKey')
+TEXT_GENERATION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.textGenerationModel')
+TRANSCRIPTION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.transcriptionModel')
+
+if [ -z "$BOT_NAME" ] || [ -z "$MEETING_LINK" ]; then
+echo "Error: Missing required settings in JSON."
+exit 1
+fi
+
 echo "[+] Writing environment variables..."
 cat <<EOF > .env
+# APP
+NODE_ENV=production
 # BOT
-BOT_NAME="$1"
+BOT_NAME="$BOT_NAME"
 
 # ZOOM
-MEETING_ID="$2"
-MEETING_PASSWORD="$3"
+MEETING_LINK="$MEETING_LINK"
+MEETING_PASSWORD="$MEETING_PASSWORD"
 
 # OPEN_AI
-OPEN_AI_KEY="$4"
-TEXT_GENERATION_MODEL="$5"
-TRANSCRIPTION_MODEL="$6"
+OPEN_AI_KEY="$OPEN_AI_KEY"
+TEXT_GENERATION_MODEL="$TEXT_GENERATION_MODEL"
+TRANSCRIPTION_MODEL="$TRANSCRIPTION_MODEL"
 
 # AUDIO - RECORDER
 CHUNK_DURATION=10
 FFMPEG_PATH=/usr/bin/ffmpeg
 OUTPUT_DIRECTORY=/home/ubuntu/audio
 EOF
+
 echo "[+] .env file created."
 
 # Launch the bot inside Xvfb (headless virtual display) and detach

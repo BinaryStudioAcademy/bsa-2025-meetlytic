@@ -37,6 +37,14 @@
 	display: none;
 }
 
+.header-logo-mobile {
+	display: none;
+}
+
+.header-logo-desktop {
+	display: block;
+}
+
 @media (width <= 768px) {
 	.header-inner {
 		display: grid;
@@ -99,5 +107,13 @@
 		flex-direction: column;
 		gap: 16px;
 		margin-top: 30px;
+	}
+
+	.header-logo-desktop {
+		display: none;
+	}
+
+	.header-logo-mobile {
+		display: block;
 	}
 }

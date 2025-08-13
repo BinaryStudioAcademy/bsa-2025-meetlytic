@@ -13,6 +13,7 @@ import {
 	ButtonVariant,
 	LogoSize,
 	LogoTheme,
+	LogoType,
 } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { useCallback, useLogout, useState } from "~/libs/hooks/hooks.js";
@@ -43,7 +44,22 @@ const Header: React.FC = () => {
 				</button>
 
 				<div className={styles["header-logo"]}>
-					<Logo hasLink size={LogoSize.SMALL} theme={LogoTheme.LIGHT} />
+					<div className={styles["header-logo-mobile"]}>
+						<Logo
+							hasLink
+							size={LogoSize.SMALL}
+							theme={LogoTheme.LIGHT}
+							type={LogoType.MOBILE}
+						/>
+					</div>
+					<div className={styles["header-logo-desktop"]}>
+						<Logo
+							hasLink
+							size={LogoSize.SMALL}
+							theme={LogoTheme.LIGHT}
+							type={LogoType.DESKTOP}
+						/>
+					</div>
 				</div>
 				<div className={styles["header__avatar-logout-wrapper"]}>
 					<Avatar size={AvatarSize.MOBILE} type={AvatarType.MAIN} />

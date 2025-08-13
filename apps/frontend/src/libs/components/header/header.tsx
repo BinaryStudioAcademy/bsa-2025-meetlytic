@@ -27,7 +27,7 @@ const Header: React.FC = () => {
 
 	return (
 		<header className={styles["header"]}>
-			<div className={styles["header-inner"]}>
+			<div className={styles["header__inner"]}>
 				<button
 					aria-label={menuOpen ? "Close menu" : "Open menu"}
 					className={styles["header__burger"]}
@@ -36,8 +36,8 @@ const Header: React.FC = () => {
 					<Icon name={menuOpen ? "burgerMenu" : "burgerClose"} />
 				</button>
 
-				<div className={styles["header-logo"]}>
-					<div className={styles["header-logo-mobile"]}>
+				<div className={styles["header__logo"]}>
+					<div className={styles["header__logo--mobile"]}>
 						<Logo
 							hasLink
 							size={LogoSize.SMALL}
@@ -45,7 +45,7 @@ const Header: React.FC = () => {
 							type={LogoType.MOBILE}
 						/>
 					</div>
-					<div className={styles["header-logo-desktop"]}>
+					<div className={styles["header__logo--desktop"]}>
 						<Logo
 							hasLink
 							size={LogoSize.SMALL}

@@ -188,6 +188,8 @@ class BaseAudioRecorder implements AudioRecorder {
 			return;
 		}
 
+		mkdirSync(this.outputDir, { recursive: true });
+
 		const extension = this.useMp3 ? "mp3" : "wav";
 		this.fullPath = path.join(
 			this.outputDir,
@@ -196,6 +198,9 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		const ffmpegArguments = [
 			"-hide_banner",
+			"-loglevel",
+			"info",
+			"-y",
 			"-fflags",
 			"+genpts+igndts",
 			"-use_wallclock_as_timestamps",
@@ -203,11 +208,21 @@ class BaseAudioRecorder implements AudioRecorder {
 			"-f",
 			"pulse",
 			"-i",
-			"virtual_sink.monitor",
+			"auto_null.monitor",
+			"-vn",
 		];
 
 		if (this.useMp3) {
-			ffmpegArguments.push("-acodec", "libmp3lame", "-b:a", "128k");
+			ffmpegArguments.push(
+				"-acodec",
+				"libmp3lame",
+				"-b:a",
+				"128k",
+				"-ar",
+				"44100",
+				"-ac",
+				"2",
+			);
 		} else {
 			ffmpegArguments.push("-acodec", "pcm_s16le", "-ar", "44100", "-ac", "2");
 		}
@@ -219,16 +234,23 @@ class BaseAudioRecorder implements AudioRecorder {
 		this.fullRecordingProccess = spawn(this.ffmpegPath, ffmpegArguments);
 
 		this.fullRecordingProccess.stderr.on(AudioRecorderEvent.DATA, (data) => {
-			const lines = String(data)
-				.trim()
-				.split("\n")
-				.map((l) => l.trim());
+			const lines = String(data).split("\n");
 
-			for (const line of lines) {
-				if (/error|invalid|failed|no such/i.test(line)) {
-					this.logger.error(`[FFMPEG][full][ERROR?] ${line}`);
+			for (const raw of lines) {
+				const line = raw.trim();
+
+				if (!line) {
+					continue;
 				}
+
+				this.logger.info(`[FFMPEG][full] ${line}`);
 			}
+		});
+
+		this.fullRecordingProccess.once("exit", (code, signal) => {
+			this.logger.warn(
+				`[full] ffmpeg exited early code=${String(code)} signal=${String(signal)}`,
+			);
 		});
 	}
 

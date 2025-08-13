@@ -249,6 +249,28 @@ class BaseZoomBot {
 				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
 				await this.leaveMeeting();
 				this.shouldMonitor = false;
+
+				const meetingId = this.getMeetingId();
+				this.logger.info(
+					`strarting finalizing full meeting recording for ${meetingId}`,
+				);
+				const audioPrefix = this.config.ENV.S3.PREFIX_AUDIO;
+				const prefix = `${audioPrefix}/${meetingId}`;
+				await this.audioRecorder.stopFullMeetingRecording();
+				const contentType = "audio/mpeg";
+				const result = await this.audioRecorder.finalize({
+					contentType,
+					meetingId,
+					prefix,
+				});
+
+				if (result.s3) {
+					this.logger.info(
+						`[S3] Uploaded: key=${result.s3.key} version=${String(result.s3.versionId)} etag=${String(result.s3.etag)}`,
+					);
+				}
+
+				break;
 			}
 
 			await delay(TIMEOUTS.FIFTEEN_SECONDS);
@@ -286,22 +308,6 @@ class BaseZoomBot {
 			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
 			await delay(TIMEOUTS.FIFTEEN_SECONDS);
 			await this.monitorParticipants();
-
-			const audioPrefix = this.config.ENV.S3.PREFIX_AUDIO;
-			const prefix = `${audioPrefix}/${meetingId}`;
-			await this.audioRecorder.stopFullMeetingRecording();
-			const contentType = "audio/mpeg";
-			const result = await this.audioRecorder.finalize({
-				contentType,
-				meetingId,
-				prefix,
-			});
-
-			if (result.s3) {
-				this.logger.info(
-					`[S3] Uploaded: key=${result.s3.key} version=${String(result.s3.versionId)} etag=${String(result.s3.etag)}`,
-				);
-			}
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessages.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,

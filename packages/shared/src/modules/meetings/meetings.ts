@@ -7,7 +7,9 @@ export {
 } from "./libs/enums/enums.js";
 export {
 	type MeetingCreateRequestDto,
+	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
+	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,

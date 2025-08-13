@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.5.1...v1.5.2) (2025-08-13)
+
+
+### Bug Fixes
+
+* generate different error codes for validation signup and signin ml-162 ([#167](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/167)) ([6b37ff4](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/6b37ff400a4cbd5b51b03ece8696311cdf8acba0))
+
+## [1.5.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.5.0...v1.5.1) (2025-08-12)
+
+
+### Bug Fixes
+
+* bot fails to join zoom meeting ml-148 ([#165](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/165)) ([905be23](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/905be23531ef4b8f9f3b9736f50b33ded2c73c1c))
+
 ## [1.5.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.4.0...v1.5.0) (2025-08-11)
 
 

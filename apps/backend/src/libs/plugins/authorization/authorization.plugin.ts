@@ -44,7 +44,9 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 			const isWhiteRoute = routesWhiteList.some((whiteRoute) => {
 				return (
 					method.toUpperCase() === whiteRoute.method.toUpperCase() &&
-					endpointToCompare === whiteRoute.path
+					(whiteRoute.path instanceof RegExp
+						? whiteRoute.path.test(endpointToCompare)
+						: endpointToCompare === whiteRoute.path)
 				);
 			});
 

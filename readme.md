@@ -48,6 +48,8 @@ erDiagram
       int owner_id FK
       text meeting_id
       text meeting_password
+      text summary
+      text action_items
       dateTime created_at
       dateTime updated_at
    }

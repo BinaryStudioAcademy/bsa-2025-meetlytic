@@ -15,6 +15,8 @@ import {
 import { MeetingTranscriptionModel } from "./meeting-transcription.model.js";
 
 class MeetingModel extends AbstractModel {
+	public actionItems!: null | string;
+
 	public host!: ValueOf<typeof MeetingHost>;
 
 	public instanceId!: null | string;
@@ -26,6 +28,8 @@ class MeetingModel extends AbstractModel {
 	public ownerId!: number;
 
 	public status!: ValueOf<typeof MeetingStatus>;
+
+	public summary!: null | string;
 
 	public static get relationMappings(): RelationMappings {
 		return {

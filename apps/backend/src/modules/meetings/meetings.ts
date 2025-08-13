@@ -1,5 +1,6 @@
 import { cloudFormation } from "~/libs/modules/cloud-formation/cloud-formation.js";
 import { logger } from "~/libs/modules/logger/logger.js";
+import { sharedJwt } from "~/libs/modules/token/token.js";
 
 import { meetingTranscriptionService } from "./meetings-transcription.js";
 import { MeetingsController } from "./meetings.controller.js";
@@ -12,6 +13,7 @@ const meetingService: MeetingService = new MeetingService({
 	cloudFormation,
 	meetingRepository,
 	meetingTranscriptionService,
+	sharedJwt,
 });
 const meetingsController = new MeetingsController(logger, meetingService);
 

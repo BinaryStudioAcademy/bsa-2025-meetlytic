@@ -44,7 +44,9 @@ export {
 export { AuthApiPath, AuthStatusMessage } from "./modules/auth/auth.js";
 export {
 	type MeetingCreateRequestDto,
+	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
+	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,

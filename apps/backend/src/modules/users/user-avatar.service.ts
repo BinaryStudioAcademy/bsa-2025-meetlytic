@@ -42,16 +42,16 @@ class UserAvatarService {
 		return `avatars/${String(userId)}/${String(Date.now())}_${safe}`;
 	}
 
-	public async deleteAvatar(fileKey: string): Promise<{ success: boolean }> {
+	public async deleteAvatar(fileKey: string): Promise<{ isDeleted: boolean }> {
 		try {
 			await s3Instance.deleteObject({
 				bucket: this.bucketName,
 				key: fileKey,
 			});
 
-			return { success: true };
+			return { isDeleted: true };
 		} catch {
-			return { success: false };
+			return { isDeleted: false };
 		}
 	}
 

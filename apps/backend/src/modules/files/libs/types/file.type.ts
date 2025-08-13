@@ -3,6 +3,5 @@ type File = {
 	key: string;
 	type: string;
 	url: string;
-	user_details_id: number;
 };
 export { type File };

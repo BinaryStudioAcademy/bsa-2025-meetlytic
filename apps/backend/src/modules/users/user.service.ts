@@ -1,11 +1,16 @@
 import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
+import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
 
+import { UserErrorMessage } from "./libs/enums/enums.js";
+import { UserError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserCredentials,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignUpRequestDto,
+	type UserUpdateResponseDto,
+	type UserWithDetailsDto,
 } from "./libs/types/types.js";
 import { UserDetailsEntity } from "./user-details.entity.js";
 import { type UserDetailsRepository } from "./user-details.repository.js";
@@ -67,6 +72,32 @@ class UserService implements Service {
 
 		return user ? user.toObject() : null;
 	}
+
+	public async findProfileByEmail(
+		email: string,
+	): Promise<null | UserWithDetailsDto> {
+		const user = await this.userRepository.findByEmailWithDetails(email);
+		const details = user?.getDetails();
+
+		if (!user) {
+			throw new UserError({
+				message: UserErrorMessage.USER_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		if (!details) {
+			return null;
+		}
+
+		return {
+			email: user.toObject().email,
+			firstName: details.toObject().firstName,
+			id: user.toObject().id,
+			lastName: details.toObject().lastName,
+		};
+	}
+
 	public async getCredentials(id: number): Promise<null | UserCredentials> {
 		const credentials = await this.userRepository.getCredentials(id);
 
@@ -74,10 +105,11 @@ class UserService implements Service {
 	}
 
 	public async getOrCreateDetailsId(userId: number): Promise<number> {
-		const existingId = await this.userDetailsRepository.findIdByUserId(userId);
+		const existingEntity =
+			await this.userDetailsRepository.findByUserId(userId);
 
-		if (existingId) {
-			return existingId;
+		if (existingEntity) {
+			return existingEntity.toObject().id;
 		}
 
 		const created = await this.userDetailsRepository.create(
@@ -87,8 +119,49 @@ class UserService implements Service {
 		return created.toObject().id;
 	}
 
-	public update(): ReturnType<Service["update"]> {
-		return Promise.resolve(null);
+	public async update(
+		userId: number,
+		payload: UserUpdateResponseDto,
+	): Promise<null | UserEntity> {
+		const user = await this.userRepository.findByIdWithDetails(userId);
+		const details = user?.getDetails();
+
+		if (!user) {
+			throw new UserError({
+				message: UserErrorMessage.USER_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		if (!details) {
+			return null;
+		}
+
+		if (payload.email !== user.toObject().email) {
+			const userWithEmail = await this.userRepository.findByEmail(
+				payload.email,
+			);
+
+			if (userWithEmail && userWithEmail.toObject().id !== userId) {
+				throw new UserError({
+					message: UserErrorMessage.USER_EMAIL_IN_USE,
+					status: HTTPCode.CONFLICT,
+				});
+			}
+
+			await this.userRepository.update(userId, {
+				email: payload.email,
+			});
+		}
+
+		await this.userDetailsRepository.update(details.toObject().id, {
+			firstName: payload.firstName,
+			lastName: payload.lastName,
+		});
+
+		const updatedUser = await this.userRepository.findByIdWithDetails(userId);
+
+		return updatedUser;
 	}
 
 	public async updateUserDetailsFileId(

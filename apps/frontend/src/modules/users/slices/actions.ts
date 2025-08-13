@@ -1,62 +1,36 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { name as sliceName } from "./user-avatar.slice.js";
+import { NotificationMessage } from "~/libs/enums/enums.js";
+import { notification } from "~/libs/modules/notifications/notifications.js";
+import { type AsyncThunkConfig } from "~/libs/types/types.js";
+import {
+	type UserUpdateResponseDto,
+	type UserWithDetailsDto,
+} from "~/modules/users/users.js";
 
-interface LocalAsyncThunkConfig {
-	extra: {
-		userAvatarApi: UserAvatarApi;
-	};
-}
+import { name as sliceName } from "./users.slice.js";
 
-interface UserAvatarApi {
-	deleteAvatar: () => Promise<void>;
-	getAvatarUrl: () => Promise<null | string>;
-	uploadAvatar: (file: File) => Promise<string>;
-}
-
-const uploadAvatar = createAsyncThunk<string, File, LocalAsyncThunkConfig>(
-	`${sliceName}/upload`,
-	async (file, { extra, rejectWithValue }) => {
-		try {
-			const url = await extra.userAvatarApi.uploadAvatar(file);
-
-			return url;
-		} catch (error) {
-			return rejectWithValue(
-				error instanceof Error ? error.message : "Unknown error",
-			);
-		}
-	},
-);
-
-const deleteAvatar = createAsyncThunk<
+const getProfile = createAsyncThunk<
+	UserWithDetailsDto,
 	undefined,
-	undefined,
-	LocalAsyncThunkConfig
->(`${sliceName}/delete`, async (_, { extra, rejectWithValue }) => {
-	try {
-		await extra.userAvatarApi.deleteAvatar();
-	} catch (error) {
-		return rejectWithValue(
-			error instanceof Error ? error.message : "Unknown error",
-		);
-	}
+	AsyncThunkConfig
+>(`${sliceName}/get-profile`, async (_, { extra }) => {
+	const { userApi } = extra;
+
+	return await userApi.getCurrent();
 });
 
-const fetchAvatar = createAsyncThunk<
-	null | string,
-	undefined,
-	LocalAsyncThunkConfig
->(`${sliceName}/fetch`, async (_, { extra, rejectWithValue }) => {
-	try {
-		const url = await extra.userAvatarApi.getAvatarUrl();
+const updateProfile = createAsyncThunk<
+	UserWithDetailsDto,
+	UserUpdateResponseDto,
+	AsyncThunkConfig
+>(`${sliceName}/edit-user-profile`, async (payload, { extra }) => {
+	const { userApi } = extra;
 
-		return url;
-	} catch (error) {
-		return rejectWithValue(
-			error instanceof Error ? error.message : "Unknown error",
-		);
-	}
+	const updatedUser = await userApi.updateProfile(payload);
+	notification.success(NotificationMessage.EDIT_PROFILE_SUCCESS);
+
+	return updatedUser;
 });
 
-export { deleteAvatar, fetchAvatar, uploadAvatar };
+export { getProfile, updateProfile };

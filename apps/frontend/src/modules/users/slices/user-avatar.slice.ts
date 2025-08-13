@@ -1,6 +1,10 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-import { deleteAvatar, fetchAvatar, uploadAvatar } from "./actions.js";
+import {
+	deleteAvatar,
+	fetchAvatar,
+	uploadAvatar,
+} from "./user-avatar.thunks.js";
 
 type UserAvatarState = {
 	error: null | string;
@@ -14,7 +18,7 @@ const initialState: UserAvatarState = {
 	url: null,
 };
 
-const { actions, name, reducer } = createSlice({
+const { actions, reducer } = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(uploadAvatar.pending, (state) => {
@@ -67,4 +71,4 @@ const { actions, name, reducer } = createSlice({
 	},
 });
 
-export { actions, name, reducer };
+export { actions, reducer };

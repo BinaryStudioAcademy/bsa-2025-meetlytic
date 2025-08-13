@@ -10,17 +10,16 @@ class FileModel extends Model {
 	public key!: string;
 	public updated_at!: string;
 	public url!: string;
-	public user_details_id!: number;
 
 	public static get relationMappings(): RelationMappings {
 		return {
 			userDetails: {
 				join: {
-					from: `${TableName.FILES}.user_details_id`,
-					to: `${TableName.USER_DETAILS}.id`,
+					from: `${TableName.FILES}.id`,
+					to: `${TableName.USER_DETAILS}.file_id`,
 				},
 				modelClass: UserDetailsModel,
-				relation: Model.BelongsToOneRelation,
+				relation: Model.HasOneRelation,
 			},
 		};
 	}

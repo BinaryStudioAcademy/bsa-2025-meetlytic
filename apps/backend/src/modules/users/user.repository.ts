@@ -1,4 +1,5 @@
 import { type Repository } from "~/libs/types/types.js";
+import { UserDetailsEntity } from "~/modules/users/user-details.entity.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
@@ -51,6 +52,58 @@ class UserRepository implements Repository {
 		return user ? UserEntity.initialize(user) : null;
 	}
 
+	public async findByEmailWithDetails(
+		email: string,
+	): Promise<null | UserEntity> {
+		const userWithDetails = await this.userModel
+			.query()
+			.findOne(UserAttribute.EMAIL, email)
+			.withGraphFetched("userDetails");
+
+		if (!userWithDetails) {
+			return null;
+		}
+
+		return UserEntity.initialize({
+			details: UserDetailsEntity.initialize({
+				fileId: userWithDetails.userDetails.fileId ?? null,
+				firstName: userWithDetails.userDetails.firstName,
+				id: userWithDetails.userDetails.id,
+				lastName: userWithDetails.userDetails.lastName,
+				userId: userWithDetails.userDetails.userId,
+			}),
+			email: userWithDetails.email,
+			id: userWithDetails.id,
+			passwordHash: userWithDetails.passwordHash,
+			passwordSalt: userWithDetails.passwordSalt,
+		});
+	}
+
+	public async findByIdWithDetails(id: number): Promise<null | UserEntity> {
+		const userWithDetails = await this.userModel
+			.query()
+			.findById(id)
+			.withGraphFetched("userDetails");
+
+		if (!userWithDetails) {
+			return null;
+		}
+
+		return UserEntity.initialize({
+			details: UserDetailsEntity.initialize({
+				fileId: userWithDetails.userDetails.fileId ?? null,
+				firstName: userWithDetails.userDetails.firstName,
+				id: userWithDetails.userDetails.id,
+				lastName: userWithDetails.userDetails.lastName,
+				userId: userWithDetails.userDetails.userId,
+			}),
+			email: userWithDetails.email,
+			id: userWithDetails.id,
+			passwordHash: userWithDetails.passwordHash,
+			passwordSalt: userWithDetails.passwordSalt,
+		});
+	}
+
 	public async getCredentials(id: number): Promise<null | UserCredentials> {
 		const credentials = await this.userModel
 			.query()
@@ -60,8 +113,16 @@ class UserRepository implements Repository {
 		return credentials ?? null;
 	}
 
-	public update(): ReturnType<Repository["update"]> {
-		return Promise.resolve(null);
+	public async update(
+		id: number,
+		payload: Partial<{ email: string }>,
+	): Promise<UserEntity> {
+		const updatedUser = await this.userModel
+			.query()
+			.patchAndFetchById(id, payload)
+			.execute();
+
+		return UserEntity.initialize(updatedUser);
 	}
 }
 

@@ -12,7 +12,10 @@ import { UserModel } from "./user.model.js";
 import { UserRepository } from "./user.repository.js";
 import { UserService } from "./user.service.js";
 
-const fileRepository = new FileRepository(FileModel);
+const fileRepository = new FileRepository({
+	fileModel: FileModel,
+	userDetailsModel: UserDetailsModel,
+});
 const userRepository = new UserRepository(UserModel);
 const userDetailsRepository = new UserDetailsRepository(UserDetailsModel);
 const userService = new UserService(userRepository, userDetailsRepository);

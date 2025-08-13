@@ -34,7 +34,11 @@ class FileService {
 			return false;
 		}
 
+		await this.userAvatarService.deleteAvatar(existing.key);
+
 		await this.fileRepository.delete(existing.id);
+
+		await this.fileRepository.unsetFileId(user_details_id);
 
 		return true;
 	}

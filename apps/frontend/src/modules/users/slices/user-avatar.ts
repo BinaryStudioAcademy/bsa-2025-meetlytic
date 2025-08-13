@@ -1,5 +1,9 @@
-import { deleteAvatar, fetchAvatar, uploadAvatar } from "./actions.js";
 import { actions } from "./user-avatar.slice.js";
+import {
+	deleteAvatar,
+	fetchAvatar,
+	uploadAvatar,
+} from "./user-avatar.thunks.js";
 
 const allActions = {
 	...actions,

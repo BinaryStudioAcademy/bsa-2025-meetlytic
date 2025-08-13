@@ -127,6 +127,7 @@ fi
 
 # Use jq to parse JSON into bash variables
 BOT_NAME=$(echo "$SETTINGS_JSON" | jq -r '.botName')
+MEETING_ID=$(echo "$SETTINGS_JSON" | jq -r '.id')
 MEETING_LINK=$(echo "$SETTINGS_JSON" | jq -r '.meetingLink')
 MEETING_PASSWORD=$(echo "$SETTINGS_JSON" | jq -r '.meetingPassword')
 OPEN_AI_KEY=$(echo "$SETTINGS_JSON" | jq -r '.openAIKey')
@@ -146,6 +147,7 @@ NODE_ENV=production
 BOT_NAME="$BOT_NAME"
 
 # ZOOM
+MEETING_ID="$MEETING_ID"
 MEETING_LINK="$MEETING_LINK"
 MEETING_PASSWORD="$MEETING_PASSWORD"
 

@@ -89,6 +89,12 @@ class BaseConfig implements Config {
 					env: "BOT_NAME",
 					format: String,
 				},
+				MEETING_ID: {
+					default: null,
+					doc: "meeting ID primary key",
+					env: "MEETING_ID",
+					format: Number,
+				},
 				MEETING_LINK: {
 					default: null,
 					doc: "Zoom meeting link",

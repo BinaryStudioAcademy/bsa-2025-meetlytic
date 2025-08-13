@@ -19,6 +19,7 @@ type EnvironmentSchema = {
 	};
 	ZOOM: {
 		BOT_NAME: string;
+		MEETING_ID: number;
 		MEETING_LINK: string;
 		MEETING_PASSWORD: string;
 	};

@@ -30,6 +30,11 @@ type EnvironmentSchema = {
 		TEXT_GENERATION_MODEL: string;
 		TRANSCRIPTION_MODEL: string;
 	};
+	SHARED_TOKEN: {
+		ALGORITHM: string;
+		EXPIRES_IN: string;
+		SECRET: string;
+	};
 	TOKEN: {
 		ALGORITHM: string;
 		EXPIRES_IN: string;

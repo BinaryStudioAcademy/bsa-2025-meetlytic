@@ -13,6 +13,7 @@ const meetingApi = new MeetingApi({
 export { meetingApi };
 export {
 	type MeetingCreateRequestDto,
+	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
 	type MeetingResponseDto,
 } from "./libs/types/types.js";

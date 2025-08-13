@@ -3,6 +3,8 @@ import { type Entity, type ValueOf } from "~/libs/types/types.js";
 import { type MeetingHost, MeetingStatus } from "./libs/enums/enums.js";
 
 class MeetingEntity implements Entity {
+	private actionItems: null | string;
+
 	private createdAt: null | string;
 
 	private host: ValueOf<typeof MeetingHost>;
@@ -19,7 +21,10 @@ class MeetingEntity implements Entity {
 
 	private status!: ValueOf<typeof MeetingStatus>;
 
+	private summary: null | string;
+
 	private constructor({
+		actionItems,
 		createdAt,
 		host,
 		id,
@@ -28,7 +33,9 @@ class MeetingEntity implements Entity {
 		meetingPassword,
 		ownerId,
 		status,
+		summary,
 	}: {
+		actionItems: null | string;
 		createdAt: null | string;
 		host: ValueOf<typeof MeetingHost>;
 		id: null | number;
@@ -37,7 +44,9 @@ class MeetingEntity implements Entity {
 		meetingPassword: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
+		summary: null | string;
 	}) {
+		this.actionItems = actionItems;
 		this.createdAt = createdAt;
 		this.id = id;
 		this.host = host;
@@ -46,9 +55,11 @@ class MeetingEntity implements Entity {
 		this.meetingPassword = meetingPassword;
 		this.ownerId = ownerId;
 		this.status = status;
+		this.summary = summary;
 	}
 
 	public static initialize({
+		actionItems,
 		createdAt,
 		host,
 		id,
@@ -57,7 +68,9 @@ class MeetingEntity implements Entity {
 		meetingPassword,
 		ownerId,
 		status,
+		summary,
 	}: {
+		actionItems: null | string;
 		createdAt: null | string;
 		host: ValueOf<typeof MeetingHost>;
 		id: number;
@@ -66,8 +79,10 @@ class MeetingEntity implements Entity {
 		meetingPassword: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
+		summary: null | string;
 	}): MeetingEntity {
 		return new MeetingEntity({
+			actionItems,
 			createdAt,
 			host,
 			id,
@@ -76,6 +91,7 @@ class MeetingEntity implements Entity {
 			meetingPassword,
 			ownerId,
 			status,
+			summary,
 		});
 	}
 
@@ -93,6 +109,7 @@ class MeetingEntity implements Entity {
 		ownerId: number;
 	}): MeetingEntity {
 		return new MeetingEntity({
+			actionItems: null,
 			createdAt: null,
 			host,
 			id: null,
@@ -101,7 +118,52 @@ class MeetingEntity implements Entity {
 			meetingPassword,
 			ownerId,
 			status: MeetingStatus.STARTED,
+			summary: null,
 		});
+	}
+
+	public toClientObject(): {
+		createdAt: string;
+		host: ValueOf<typeof MeetingHost>;
+		id: number;
+		meetingId: string;
+		meetingPassword: null | string;
+		ownerId: number;
+		status: ValueOf<typeof MeetingStatus>;
+	} {
+		return {
+			createdAt: this.createdAt as string,
+			host: this.host,
+			id: this.id as number,
+			meetingId: this.meetingId,
+			meetingPassword: this.meetingPassword,
+			ownerId: this.ownerId,
+			status: this.status,
+		};
+	}
+
+	public toDetailedObject(): {
+		actionItems: null | string;
+		createdAt: string;
+		host: ValueOf<typeof MeetingHost>;
+		id: number;
+		meetingId: string;
+		meetingPassword: null | string;
+		ownerId: number;
+		status: ValueOf<typeof MeetingStatus>;
+		summary: null | string;
+	} {
+		return {
+			actionItems: this.actionItems as string,
+			createdAt: this.createdAt as string,
+			host: this.host,
+			id: this.id as number,
+			meetingId: this.meetingId,
+			meetingPassword: this.meetingPassword,
+			ownerId: this.ownerId,
+			status: this.status,
+			summary: this.summary as string,
+		};
 	}
 
 	public toNewObject(): {

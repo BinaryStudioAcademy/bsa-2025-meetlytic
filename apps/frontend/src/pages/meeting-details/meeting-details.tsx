@@ -17,7 +17,7 @@ import {
 	useState,
 } from "~/libs/hooks/hooks.js";
 import { type ValueOf } from "~/libs/types/types.js";
-import { type MeetingResponseDto } from "~/modules/meeting/meeting.js";
+import { type MeetingDetailedResponseDto } from "~/modules/meeting/meeting.js";
 import { meetingApi } from "~/modules/meeting/meeting.js";
 
 import styles from "./styles.module.css";
@@ -27,7 +27,9 @@ const MeetingDetails: React.FC = () => {
 	const [searchParameters] = useSearchParams();
 	const dispatch = useAppDispatch();
 
-	const [meeting, setMeeting] = useState<MeetingResponseDto | null>(null);
+	const [meeting, setMeeting] = useState<MeetingDetailedResponseDto | null>(
+		null,
+	);
 	const [dataStatus, setDataStatus] = useState<ValueOf<typeof DataStatus>>(
 		DataStatus.IDLE,
 	);
@@ -53,11 +55,9 @@ const MeetingDetails: React.FC = () => {
 			try {
 				const shareToken = searchParameters.get("token");
 
-				const fetchedMeeting: MeetingResponseDto = shareToken
+				const fetchedMeeting: MeetingDetailedResponseDto = shareToken
 					? await meetingApi.getMeetingById(Number(id), shareToken)
 					: await meetingApi.getMeetingById(Number(id));
-
-				// TODO: console.log("fetchedMeeting: ", fetchedMeeting);
 
 				setMeeting(fetchedMeeting);
 				setDataStatus(DataStatus.FULFILLED);
@@ -186,6 +186,7 @@ const MeetingDetails: React.FC = () => {
 									Good afternoon, everyone. Today, we are here to discuss last
 									weeks sales.
 								</li>
+								;
 								<li className={styles["action-items__text"]}>
 									<span className={styles["action-item-dot"]}></span>
 									Today, we are here to discuss last weeks sales.

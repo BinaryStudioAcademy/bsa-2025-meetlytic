@@ -46,10 +46,6 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 										element: <Meetings />,
 										path: AppRoute.MEETINGS,
 									},
-									{
-										element: <MeetingDetails />,
-										path: AppRoute.MEETINGS_BY_ID,
-									},
 								],
 								element: (
 									<ProtectedRoute redirectTo={AppRoute.SIGN_IN}>
@@ -64,7 +60,7 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 						children: [
 							{
 								element: <MeetingDetails />,
-								path: AppRoute.PUBLIC_MEETINGS_BY_ID,
+								path: AppRoute.PUBLIC_MEETINGS_$ID,
 							},
 						],
 						element: <PublicLayout />,

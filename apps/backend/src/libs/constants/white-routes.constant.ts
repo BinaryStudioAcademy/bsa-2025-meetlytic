@@ -1,12 +1,26 @@
 import { APIPath, AuthApiPath } from "~/libs/enums/enums.js";
+import { HTTPMethod } from "~/libs/modules/http/http.js";
+import { MeetingsApiPath } from "~/modules/meetings/libs/enums/enums.js";
 
 import { type WhiteRoute } from "./libs/types/types.js";
 
 const WHITE_ROUTES: WhiteRoute[] = [
-	{ method: "POST", path: `${APIPath.AUTH}${AuthApiPath.SIGN_UP}` },
-	{ method: "POST", path: `${APIPath.AUTH}${AuthApiPath.SIGN_IN}` },
-
-	{ method: "GET", path: "/documentation" },
+	{ method: HTTPMethod.POST, path: `${APIPath.AUTH}${AuthApiPath.SIGN_UP}` },
+	{ method: HTTPMethod.POST, path: `${APIPath.AUTH}${AuthApiPath.SIGN_IN}` },
+	{
+		method: HTTPMethod.GET,
+		path: /\/meetings\/[1-9]+\/url-verification\?token=.*/,
+	},
+	{
+		method: HTTPMethod.GET,
+		// path: new RegExp(
+		// 	`^/meetings${"/:id/".replace(":id", "[1-9]+")}/public\\?token=.+$`,
+		// ),
+		path: new RegExp(
+			`^/meetings${MeetingsApiPath.$ID_PUBLIC.replace(":id", "[1-9]+")}\\?token=.+$`,
+		),
+	},
+	{ method: HTTPMethod.GET, path: "/documentation" },
 ];
 
 export { WHITE_ROUTES };

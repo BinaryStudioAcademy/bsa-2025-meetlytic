@@ -1,13 +1,21 @@
+import { APIPath } from "~/libs/enums/enums.js";
+import { AuthError } from "~/libs/exceptions/exceptions.js";
 import { type CloudFormation } from "~/libs/modules/cloud-formation/cloud-formation.js";
 import template from "~/libs/modules/cloud-formation/libs/templates/ec2-instance-template.json" with { type: "json" };
 import { HTTPCode } from "~/libs/modules/http/http.js";
+import {
+	type BaseToken,
+	type SharedJwtPayload,
+} from "~/libs/modules/token/token.js";
 import { type Service } from "~/libs/types/types.js";
 
 import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
 import {
 	type MeetingCreateRequestDto,
+	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
+	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
 	type MeetingUpdateRequestDto,
 } from "./libs/types/types.js";
@@ -17,15 +25,22 @@ import { type MeetingRepository } from "./meetings.repository.js";
 type Constructor = {
 	cloudFormation: CloudFormation;
 	meetingRepository: MeetingRepository;
+	sharedJwt: BaseToken<SharedJwtPayload>;
 };
 
 class MeetingService implements Service<MeetingResponseDto> {
 	private cloudFormation: CloudFormation;
 	private meetingRepository: MeetingRepository;
+	private sharedJwt: BaseToken<SharedJwtPayload>;
 
-	public constructor({ cloudFormation, meetingRepository }: Constructor) {
+	public constructor({
+		cloudFormation,
+		meetingRepository,
+		sharedJwt,
+	}: Constructor) {
 		this.cloudFormation = cloudFormation;
 		this.meetingRepository = meetingRepository;
+		this.sharedJwt = sharedJwt;
 	}
 
 	private async createInstance(id: number): Promise<MeetingResponseDto> {
@@ -92,6 +107,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		return isDeleted;
 	}
+
 	public async endMeeting(id: number): Promise<MeetingResponseDto> {
 		await this.cloudFormation.delete(id);
 		const meeting = await this.meetingRepository.update(id, {
@@ -109,7 +125,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return meeting.toObject();
 	}
 
-	public async find(id: number): Promise<MeetingResponseDto> {
+	public async find(id: number): Promise<MeetingDetailedResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
 
 		if (!meeting) {
@@ -119,7 +135,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return meeting.toObject();
+		return meeting.toDetailedObject();
 	}
 
 	public async findAll(
@@ -130,6 +146,42 @@ class MeetingService implements Service<MeetingResponseDto> {
 		const meetings = await this.meetingRepository.findAllByOwnerId(ownerId);
 
 		return { items: meetings.map((meeting) => meeting.toObject()) };
+	}
+
+	public async findBySignedUrl(
+		id: number,
+		token: string,
+	): Promise<MeetingResponseDto> {
+		try {
+			const { payload } = await this.sharedJwt.verify(token);
+
+			if (id !== payload.meetingId) {
+				throw new AuthError();
+			}
+		} catch {
+			throw new AuthError();
+		}
+
+		return await this.find(id);
+	}
+
+	public async getPublicUrl(
+		id: number,
+	): Promise<MeetingGetPublicUrlResponseDto> {
+		const meeting = await this.meetingRepository.find(id);
+
+		if (!meeting) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.MEETING_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		const token = await this.sharedJwt.sign({ meetingId: id });
+
+		return {
+			publicUrl: `${APIPath.PUBLIC_MEETINGS}/${String(id)}?token=${token}`,
+		};
 	}
 
 	public async update(
@@ -146,6 +198,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		}
 
 		const meeting = MeetingEntity.initialize({
+			actionItems: meetingEntity.toDetailedObject().actionItems,
 			createdAt: meetingEntity.toObject().createdAt,
 			host: payload.host,
 			id,
@@ -154,6 +207,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			meetingPassword: meetingEntity.toObject().meetingPassword,
 			ownerId: meetingEntity.toObject().ownerId,
 			status: payload.status,
+			summary: meetingEntity.toDetailedObject().summary,
 		});
 
 		const updatedMeeting = await this.meetingRepository.update(
@@ -168,7 +222,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return updatedMeeting.toObject();
+		return updatedMeeting.toClientObject();
 	}
 }
 

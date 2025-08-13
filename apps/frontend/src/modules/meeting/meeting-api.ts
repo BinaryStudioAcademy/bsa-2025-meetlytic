@@ -1,9 +1,10 @@
 import { APIPath, ContentType } from "~/libs/enums/enums.js";
-import { BaseHTTPApi, type HTTPApiOptions } from "~/libs/modules/api/api.js";
+import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
 import {
 	type MeetingCreateRequestDto,
+	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
 	type MeetingResponseDto,
 } from "~/modules/meeting/meeting.js";
@@ -53,23 +54,29 @@ class MeetingApi extends BaseHTTPApi {
 	public async getMeetingById(
 		id: number,
 		token?: string,
-	): Promise<MeetingResponseDto> {
-		const options: HTTPApiOptions = {
-			contentType: ContentType.JSON,
-			hasAuth: !token,
-			method: "GET",
-		};
+	): Promise<MeetingDetailedResponseDto> {
+		const response = await (token
+			? this.load(
+					this.getFullEndpoint(`${MeetingsApiPath.$ID_PUBLIC}?token=${token}`, {
+						id: String(id),
+						// token: `?token=${token}`,
+					}),
+					{
+						contentType: ContentType.JSON,
+						hasAuth: false,
+						method: "GET",
+					},
+				)
+			: this.load(
+					this.getFullEndpoint(MeetingsApiPath.$ID, { id: String(id) }),
+					{
+						contentType: ContentType.JSON,
+						hasAuth: true,
+						method: "GET",
+					},
+				));
 
-		if (token) {
-			options.headers = { Authorization: `Bearer ${token}` };
-		}
-
-		const response = await this.load(
-			this.getFullEndpoint(MeetingsApiPath.$ID, { id: String(id) }),
-			options,
-		);
-
-		return await response.json<MeetingResponseDto>();
+		return await response.json<MeetingDetailedResponseDto>();
 	}
 }
 

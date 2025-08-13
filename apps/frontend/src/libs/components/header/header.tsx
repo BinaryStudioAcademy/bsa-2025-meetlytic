@@ -1,11 +1,4 @@
-import {
-	Avatar,
-	Button,
-	Icon,
-	Logo,
-	Navigation,
-} from "~/libs/components/components.js";
-import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
+import { Avatar, Button, Icon, Logo } from "~/libs/components/components.js";
 import {
 	AvatarSize,
 	AvatarType,
@@ -15,9 +8,9 @@ import {
 	LogoTheme,
 	LogoType,
 } from "~/libs/enums/enums.js";
-import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { useCallback, useLogout, useState } from "~/libs/hooks/hooks.js";
 
+import { MobileMenu } from "./libs/components/mobile-menu/mobile-menu.js";
 import styles from "./styles.module.css";
 
 const Header: React.FC = () => {
@@ -75,26 +68,11 @@ const Header: React.FC = () => {
 				</div>
 			</div>
 
-			<div
-				className={getValidClassNames(
-					styles["header__mobile-menu"],
-					menuOpen ? styles["header__mobile-menu--open"] : null,
-				)}
-			>
-				<Navigation items={NAVIGATION_ITEMS} />
-
-				<div className={styles["header__mobile-menu-actions"]}>
-					<Button
-						iconLeft={
-							<Icon className={styles["header__logout-icon"]} name="logout" />
-						}
-						label="Logout"
-						onClick={handleLogout}
-						size={ButtonSize.SMALL}
-						variant={ButtonVariant.OUTLINED}
-					/>
-				</div>
-			</div>
+			<MobileMenu
+				isOpen={menuOpen}
+				onClose={toggleMenu}
+				onLogout={handleLogout}
+			/>
 		</header>
 	);
 };

@@ -5,7 +5,6 @@ import { type ValueOf } from "~/libs/types/types.js";
 type HTTPApiOptions = Omit<HTTPOptions, "headers" | "payload"> & {
 	contentType: ValueOf<typeof ContentType>;
 	hasAuth: boolean;
-	headers?: HeadersInit;
 	payload?: HTTPOptions["payload"];
 };
 

@@ -13,10 +13,10 @@ import styles from "./styles.module.css";
 const Layout: React.FC = () => {
 	const logout = useLogout();
 
-	const [menuOpen, setMenuOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-	const toggleMenu = useCallback(() => {
-		setMenuOpen((previous) => !previous);
+	const onToggleMenu = useCallback(() => {
+		setIsMenuOpen((previous) => !previous);
 	}, []);
 
 	const onLogout = useCallback((): void => {
@@ -27,9 +27,9 @@ const Layout: React.FC = () => {
 		<div className={styles["layout"]}>
 			<div className={styles["layout__header"]}>
 				<Header
-					menuOpen={menuOpen}
+					isMenuOpen={isMenuOpen}
 					onLogout={onLogout}
-					toggleMenu={toggleMenu}
+					onToggleMenu={onToggleMenu}
 				/>
 			</div>
 
@@ -39,9 +39,15 @@ const Layout: React.FC = () => {
 				</Sidebar>
 			</div>
 
-			<main className={styles["layout__main"]}>{<RouterOutlet />}</main>
+			<main className={styles["layout__main"]}>
+				<RouterOutlet />
+			</main>
 
-			<MobileMenu isOpen={menuOpen} onClose={toggleMenu} onLogout={onLogout} />
+			<MobileMenu
+				isOpen={isMenuOpen}
+				onClose={onToggleMenu}
+				onLogout={onLogout}
+			/>
 		</div>
 	);
 };

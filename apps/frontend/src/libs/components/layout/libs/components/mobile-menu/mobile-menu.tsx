@@ -21,7 +21,7 @@ const MobileMenu: React.FC<Properties> = ({
 			<div
 				className={getValidClassNames(
 					styles["mobile-menu"],
-					isOpen ? styles["mobile-menu--open"] : null,
+					isOpen && styles["mobile-menu--open"],
 				)}
 			>
 				<Navigation items={NAVIGATION_ITEMS} onClick={onClose} />

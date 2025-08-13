@@ -14,15 +14,15 @@ import { useCallback, useNavigate } from "~/libs/hooks/hooks.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	menuOpen: boolean;
+	isMenuOpen: boolean;
 	onLogout: () => void;
-	toggleMenu: () => void;
+	onToggleMenu: () => void;
 };
 
 const Header: React.FC<Properties> = ({
-	menuOpen,
+	isMenuOpen,
 	onLogout,
-	toggleMenu,
+	onToggleMenu,
 }: Properties) => {
 	const navigate = useNavigate() as (to: string) => void;
 
@@ -34,11 +34,11 @@ const Header: React.FC<Properties> = ({
 		<header className={styles["header"]}>
 			<div className={styles["header__inner"]}>
 				<button
-					aria-label={menuOpen ? "Close menu" : "Open menu"}
+					aria-label={isMenuOpen ? "Close menu" : "Open menu"}
 					className={styles["header__burger"]}
-					onClick={toggleMenu}
+					onClick={onToggleMenu}
 				>
-					<Icon name={menuOpen ? "closeIcon" : "burgerMenu"} />
+					<Icon name={isMenuOpen ? "closeIcon" : "burgerMenu"} />
 				</button>
 
 				<div className={styles["header__logo"]}>

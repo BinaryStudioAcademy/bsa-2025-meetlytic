@@ -38,7 +38,7 @@ type Constructor = {
 	config: Config;
 	database: Database;
 	logger: Logger;
-	services: { socketService: BaseSocketService };
+	socketService: BaseSocketService;
 	title: string;
 };
 
@@ -53,9 +53,7 @@ class BaseServerApplication implements ServerApplication {
 
 	private logger: Logger;
 
-	private services: {
-		socketService: BaseSocketService;
-	};
+	private socketService: BaseSocketService;
 
 	private title: string;
 
@@ -64,13 +62,13 @@ class BaseServerApplication implements ServerApplication {
 		config,
 		database,
 		logger,
-		services,
+		socketService,
 		title,
 	}: Constructor) {
 		this.title = title;
 		this.config = config;
 		this.logger = logger;
-		this.services = services;
+		this.socketService = socketService;
 		this.database = database;
 		this.apis = apis;
 
@@ -148,7 +146,6 @@ class BaseServerApplication implements ServerApplication {
 				config: this.config,
 				jwt,
 				logger: this.logger,
-				socketService: this.services.socketService,
 				userService,
 			},
 		});
@@ -171,8 +168,7 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	private initSocket(): void {
-		const { socketService } = this.services;
-		socketService.initialize(this.app.server);
+		this.socketService.initialize(this.app.server);
 	}
 
 	public addRoute(parameters: ServerApplicationRouteParameters): void {

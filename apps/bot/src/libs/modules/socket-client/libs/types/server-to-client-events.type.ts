@@ -1,6 +1,6 @@
 type ServerToClientEvents = {
 	connect: () => void;
-	transcribe: (data: { chunkText: string; zoomMeetingId: number }) => void;
+	transcribe: (data: { chunkText: string; meetingId: number }) => void;
 };
 
 export { type ServerToClientEvents };

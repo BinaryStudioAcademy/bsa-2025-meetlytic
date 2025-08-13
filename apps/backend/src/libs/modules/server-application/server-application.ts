@@ -21,7 +21,7 @@ const serverApplication = new BaseServerApplication({
 	config,
 	database,
 	logger,
-	services: { socketService },
+	socketService,
 	title: "Meetlytic",
 });
 

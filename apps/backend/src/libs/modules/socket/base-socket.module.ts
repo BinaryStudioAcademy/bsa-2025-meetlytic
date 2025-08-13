@@ -10,7 +10,10 @@ import {
 	SocketEvent,
 	SocketMessage,
 } from "./libs/enums/enums.js";
-import { type SocketService } from "./libs/types/types.js";
+import {
+	type MeetingTranscriptionRequestDto,
+	type SocketService,
+} from "./libs/types/types.js";
 
 class BaseSocketService implements SocketService {
 	private io!: SocketServer;
@@ -25,7 +28,7 @@ class BaseSocketService implements SocketService {
 
 		socket.on(
 			SocketEvent.TRANSCRIPTION,
-			async (payload: { chunkText: string; zoomMeetingId: string }) => {
+			async (payload: MeetingTranscriptionRequestDto) => {
 				try {
 					this.logger.info(SocketMessage.SOCKET_EVENT_RECEIVED);
 

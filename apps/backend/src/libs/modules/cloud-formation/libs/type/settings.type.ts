@@ -1,6 +1,6 @@
 type Settings = {
 	botName: string;
-	id: number;
+	id?: number;
 	openAIKey: string;
 	textGenerationModel: string;
 	transcriptionModel: string;

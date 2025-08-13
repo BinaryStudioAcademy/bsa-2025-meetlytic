@@ -21,6 +21,7 @@ import {
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingTranscriptionRequestDto,
 	type MeetingTranscriptionResponseDto,
 	type MeetingUpdateRequestDto,
 } from "./libs/types/types.js";
@@ -168,20 +169,6 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		return { items: meetings.map((meeting) => meeting.toObject()) };
 	}
-	public async saveChunk({
-		chunkText,
-		zoomMeetingId: meetingId,
-	}: {
-		chunkText: string;
-		zoomMeetingId: number;
-	}): Promise<MeetingTranscriptionResponseDto> {
-		const transcription = await this.meetingTranscriptionService.create({
-			chunkText,
-			meetingId,
-		});
-
-		return transcription;
-	}
 
 	public async findBySignedUrl(
 		id: number,
@@ -209,6 +196,18 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return {
 			publicUrl: `${APIPath.PUBLIC_MEETINGS}/${String(id)}?token=${token}`,
 		};
+	}
+
+	public async saveChunk({
+		chunkText,
+		meetingId,
+	}: MeetingTranscriptionRequestDto): Promise<MeetingTranscriptionResponseDto> {
+		const transcription = await this.meetingTranscriptionService.create({
+			chunkText,
+			meetingId,
+		});
+
+		return transcription;
 	}
 
 	public async update(

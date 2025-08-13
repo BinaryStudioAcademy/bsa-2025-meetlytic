@@ -282,7 +282,7 @@ class BaseZoomBot {
 				const chunkText = await this.openAI.transcribe(filePath);
 				this.socketClient.emit(SocketEvent.TRANSCRIPTION, {
 					chunkText,
-					zoomMeetingId: this.config.ENV.ZOOM.MEETING_ID,
+					meetingId: this.config.ENV.ZOOM.MEETING_ID,
 				});
 			} catch (error) {
 				this.logger.error(

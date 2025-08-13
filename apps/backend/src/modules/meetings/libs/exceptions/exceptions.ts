@@ -1,2 +1,1 @@
-export { MeetingError } from "@meetlytic/shared";
-export { MeetingTranscriptionError } from "@meetlytic/shared";
+export { MeetingError, MeetingTranscriptionError } from "@meetlytic/shared";

@@ -7,7 +7,7 @@ import {
 
 import {
 	MeetingAttributes,
-	MeetingTranscriptionAttributes,
+	MeetingTranscriptionAttribute,
 } from "./libs/enums/enums.js";
 import { MeetingModel } from "./meetings.model.js";
 
@@ -19,7 +19,7 @@ class MeetingTranscriptionModel extends AbstractModel {
 		return {
 			meeting: {
 				join: {
-					from: `${this.tableName}.${MeetingTranscriptionAttributes.MEETING_ID}`,
+					from: `${this.tableName}.${MeetingTranscriptionAttribute.MEETING_ID}`,
 					to: `${DatabaseTableName.MEETINGS}.${MeetingAttributes.ID}`,
 				},
 				modelClass: MeetingModel,

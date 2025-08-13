@@ -10,7 +10,7 @@ import {
 	MeetingAttributes,
 	type MeetingHost,
 	type MeetingStatus,
-	MeetingTranscriptionAttributes,
+	MeetingTranscriptionAttribute,
 } from "./libs/enums/enums.js";
 import { MeetingTranscriptionModel } from "./meeting-transcription.model.js";
 
@@ -36,7 +36,7 @@ class MeetingModel extends AbstractModel {
 			transcriptions: {
 				join: {
 					from: `${DatabaseTableName.MEETINGS}.${MeetingAttributes.ID}`,
-					to: `${DatabaseTableName.MEETING_TRANSCRIPTIONS}.${MeetingTranscriptionAttributes.MEETING_ID}`,
+					to: `${DatabaseTableName.MEETING_TRANSCRIPTIONS}.${MeetingTranscriptionAttribute.MEETING_ID}`,
 				},
 				modelClass: MeetingTranscriptionModel,
 				relation: this.HasManyRelation,

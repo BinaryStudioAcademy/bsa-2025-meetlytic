@@ -1,4 +1,4 @@
-const MeetingTranscriptionAttributes = {
+const MeetingTranscriptionAttribute = {
 	CHUNK_TEXT: "chunk_text",
 	CREATED_AT: "created_at",
 	ID: "id",
@@ -6,4 +6,4 @@ const MeetingTranscriptionAttributes = {
 	UPDATED_AT: "updated_at",
 } as const;
 
-export { MeetingTranscriptionAttributes };
+export { MeetingTranscriptionAttribute };

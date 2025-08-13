@@ -1,5 +1,5 @@
 export { MeetingAttributes } from "./meeting-attributes.enum.js";
-export { MeetingTranscriptionAttributes } from "./meeting-transcriptions-attributes.enum.js";
+export { MeetingTranscriptionAttribute } from "./meeting-transcriptions-attributes.enum.js";
 export {
 	HTTPCode,
 	MeetingErrorMessage,

@@ -19,7 +19,7 @@ const Layout: React.FC = () => {
 		setMenuOpen((previous) => !previous);
 	}, []);
 
-	const handleLogout = useCallback((): void => {
+	const onLogout = useCallback((): void => {
 		void logout();
 	}, [logout]);
 
@@ -27,8 +27,8 @@ const Layout: React.FC = () => {
 		<div className={styles["layout"]}>
 			<div className={styles["layout__header"]}>
 				<Header
-					handleLogout={handleLogout}
 					menuOpen={menuOpen}
+					onLogout={onLogout}
 					toggleMenu={toggleMenu}
 				/>
 			</div>
@@ -41,11 +41,7 @@ const Layout: React.FC = () => {
 
 			<main className={styles["layout__main"]}>{<RouterOutlet />}</main>
 
-			<MobileMenu
-				isOpen={menuOpen}
-				onClose={toggleMenu}
-				onLogout={handleLogout}
-			/>
+			<MobileMenu isOpen={menuOpen} onClose={toggleMenu} onLogout={onLogout} />
 		</div>
 	);
 };

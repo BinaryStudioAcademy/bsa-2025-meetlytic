@@ -14,17 +14,17 @@ import { useCallback, useNavigate } from "~/libs/hooks/hooks.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	handleLogout: () => void;
 	menuOpen: boolean;
+	onLogout: () => void;
 	toggleMenu: () => void;
 };
 
 const Header: React.FC<Properties> = ({
-	handleLogout,
 	menuOpen,
+	onLogout,
 	toggleMenu,
 }: Properties) => {
-	const navigate = useNavigate() as (to: string) => void; // TODO: fix navigation
+	const navigate = useNavigate() as (to: string) => void;
 
 	const handleProfileClick = useCallback((): void => {
 		navigate(AppRoute.PROFILE);
@@ -78,7 +78,7 @@ const Header: React.FC<Properties> = ({
 								<Icon className={styles["header__logout-icon"]} name="logout" />
 							}
 							label="Logout"
-							onClick={handleLogout}
+							onClick={onLogout}
 							size={ButtonSize.SMALL}
 							variant={ButtonVariant.OUTLINED}
 						/>

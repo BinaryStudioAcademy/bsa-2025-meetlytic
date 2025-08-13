@@ -1,4 +1,8 @@
 export { type AuthResponseDto } from "./auth-response-dto.type.js";
+export {
+	type AvatarFileDto,
+	type AvatarUploadResponseDto,
+} from "./user-avatar.dto.js";
 export { type UserGetAllResponseDto } from "./user-get-all-response-dto.type.js";
 export { type UserResponseDto } from "./user-response-dto.type.js";
 export { type UserSignInRequestDto } from "./user-sign-in-request-dto.type.js";

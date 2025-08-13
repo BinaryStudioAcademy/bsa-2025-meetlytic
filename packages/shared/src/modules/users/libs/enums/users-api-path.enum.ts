@@ -1,7 +1,7 @@
 const UsersApiPath = {
-	AVATAR: "/avatar",
-	AVATAR_BY_KEY: "/avatar/:key",
-	ROOT: "/",
+	AVATAR: "avatar",
+	ME: "me",
+	ROOT: "/users",
 } as const;
 
 export { UsersApiPath };

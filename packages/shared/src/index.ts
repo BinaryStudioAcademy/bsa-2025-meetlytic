@@ -53,6 +53,8 @@ export {
 } from "./modules/meetings/meetings.js";
 export {
 	type AuthResponseDto,
+	type AvatarFileDto,
+	type AvatarUploadResponseDto,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignInRequestDto,

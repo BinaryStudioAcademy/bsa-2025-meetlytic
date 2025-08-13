@@ -5,61 +5,29 @@ import {
 	ButtonVariant,
 } from "~/libs/enums/enums.js";
 import {
+	useAppDispatch,
+	useAppSelector,
 	useCallback,
 	useEffect,
 	useRef,
-	useState,
 } from "~/libs/hooks/hooks.js";
+import { actions as userAvatarActions } from "~/modules/users/user-avatar.js";
 
 import { Avatar, Button } from "../components.js";
 import styles from "./styles.module.css";
 
-type AvatarUploadResponse = {
-	data: {
-		key: string;
-		url: string;
-	};
-	success: boolean;
-};
-
-type UserResponse = {
-	details?: null | {
-		avatarFile?: null | {
-			key: string;
-			url: string;
-		};
-	};
-};
-
 const FIRST_FILE_INDEX = 0;
 
 const UserAvatarUploader: React.FC = () => {
+	const dispatch = useAppDispatch();
 	const fileInputReference = useRef<HTMLInputElement>(null);
-	const [avatarUrl, setAvatarUrl] = useState<null | string>(null);
-	const [isLoading, setIsLoading] = useState(false);
+	const { isLoading, url: avatarUrl } = useAppSelector(
+		(state) => state.userAvatar,
+	);
 
 	useEffect(() => {
-		void (async (): Promise<void> => {
-			const token = localStorage.getItem("token");
-
-			if (!token) {
-				throw new Error("No token found");
-			}
-
-			const response = await fetch("/api/v1/users/me", {
-				headers: { Authorization: `Bearer ${token}` },
-			});
-
-			if (!response.ok) {
-				throw new Error("Failed to fetch user");
-			}
-
-			const user = (await response.json()) as UserResponse;
-			const url = user.details?.avatarFile?.url ?? null;
-
-			setAvatarUrl(url);
-		})();
-	}, []);
+		void dispatch(userAvatarActions.fetchAvatar());
+	}, [dispatch]);
 
 	const handleUploadClick = useCallback((): void => {
 		fileInputReference.current?.click();
@@ -67,83 +35,22 @@ const UserAvatarUploader: React.FC = () => {
 
 	const handleFileChange = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>): void => {
-			void (async (): Promise<void> => {
-				const file = event.target.files?.[FIRST_FILE_INDEX];
+			const file = event.target.files?.[FIRST_FILE_INDEX];
 
-				if (!file) {
-					return;
-				}
+			if (!file) {
+				return;
+			}
 
-				setIsLoading(true);
-
-				try {
-					const token = localStorage.getItem("token");
-
-					if (!token) {
-						throw new Error("No token found");
-					}
-
-					const formData = new FormData();
-					formData.append("file", file);
-
-					const response = await fetch("/api/v1/users/avatar", {
-						body: formData,
-						headers: { Authorization: `Bearer ${token}` },
-						method: "POST",
-					});
-
-					if (!response.ok) {
-						throw new Error("Failed to upload avatar");
-					}
-
-					const data = (await response.json()) as AvatarUploadResponse;
-					setAvatarUrl(data.data.url);
-				} catch {
-					alert("Failed to upload avatar");
-				} finally {
-					setIsLoading(false);
-
-					if (fileInputReference.current) {
-						fileInputReference.current.value = "";
-					}
-				}
-			})();
+			void dispatch(userAvatarActions.uploadAvatar(file));
 		},
-		[],
+		[dispatch],
 	);
 
 	const handleDeleteClick = useCallback((): void => {
-		if (!avatarUrl) {
-			return;
+		if (avatarUrl) {
+			void dispatch(userAvatarActions.deleteAvatar());
 		}
-
-		setIsLoading(true);
-
-		void (async (): Promise<void> => {
-			try {
-				const token = localStorage.getItem("token");
-
-				if (!token) {
-					throw new Error("No token found");
-				}
-
-				const response = await fetch("/api/v1/users/avatar", {
-					headers: { Authorization: `Bearer ${token}` },
-					method: "DELETE",
-				});
-
-				if (!response.ok) {
-					throw new Error("Failed to delete avatar");
-				}
-
-				setAvatarUrl(null);
-			} catch {
-				alert("Failed to delete avatar");
-			} finally {
-				setIsLoading(false);
-			}
-		})();
-	}, [avatarUrl]);
+	}, [dispatch, avatarUrl]);
 
 	return (
 		<div className={styles["container"]}>

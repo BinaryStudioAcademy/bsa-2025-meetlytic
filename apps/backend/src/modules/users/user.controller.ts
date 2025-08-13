@@ -15,19 +15,54 @@ import {
 	type UserUpdateResponseDto,
 } from "./libs/types/types.js";
 
-/*** @swagger
+/**
+ * @swagger
  * components:
- *    schemas:
- *      User:
- *        type: object
- *        properties:
- *          id:
- *            type: number
- *            format: number
- *            minimum: 1
- *          email:
- *            type: string
- *            format: email
+ *   schemas:
+ *     UserDetails:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *         firstName:
+ *           type: string
+ *           nullable: true
+ *         lastName:
+ *           type: string
+ *           nullable: true
+ *         userId:
+ *           type: number
+ *       required:
+ *         - id
+ *         - userId
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *         email:
+ *           type: string
+ *           format: email
+ *       required:
+ *         - id
+ *         - email
+ *     UserWithDetails:
+ *       allOf:
+ *         - $ref: "#/components/schemas/User"
+ *         - type: object
+ *           properties:
+ *             details:
+ *               $ref: "#/components/schemas/UserDetails"
+ *     UserUpdateRequest:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *           format: email
+ *         firstName:
+ *           type: string
+ *         lastName:
+ *           type: string
  */
 class UserController extends BaseController {
 	private userService: UserService;
@@ -46,9 +81,7 @@ class UserController extends BaseController {
 		this.addRoute({
 			handler: (options) =>
 				this.getCurrentUser(
-					options as APIHandlerOptions<{
-						user: UserGetAllItemResponseDto;
-					}>,
+					options as APIHandlerOptions<{ user: UserGetAllItemResponseDto }>,
 				),
 			method: HTTPMethod.GET,
 			path: UsersApiPath.ME,
@@ -70,17 +103,19 @@ class UserController extends BaseController {
 	/**
 	 * @swagger
 	 * /users:
-	 *    get:
-	 *      description: Returns an array of users
-	 *      responses:
-	 *        200:
-	 *          description: Successful operation
-	 *          content:
-	 *            application/json:
-	 *              schema:
-	 *                type: array
-	 *                items:
-	 *                  $ref: "#/components/schemas/User"
+	 *   get:
+	 *     summary: Get all users
+	 *     tags:
+	 *       - Users
+	 *     responses:
+	 *       200:
+	 *         description: List of users
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: array
+	 *               items:
+	 *                 $ref: "#/components/schemas/User"
 	 */
 	private async findAll(): Promise<APIHandlerResponse> {
 		return {
@@ -94,13 +129,15 @@ class UserController extends BaseController {
 	 * /users/me:
 	 *   get:
 	 *     summary: Get current user profile
+	 *     tags:
+	 *       - Users
 	 *     responses:
 	 *       200:
-	 *         description: Successfully retrieved user
+	 *         description: Current user data
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/User'
+	 *               $ref: "#/components/schemas/UserWithDetails"
 	 *       401:
 	 *         description: Unauthorized
 	 */
@@ -126,31 +163,25 @@ class UserController extends BaseController {
 	 * /users/me:
 	 *   patch:
 	 *     summary: Update current user's profile
+	 *     tags:
+	 *       - Users
 	 *     requestBody:
 	 *       required: true
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             type: object
-	 *             properties:
-	 *               email:
-	 *                 type: string
-	 *                 format: email
-	 *               firstName:
-	 *                 type: string
-	 *               lastName:
-	 *                 type: string
+	 *             $ref: "#/components/schemas/UserUpdateRequest"
 	 *     responses:
 	 *       200:
-	 *         description: Successfully updated user
+	 *         description: Updated user data
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/User'
+	 *               $ref: "#/components/schemas/UserWithDetails"
 	 *       400:
 	 *         description: Bad request
-	 *       401:
-	 *         description: Unauthorized
+	 *       422:
+	 *         description: Validation failed
 	 */
 
 	public async updateProfile({

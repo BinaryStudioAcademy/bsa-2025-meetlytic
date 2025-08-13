@@ -33,12 +33,13 @@
 	display: none;
 }
 
-.header__logo--mobile {
+.variable-component__mobile {
 	display: none;
 }
 
-.header__logo--desktop {
+.variable-component__desktop {
 	display: block;
+	width: 100%;
 }
 
 @media (width <= 768px) {
@@ -68,11 +69,11 @@
 		display: none;
 	}
 
-	.header__logo--desktop {
+	.variable-component__desktop {
 		display: none;
 	}
 
-	.header__logo--mobile {
+	.variable-component__mobile {
 		display: block;
 	}
 }

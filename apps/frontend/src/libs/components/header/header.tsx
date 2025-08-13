@@ -37,7 +37,7 @@ const Header: React.FC = () => {
 				</button>
 
 				<div className={styles["header__logo"]}>
-					<div className={styles["header__logo--mobile"]}>
+					<div className={styles["variable-component__mobile"]}>
 						<Logo
 							hasLink
 							size={LogoSize.SMALL}
@@ -45,7 +45,7 @@ const Header: React.FC = () => {
 							type={LogoType.MOBILE}
 						/>
 					</div>
-					<div className={styles["header__logo--desktop"]}>
+					<div className={styles["variable-component__desktop"]}>
 						<Logo
 							hasLink
 							size={LogoSize.SMALL}
@@ -55,7 +55,13 @@ const Header: React.FC = () => {
 					</div>
 				</div>
 				<div className={styles["header__avatar-logout-wrapper"]}>
-					<Avatar size={AvatarSize.MOBILE} type={AvatarType.MAIN} />
+					<div className={styles["variable-component__mobile"]}>
+						<Avatar size={AvatarSize.MOBILE} type={AvatarType.MAIN} />
+					</div>
+					<div className={styles["variable-component__desktop"]}>
+						<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
+					</div>
+
 					<Button
 						iconLeft={
 							<Icon className={styles["header__logout-icon"]} name="logout" />

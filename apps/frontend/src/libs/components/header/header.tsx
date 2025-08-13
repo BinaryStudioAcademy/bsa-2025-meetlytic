@@ -1,5 +1,6 @@
 import { Avatar, Button, Icon, Logo } from "~/libs/components/components.js";
 import {
+	AppRoute,
 	AvatarSize,
 	AvatarType,
 	ButtonSize,
@@ -8,6 +9,7 @@ import {
 	LogoTheme,
 	LogoType,
 } from "~/libs/enums/enums.js";
+import { useCallback, useNavigate } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
@@ -22,6 +24,12 @@ const Header: React.FC<Properties> = ({
 	menuOpen,
 	toggleMenu,
 }: Properties) => {
+	const navigate = useNavigate() as (to: string) => void; // TODO: fix navigation
+
+	const handleProfileClick = useCallback((): void => {
+		navigate(AppRoute.PROFILE);
+	}, [navigate]);
+
 	return (
 		<header className={styles["header"]}>
 			<div className={styles["header__inner"]}>
@@ -52,12 +60,17 @@ const Header: React.FC<Properties> = ({
 					</div>
 				</div>
 				<div className={styles["header__avatar-logout-wrapper"]}>
-					<div className={styles["variable-component__mobile"]}>
-						<Avatar size={AvatarSize.MOBILE} type={AvatarType.MAIN} />
-					</div>
-					<div className={styles["variable-component__desktop"]}>
-						<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
-					</div>
+					<button
+						className={styles["header__profile-button"]}
+						onClick={handleProfileClick}
+					>
+						<div className={styles["variable-component__mobile"]}>
+							<Avatar size={AvatarSize.MOBILE} type={AvatarType.MAIN} />
+						</div>
+						<div className={styles["variable-component__desktop"]}>
+							<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
+						</div>
+					</button>
 
 					<div className={styles["variable-component__desktop"]}>
 						<Button

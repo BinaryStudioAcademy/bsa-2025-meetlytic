@@ -7,6 +7,8 @@ import { type ValueOf } from "~/libs/types/types.js";
 import { type MeetingHost, type MeetingStatus } from "./libs/enums/enums.js";
 
 class MeetingModel extends AbstractModel {
+	public actionItems!: null | string;
+
 	public host!: ValueOf<typeof MeetingHost>;
 
 	public instanceId!: null | string;
@@ -18,6 +20,8 @@ class MeetingModel extends AbstractModel {
 	public ownerId!: number;
 
 	public status!: ValueOf<typeof MeetingStatus>;
+
+	public summary!: null | string;
 
 	public static override get tableName(): string {
 		return DatabaseTableName.MEETINGS;

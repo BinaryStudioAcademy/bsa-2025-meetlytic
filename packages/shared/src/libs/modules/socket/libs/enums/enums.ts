@@ -1,2 +1,2 @@
 export { SocketEvent } from "./socket-event.enum.js";
-export { SocketMessages } from "./socket-messages.enum.js";
+export { SocketMessage } from "./socket-messages.enum.js";

@@ -7,7 +7,7 @@ import {
 import { type ValueOf } from "~/libs/types/types.js";
 
 import {
-	MeetingAttributes,
+	MeetingAttribute,
 	type MeetingHost,
 	type MeetingStatus,
 	MeetingTranscriptionAttribute,
@@ -35,7 +35,7 @@ class MeetingModel extends AbstractModel {
 		return {
 			transcriptions: {
 				join: {
-					from: `${DatabaseTableName.MEETINGS}.${MeetingAttributes.ID}`,
+					from: `${DatabaseTableName.MEETINGS}.${MeetingAttribute.ID}`,
 					to: `${DatabaseTableName.MEETING_TRANSCRIPTIONS}.${MeetingTranscriptionAttribute.MEETING_ID}`,
 				},
 				modelClass: MeetingTranscriptionModel,

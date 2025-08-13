@@ -30,8 +30,10 @@ class MeetingTranscriptionService
 	public async create(
 		payload: MeetingTranscriptionRequestDto,
 	): Promise<MeetingTranscriptionResponseDto> {
-		const newEntity = MeetingTranscriptionEntity.initializeNew(payload);
-		const created = await this.meetingTranscriptionRepository.create(newEntity);
+		const meetingTranscription =
+			MeetingTranscriptionEntity.initializeNew(payload);
+		const created =
+			await this.meetingTranscriptionRepository.create(meetingTranscription);
 
 		return created.toObject();
 	}
@@ -73,10 +75,11 @@ class MeetingTranscriptionService
 	public async findAll(
 		filter?: Partial<Record<string, unknown>>,
 	): Promise<MeetingTranscriptionGetAllResponseDto> {
-		const entities = await this.meetingTranscriptionRepository.findAll(filter);
+		const transcriptions =
+			await this.meetingTranscriptionRepository.findAll(filter);
 
 		return {
-			items: entities.map((entity) => entity.toObject()),
+			items: transcriptions.map((transcription) => transcription.toObject()),
 		};
 	}
 
@@ -84,9 +87,9 @@ class MeetingTranscriptionService
 		id: number,
 		payload: MeetingUpdateTranscriptionRequestDto,
 	): Promise<MeetingTranscriptionResponseDto> {
-		const existing = await this.meetingTranscriptionRepository.find(id);
+		const transcription = await this.meetingTranscriptionRepository.find(id);
 
-		if (!existing) {
+		if (!transcription) {
 			throw new MeetingTranscriptionError({
 				message: MeetingTranscriptionErrorMessage.NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,

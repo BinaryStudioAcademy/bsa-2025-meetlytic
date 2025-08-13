@@ -1,4 +1,4 @@
-const SocketMessages = {
+const SocketMessage = {
 	CLIENT_CONNECTED: "Client connected:",
 	CLIENT_DISCONNECTED: "Client disconnected:",
 	CLIENT_ERROR: "Client error:",
@@ -9,4 +9,4 @@ const SocketMessages = {
 	TRANSCRIPTION_RECEIVED: "Received chunk from bot:",
 } as const;
 
-export { SocketMessages };
+export { SocketMessage };

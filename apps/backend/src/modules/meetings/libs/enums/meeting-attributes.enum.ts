@@ -1,4 +1,4 @@
-const MeetingAttributes = {
+const MeetingAttribute = {
 	HOST: "host",
 	ID: "id",
 	INSTANCE_ID: "instance_id",
@@ -8,4 +8,4 @@ const MeetingAttributes = {
 	STATUS: "status",
 } as const;
 
-export { MeetingAttributes };
+export { MeetingAttribute };

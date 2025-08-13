@@ -1,6 +1,5 @@
 import { config } from "~/libs/modules/config/config.js";
 import { logger } from "~/libs/modules/logger/logger.js";
-import { openAI } from "~/libs/modules/open-ai/open-ai.js";
 
 import { BaseAudioRecorder } from "./base-audio-recorder.module.js";
 
@@ -11,7 +10,6 @@ const audioRecorder = new BaseAudioRecorder({
 	chunkDuration: CHUNK_DURATION,
 	ffmpegPath: FFMPEG_PATH,
 	logger,
-	openAI,
 	outputDir: OUTPUT_DIRECTORY,
 });
 

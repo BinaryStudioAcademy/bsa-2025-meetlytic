@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 
-import { type Logger, type OpenAI } from "~/libs/types/types.js";
+import { type Logger } from "~/libs/types/types.js";
 
 import { AudioRecorderEvent } from "./libs/enums/enums.js";
 import {
@@ -12,10 +12,10 @@ import {
 
 class BaseAudioRecorder implements AudioRecorder {
 	private chunkDuration: number;
+	private chunkListeners: Array<(chunkFilePath: string) => void> = [];
 	private ffmpegPath: string;
 	private isRecording = false;
 	private logger: Logger;
-	private openAI: OpenAI;
 	private outputDir: string;
 	private useMp3 = true;
 	private VOLUME_RE = /mean[_ ]volume:\s*(-?\d+(?:\.\d+)?)\s*dB/i;
@@ -24,13 +24,11 @@ class BaseAudioRecorder implements AudioRecorder {
 		chunkDuration,
 		ffmpegPath,
 		logger,
-		openAI,
 		outputDir,
 	}: AudioRecorderOptions) {
 		this.chunkDuration = chunkDuration;
 		this.ffmpegPath = ffmpegPath;
 		this.outputDir = outputDir;
-		this.openAI = openAI;
 		this.logger = logger;
 	}
 
@@ -46,6 +44,16 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		if (message) {
 			this.logger.info(`[VOL] ${String(message[ONE])} dB`);
+		}
+	}
+
+	private notifyChunkListeners(filePath: string): void {
+		for (const callback of this.chunkListeners) {
+			try {
+				callback(filePath);
+			} catch (error) {
+				this.logger.error(`Error in chunk listener: ${String(error)}`);
+			}
 		}
 	}
 
@@ -111,14 +119,16 @@ class BaseAudioRecorder implements AudioRecorder {
 				`[+] Chunk done | path=${filePath} | code=${String(code)}  signal=${String(signal)}`,
 			);
 
+			this.notifyChunkListeners(filePath);
+
 			if (this.isRecording) {
 				this.recordNextChunk();
 			}
-
-			this.openAI.transcribe(filePath).catch((error: unknown) => {
-				this.logger.error(String(error));
-			});
 		});
+	}
+
+	public onChunk(callback: (chunkFilePath: string) => void): void {
+		this.chunkListeners.push(callback);
 	}
 
 	public start(): void {

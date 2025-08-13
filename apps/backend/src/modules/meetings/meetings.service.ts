@@ -45,7 +45,6 @@ class MeetingService implements Service<MeetingResponseDto> {
 		this.cloudFormation = cloudFormation;
 		this.meetingRepository = meetingRepository;
 		this.sharedJwt = sharedJwt;
-		this.sharedJwt = sharedJwt;
 	}
 
 	private async createInstance(

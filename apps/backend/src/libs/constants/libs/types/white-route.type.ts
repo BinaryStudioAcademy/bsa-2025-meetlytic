@@ -3,7 +3,7 @@ import { type ValueOf } from "~/libs/types/types.js";
 
 type WhiteRoute = {
 	method: ValueOf<typeof HTTPMethod>;
-	path: string;
+	path: RegExp | string;
 };
 
 export { type WhiteRoute };

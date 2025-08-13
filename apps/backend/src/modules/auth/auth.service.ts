@@ -1,7 +1,7 @@
 import { AuthError } from "~/libs/exceptions/exceptions.js";
 import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
-import { jwt } from "~/libs/modules/token/token.js";
+import { type BaseToken, type JwtPayload } from "~/libs/modules/token/token.js";
 import { type UserService } from "~/modules/users/user.service.js";
 import {
 	type AuthResponseDto,
@@ -12,10 +12,12 @@ import {
 import { AuthStatusMessage } from "./libs/enums/enums.js";
 
 class AuthService {
+	private jwt: BaseToken<JwtPayload>;
 	private userService: UserService;
 
-	public constructor(userService: UserService) {
+	public constructor(userService: UserService, jwt: BaseToken<JwtPayload>) {
 		this.userService = userService;
+		this.jwt = jwt;
 	}
 
 	public async signIn(
@@ -43,7 +45,7 @@ class AuthService {
 		}
 
 		return {
-			token: await jwt.sign({ userId: user.id }),
+			token: await this.jwt.sign({ userId: user.id }),
 			user,
 		};
 	}
@@ -66,7 +68,7 @@ class AuthService {
 
 		const user = await this.userService.create(userRequestDto);
 
-		const token = await jwt.sign({ userId: user.id });
+		const token = await this.jwt.sign({ userId: user.id });
 
 		return { token, user };
 	}

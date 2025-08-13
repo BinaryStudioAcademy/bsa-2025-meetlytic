@@ -55,7 +55,6 @@ class UserDetailsRepository implements Repository {
 
 		return row?.id ?? null;
 	}
-
 	public async update(
 		id: number,
 		payload: Partial<Record<string, unknown>>,
@@ -71,6 +70,20 @@ class UserDetailsRepository implements Repository {
 			.patchAndFetchById(id, payload);
 
 		return UserDetailsEntity.initialize(updated);
+	}
+
+	public async updateFileId(
+		detailsId: number,
+		fileId: number,
+	): Promise<boolean> {
+		const updatedRow = await this.userDetailsModel
+			.query()
+			.patch({ fileId: fileId })
+			.where("id", detailsId)
+			.returning("*")
+			.execute();
+
+		return updatedRow.length > NO_ROWS_DELETED;
 	}
 }
 

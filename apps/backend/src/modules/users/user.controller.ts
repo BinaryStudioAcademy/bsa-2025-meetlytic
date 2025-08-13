@@ -80,7 +80,7 @@ class UserController extends BaseController {
 		this.addRoute({
 			handler: () => this.findAll(),
 			method: "GET",
-			path: UsersApiPath.ROOT,
+			path: APIPath.USERS,
 		});
 
 		this.addRoute({
@@ -89,7 +89,7 @@ class UserController extends BaseController {
 					options as APIHandlerOptions<{ user: { id: number } }>,
 				),
 			method: "GET",
-			path: "/me",
+			path: UsersApiPath.ME,
 		});
 
 		this.addRoute({
@@ -111,7 +111,7 @@ class UserController extends BaseController {
 					options as APIHandlerOptions<{ user: { id: number } }>,
 				),
 			method: "DELETE",
-			path: UsersApiPath.AVATAR, // без :key — беремо поточний аватар з БД
+			path: UsersApiPath.AVATAR,
 		});
 	}
 
@@ -273,11 +273,17 @@ class UserController extends BaseController {
 				};
 			}
 
-			await this.fileService.replaceAvatarRecord({
+			const fileRecord = await this.fileService.replaceAvatarRecord({
 				key,
 				url,
 				user_details_id: detailsId,
 			});
+
+			if (!fileRecord.id) {
+				throw new Error("Failed to create file record");
+			}
+
+			await this.userService.updateUserDetailsFileId(detailsId, fileRecord.id);
 
 			return {
 				payload: { data: { key, url }, success: true },

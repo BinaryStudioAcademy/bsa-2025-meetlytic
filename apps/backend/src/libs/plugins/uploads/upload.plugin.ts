@@ -15,16 +15,12 @@ import {
 	FILENAME_SANITIZE_REGEX,
 	TO_MB,
 } from "~/libs/constants/constants.js";
-import { HTTPCode } from "~/libs/modules/http/http.js";
+import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 
 declare module "fastify" {
 	interface FastifyRequest {
 		getFileOrThrow: (options?: { fieldName?: string }) => Promise<UploadedFile>;
 	}
-}
-
-interface HttpError extends Error {
-	statusCode?: number;
 }
 
 type UploadedFile = {
@@ -40,13 +36,6 @@ type UploadPluginOptions = {
 	fieldName?: string;
 	maxFiles?: number;
 	maxFileSize?: number;
-};
-
-const httpError = (statusCode: number, message: string): HttpError => {
-	const error = new Error(message) as HttpError;
-	error.statusCode = statusCode;
-
-	return error;
 };
 
 const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
@@ -72,27 +61,29 @@ const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 			localOptions?: { fieldName?: string },
 		): Promise<UploadedFile> {
 			const name = localOptions?.fieldName ?? fieldName;
-
 			const file = await this.file({ limits: { fileSize: maxFileSize } });
 
 			if (!file) {
-				throw httpError(HTTPCode.BAD_REQUEST, `Missing file field "${name}"`);
+				throw new HTTPError({
+					message: `Missing file field "${name}"`,
+					status: HTTPCode.BAD_REQUEST,
+				});
 			}
 
 			if (!allowedMimeTypes.includes(file.mimetype)) {
-				throw httpError(
-					HTTPCode.BAD_REQUEST,
-					`Invalid file type "${file.mimetype}". Allowed: ${allowedMimeTypes.join(", ")}`,
-				);
+				throw new HTTPError({
+					message: `Invalid file type "${file.mimetype}". Allowed: ${allowedMimeTypes.join(", ")}`,
+					status: HTTPCode.BAD_REQUEST,
+				});
 			}
 
 			const buffer = await file.toBuffer();
 
 			if (buffer.length > maxFileSize) {
-				throw httpError(
-					HTTPCode.PAYLOAD_TOO_LARGE,
-					`File too large. Max ${TO_MB(maxFileSize)} MB`,
-				);
+				throw new HTTPError({
+					message: `File too large. Max ${TO_MB(maxFileSize)} MB`,
+					status: HTTPCode.PAYLOAD_TOO_LARGE,
+				});
 			}
 
 			const filename =

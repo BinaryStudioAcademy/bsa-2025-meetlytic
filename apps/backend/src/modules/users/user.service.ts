@@ -90,6 +90,13 @@ class UserService implements Service {
 	public update(): ReturnType<Service["update"]> {
 		return Promise.resolve(null);
 	}
+
+	public async updateUserDetailsFileId(
+		detailsId: number,
+		fileId: number,
+	): Promise<void> {
+		await this.userDetailsRepository.updateFileId(detailsId, fileId);
+	}
 }
 
 export { UserService };

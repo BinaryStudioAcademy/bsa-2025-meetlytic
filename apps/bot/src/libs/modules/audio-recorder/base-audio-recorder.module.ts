@@ -70,7 +70,7 @@ class BaseAudioRecorder implements AudioRecorder {
 			"-f",
 			"pulse",
 			"-i",
-			"virtual_sink.monitor",
+			"auto_null.monitor",
 			"-t",
 			String(this.chunkDuration),
 			"-af",

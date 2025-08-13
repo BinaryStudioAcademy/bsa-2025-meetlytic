@@ -1,0 +1,29 @@
+.progress {
+	position: relative;
+	display: grid;
+	place-items: center;
+	width: 112px;
+	height: 112px;
+}
+
+.ring {
+	width: 112px;
+	height: 112px;
+	transform: rotate(-90deg);
+}
+
+.ring__track,
+.ring__bar {
+	fill: none;
+	stroke-width: 13px;
+	stroke-linecap: round;
+}
+
+.ring__track {
+	stroke: rgb(191 231 241);
+}
+
+.ring__bar {
+	stroke: var(--color-brand);
+	transition: stroke-dashoffset 0.2s ease;
+}

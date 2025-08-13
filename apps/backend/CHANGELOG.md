@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.4.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.4.1...backend-v1.4.2) (2025-08-13)
+
+
+### Bug Fixes
+
+* generate different error codes for validation signup and signin ml-162 ([#167](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/167)) ([6b37ff4](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/6b37ff400a4cbd5b51b03ece8696311cdf8acba0))
+
+## [1.4.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.4.0...backend-v1.4.1) (2025-08-12)
+
+
+### Bug Fixes
+
+* bot fails to join zoom meeting ml-148 ([#165](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/165)) ([905be23](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/905be23531ef4b8f9f3b9736f50b33ded2c73c1c))
+
+## [1.4.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.3.0...backend-v1.4.0) (2025-08-11)
+
+
+### Features
+
+* create player track component ml-62 ([#135](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/135)) ([71b41c9](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/71b41c9f92028772183682f2a6ab89ead1318ec8))
+
 ## [1.3.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.2.0...backend-v1.3.0) (2025-08-10)
 
 

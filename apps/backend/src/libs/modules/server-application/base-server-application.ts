@@ -17,6 +17,7 @@ import { type Config } from "~/libs/modules/config/config.js";
 import { type Database } from "~/libs/modules/database/database.js";
 import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type BaseSocketService } from "~/libs/modules/socket/socket.js";
 import { jwt } from "~/libs/modules/token/token.js";
 import { authorizationPlugin } from "~/libs/plugins/authorization/authorization.plugin.js";
 import {
@@ -36,6 +37,7 @@ type Constructor = {
 	config: Config;
 	database: Database;
 	logger: Logger;
+	services: { socketService: BaseSocketService };
 	title: string;
 };
 
@@ -50,12 +52,24 @@ class BaseServerApplication implements ServerApplication {
 
 	private logger: Logger;
 
+	private services: {
+		socketService: BaseSocketService;
+	};
+
 	private title: string;
 
-	public constructor({ apis, config, database, logger, title }: Constructor) {
+	public constructor({
+		apis,
+		config,
+		database,
+		logger,
+		services,
+		title,
+	}: Constructor) {
 		this.title = title;
 		this.config = config;
 		this.logger = logger;
+		this.services = services;
 		this.database = database;
 		this.apis = apis;
 
@@ -127,6 +141,7 @@ class BaseServerApplication implements ServerApplication {
 				config: this.config,
 				jwt,
 				logger: this.logger,
+				socketService: this.services.socketService,
 				userService,
 			},
 		});
@@ -146,6 +161,11 @@ class BaseServerApplication implements ServerApplication {
 		this.app.setNotFoundHandler(async (_request, response) => {
 			await response.sendFile("index.html", staticPath);
 		});
+	}
+
+	private initSocket(): void {
+		const { socketService } = this.services;
+		socketService.initialize(this.app.server);
 	}
 
 	public addRoute(parameters: ServerApplicationRouteParameters): void {
@@ -196,6 +216,8 @@ class BaseServerApplication implements ServerApplication {
 		await this.initPlugins();
 
 		this.initRoutes();
+
+		this.initSocket();
 
 		this.database.connect();
 

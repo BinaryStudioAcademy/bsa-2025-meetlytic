@@ -8,32 +8,52 @@ import {
 } from "~/libs/constants/constants.js";
 import {
 	KeyboardKey,
+	SocketEvent,
+	SocketMessages,
 	ZoomBotMessages,
 	ZoomUILabel,
 } from "~/libs/enums/enums.js";
-import { delay } from "~/libs/helpers/helpers.js";
+import { delay, extractZoomMeetingId } from "~/libs/helpers/helpers.js";
+import { type BaseSocketClient } from "~/libs/modules/socket-client/socket.js";
 import {
 	type AudioRecorder,
 	type BaseConfig,
 	type Logger,
+	type OpenAI,
 } from "~/libs/types/types.js";
+
+type Constructor = {
+	audioRecorder: AudioRecorder;
+	config: BaseConfig;
+	logger: Logger;
+	openAI: OpenAI;
+	socketClient: BaseSocketClient;
+};
 
 class BaseZoomBot {
 	private audioRecorder: AudioRecorder;
 	private browser: Browser | null = null;
 	private config: BaseConfig;
 	private logger: Logger;
+	private meetingId: null | string = null;
+	private openAI: OpenAI;
 	private page: null | Page = null;
 	private shouldMonitor = true;
+	private socketClient: BaseSocketClient;
 
-	public constructor(
-		config: BaseConfig,
-		logger: Logger,
-		audioRecorder: AudioRecorder,
-	) {
+	public constructor({
+		audioRecorder,
+		config,
+		logger,
+		openAI,
+		socketClient,
+	}: Constructor) {
 		this.config = config;
 		this.logger = logger;
+		this.openAI = openAI;
 		this.audioRecorder = audioRecorder;
+		this.socketClient = socketClient;
+		this.meetingId = extractZoomMeetingId(this.config.ENV.ZOOM.MEETING_LINK);
 	}
 
 	private async clickHelper(
@@ -179,6 +199,19 @@ class BaseZoomBot {
 			);
 		}
 	}
+	private initSocket(): void {
+		this.socketClient.on(SocketEvent.CONNECT, () => {
+			this.logger.info(
+				`${SocketMessages.CLIENT_CONNECTED} ${String(this.meetingId)}`,
+			);
+		});
+
+		this.socketClient.on(SocketEvent.DISCONNECT, (reason: string) => {
+			this.logger.warn(`${SocketMessages.CLIENT_DISCONNECTED} ${reason}`);
+		});
+
+		this.socketClient.connect();
+	}
 	private async joinMeeting(): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
@@ -210,6 +243,7 @@ class BaseZoomBot {
 
 		await this.clickHelper(ZoomUILabel.JOIN);
 	}
+
 	private async leaveMeeting(): Promise<void> {
 		try {
 			await this.clickHelper(ZoomUILabel.LEAVE);
@@ -221,6 +255,7 @@ class BaseZoomBot {
 			);
 		}
 	}
+
 	private async monitorParticipants(): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
@@ -241,7 +276,36 @@ class BaseZoomBot {
 		}
 	}
 
+	private subscribeToAudioChunks(): void {
+		this.audioRecorder.onChunk(async (filePath: string) => {
+			try {
+				const chunkText = await this.openAI.transcribe(filePath);
+				this.socketClient.emit(SocketEvent.TRANSCRIPTION, {
+					chunkText: chunkText,
+					zoomMeetingId: this.config.ENV.ZOOM.MEETING_ID,
+				});
+			} catch (error) {
+				this.logger.error(
+					`${SocketMessages.TRANSCRIPTION_ERROR} ${String(error)}`,
+				);
+			}
+		});
+	}
+
 	public async run(): Promise<void> {
+		this.initSocket();
+		this.socketClient.on(SocketEvent.CONNECT, () => {
+			this.logger.info(
+				`${SocketMessages.CLIENT_CONNECTED} ${String(this.meetingId)}`,
+			);
+		});
+
+		this.socketClient.on(SocketEvent.DISCONNECT, (reason: string) => {
+			this.logger.warn(`${SocketMessages.CLIENT_DISCONNECTED} ${reason}`);
+		});
+
+		this.socketClient.connect();
+
 		try {
 			this.browser = await puppeteer.launch(this.config.getLaunchOptions());
 			this.page = await this.browser.newPage();
@@ -268,6 +332,7 @@ class BaseZoomBot {
 			this.audioRecorder.start();
 			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
 			await delay(TIMEOUTS.FIFTEEN_SECONDS);
+			this.subscribeToAudioChunks();
 			await this.monitorParticipants();
 		} catch (error) {
 			this.logger.error(

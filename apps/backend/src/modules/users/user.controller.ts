@@ -94,7 +94,7 @@ class UserController extends BaseController {
 						user: UserResponseDto;
 					}>,
 				),
-			method: HTTPMethod.PUT,
+			method: HTTPMethod.PATCH,
 			path: UsersApiPath.ME,
 		});
 	}

@@ -4,7 +4,7 @@ import {
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
-import { HTTPCode } from "~/libs/modules/http/http.js";
+import { HTTPCode, HTTPMethod } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import {
 	type UserResponseDto,
@@ -30,7 +30,7 @@ class AuthController extends BaseController {
 				this.getAuthenticatedUser(
 					options as APIHandlerOptions<{ user: UserResponseDto }>,
 				),
-			method: "GET",
+			method: HTTPMethod.GET,
 			path: AuthApiPath.AUTHENTICATED_USER,
 		});
 
@@ -41,7 +41,7 @@ class AuthController extends BaseController {
 						body: UserSignUpRequestDto;
 					}>,
 				),
-			method: "POST",
+			method: HTTPMethod.POST,
 			path: AuthApiPath.SIGN_UP,
 			validation: {
 				body: userSignUpValidationSchema,
@@ -55,7 +55,7 @@ class AuthController extends BaseController {
 						body: UserSignInRequestDto;
 					}>,
 				),
-			method: "POST",
+			method: HTTPMethod.POST,
 			path: AuthApiPath.SIGN_IN,
 			validation: {
 				body: userSignInValidationSchema,

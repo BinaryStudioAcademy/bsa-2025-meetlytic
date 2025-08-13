@@ -21,13 +21,13 @@ const Logo: React.FC<Properties> = ({
 	theme = LogoTheme.LIGHT,
 	type = LogoType.DESKTOP,
 }: Properties) => {
-	let logoSource;
+	const handleGetLogo = (): string => {
+		if (type === LogoType.MOBILE) {
+			return logoMobile;
+		}
 
-	if (type === LogoType.DESKTOP) {
-		logoSource = theme === LogoTheme.DARK ? logoDark : logoLight;
-	} else {
-		logoSource = logoMobile;
-	}
+		return theme === LogoTheme.DARK ? logoDark : logoLight;
+	};
 
 	const logoContent = (
 		<div className={styles["logo"]}>
@@ -37,7 +37,7 @@ const Logo: React.FC<Properties> = ({
 					styles["logo__image"],
 					styles[`logo__image--${size}`],
 				)}
-				src={logoSource}
+				src={handleGetLogo()}
 			/>
 		</div>
 	);

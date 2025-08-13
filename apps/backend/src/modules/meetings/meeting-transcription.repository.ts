@@ -66,7 +66,7 @@ class MeetingTranscriptionRepository
 	): Promise<MeetingTranscriptionEntity[]> {
 		const transcriptions = await this.meetingTranscriptionModel
 			.query()
-			.where(MeetingTranscriptionAttributes.MEETING_REF_ID, meetingId)
+			.where(MeetingTranscriptionAttributes.MEETING_ID, meetingId)
 			.execute();
 
 		return transcriptions.map((transcription) =>

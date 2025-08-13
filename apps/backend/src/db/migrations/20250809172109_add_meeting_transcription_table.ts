@@ -9,7 +9,7 @@ const ColumnName = {
 	CHUNK_TEXT: "chunk_text",
 	CREATED_AT: "created_at",
 	ID: "id",
-	MEETING_REF_ID: "meeting_ref_id",
+	MEETING_ID: "meeting_id",
 	UPDATED_AT: "updated_at",
 } as const;
 
@@ -23,7 +23,7 @@ function up(knex: Knex): Promise<void> {
 	return knex.schema.createTable(TableName.MEETING_TRANSCRIPTIONS, (table) => {
 		table.increments(ColumnName.ID).primary();
 		table
-			.integer(ColumnName.MEETING_REF_ID)
+			.integer(ColumnName.MEETING_ID)
 			.unsigned()
 			.notNullable()
 			.references(ColumnName.ID)

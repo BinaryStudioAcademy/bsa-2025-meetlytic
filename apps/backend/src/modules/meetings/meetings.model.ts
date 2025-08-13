@@ -36,7 +36,7 @@ class MeetingModel extends AbstractModel {
 			transcriptions: {
 				join: {
 					from: `${DatabaseTableName.MEETINGS}.${MeetingAttributes.ID}`,
-					to: `${DatabaseTableName.MEETING_TRANSCRIPTIONS}.${MeetingTranscriptionAttributes.MEETING_REF_ID}`,
+					to: `${DatabaseTableName.MEETING_TRANSCRIPTIONS}.${MeetingTranscriptionAttributes.MEETING_ID}`,
 				},
 				modelClass: MeetingTranscriptionModel,
 				relation: this.HasManyRelation,

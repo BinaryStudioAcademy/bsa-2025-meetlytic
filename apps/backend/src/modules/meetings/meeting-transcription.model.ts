@@ -19,7 +19,7 @@ class MeetingTranscriptionModel extends AbstractModel {
 		return {
 			meeting: {
 				join: {
-					from: `${this.tableName}.${MeetingTranscriptionAttributes.MEETING_REF_ID}`,
+					from: `${this.tableName}.${MeetingTranscriptionAttributes.MEETING_ID}`,
 					to: `${DatabaseTableName.MEETINGS}.${MeetingAttributes.ID}`,
 				},
 				modelClass: MeetingModel,

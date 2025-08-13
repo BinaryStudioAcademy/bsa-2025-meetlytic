@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.4.2...backend-v1.5.0) (2025-08-13)
+
+
+### Features
+
+* add meeting public url ml-143 ([#163](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/163)) ([73b8c8d](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/73b8c8dbb9a6e168c0e74d7eb8bb29ff06e8a348))
+
 ## [1.4.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.4.1...backend-v1.4.2) (2025-08-13)
 
 

@@ -5,7 +5,6 @@ import {
 	Sidebar,
 } from "~/libs/components/components.js";
 import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
-import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { useCallback, useLogout, useState } from "~/libs/hooks/hooks.js";
 
 import { MobileMenu } from "./libs/components/mobile-menu/mobile-menu.js";
@@ -25,12 +24,7 @@ const Layout: React.FC = () => {
 	}, [logout]);
 
 	return (
-		<div
-			className={getValidClassNames(
-				styles["layout"],
-				menuOpen ? styles["layout--no-scroll"] : null,
-			)}
-		>
+		<div className={styles["layout"]}>
 			<div className={styles["layout__header"]}>
 				<Header
 					handleLogout={handleLogout}

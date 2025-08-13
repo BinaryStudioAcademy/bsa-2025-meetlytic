@@ -61,9 +61,9 @@ const UserAvatarUploader: React.FC = () => {
 			/>
 			<input
 				accept="image/jpeg,image/png,image/webp,image/gif"
+				className={styles["hidden"]}
 				onChange={handleFileChange}
 				ref={fileInputReference}
-				style={{ display: "none" }}
 				type="file"
 			/>
 			<div className={styles["buttons"]}>

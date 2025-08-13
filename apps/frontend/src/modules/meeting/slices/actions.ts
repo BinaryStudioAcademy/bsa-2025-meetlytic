@@ -1,5 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+import { NotificationMessage } from "~/libs/enums/enums.js";
+import { extractErrorMessage } from "~/libs/helpers/helpers.js";
 import { type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
 	type MeetingCreateRequestDto,
@@ -36,10 +38,19 @@ const getMeetingDetailsById = createAsyncThunk<
 	AsyncThunkConfig
 >(
 	`${sliceName}/get-meeting-details-by-id`,
-	async ({ id, token }, { extra }) => {
+	async ({ id, token }, { extra, rejectWithValue }) => {
 		const { meetingApi } = extra;
 
-		return await meetingApi.getMeetingById(id, token);
+		try {
+			return await meetingApi.getMeetingById(id, token);
+		} catch (error: unknown) {
+			const message = extractErrorMessage(
+				error,
+				NotificationMessage.MEETING_DETAILS_FETCH_FAILED,
+			);
+
+			return rejectWithValue(message);
+		}
 	},
 );
 

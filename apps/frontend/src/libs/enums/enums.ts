@@ -17,6 +17,7 @@ export {
 	AppEnvironment,
 	ContentType,
 	KeyboardKey,
+	MeetingErrorMessage,
 	MeetingHost,
 	ServerErrorType,
 	UserValidationRule,

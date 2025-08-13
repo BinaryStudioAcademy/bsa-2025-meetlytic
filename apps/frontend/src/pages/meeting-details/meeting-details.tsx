@@ -6,8 +6,9 @@ import {
 	PlayerTrack,
 	SearchInput,
 } from "~/libs/components/components.js";
-import { DataStatus } from "~/libs/enums/enums.js";
-import { formatDate } from "~/libs/helpers/helpers.js";
+import { ZERO_LENGTH } from "~/libs/constants/constants.js";
+import { DataStatus, MeetingErrorMessage } from "~/libs/enums/enums.js";
+import { formatDate, getOffsetHours } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
@@ -17,6 +18,7 @@ import {
 	useParams,
 	useSearchParams,
 } from "~/libs/hooks/hooks.js";
+import { notification } from "~/libs/modules/notifications/notifications.js";
 import {
 	actions as meetingActions,
 	meetingApi,
@@ -58,9 +60,9 @@ const MeetingDetails: React.FC = () => {
 	}, []);
 
 	const handleShareClick = useCallback(() => {
+		// TODO: !!! Implement handleShareClick logic. Already implemented logic is just for demonstration use and should be changed.
 		if (!meeting || !meeting.id) {
-			// TODO:
-			// console.error("No meeting ID to share.");
+			notification.error("Meeting data is not available for sharing.");
 
 			return;
 		}
@@ -68,12 +70,10 @@ const MeetingDetails: React.FC = () => {
 		const shareMeeting = async (): Promise<void> => {
 			try {
 				const { publicUrl } = await meetingApi.getPublicShareUrl(meeting.id);
-				void navigator.clipboard.writeText(publicUrl);
-				alert("Public link copied to clipboard!");
-			} catch (error) {
-				// TODO:
-				// console.error("Failed to generate share link:", error);
-				alert("Failed to generate share link.");
+				void navigator.clipboard.writeText(`http://localhost:3000${publicUrl}`);
+				notification.success("Public link copied to clipboard!");
+			} catch (error: unknown) {
+				notification.error("Failed to generate share link.");
 
 				throw error;
 			}
@@ -103,13 +103,21 @@ const MeetingDetails: React.FC = () => {
 		);
 	}
 
+	const actionItemsArray = meeting.actionItems
+		? meeting.actionItems
+				.split(".")
+				.map((item) => item.trim())
+				.filter((item) => item.length > ZERO_LENGTH)
+		: [];
+
 	return (
 		<>
 			<div className={styles["meeting-details"]}>
 				<div className={styles["meeting-details__header"]}>
 					<h1 className={styles["meeting-details__title"]}>
-						Owner {meeting.ownerId} (
-						{formatDate(new Date(meeting.createdAt), "MMM D, YYYY, h:m A")})
+						Owner {meeting.ownerId}{" "}
+						{getOffsetHours(new Date(meeting.createdAt))} |{" "}
+						{formatDate(new Date(meeting.createdAt), "D MMMM hA")}
 					</h1>
 					<div className={styles["meeting-details__actions"]}>
 						<button
@@ -161,12 +169,8 @@ const MeetingDetails: React.FC = () => {
 							</div>
 							<div className={styles["summary-area"]}>
 								<p className={styles["summary-text"]}>
-									Good afternoon, everyone. Today, we are here to discuss last
-									weeks sales. Today, we are here to discuss last weeks sales.
-									Today, we are here to discuss last weeks sales. Good
-									afternoon, everyone. Today, we are here to discuss last weeks
-									sales. Today, we are here to discuss last weeks sales. Today,
-									we are here to discuss last weeks sales.
+									{meeting.summary ||
+										MeetingErrorMessage.MEETING_SUMMARY_NOT_AVAILABLE}
 								</p>
 							</div>
 						</div>
@@ -175,23 +179,19 @@ const MeetingDetails: React.FC = () => {
 							<div className={styles["panel-header"]}>
 								<div className={styles["panel-header__text"]}>ACTION ITEMS</div>
 							</div>
-
 							<ul className={styles["action-items__list"]}>
-								<li className={styles["action-items__text"]}>
-									<span className={styles["action-item-dot"]}></span>
-									Good afternoon, everyone. Today, we are here to discuss last
-									weeks sales.
-								</li>
-								;
-								<li className={styles["action-items__text"]}>
-									<span className={styles["action-item-dot"]}></span>
-									Today, we are here to discuss last weeks sales.
-								</li>
-								<li className={styles["action-items__text"]}>
-									<span className={styles["action-item-dot"]}></span>
-									Good afternoon, everyone. Today, we are here to discuss last
-									weeks sales.
-								</li>
+								{actionItemsArray.length > ZERO_LENGTH ? (
+									actionItemsArray.map((item, index) => (
+										<li className={styles["action-items__text"]} key={index}>
+											<span className={styles["action-item-dot"]}></span>
+											{item}
+										</li>
+									))
+								) : (
+									<li className={styles["action-items__text"]}>
+										{MeetingErrorMessage.MEETING_ACTION_ITEMS_NOT_AVAILABLE}
+									</li>
+								)}
 							</ul>
 						</div>
 					</div>

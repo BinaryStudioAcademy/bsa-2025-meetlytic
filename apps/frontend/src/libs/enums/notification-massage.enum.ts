@@ -1,6 +1,7 @@
 const NotificationMessage = {
 	AUTH_FAILED: "Authentication failed. Please log in again.",
 	EDIT_PROFILE_SUCCESS: "Profile was edited successfully",
+	MEETING_DETAILS_FETCH_FAILED: "Failed to load meeting details.",
 	SIGN_IN_FAILED:
 		"We couldn't sign you in. Please check your email and password.",
 	SIGN_UP_FAILED: "Something went wrong during sign up. Please try again.",

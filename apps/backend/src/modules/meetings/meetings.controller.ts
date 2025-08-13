@@ -51,12 +51,6 @@ import { type MeetingService } from "./meetings.service.js";
  *           type: string
  *         meetingPassword:
  *           type: string
- *         createdAt:
- *           type: string
- *         meetingId:
- *           type: string
- *         meetingPassword:
- *           type: string
  *       required:
  *         - id
  *         - host
@@ -131,18 +125,6 @@ class MeetingsController extends BaseController {
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.ROOT,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
-		});
-		this.addRoute({
-			handler: (options) => this.getPublicUrl(options as GetPublicUrlOptions),
-			method: HTTPMethod.GET,
-			path: MeetingsApiPath.$ID_URL,
-			preHandlers: [checkIfMeetingOwner(this.meetingService)],
-		});
-		this.addRoute({
-			handler: (options) =>
-				this.findBySignedUrl(options as FindBySignedUrlOptions),
-			method: HTTPMethod.GET,
-			path: MeetingsApiPath.$ID_PUBLIC,
 		});
 		this.addRoute({
 			handler: (options) => this.getPublicUrl(options as GetPublicUrlOptions),

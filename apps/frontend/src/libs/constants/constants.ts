@@ -4,4 +4,5 @@ export {
 	MILLISECONDS_IN_SECOND,
 	PERCENT_MULTIPLIER,
 	START_TIME,
+	ZERO_LENGTH,
 } from "@meetlytic/shared";

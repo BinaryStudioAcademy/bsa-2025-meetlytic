@@ -38,7 +38,7 @@ const Header: React.FC<Properties> = ({
 					className={styles["header__burger"]}
 					onClick={toggleMenu}
 				>
-					<Icon name={menuOpen ? "burgerMenu" : "burgerClose"} />
+					<Icon name={menuOpen ? "closeIcon" : "burgerMenu"} />
 				</button>
 
 				<div className={styles["header__logo"]}>

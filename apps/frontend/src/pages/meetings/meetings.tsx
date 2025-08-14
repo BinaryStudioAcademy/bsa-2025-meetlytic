@@ -7,6 +7,7 @@ import {
 	useEffect,
 } from "~/libs/hooks/hooks.js";
 import { actions as meetingActions } from "~/modules/meeting/meeting.js";
+import { actions as userAvatarActions } from "~/modules/users/user-avatar.js";
 
 import { MeetingCreationModal } from "./components/meeting-creation-modal/meeting-creation-modal.js";
 import { MeetingItem } from "./components/meeting-item/meeting-item.js";
@@ -16,9 +17,11 @@ const Meetings: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const meetings = useAppSelector((state) => state.meeting.meetings);
 	const userEmail = useAppSelector((state) => state.auth.user?.email);
+	const avatarUrl = useAppSelector((state) => state.userAvatar.url);
 
 	useEffect(() => {
 		void dispatch(meetingActions.getAllMeetings());
+		void dispatch(userAvatarActions.fetchAvatar());
 	}, [dispatch]);
 
 	return (
@@ -26,7 +29,7 @@ const Meetings: React.FC = () => {
 			<MeetingCreationModal />
 			<div className={styles["meetings"]}>
 				<div className={styles["meetings__header"]}>
-					<Avatar size={AvatarSize.LARGE} />
+					<Avatar size={AvatarSize.LARGE} src={avatarUrl ?? undefined} />
 					<div className={styles["meetings__header-text"]}>
 						<h5 className={styles["meetings__header-name"]}>
 							{userEmail ?? "Username"}

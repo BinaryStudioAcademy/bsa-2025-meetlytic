@@ -8,7 +8,15 @@ import {
 	LogoSize,
 	LogoTheme,
 } from "~/libs/enums/enums.js";
-import { useCallback, useLogout, useNavigate } from "~/libs/hooks/hooks.js";
+import {
+	useAppDispatch,
+	useAppSelector,
+	useCallback,
+	useEffect,
+	useLogout,
+	useNavigate,
+} from "~/libs/hooks/hooks.js";
+import { actions as userAvatarActions } from "~/modules/users/user-avatar.js";
 
 import styles from "./styles.module.css";
 
@@ -24,6 +32,13 @@ const Header: React.FC = () => {
 		navigate(AppRoute.PROFILE);
 	}, [navigate]);
 
+	const avatarUrl = useAppSelector((state) => state.userAvatar.url);
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		void dispatch(userAvatarActions.fetchAvatar());
+	}, [dispatch]);
+
 	return (
 		<header className={styles["header"]}>
 			<div className={styles["header-inner"]}>
@@ -35,7 +50,11 @@ const Header: React.FC = () => {
 						className={styles["header__profile-button"]}
 						onClick={handleProfileClick}
 					>
-						<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
+						<Avatar
+							size={AvatarSize.SMALL}
+							src={avatarUrl ?? undefined}
+							type={AvatarType.MAIN}
+						/>
 					</button>
 					<Button
 						iconLeft={

@@ -35,6 +35,12 @@ class BaseConfig implements Config {
 					env: "HOST",
 					format: String,
 				},
+				ORIGIN: {
+					default: null,
+					doc: "Origin URL",
+					env: "ORIGIN",
+					format: String,
+				},
 				PORT: {
 					default: null,
 					doc: "Port for incoming connections",

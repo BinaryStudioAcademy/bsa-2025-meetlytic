@@ -16,14 +16,14 @@ const DEFAULT_ALLOWED_IMAGE_MIME_TYPES = [
 const FILENAME_FALLBACK = "upload";
 const FILENAME_SANITIZE_REGEX = /[^\w.-]+/g;
 
-const TO_MB = (bytes: number): string =>
+const bytesToMegabytes = (bytes: number): string =>
 	Math.floor(bytes / (MEMORY_UNIT_SIZE * MEMORY_UNIT_SIZE)).toString();
 
 export {
+	bytesToMegabytes,
 	DEFAULT_ALLOWED_IMAGE_MIME_TYPES,
 	DEFAULT_MAX_FILE_SIZE,
 	DEFAULT_MAX_FILES,
 	FILENAME_FALLBACK,
 	FILENAME_SANITIZE_REGEX,
-	TO_MB,
 };

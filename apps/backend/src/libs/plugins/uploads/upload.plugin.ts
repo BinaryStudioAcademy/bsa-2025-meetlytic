@@ -8,12 +8,12 @@ import {
 import fp from "fastify-plugin";
 
 import {
+	bytesToMegabytes,
 	DEFAULT_ALLOWED_IMAGE_MIME_TYPES,
 	DEFAULT_MAX_FILE_SIZE,
 	DEFAULT_MAX_FILES,
 	FILENAME_FALLBACK,
 	FILENAME_SANITIZE_REGEX,
-	TO_MB,
 } from "~/libs/constants/constants.js";
 import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 
@@ -71,7 +71,7 @@ const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 
 			if (buffer.length > maxFileSize) {
 				throw new HTTPError({
-					message: `File too large. Max ${TO_MB(maxFileSize)} MB`,
+					message: `File too large. Max ${bytesToMegabytes(maxFileSize)} MB`,
 					status: HTTPCode.PAYLOAD_TOO_LARGE,
 				});
 			}

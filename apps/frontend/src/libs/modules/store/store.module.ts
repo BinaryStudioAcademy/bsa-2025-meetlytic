@@ -19,10 +19,6 @@ import {
 	meetingApi,
 	reducer as meetingReducer,
 } from "~/modules/meeting/meeting.js";
-import {
-	userAvatarApi,
-	reducer as userAvatarReducer,
-} from "~/modules/users/user-avatar.js";
 import { userApi, reducer as userReducer } from "~/modules/users/users.js";
 
 type ExtraArguments = {
@@ -30,20 +26,17 @@ type ExtraArguments = {
 	meetingApi: typeof meetingApi;
 	storage: typeof storage;
 	userApi: typeof userApi;
-	userAvatarApi: typeof userAvatarApi;
 };
 
 type RootReducer = {
 	auth: ReturnType<typeof authReducer>;
 	meeting: ReturnType<typeof meetingReducer>;
-	userAvatar: ReturnType<typeof userAvatarReducer>;
 	users: ReturnType<typeof userReducer>;
 };
 
 const rootReducer = combineReducers({
 	auth: authReducer,
 	meeting: meetingReducer,
-	userAvatar: userAvatarReducer,
 	users: userReducer,
 });
 
@@ -87,7 +80,6 @@ class Store {
 			meetingApi,
 			storage,
 			userApi,
-			userAvatarApi,
 		};
 	}
 }

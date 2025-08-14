@@ -91,7 +91,7 @@ class UserDetailsRepository implements Repository {
 	): Promise<boolean> {
 		const updatedRow = await this.userDetailsModel
 			.query()
-			.patch({ fileId: fileId })
+			.patch({ fileId })
 			.where("id", detailsId)
 			.returning("*")
 			.execute();

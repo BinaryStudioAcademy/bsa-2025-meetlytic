@@ -11,7 +11,7 @@ import {
 	useEffect,
 	useRef,
 } from "~/libs/hooks/hooks.js";
-import { actions as userAvatarActions } from "~/modules/users/user-avatar.js";
+import { actions as userActions } from "~/modules/users/users.js";
 
 import { Avatar, Button } from "../components.js";
 import styles from "./styles.module.css";
@@ -22,11 +22,11 @@ const UserAvatarUploader: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const fileInputReference = useRef<HTMLInputElement>(null);
 	const { isLoading, url: avatarUrl } = useAppSelector(
-		(state) => state.userAvatar,
+		(state) => state.users.avatar,
 	);
 
 	useEffect(() => {
-		void dispatch(userAvatarActions.fetchAvatar());
+		void dispatch(userActions.fetchAvatar());
 	}, [dispatch]);
 
 	const handleUploadClick = useCallback((): void => {
@@ -41,14 +41,14 @@ const UserAvatarUploader: React.FC = () => {
 				return;
 			}
 
-			void dispatch(userAvatarActions.uploadAvatar(file));
+			void dispatch(userActions.uploadAvatar(file));
 		},
 		[dispatch],
 	);
 
 	const handleDeleteClick = useCallback((): void => {
 		if (avatarUrl) {
-			void dispatch(userAvatarActions.deleteAvatar());
+			void dispatch(userActions.deleteAvatar());
 		}
 	}, [dispatch, avatarUrl]);
 

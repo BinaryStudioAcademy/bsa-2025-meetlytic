@@ -1,3 +1,4 @@
+import PlaceholderAvatar from "~/assets/img/icons/placeholder-avatar.svg";
 import { Avatar, Button, Icon, Logo } from "~/libs/components/components.js";
 import {
 	AppRoute,
@@ -16,7 +17,7 @@ import {
 	useEffect,
 	useNavigate,
 } from "~/libs/hooks/hooks.js";
-import { actions as userAvatarActions } from "~/modules/users/user-avatar.js";
+import { actions as userActions } from "~/modules/users/users.js";
 
 import styles from "./styles.module.css";
 
@@ -37,11 +38,11 @@ const Header: React.FC<Properties> = ({
 		navigate(AppRoute.PROFILE);
 	}, [navigate]);
 
-	const avatarUrl = useAppSelector((state) => state.userAvatar.url);
+	const avatarUrl = useAppSelector((state) => state.users.avatar.url);
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		void dispatch(userAvatarActions.fetchAvatar());
+		void dispatch(userActions.fetchAvatar());
 	}, [dispatch]);
 
 	return (
@@ -81,14 +82,14 @@ const Header: React.FC<Properties> = ({
 						<div className={styles["variable-component__mobile"]}>
 							<Avatar
 								size={AvatarSize.MOBILE}
-								src={avatarUrl ?? undefined}
+								src={avatarUrl ?? PlaceholderAvatar}
 								type={AvatarType.MAIN}
 							/>
 						</div>
 						<div className={styles["variable-component__desktop"]}>
 							<Avatar
 								size={AvatarSize.SMALL}
-								src={avatarUrl ?? undefined}
+								src={avatarUrl ?? PlaceholderAvatar}
 								type={AvatarType.MAIN}
 							/>
 						</div>

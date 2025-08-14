@@ -12,6 +12,7 @@ const userApi = new UsersApi({
 
 export { userApi };
 export {
+	type AvatarUploadResponseDto,
 	type UserResponseDto,
 	type UserSignInRequestDto,
 	type UserSignUpRequestDto,

@@ -7,7 +7,7 @@ import {
 	useEffect,
 } from "~/libs/hooks/hooks.js";
 import { actions as meetingActions } from "~/modules/meeting/meeting.js";
-import { actions as userAvatarActions } from "~/modules/users/user-avatar.js";
+import { actions as userActions } from "~/modules/users/users.js";
 
 import { MeetingCreationModal } from "./components/meeting-creation-modal/meeting-creation-modal.js";
 import { MeetingItem } from "./components/meeting-item/meeting-item.js";
@@ -17,11 +17,11 @@ const Meetings: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const meetings = useAppSelector((state) => state.meeting.meetings);
 	const userEmail = useAppSelector((state) => state.auth.user?.email);
-	const avatarUrl = useAppSelector((state) => state.userAvatar.url);
+	const avatarUrl = useAppSelector((state) => state.users.avatar.url);
 
 	useEffect(() => {
 		void dispatch(meetingActions.getAllMeetings());
-		void dispatch(userAvatarActions.fetchAvatar());
+		void dispatch(userActions.fetchAvatar());
 	}, [dispatch]);
 
 	return (

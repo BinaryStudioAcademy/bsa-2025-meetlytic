@@ -8,7 +8,7 @@ import {
 	type UserWithDetailsDto,
 } from "~/modules/users/users.js";
 
-import { name as sliceName } from "./users.slice.js";
+import { sliceName } from "./users.slice.js";
 
 const getProfile = createAsyncThunk<
 	UserWithDetailsDto,

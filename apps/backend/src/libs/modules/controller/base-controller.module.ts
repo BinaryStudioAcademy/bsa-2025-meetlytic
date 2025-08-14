@@ -55,15 +55,7 @@ class BaseController implements Controller {
 		const { handler, path, preHandlers } = options;
 		const fullPath = this.apiUrl + path;
 
-		let processedPreHandlers: preHandlerHookHandler[];
-
-		if (Array.isArray(preHandlers)) {
-			processedPreHandlers = preHandlers;
-		} else if (preHandlers) {
-			processedPreHandlers = [preHandlers];
-		} else {
-			processedPreHandlers = [];
-		}
+		const processedPreHandlers: preHandlerHookHandler[] = preHandlers ?? [];
 
 		this.routes.push({
 			...options,

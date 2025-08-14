@@ -1,6 +1,4 @@
-import { Model, type RelationMappings } from "objection";
-
-import { UserDetailsModel } from "~/modules/users/user-details.model.js";
+import { Model } from "objection";
 
 import { TableName } from "./libs/enums/enums.js";
 
@@ -11,19 +9,6 @@ class FileModel extends Model {
 	public type!: string;
 	public updated_at!: string;
 	public url!: string;
-
-	public static get relationMappings(): RelationMappings {
-		return {
-			userDetails: {
-				join: {
-					from: `${TableName.FILES}.id`,
-					to: `${TableName.USER_DETAILS}.fileId`,
-				},
-				modelClass: UserDetailsModel,
-				relation: Model.HasOneRelation,
-			},
-		};
-	}
 
 	public static get tableName(): string {
 		return TableName.FILES;

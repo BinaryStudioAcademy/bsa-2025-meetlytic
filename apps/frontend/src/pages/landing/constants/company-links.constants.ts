@@ -5,7 +5,7 @@ import { type LinkGroup } from "./../types/types.js";
 const COMPANY_LINKS: LinkGroup = {
 	links: [
 		{ label: "Home", to: AppRoute.ROOT },
-		{ label: "Features", to: AppRoute.ROOT },
+		{ label: "Features", to: AppRoute.FEATURES },
 	],
 	title: "Company",
 };

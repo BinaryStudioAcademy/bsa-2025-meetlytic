@@ -1,5 +1,6 @@
 const AppRoute = {
 	ANY: "*",
+	FEATURES: "#features",
 	MEETINGS: "/meetings",
 	MEETINGS_$ID: "/meetings/:id",
 	ROOT: "/",

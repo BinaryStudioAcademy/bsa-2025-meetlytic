@@ -1,7 +1,7 @@
 .landing-background {
 	position: absolute;
 	inset: 0;
-	z-index: 0;
+	z-index: var(--z-index-low);
 	contain: layout paint;
 	overflow: hidden;
 	pointer-events: none;

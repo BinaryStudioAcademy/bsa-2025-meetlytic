@@ -1,5 +1,3 @@
-import { Link } from "~/libs/components/components.js";
-
 import { type LinkGroup } from "../../types/types.js";
 import styles from "./styles.module.css";
 
@@ -14,13 +12,13 @@ const FooterColumn: React.FC<Properties> = ({ group }: Properties) => {
 			<ul className={styles["landing-footer__list"]}>
 				{group.links.map(({ label, to }) => (
 					<li className={styles["landing-footer__item"]} key={label}>
-						<Link
+						<a
 							aria-label={label}
 							className={styles["landing-footer__link"]}
-							to={to}
+							href={to}
 						>
 							{label}
-						</Link>
+						</a>
 					</li>
 				))}
 			</ul>

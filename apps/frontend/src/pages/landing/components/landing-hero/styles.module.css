@@ -44,7 +44,7 @@
 .hero__img--video {
 	position: absolute;
 	top: 150px;
-	z-index: 2;
+	z-index: var(--z-index-medium);
 	width: 495px;
 	height: auto;
 	transform: translateX(-65px);
@@ -54,7 +54,7 @@
 	position: absolute;
 	top: -5px;
 	left: -30px;
-	z-index: 1;
+	z-index: var(--z-index-low);
 	width: 227px;
 	height: auto;
 }
@@ -63,7 +63,7 @@
 	position: absolute;
 	top: 65px;
 	right: 175px;
-	z-index: 3;
+	z-index: var(--z-index-medium);
 	width: 218px;
 	height: auto;
 }

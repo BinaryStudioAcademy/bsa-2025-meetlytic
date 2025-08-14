@@ -3,7 +3,7 @@ import { AppRoute } from "~/libs/enums/enums.js";
 import { type NavLink } from "./../types/types.js";
 
 const HEADER_LINKS: NavLink[] = [
-	{ label: "Features", to: AppRoute.ROOT },
+	{ label: "Features", to: AppRoute.FEATURES },
 	{ label: "Contacts", to: AppRoute.ROOT },
 ];
 

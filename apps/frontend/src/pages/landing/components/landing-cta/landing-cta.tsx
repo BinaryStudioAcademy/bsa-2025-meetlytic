@@ -5,9 +5,9 @@ import styles from "./styles.module.css";
 
 const LandingCTA: React.FC = () => {
 	return (
-		<section aria-labelledby="cta" className={styles["cta"]}>
+		<section aria-labelledby="cta-title" className={styles["cta"]}>
 			<div className={styles["cta__inner"]}>
-				<h2 className={styles["cta__title"]}>
+				<h2 className={styles["cta__title"]} id="cta-title">
 					Ready to Ignite Your Business <br /> Journey?
 				</h2>
 

@@ -1,5 +1,5 @@
 .landing-header {
-	z-index: 5;
+	z-index: var(--z-index-medium);
 }
 
 .landing-header__inner {

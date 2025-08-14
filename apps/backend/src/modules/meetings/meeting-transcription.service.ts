@@ -49,17 +49,17 @@ class MeetingTranscriptionService
 			});
 		}
 
-		const sTranscriptionDeleted =
+		const isTranscriptionDeleted =
 			await this.meetingTranscriptionRepository.delete(id);
 
-		if (!sTranscriptionDeleted) {
+		if (!isTranscriptionDeleted) {
 			throw new MeetingTranscriptionError({
 				message: MeetingTranscriptionErrorMessage.DELETE_FAILED,
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}
 
-		return sTranscriptionDeleted;
+		return isTranscriptionDeleted;
 	}
 
 	public async find(id: number): Promise<MeetingTranscriptionResponseDto> {

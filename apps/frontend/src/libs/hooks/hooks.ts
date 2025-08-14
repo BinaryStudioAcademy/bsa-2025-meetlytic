@@ -5,7 +5,7 @@ export { useAppSelector } from "./use-app-selector/use-app-selector.hook.js";
 export { useCarousel } from "./use-carousel/use-carousel.hook.js";
 export { useLandingAnimation } from "./use-landing-background-animation/use-landing-background-animation.hook.js";
 export { useLogout } from "./use-logout/use-logout.hook.js";
-export { useInView } from "motion/react";
+export { animate, inView, useInView } from "motion/react";
 export { useCallback, useEffect, useMemo, useRef, useState } from "react";
 export { useController as useFormController } from "react-hook-form";
 export { useLocation, useNavigate, useParams } from "react-router-dom";

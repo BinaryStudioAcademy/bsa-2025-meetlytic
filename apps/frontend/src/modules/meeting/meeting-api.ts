@@ -56,7 +56,6 @@ class MeetingApi extends BaseHTTPApi {
 				id,
 			}),
 			{
-				contentType: ContentType.JSON,
 				hasAuth: true,
 				method: HTTPMethod.DELETE,
 			},

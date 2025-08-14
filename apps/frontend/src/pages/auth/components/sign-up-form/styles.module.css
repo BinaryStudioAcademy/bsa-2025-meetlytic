@@ -1,7 +1,7 @@
 .title {
-	margin-top: auto;
+	margin-top: 30px;
 	margin-bottom: 20px;
-	font-size: 36px;
+	font-size: 24px;
 	font-weight: 700;
 	color: var(--color-brand);
 	text-align: center;
@@ -10,8 +10,8 @@
 .link-container {
 	display: flex;
 	gap: 10px;
-	margin-top: auto;
-	margin-bottom: 60px;
+	margin-top: 25px;
+	margin-bottom: 40px;
 	font-size: 16px;
 	font-weight: 600;
 }
@@ -39,8 +39,20 @@
 	height: 44px;
 }
 
-.input:focus,
-.input:focus-visible {
-	outline: unset;
-	border-color: var(--color-accent-2);
+@media screen and (768px <=width) {
+	.title {
+		font-size: 32px;
+	}
+}
+
+@media screen and (990px <=width) {
+	.title {
+		margin-top: auto;
+		font-size: 36px;
+	}
+
+	.link-container {
+		margin-top: auto;
+		margin-bottom: 60px;
+	}
 }

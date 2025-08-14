@@ -1,13 +1,25 @@
-import { type CloudFormation } from "~/libs/modules/cloud-formation/cloud-formation.js";
+import { APIPath } from "~/libs/enums/enums.js";
+import { AuthError } from "~/libs/exceptions/exceptions.js";
+import {
+	type CloudFormation,
+	type CreateStack,
+} from "~/libs/modules/cloud-formation/cloud-formation.js";
 import template from "~/libs/modules/cloud-formation/libs/templates/ec2-instance-template.json" with { type: "json" };
 import { HTTPCode } from "~/libs/modules/http/http.js";
+import {
+	type BaseToken,
+	type SharedJwtPayload,
+} from "~/libs/modules/token/token.js";
 import { type Service } from "~/libs/types/types.js";
 
 import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
+import { extractZoomMeetingId } from "./libs/helpers/helpers.js";
 import {
 	type MeetingCreateRequestDto,
+	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
+	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
 	type MeetingUpdateRequestDto,
 } from "./libs/types/types.js";
@@ -17,23 +29,32 @@ import { type MeetingRepository } from "./meetings.repository.js";
 type Constructor = {
 	cloudFormation: CloudFormation;
 	meetingRepository: MeetingRepository;
+	sharedJwt: BaseToken<SharedJwtPayload>;
 };
 
 class MeetingService implements Service<MeetingResponseDto> {
 	private cloudFormation: CloudFormation;
 	private meetingRepository: MeetingRepository;
+	private sharedJwt: BaseToken<SharedJwtPayload>;
 
-	public constructor({ cloudFormation, meetingRepository }: Constructor) {
+	public constructor({
+		cloudFormation,
+		meetingRepository,
+		sharedJwt,
+	}: Constructor) {
 		this.cloudFormation = cloudFormation;
 		this.meetingRepository = meetingRepository;
+		this.sharedJwt = sharedJwt;
 	}
 
-	private async createInstance(id: number): Promise<MeetingResponseDto> {
+	private async createInstance(
+		payload: Omit<CreateStack, "template">,
+	): Promise<MeetingResponseDto> {
 		const instanceId = await this.cloudFormation.create({
-			id,
+			...payload,
 			template: JSON.stringify(template),
 		});
-		const meeting = await this.meetingRepository.update(id, {
+		const meeting = await this.meetingRepository.update(payload.id, {
 			instanceId,
 		});
 
@@ -50,16 +71,26 @@ class MeetingService implements Service<MeetingResponseDto> {
 	public async create(
 		payload: MeetingCreateRequestDto & { ownerId: number },
 	): Promise<MeetingResponseDto> {
+		const { meetingLink } = payload;
+		const meetingId = extractZoomMeetingId(meetingLink);
+
+		if (!meetingId) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.INVALID_MEETING_LINK,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const meeting = MeetingEntity.initializeNew({
 			host: payload.host,
 			instanceId: null,
-			meetingId: payload.meetingId,
+			meetingId,
 			meetingPassword: payload.meetingPassword ?? null,
 			ownerId: payload.ownerId,
 		});
 
 		const newMeeting = await this.meetingRepository.create(meeting);
-		const { id } = newMeeting.toObject();
+		const { id, meetingPassword } = newMeeting.toObject();
 
 		if (!id) {
 			throw new MeetingError({
@@ -68,7 +99,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return await this.createInstance(id);
+		return await this.createInstance({ id, meetingLink, meetingPassword });
 	}
 
 	public async delete(id: number): Promise<boolean> {
@@ -92,7 +123,8 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		return isDeleted;
 	}
-	public async endMeeting(id: number): Promise<MeetingResponseDto> {
+
+	public async endMeeting(id: number): Promise<MeetingDetailedResponseDto> {
 		await this.cloudFormation.delete(id);
 		const meeting = await this.meetingRepository.update(id, {
 			instanceId: null,
@@ -106,10 +138,9 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return meeting.toObject();
+		return meeting.toDetailedObject();
 	}
-
-	public async find(id: number): Promise<MeetingResponseDto> {
+	public async find(id: number): Promise<MeetingDetailedResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
 
 		if (!meeting) {
@@ -119,7 +150,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return meeting.toObject();
+		return meeting.toDetailedObject();
 	}
 
 	public async findAll(
@@ -130,6 +161,41 @@ class MeetingService implements Service<MeetingResponseDto> {
 		const meetings = await this.meetingRepository.findAllByOwnerId(ownerId);
 
 		return { items: meetings.map((meeting) => meeting.toObject()) };
+	}
+
+	public async findBySignedUrl(
+		id: number,
+		token: string,
+	): Promise<MeetingResponseDto> {
+		try {
+			const { payload } = await this.sharedJwt.verify(token);
+
+			if (id !== payload.meetingId) {
+				throw new AuthError();
+			}
+		} catch {
+			throw new AuthError();
+		}
+
+		return await this.find(id);
+	}
+
+	public async getPublicUrl(
+		id: number,
+	): Promise<MeetingGetPublicUrlResponseDto> {
+		const meeting = await this.find(id);
+		const token = await this.sharedJwt.sign({ meetingId: meeting.id });
+
+		return {
+			publicUrl: `${APIPath.PUBLIC_MEETINGS}/${String(id)}?token=${token}`,
+		};
+	}
+
+	public async stopRecording(id: number): Promise<void> {
+		// TODO:
+		// 1. emit a message for the bot (bot stops audio recording, transcribes full audio, gets summary and action points)
+		// 2. move endMeeting(id) call to the websocket event handler
+		await this.endMeeting(id);
 	}
 
 	public async update(
@@ -146,6 +212,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		}
 
 		const meeting = MeetingEntity.initialize({
+			actionItems: meetingEntity.toDetailedObject().actionItems,
 			createdAt: meetingEntity.toObject().createdAt,
 			host: payload.host,
 			id,
@@ -154,6 +221,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			meetingPassword: meetingEntity.toObject().meetingPassword,
 			ownerId: meetingEntity.toObject().ownerId,
 			status: payload.status,
+			summary: meetingEntity.toDetailedObject().summary,
 		});
 
 		const updatedMeeting = await this.meetingRepository.update(
@@ -168,7 +236,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return updatedMeeting.toObject();
+		return updatedMeeting.toClientObject();
 	}
 }
 

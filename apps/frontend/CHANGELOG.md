@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.5.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.4.1...frontend-v1.5.0) (2025-08-14)
+
+
+### Features
+
+* add edit user profile ml-56 ([#76](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/76)) ([35e5b8f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/35e5b8f58179e01e7e2519d57ceeab46f7f7acbf))
+* add mobile layout to auth pages ml-152 ([#177](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/177)) ([4426d23](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/4426d23610a8bebd67c1592692b872619100f9d9))
+* end meeting recording from the frontend ml-160 ([#184](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/184)) ([084b147](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/084b1479fa64d9ccc0a4345a7a74e235d34ff96c))
+
+## [1.4.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.4.0...frontend-v1.4.1) (2025-08-12)
+
+
+### Bug Fixes
+
+* bot fails to join zoom meeting ml-148 ([#165](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/165)) ([905be23](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/905be23531ef4b8f9f3b9736f50b33ded2c73c1c))
+
+## [1.4.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.3.0...frontend-v1.4.0) (2025-08-11)
+
+
+### Features
+
+* create player track component ml-62 ([#135](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/135)) ([71b41c9](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/71b41c9f92028772183682f2a6ab89ead1318ec8))
+
 ## [1.3.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.2.0...frontend-v1.3.0) (2025-08-10)
 
 

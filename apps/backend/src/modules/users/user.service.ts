@@ -1,11 +1,16 @@
 import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
+import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
 
+import { UserErrorMessage } from "./libs/enums/enums.js";
+import { UserError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserCredentials,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignUpRequestDto,
+	type UserUpdateResponseDto,
+	type UserWithDetailsDto,
 } from "./libs/types/types.js";
 import { UserDetailsEntity } from "./user-details.entity.js";
 import { type UserDetailsRepository } from "./user-details.repository.js";
@@ -68,14 +73,90 @@ class UserService implements Service {
 		return user ? user.toObject() : null;
 	}
 
+	public async findProfileByEmail(
+		email: string,
+	): Promise<null | UserWithDetailsDto> {
+		const user = await this.userRepository.findByEmailWithDetails(email);
+		const details = user?.getDetails();
+
+		if (!user) {
+			throw new UserError({
+				message: UserErrorMessage.USER_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		if (!details) {
+			return null;
+		}
+
+		return {
+			email: user.toObject().email,
+			firstName: details.toObject().firstName,
+			id: user.toObject().id,
+			lastName: details.toObject().lastName,
+		};
+	}
+
 	public async getCredentials(id: number): Promise<null | UserCredentials> {
 		const credentials = await this.userRepository.getCredentials(id);
 
 		return credentials ?? null;
 	}
 
-	public update(): ReturnType<Service["update"]> {
-		return Promise.resolve(null);
+	public async update(
+		userId: number,
+		payload: UserUpdateResponseDto,
+	): Promise<null | UserWithDetailsDto> {
+		const existingUser = await this.userRepository.findByIdWithDetails(userId);
+		const existingDetails = existingUser?.getDetails();
+
+		if (!existingUser) {
+			throw new UserError({
+				message: UserErrorMessage.USER_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		if (!existingDetails) {
+			return null;
+		}
+
+		if (payload.email !== existingUser.toObject().email) {
+			const userWithEmail = await this.userRepository.findByEmail(
+				payload.email,
+			);
+
+			if (userWithEmail && userWithEmail.toObject().id !== userId) {
+				throw new UserError({
+					message: UserErrorMessage.USER_EMAIL_IN_USE,
+					status: HTTPCode.CONFLICT,
+				});
+			}
+		}
+
+		const updatedUser = await this.userRepository.update(userId, {
+			email: payload.email,
+		});
+
+		const updatedDetails = await this.userDetailsRepository.update(
+			existingDetails.toObject().id,
+			{
+				firstName: payload.firstName,
+				lastName: payload.lastName,
+			},
+		);
+
+		if (!updatedDetails) {
+			return null;
+		}
+
+		return {
+			email: updatedUser.toObject().email,
+			firstName: updatedDetails.toObject().firstName,
+			id: updatedUser.toObject().id,
+			lastName: updatedDetails.toObject().lastName,
+		};
 	}
 }
 

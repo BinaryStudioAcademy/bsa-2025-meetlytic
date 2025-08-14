@@ -1,5 +1,6 @@
 .landing-footer {
 	position: relative;
+	z-index: var(--z-index-medium);
 	background-color: var(--color-background-5);
 }
 

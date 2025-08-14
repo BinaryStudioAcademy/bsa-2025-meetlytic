@@ -24,4 +24,7 @@
 	--second-font-family: "Nunito", sans-serif;
 	--third-font-family: "Roboto", sans-serif;
 	--fourth-font-family: "Plus Jakarta Sans", sans-serif;
+	--z-index-low: 10;
+	--z-index-medium: 100;
+	--z-index-high: 1000;
 }

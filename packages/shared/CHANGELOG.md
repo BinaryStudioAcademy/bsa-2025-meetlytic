@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.5.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.4.0...shared-v1.5.0) (2025-08-14)
+
+
+### Features
+
+* add edit user profile ml-56 ([#76](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/76)) ([35e5b8f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/35e5b8f58179e01e7e2519d57ceeab46f7f7acbf))
+* end meeting recording from the frontend ml-160 ([#184](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/184)) ([084b147](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/084b1479fa64d9ccc0a4345a7a74e235d34ff96c))
+
+## [1.4.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.3.1...shared-v1.4.0) (2025-08-13)
+
+
+### Features
+
+* add meeting public url ml-143 ([#163](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/163)) ([73b8c8d](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/73b8c8dbb9a6e168c0e74d7eb8bb29ff06e8a348))
+
+## [1.3.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.3.0...shared-v1.3.1) (2025-08-12)
+
+
+### Bug Fixes
+
+* bot fails to join zoom meeting ml-148 ([#165](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/165)) ([905be23](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/905be23531ef4b8f9f3b9736f50b33ded2c73c1c))
+
+## [1.3.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.2.0...shared-v1.3.0) (2025-08-11)
+
+
+### Features
+
+* create player track component ml-62 ([#135](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/135)) ([71b41c9](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/71b41c9f92028772183682f2a6ab89ead1318ec8))
+
 ## [1.2.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.1.1...shared-v1.2.0) (2025-08-10)
 
 

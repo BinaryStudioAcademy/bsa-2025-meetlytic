@@ -118,23 +118,43 @@ class BaseConfig implements Config {
 					format: Number,
 				},
 			},
-			"OPEN_AI": {
-				"KEY": {
+			OPEN_AI: {
+				KEY: {
 					default: null,
 					doc: "OpenAI API key",
 					env: "OPEN_AI_KEY",
 					format: String,
 				},
-				"TEXT_GENERATION_MODEL": {
+				TEXT_GENERATION_MODEL: {
 					default: null,
 					doc: "OpenAI text generation model",
 					env: "TEXT_GENERATION_MODEL",
 					format: String,
 				},
-				"TRANSCRIPTION_MODEL": {
+				TRANSCRIPTION_MODEL: {
 					default: null,
 					doc: "OpenAI transcription model",
 					env: "TRANSCRIPTION_MODEL",
+					format: String,
+				},
+			},
+			SHARED_TOKEN: {
+				ALGORITHM: {
+					default: null,
+					doc: "JWT signing algorithm for shared tokens",
+					env: "SHARED_JWT_ALGORITHM",
+					format: String,
+				},
+				EXPIRES_IN: {
+					default: null,
+					doc: "Shared token expiration duration in a human-readable format",
+					env: "SHARED_JWT_EXPIRES_IN",
+					format: String,
+				},
+				SECRET: {
+					default: null,
+					doc: "Secret key of shared JWT tokens",
+					env: "SHARED_JWT_SECRET",
 					format: String,
 				},
 			},

@@ -44,7 +44,7 @@ class BaseS3 {
 	}: Constructor) {
 		this.logger = logger;
 
-		if (defaultBucket !== undefined) {
+		if (defaultBucket) {
 			this.defaultBucket = defaultBucket;
 		}
 
@@ -73,13 +73,13 @@ class BaseS3 {
 	}
 
 	public getPublicUrl(key: string, bucket?: string): string {
-		const b = bucket ?? this.defaultBucket;
+		const bucketName = bucket ?? this.defaultBucket;
 
-		if (!b) {
+		if (!bucketName) {
 			throw new Error("Bucket name is required to build public URL.");
 		}
 
-		return `https://${b}.s3.amazonaws.com/${key}`;
+		return `https://${bucketName}.s3.amazonaws.com/${key}`;
 	}
 
 	public async uploadObject({

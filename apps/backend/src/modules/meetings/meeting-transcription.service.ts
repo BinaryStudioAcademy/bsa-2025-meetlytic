@@ -86,6 +86,15 @@ class MeetingTranscriptionService
 		};
 	}
 
+	public async getByMeetingId(
+		meetingId: number,
+	): Promise<MeetingTranscriptionResponseDto[]> {
+		const transcriptions =
+			await this.meetingTranscriptionRepository.findByMeetingId(meetingId);
+
+		return transcriptions.map((transcription) => transcription.toObject());
+	}
+
 	public async update(
 		id: number,
 		payload: MeetingUpdateTranscriptionRequestDto,

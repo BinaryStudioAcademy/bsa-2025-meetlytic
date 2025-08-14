@@ -1,7 +1,8 @@
 import logoDark from "~/assets/img/logo/meetlytic-logo-dark.svg";
+import logoMobile from "~/assets/img/logo/meetlytic-logo-mobile.svg";
 import logoLight from "~/assets/img/logo/meetlytic-logo.svg";
 import { Link } from "~/libs/components/components.js";
-import { AppRoute, LogoSize, LogoTheme } from "~/libs/enums/enums.js";
+import { AppRoute, LogoSize, LogoTheme, LogoType } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
@@ -11,14 +12,22 @@ type Properties = {
 	hasLink?: boolean;
 	size?: ValueOf<typeof LogoSize>;
 	theme?: ValueOf<typeof LogoTheme>;
+	type?: ValueOf<typeof LogoType>;
 };
 
 const Logo: React.FC<Properties> = ({
 	hasLink = true,
 	size = LogoSize.SMALL,
 	theme = LogoTheme.LIGHT,
+	type = LogoType.DESKTOP,
 }: Properties) => {
-	const logoSource = theme === LogoTheme.DARK ? logoDark : logoLight;
+	const handleGetLogo = (): string => {
+		if (type === LogoType.MOBILE) {
+			return logoMobile;
+		}
+
+		return theme === LogoTheme.DARK ? logoDark : logoLight;
+	};
 
 	const logoContent = (
 		<div className={styles["logo"]}>
@@ -28,7 +37,7 @@ const Logo: React.FC<Properties> = ({
 					styles["logo__image"],
 					styles[`logo__image--${size}`],
 				)}
-				src={logoSource}
+				src={handleGetLogo()}
 			/>
 		</div>
 	);

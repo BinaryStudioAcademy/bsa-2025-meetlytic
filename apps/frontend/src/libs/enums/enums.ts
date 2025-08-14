@@ -16,6 +16,7 @@ export {
 	APIPath,
 	AppEnvironment,
 	ContentType,
+	HTTPMethod,
 	KeyboardKey,
 	MeetingHost,
 	ServerErrorType,

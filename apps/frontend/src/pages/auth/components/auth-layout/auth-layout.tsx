@@ -14,7 +14,7 @@ const AuthLayout: React.FC<Properties> = ({ children }: Properties) => {
 		<div className={styles["auth"]}>
 			<div className={styles["auth-left"]}>
 				<div className={styles["auth-logo"]}>
-					<Logo size={LogoSize.LARGE} theme={LogoTheme.LIGHT} />
+					<Logo size={LogoSize.EXTRA_LARGE} theme={LogoTheme.LIGHT} />
 				</div>
 			</div>
 

@@ -26,23 +26,22 @@ class FileService {
 	public async findByUserDetailsId(
 		user_details_id: number,
 	): Promise<File | undefined> {
-		const result =
-			await this.fileRepository.findByUserDetailsId(user_details_id);
+		const file = await this.fileRepository.findByUserDetailsId(user_details_id);
 
-		return result;
+		return file;
 	}
 
 	public async removeAvatarRecord(user_details_id: number): Promise<boolean> {
-		const existing =
+		const avatarFile =
 			await this.fileRepository.findByUserDetailsId(user_details_id);
 
-		if (!existing) {
+		if (!avatarFile) {
 			return false;
 		}
 
-		await this.userAvatarService.deleteAvatar(existing.key);
+		await this.userAvatarService.deleteAvatar(avatarFile.key);
 
-		await this.fileRepository.delete(existing.id);
+		await this.fileRepository.delete(avatarFile.id);
 
 		await this.fileRepository.unsetFileId(user_details_id);
 
@@ -56,12 +55,12 @@ class FileService {
 	}): Promise<File> {
 		const { key, url, user_details_id } = parameters;
 
-		const existing =
+		const avatarFile =
 			await this.fileRepository.findByUserDetailsId(user_details_id);
 
-		if (existing) {
-			await this.userAvatarService.deleteAvatar(existing.key);
-			const updated = await this.fileRepository.update(existing.id, {
+		if (avatarFile) {
+			await this.userAvatarService.deleteAvatar(avatarFile.key);
+			const updated = await this.fileRepository.update(avatarFile.id, {
 				key,
 				url,
 			});

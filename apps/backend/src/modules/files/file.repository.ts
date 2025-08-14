@@ -8,6 +8,8 @@ type Constructor = {
 	userDetailsModel: typeof UserDetailsModel;
 };
 
+const FILE_TYPE_AVATAR = "avatar";
+
 class FileRepository {
 	private fileModel: typeof FileModel;
 	private userDetailsModel: typeof UserDetailsModel;
@@ -34,7 +36,7 @@ class FileRepository {
 			.patch({ fileId: fileRow.id })
 			.where("id", user_details_id);
 
-		return { ...fileRow.toJSON(), type: "avatar" } as File;
+		return { ...fileRow.toJSON(), type: FILE_TYPE_AVATAR } as File;
 	}
 
 	public async delete(id: number): Promise<number> {
@@ -45,7 +47,7 @@ class FileRepository {
 		const fileRow = await this.fileModel.query().findById(id);
 
 		return fileRow
-			? ({ ...fileRow.toJSON(), type: "avatar" } as File)
+			? ({ ...fileRow.toJSON(), type: FILE_TYPE_AVATAR } as File)
 			: undefined;
 	}
 
@@ -68,7 +70,7 @@ class FileRepository {
 			return undefined;
 		}
 
-		return { ...fileRow.toJSON(), type: "avatar" } as File;
+		return { ...fileRow.toJSON(), type: FILE_TYPE_AVATAR } as File;
 	}
 
 	public async unsetFileId(user_details_id: number): Promise<number> {
@@ -86,7 +88,7 @@ class FileRepository {
 			.query()
 			.patchAndFetchById(id, parameters);
 
-		return { ...updatedRow.toJSON(), type: "avatar" } as File;
+		return { ...updatedRow.toJSON(), type: FILE_TYPE_AVATAR } as File;
 	}
 }
 

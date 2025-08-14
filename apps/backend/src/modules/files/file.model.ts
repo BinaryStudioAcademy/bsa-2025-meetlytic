@@ -17,7 +17,7 @@ class FileModel extends Model {
 			userDetails: {
 				join: {
 					from: `${TableName.FILES}.id`,
-					to: `${TableName.USER_DETAILS}.file_id`,
+					to: `${TableName.USER_DETAILS}.fileId`,
 				},
 				modelClass: UserDetailsModel,
 				relation: Model.HasOneRelation,

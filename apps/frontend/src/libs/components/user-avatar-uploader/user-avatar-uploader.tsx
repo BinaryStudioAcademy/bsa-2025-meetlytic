@@ -1,3 +1,4 @@
+import { ACCEPTED_IMAGE_TYPES } from "~/libs/constants/constants.js";
 import {
 	AvatarSize,
 	AvatarType,
@@ -60,7 +61,7 @@ const UserAvatarUploader: React.FC = () => {
 				type={AvatarType.MAIN}
 			/>
 			<input
-				accept="image/jpeg,image/png,image/webp,image/gif"
+				accept={ACCEPTED_IMAGE_TYPES}
 				className={styles["hidden"]}
 				onChange={handleFileChange}
 				ref={fileInputReference}

@@ -108,21 +108,21 @@ class UserService implements Service {
 		userId: number,
 		payload: UserUpdateResponseDto,
 	): Promise<null | UserWithDetailsDto> {
-		const user = await this.userRepository.findByIdWithDetails(userId);
-		const details = user?.getDetails();
+		const existingUser = await this.userRepository.findByIdWithDetails(userId);
+		const existingDetails = existingUser?.getDetails();
 
-		if (!user) {
+		if (!existingUser) {
 			throw new UserError({
 				message: UserErrorMessage.USER_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
-		if (!details) {
+		if (!existingDetails) {
 			return null;
 		}
 
-		if (payload.email !== user.toObject().email) {
+		if (payload.email !== existingUser.toObject().email) {
 			const userWithEmail = await this.userRepository.findByEmail(
 				payload.email,
 			);
@@ -133,20 +133,29 @@ class UserService implements Service {
 					status: HTTPCode.CONFLICT,
 				});
 			}
-
-			await this.userRepository.update(userId, { email: payload.email });
 		}
 
-		await this.userDetailsRepository.update(details.toObject().id, {
-			firstName: payload.firstName,
-			lastName: payload.lastName,
+		const updatedUser = await this.userRepository.update(userId, {
+			email: payload.email,
 		});
 
+		const updatedDetails = await this.userDetailsRepository.update(
+			existingDetails.toObject().id,
+			{
+				firstName: payload.firstName,
+				lastName: payload.lastName,
+			},
+		);
+
+		if (!updatedDetails) {
+			return null;
+		}
+
 		return {
-			email: user.toObject().email,
-			firstName: details.toObject().firstName,
-			id: user.toObject().id,
-			lastName: details.toObject().lastName,
+			email: updatedUser.toObject().email,
+			firstName: updatedDetails.toObject().firstName,
+			id: updatedUser.toObject().id,
+			lastName: updatedDetails.toObject().lastName,
 		};
 	}
 }

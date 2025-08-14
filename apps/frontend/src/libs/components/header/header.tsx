@@ -7,26 +7,31 @@ import {
 	ButtonVariant,
 	LogoSize,
 	LogoTheme,
+	LogoType,
 } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
 	useCallback,
 	useEffect,
-	useLogout,
 	useNavigate,
 } from "~/libs/hooks/hooks.js";
 import { actions as userAvatarActions } from "~/modules/users/user-avatar.js";
 
 import styles from "./styles.module.css";
 
-const Header: React.FC = () => {
-	const logout = useLogout();
-	const navigate = useNavigate() as (to: string) => void; // TODO: fix navigation
+type Properties = {
+	isMenuOpen: boolean;
+	onLogout: () => void;
+	onToggleMenu: () => void;
+};
 
-	const handleLogout = useCallback((): void => {
-		void logout();
-	}, [logout]);
+const Header: React.FC<Properties> = ({
+	isMenuOpen,
+	onLogout,
+	onToggleMenu,
+}: Properties) => {
+	const navigate = useNavigate() as (to: string) => void;
 
 	const handleProfileClick = useCallback((): void => {
 		navigate(AppRoute.PROFILE);
@@ -41,30 +46,65 @@ const Header: React.FC = () => {
 
 	return (
 		<header className={styles["header"]}>
-			<div className={styles["header-inner"]}>
-				<div className={styles["header-logo"]}>
-					<Logo hasLink size={LogoSize.SMALL} theme={LogoTheme.LIGHT} />
+			<div className={styles["header__inner"]}>
+				<button
+					aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+					className={styles["header__burger"]}
+					onClick={onToggleMenu}
+				>
+					<Icon name={isMenuOpen ? "closeIcon" : "burgerMenu"} />
+				</button>
+
+				<div className={styles["header__logo"]}>
+					<div className={styles["variable-component__mobile"]}>
+						<Logo
+							hasLink
+							size={LogoSize.SMALL}
+							theme={LogoTheme.LIGHT}
+							type={LogoType.MOBILE}
+						/>
+					</div>
+					<div className={styles["variable-component__desktop"]}>
+						<Logo
+							hasLink
+							size={LogoSize.SMALL}
+							theme={LogoTheme.LIGHT}
+							type={LogoType.DESKTOP}
+						/>
+					</div>
 				</div>
 				<div className={styles["header__avatar-logout-wrapper"]}>
 					<button
 						className={styles["header__profile-button"]}
 						onClick={handleProfileClick}
 					>
-						<Avatar
-							size={AvatarSize.SMALL}
-							src={avatarUrl ?? undefined}
-							type={AvatarType.MAIN}
-						/>
+						<div className={styles["variable-component__mobile"]}>
+							<Avatar
+								size={AvatarSize.MOBILE}
+								src={avatarUrl ?? undefined}
+								type={AvatarType.MAIN}
+							/>
+						</div>
+						<div className={styles["variable-component__desktop"]}>
+							<Avatar
+								size={AvatarSize.SMALL}
+								src={avatarUrl ?? undefined}
+								type={AvatarType.MAIN}
+							/>
+						</div>
 					</button>
-					<Button
-						iconLeft={
-							<Icon className={styles["header__logout-icon"]} name="logout" />
-						}
-						label="Logout"
-						onClick={handleLogout}
-						size={ButtonSize.SMALL}
-						variant={ButtonVariant.OUTLINED}
-					/>
+
+					<div className={styles["variable-component__desktop"]}>
+						<Button
+							iconLeft={
+								<Icon className={styles["header__logout-icon"]} name="logout" />
+							}
+							label="Logout"
+							onClick={onLogout}
+							size={ButtonSize.SMALL}
+							variant={ButtonVariant.OUTLINED}
+						/>
+					</div>
 				</div>
 			</div>
 		</header>

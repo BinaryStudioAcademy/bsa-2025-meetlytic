@@ -10,8 +10,6 @@ type UserSignUpRequestValidationDto = {
 	password: z.ZodString;
 };
 
-const NAME_VALIDATION_REGEX = /^[a-zA-Z]+(?:[ -][a-zA-Z]+)*$/;
-
 const userSignUp = z
 	.object<UserSignUpRequestValidationDto>({
 		confirmPassword: z
@@ -42,7 +40,7 @@ const userSignUp = z
 			.max(UserValidationRule.FIRST_NAME_MAXIMUM_LENGTH, {
 				message: UserValidationMessage.FIRST_NAME_MAX_LENGTH,
 			})
-			.regex(NAME_VALIDATION_REGEX, {
+			.regex(UserValidationRule.NAME_VALIDATION_REGEX, {
 				message: UserValidationMessage.ONLY_LATIN_LETTERS,
 			}),
 		lastName: z
@@ -54,7 +52,7 @@ const userSignUp = z
 			.max(UserValidationRule.LAST_NAME_MAXIMUM_LENGTH, {
 				message: UserValidationMessage.LAST_NAME_MAX_LENGTH,
 			})
-			.regex(NAME_VALIDATION_REGEX, {
+			.regex(UserValidationRule.NAME_VALIDATION_REGEX, {
 				message: UserValidationMessage.ONLY_LATIN_LETTERS,
 			}),
 		password: z

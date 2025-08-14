@@ -27,6 +27,9 @@ const userUpdate = z
 			})
 			.max(UserValidationRule.FIRST_NAME_MAXIMUM_LENGTH, {
 				message: UserValidationMessage.FIRST_NAME_MAX_LENGTH,
+			})
+			.regex(UserValidationRule.NAME_VALIDATION_REGEX, {
+				message: UserValidationMessage.ONLY_LATIN_LETTERS,
 			}),
 		lastName: z
 			.string()
@@ -36,6 +39,9 @@ const userUpdate = z
 			})
 			.max(UserValidationRule.LAST_NAME_MAXIMUM_LENGTH, {
 				message: UserValidationMessage.LAST_NAME_MAX_LENGTH,
+			})
+			.regex(UserValidationRule.NAME_VALIDATION_REGEX, {
+				message: UserValidationMessage.ONLY_LATIN_LETTERS,
 			}),
 	})
 	.required();

@@ -15,6 +15,7 @@ import {
 	type FindBySignedUrlOptions,
 	type FindMeetingOptions,
 	type GetPublicUrlOptions,
+	type StopRecordingOptions,
 	type UpdateMeetingOptions,
 } from "./libs/types/types.js";
 import {
@@ -136,6 +137,12 @@ class MeetingsController extends BaseController {
 				this.findBySignedUrl(options as FindBySignedUrlOptions),
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID_PUBLIC,
+		});
+		this.addRoute({
+			handler: (options) => this.stopRecording(options as StopRecordingOptions),
+			method: HTTPMethod.DELETE,
+			path: MeetingsApiPath.$ID_STOP_RECORDING,
+			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 	}
 
@@ -331,6 +338,36 @@ class MeetingsController extends BaseController {
 		const url = await this.meetingService.getPublicUrl(id);
 
 		return { payload: url, status: HTTPCode.OK };
+	}
+
+	/**
+	 * @swagger
+	 * /meetings/{id}/stop-recording:
+	 *   delete:
+	 *     summary: Initiate request to stop meeting recording
+	 *     tags:
+	 *       - Meetings
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: number
+	 *     responses:
+	 *       202:
+	 *         description: Request to stop recording accepted
+	 *       404:
+	 *         description: Meeting not found
+	 *       500:
+	 *         description: Failed to delete stack
+	 */
+	private async stopRecording(
+		options: StopRecordingOptions,
+	): Promise<APIHandlerResponse> {
+		const id = Number(options.params.id);
+		await this.meetingService.stopRecording(id);
+
+		return { payload: null, status: HTTPCode.ACCEPTED };
 	}
 
 	/**

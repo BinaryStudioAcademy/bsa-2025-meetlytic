@@ -141,7 +141,7 @@ class UserService implements Service {
 	public async update(
 		userId: number,
 		payload: UserUpdateResponseDto,
-	): Promise<null | UserEntity> {
+	): Promise<null | UserWithDetailsDto> {
 		const user = await this.userRepository.findByIdWithDetails(userId);
 		const details = user?.getDetails();
 
@@ -168,9 +168,7 @@ class UserService implements Service {
 				});
 			}
 
-			await this.userRepository.update(userId, {
-				email: payload.email,
-			});
+			await this.userRepository.update(userId, { email: payload.email });
 		}
 
 		await this.userDetailsRepository.update(details.toObject().id, {
@@ -178,9 +176,12 @@ class UserService implements Service {
 			lastName: payload.lastName,
 		});
 
-		const updatedUser = await this.userRepository.findByIdWithDetails(userId);
-
-		return updatedUser;
+		return {
+			email: user.toObject().email,
+			firstName: details.toObject().firstName,
+			id: user.toObject().id,
+			lastName: details.toObject().lastName,
+		};
 	}
 
 	public async updateUserDetailsFileId(

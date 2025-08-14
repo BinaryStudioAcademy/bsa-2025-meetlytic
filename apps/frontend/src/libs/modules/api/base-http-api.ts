@@ -64,11 +64,10 @@ class BaseHTTPApi implements HTTPApi {
 	private async getHeaders(
 		hasAuth: boolean,
 		contentType?: ValueOf<typeof ContentType>,
-		payload?: unknown,
 	): Promise<Headers> {
 		const headers = new Headers();
 
-		if (contentType && !(payload instanceof FormData)) {
+		if (contentType) {
 			headers.append(HTTPHeader.CONTENT_TYPE, contentType);
 		}
 

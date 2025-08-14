@@ -1,10 +1,10 @@
 const MeetingAttribute = {
 	HOST: "host",
 	ID: "id",
-	INSTANCE_ID: "instance_id",
-	MEETING_ID: "meeting_id",
-	MEETING_PASSWORD: "meeting_password",
-	OWNER_ID: "owner_id",
+	INSTANCE_ID: "instanceId",
+	MEETING_ID: "meetingId",
+	MEETING_PASSWORD: "meetingPassword",
+	OWNER_ID: "ownerId",
 	STATUS: "status",
 } as const;
 

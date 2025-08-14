@@ -1,6 +1,7 @@
 import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
+import { type FileService } from "~/modules/files/file.service.js";
 
 import { UserErrorMessage } from "./libs/enums/enums.js";
 import { UserError } from "./libs/exceptions/exceptions.js";
@@ -18,15 +19,18 @@ import { UserEntity } from "./user.entity.js";
 import { type UserRepository } from "./user.repository.js";
 
 class UserService implements Service {
+	private fileService: FileService;
 	private userDetailsRepository: UserDetailsRepository;
 	private userRepository: UserRepository;
 
 	public constructor(
 		userRepository: UserRepository,
 		userDetailsRepository: UserDetailsRepository,
+		fileService: FileService,
 	) {
 		this.userRepository = userRepository;
 		this.userDetailsRepository = userDetailsRepository;
+		this.fileService = fileService;
 	}
 
 	public async create(payload: UserSignUpRequestDto): Promise<UserResponseDto> {
@@ -90,7 +94,22 @@ class UserService implements Service {
 			return null;
 		}
 
+		let avatarFile: null | { key: string; url: string } = null;
+		const fileId = details.getFileId();
+
+		if (fileId != null) {
+			const file = await this.fileService.findById(fileId);
+
+			if (file && file.url) {
+				avatarFile = { key: file.key, url: file.url };
+			}
+		}
+
 		return {
+			details: {
+				...details.toObject(),
+				avatarFile,
+			},
 			email: user.toObject().email,
 			firstName: details.toObject().firstName,
 			id: user.toObject().id,

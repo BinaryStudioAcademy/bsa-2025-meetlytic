@@ -29,7 +29,6 @@ class UserDetailsEntity implements Entity {
 		this.userId = userId;
 		this.fileId = fileId;
 	}
-
 	public static initialize({
 		fileId,
 		firstName,
@@ -70,6 +69,10 @@ class UserDetailsEntity implements Entity {
 			lastName,
 			userId,
 		});
+	}
+
+	public getFileId(): null | number {
+		return this.fileId;
 	}
 
 	public toNewObject(): {

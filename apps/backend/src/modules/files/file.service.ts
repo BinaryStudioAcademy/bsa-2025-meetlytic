@@ -17,6 +17,12 @@ class FileService {
 		this.userAvatarService = userAvatarService;
 	}
 
+	public async findById(id: number): Promise<File | undefined> {
+		const fileRow = await this.fileRepository.findById(id);
+
+		return fileRow;
+	}
+
 	public async findByUserDetailsId(
 		user_details_id: number,
 	): Promise<File | undefined> {
@@ -55,7 +61,12 @@ class FileService {
 
 		if (existing) {
 			await this.userAvatarService.deleteAvatar(existing.key);
-			await this.fileRepository.delete(existing.id);
+			const updated = await this.fileRepository.update(existing.id, {
+				key,
+				url,
+			});
+
+			return updated;
 		}
 
 		return await this.fileRepository.create({

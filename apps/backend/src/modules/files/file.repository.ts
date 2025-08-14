@@ -34,19 +34,41 @@ class FileRepository {
 			.patch({ fileId: fileRow.id })
 			.where("id", user_details_id);
 
-		return fileRow as unknown as File;
+		return { ...fileRow.toJSON(), type: "avatar" } as File;
 	}
 
 	public async delete(id: number): Promise<number> {
 		return await this.fileModel.query().deleteById(id);
 	}
 
+	public async findById(id: number): Promise<File | undefined> {
+		const fileRow = await this.fileModel.query().findById(id);
+
+		return fileRow
+			? ({ ...fileRow.toJSON(), type: "avatar" } as File)
+			: undefined;
+	}
+
 	public async findByUserDetailsId(
 		user_details_id: number,
 	): Promise<File | undefined> {
-		const file = await this.fileModel.query().findOne({ user_details_id });
+		const userDetails = await this.userDetailsModel
+			.query()
+			.findById(user_details_id)
+			.select("file_id")
+			.first();
 
-		return file as unknown as File | undefined;
+		if (!userDetails?.fileId) {
+			return undefined;
+		}
+
+		const fileRow = await this.fileModel.query().findById(userDetails.fileId);
+
+		if (!fileRow) {
+			return undefined;
+		}
+
+		return { ...fileRow.toJSON(), type: "avatar" } as File;
 	}
 
 	public async unsetFileId(user_details_id: number): Promise<number> {
@@ -54,6 +76,17 @@ class FileRepository {
 			.query()
 			.patch({ fileId: null })
 			.where("id", user_details_id);
+	}
+
+	public async update(
+		id: number,
+		parameters: { key: string; url: string },
+	): Promise<File> {
+		const updatedRow = await this.fileModel
+			.query()
+			.patchAndFetchById(id, parameters);
+
+		return { ...updatedRow.toJSON(), type: "avatar" } as File;
 	}
 }
 

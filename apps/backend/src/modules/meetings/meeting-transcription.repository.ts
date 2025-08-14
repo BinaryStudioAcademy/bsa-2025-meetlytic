@@ -20,22 +20,22 @@ class MeetingTranscriptionRepository
 		entity: MeetingTranscriptionEntity,
 	): Promise<MeetingTranscriptionEntity> {
 		const payload = entity.toNewObject();
-		const transcription = await this.meetingTranscriptionModel
+		const createdTranscription = await this.meetingTranscriptionModel
 			.query()
 			.insert(payload)
 			.returning("*")
 			.execute();
 
-		return MeetingTranscriptionEntity.initialize(transcription);
+		return MeetingTranscriptionEntity.initialize(createdTranscription);
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		const deletedCount = await this.meetingTranscriptionModel
+		const deletedTranscriptionsCount = await this.meetingTranscriptionModel
 			.query()
 			.deleteById(id)
 			.execute();
 
-		return deletedCount > DELETE_SUCCESS_THRESHOLD;
+		return deletedTranscriptionsCount > DELETE_SUCCESS_THRESHOLD;
 	}
 
 	public async find(id: number): Promise<MeetingTranscriptionEntity | null> {

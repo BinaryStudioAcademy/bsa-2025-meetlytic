@@ -126,21 +126,23 @@ class BaseAudioRecorder implements AudioRecorder {
 			if (this.isRecording) {
 				this.recordNextChunk();
 			}
-		});
 
-		this.transcribeAndSend(filePath).catch((error: unknown) => {
-			this.logger.error(`[OPENAI][TRANSCRIBE_ERROR] ${String(error)}`);
+			void this.transcribeAndSend(filePath);
 		});
 	}
 
 	private transcribeAndSend = async (filePath: string): Promise<void> => {
-		const chunkText = await this.openAI.transcribe(filePath);
-		this.socketClient.emit(SocketEvent.TRANSCRIBE, {
-			chunkText,
-			meetingId: this.config.ENV.ZOOM.MEETING_ID,
-		});
-	};
+		try {
+			const chunkText = await this.openAI.transcribe(filePath);
 
+			this.socketClient.emit(SocketEvent.TRANSCRIBE, {
+				chunkText,
+				meetingId: this.config.ENV.ZOOM.MEETING_ID,
+			});
+		} catch (error: unknown) {
+			this.logger.error(`[OPENAI][TRANSCRIBE_ERROR] ${String(error)}`);
+		}
+	};
 	public start(): void {
 		if (this.isRecording) {
 			this.logger.warn("[+] Already recording: ignoring start()");

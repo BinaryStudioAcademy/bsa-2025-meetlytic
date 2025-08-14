@@ -3,7 +3,7 @@ import { BaseSocketClient } from "./base-socket.module.js";
 
 const { HOST, PORT } = config.ENV.APP;
 
-const url = `http://${HOST}:${String(PORT)}`;
+const url = `ws://${HOST}:${String(PORT)}`;
 
 const socketClient = new BaseSocketClient(url);
 

@@ -32,31 +32,33 @@ class MeetingTranscriptionService
 	): Promise<MeetingTranscriptionResponseDto> {
 		const meetingTranscription =
 			MeetingTranscriptionEntity.initializeNew(payload);
-		const created =
+		const createdTranscription =
 			await this.meetingTranscriptionRepository.create(meetingTranscription);
 
-		return created.toObject();
+		return createdTranscription.toObject();
 	}
 	public async delete(id: number): Promise<boolean> {
-		const existing = await this.meetingTranscriptionRepository.find(id);
+		const existingTranscription =
+			await this.meetingTranscriptionRepository.find(id);
 
-		if (!existing) {
+		if (!existingTranscription) {
 			throw new MeetingTranscriptionError({
 				message: MeetingTranscriptionErrorMessage.NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
-		const deleted = await this.meetingTranscriptionRepository.delete(id);
+		const isDeletedTranscription =
+			await this.meetingTranscriptionRepository.delete(id);
 
-		if (!deleted) {
+		if (!isDeletedTranscription) {
 			throw new MeetingTranscriptionError({
 				message: MeetingTranscriptionErrorMessage.DELETE_FAILED,
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}
 
-		return deleted;
+		return isDeletedTranscription;
 	}
 
 	public async find(id: number): Promise<MeetingTranscriptionResponseDto> {
@@ -96,19 +98,17 @@ class MeetingTranscriptionService
 			});
 		}
 
-		const updated = await this.meetingTranscriptionRepository.update(
-			id,
-			payload,
-		);
+		const updatedTranscription =
+			await this.meetingTranscriptionRepository.update(id, payload);
 
-		if (!updated) {
+		if (!updatedTranscription) {
 			throw new MeetingTranscriptionError({
 				message: MeetingTranscriptionErrorMessage.UPDATE_FAILED,
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}
 
-		return updated.toObject();
+		return updatedTranscription.toObject();
 	}
 }
 

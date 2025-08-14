@@ -14,7 +14,7 @@ import {
 	ZoomUILabel,
 } from "~/libs/enums/enums.js";
 import { delay, extractZoomMeetingId } from "~/libs/helpers/helpers.js";
-import { type BaseSocketClient } from "~/libs/modules/socket-client/socket.js";
+import { type BaseSocketClient } from "~/libs/modules/socket-client/socket-client.js";
 import {
 	type AudioRecorder,
 	type BaseConfig,

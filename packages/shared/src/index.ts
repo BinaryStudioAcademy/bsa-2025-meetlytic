@@ -15,6 +15,7 @@ export {
 	AuthError,
 	HTTPError,
 	MeetingError,
+	UserError,
 	ValidationError,
 } from "./libs/exceptions/exceptions.js";
 export {
@@ -48,7 +49,9 @@ export {
 } from "./modules/meetings/meetings.js";
 export {
 	type MeetingCreateRequestDto,
+	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
+	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
 	type MeetingUpdateRequestDto,
 } from "./modules/meetings/meetings.js";
@@ -58,12 +61,17 @@ export {
 } from "./modules/meetings/meetings.js";
 export {
 	type AuthResponseDto,
+	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
 	type UserSignInRequestDto,
 	type UserSignUpRequestDto,
+	type UserUpdateResponseDto,
+	type UserWithDetailsDto,
+	UserErrorMessage,
 	UsersApiPath,
 	userSignInValidationSchema,
 	userSignUpValidationSchema,
+	userUpdateValidationSchema,
 	UserValidationRule,
 } from "./modules/users/users.js";

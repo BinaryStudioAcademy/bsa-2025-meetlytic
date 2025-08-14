@@ -11,8 +11,8 @@ const {
 } = config.ENV.AWS;
 
 const s3Instance = new BaseS3({
+	bucketName: bucketName,
 	credentials: { accessKeyId, secretAccessKey },
-	defaultBucket: bucketName,
 	logger,
 	region,
 });

@@ -8,12 +8,14 @@ import {
 
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
+import { S3ErrorMessage } from "./libs/enums/enum.js";
+
 type Constructor = {
+	bucketName?: string;
 	credentials: {
 		accessKeyId: string;
 		secretAccessKey: string;
 	};
-	defaultBucket?: string;
 	logger: Logger;
 	region: string;
 };
@@ -32,30 +34,25 @@ type UploadOptions = {
 };
 
 class BaseS3 {
+	private bucketName?: string;
 	private client: S3Client;
-	private defaultBucket?: string;
 	private logger: Logger;
 
-	public constructor({
-		credentials,
-		defaultBucket,
-		logger,
-		region,
-	}: Constructor) {
+	public constructor({ bucketName, credentials, logger, region }: Constructor) {
 		this.logger = logger;
 
-		if (defaultBucket) {
-			this.defaultBucket = defaultBucket;
+		if (bucketName) {
+			this.bucketName = bucketName;
 		}
 
 		this.client = new S3Client({ credentials, region });
 	}
 
 	public async deleteObject({ bucket, key }: DeleteOptions): Promise<void> {
-		const bucketName = bucket ?? this.defaultBucket;
+		const bucketName = bucket ?? this.bucketName;
 
 		if (!bucketName) {
-			throw new Error("Bucket name is required to delete object.");
+			throw new Error(S3ErrorMessage.MISSING_BUCKET);
 		}
 
 		const input: DeleteObjectCommandInput = {
@@ -73,10 +70,10 @@ class BaseS3 {
 	}
 
 	public getPublicUrl(key: string, bucket?: string): string {
-		const bucketName = bucket ?? this.defaultBucket;
+		const bucketName = bucket ?? this.bucketName;
 
 		if (!bucketName) {
-			throw new Error("Bucket name is required to build public URL.");
+			throw new Error(S3ErrorMessage.MISSING_BUCKET);
 		}
 
 		return `https://${bucketName}.s3.amazonaws.com/${key}`;
@@ -89,10 +86,10 @@ class BaseS3 {
 		key,
 		metadata,
 	}: UploadOptions): Promise<{ key: string; url: string }> {
-		const bucketName = bucket ?? this.defaultBucket;
+		const bucketName = bucket ?? this.bucketName;
 
 		if (!bucketName) {
-			throw new Error("Bucket name is required to upload object.");
+			throw new Error(S3ErrorMessage.MISSING_BUCKET);
 		}
 
 		const input: PutObjectCommandInput = {

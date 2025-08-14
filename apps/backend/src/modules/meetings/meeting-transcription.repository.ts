@@ -1,7 +1,10 @@
 import { DELETE_SUCCESS_THRESHOLD } from "~/libs/constants/constants.js";
 import { type Repository } from "~/libs/types/types.js";
 
-import { MeetingTranscriptionAttribute } from "./libs/enums/enums.js";
+import {
+	MeetingTranscriptionAttribute,
+	SortOrder,
+} from "./libs/enums/enums.js";
 import { MeetingTranscriptionEntity } from "./meeting-transcription.entity.js";
 import { type MeetingTranscriptionModel } from "./meeting-transcription.model.js";
 
@@ -67,6 +70,7 @@ class MeetingTranscriptionRepository
 		const transcriptions = await this.meetingTranscriptionModel
 			.query()
 			.where(MeetingTranscriptionAttribute.MEETING_ID, meetingId)
+			.orderBy(MeetingTranscriptionAttribute.CREATED_AT, SortOrder.ASC)
 			.execute();
 
 		return transcriptions.map((transcription) =>

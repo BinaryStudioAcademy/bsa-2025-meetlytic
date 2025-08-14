@@ -7,4 +7,5 @@ export {
 	MeetingsApiPath,
 	MeetingStatus,
 	MeetingTranscriptionErrorMessage,
+	SortOrder,
 } from "@meetlytic/shared";

@@ -6,7 +6,7 @@ const PublicLayout: React.FC = () => {
 	return (
 		<div className={styles["public"]}>
 			<div className={styles["public__header"]}>
-				<Header isPublic={true} />
+				<Header />
 			</div>
 			<main className={styles["public__main"]}>
 				<RouterOutlet />

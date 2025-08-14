@@ -7,6 +7,7 @@ export {
 export {
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
+	type MeetingDetailsRequestDto,
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,

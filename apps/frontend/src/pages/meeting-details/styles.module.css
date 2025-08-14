@@ -31,17 +31,17 @@
 	gap: 15px;
 }
 
-.action-button > svg > path {
-	fill: var(--color-brand);
-	transition: fill 0.3s ease-in-out;
-}
-
 .action-button:hover {
 	cursor: pointer;
 }
 
-.action-button:hover > svg > path {
-	fill: var(--color-brand-hover);
+.action-button__share {
+	color: var(--color-brand);
+	transition: color 0.3s ease-in-out;
+}
+
+.action-button__share:hover {
+	color: var(--color-brand-hover);
 }
 
 .meeting-details__content {

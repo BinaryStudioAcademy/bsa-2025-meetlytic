@@ -8,17 +8,19 @@ import {
 	LogoSize,
 	LogoTheme,
 } from "~/libs/enums/enums.js";
-import { useCallback, useLogout, useNavigate } from "~/libs/hooks/hooks.js";
+import {
+	useAppSelector,
+	useCallback,
+	useLogout,
+	useNavigate,
+} from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
-type Properties = {
-	isPublic?: boolean;
-};
-
-const Header: React.FC<Properties> = ({ isPublic = false }: Properties) => {
+const Header: React.FC = () => {
 	const logout = useLogout();
 	const navigate = useNavigate() as (to: string) => void; // TODO: fix navigation
+	const { user } = useAppSelector((state) => state.auth);
 
 	const handleLogout = useCallback((): void => {
 		void logout();
@@ -34,7 +36,7 @@ const Header: React.FC<Properties> = ({ isPublic = false }: Properties) => {
 				<div className={styles["header-logo"]}>
 					<Logo hasLink size={LogoSize.SMALL} theme={LogoTheme.LIGHT} />
 				</div>
-				{!isPublic && (
+				{user && (
 					<div className={styles["header__avatar-logout-wrapper"]}>
 						<button
 							className={styles["header__profile-button"]}

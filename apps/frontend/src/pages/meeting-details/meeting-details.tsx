@@ -24,9 +24,9 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
 import {
-	actions as meetingActions,
-	meetingApi,
-} from "~/modules/meeting/meeting.js";
+	actions as meetingDetailsActions,
+	meetingDetailsApi,
+} from "~/modules/meeting-details/meeting-details.js";
 
 import styles from "./styles.module.css";
 
@@ -35,8 +35,10 @@ const MeetingDetails: React.FC = () => {
 	const [searchParameters] = useSearchParams();
 	const dispatch = useAppDispatch();
 
-	const { selectedMeeting: meeting, selectedMeetingDataStatus: dataStatus } =
-		useAppSelector((state) => state.meeting);
+	const { dataStatus, meeting } = useAppSelector(
+		(state) => state.meetingDetails,
+	);
+	const { user } = useAppSelector((state) => state.auth);
 
 	const { control, errors } = useAppForm({
 		defaultValues: {
@@ -45,13 +47,9 @@ const MeetingDetails: React.FC = () => {
 	});
 
 	useEffect(() => {
-		if (!id) {
-			return;
-		}
-
 		const shareToken = searchParameters.get("token");
 		void dispatch(
-			meetingActions.getMeetingDetailsById({
+			meetingDetailsActions.getMeetingDetailsById({
 				id: Number(id),
 				token: shareToken ?? undefined,
 			}),
@@ -73,7 +71,9 @@ const MeetingDetails: React.FC = () => {
 
 		const shareMeeting = async (): Promise<void> => {
 			try {
-				const { publicUrl } = await meetingApi.getPublicShareUrl(meeting.id);
+				const { publicUrl } = await meetingDetailsApi.getPublicShareUrl(
+					meeting.id,
+				);
 				void navigator.clipboard.writeText(`http://localhost:3000${publicUrl}`);
 				notification.success("Public link copied to clipboard!");
 			} catch (error: unknown) {
@@ -124,12 +124,14 @@ const MeetingDetails: React.FC = () => {
 						{formatDate(new Date(meeting.createdAt), "D MMMM hA")}
 					</h1>
 					<div className={styles["meeting-details__actions"]}>
-						<button
-							className={styles["action-button"]}
-							onClick={handleShareClick}
-						>
-							<Icon name="share" />
-						</button>
+						{user && (
+							<button
+								className={styles["action-button"]}
+								onClick={handleShareClick}
+							>
+								<Icon className={styles["action-button__share"]} name="share" />
+							</button>
+						)}
 						<Button label="Export" onClick={handleExportClick} />
 					</div>
 				</div>

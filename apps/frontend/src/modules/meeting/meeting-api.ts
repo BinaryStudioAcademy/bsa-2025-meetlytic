@@ -1,12 +1,10 @@
-import { APIPath, ContentType } from "~/libs/enums/enums.js";
+import { APIPath, ContentType, HTTPMethod } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
 import {
 	type MeetingCreateRequestDto,
-	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
-	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
 } from "~/modules/meeting/meeting.js";
 
@@ -31,7 +29,7 @@ class MeetingApi extends BaseHTTPApi {
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,
-				method: "POST",
+				method: HTTPMethod.POST,
 				payload: JSON.stringify(payload),
 			},
 		);
@@ -45,53 +43,11 @@ class MeetingApi extends BaseHTTPApi {
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,
-				method: "GET",
+				method: HTTPMethod.GET,
 			},
 		);
 
 		return await response.json<MeetingGetAllResponseDto>();
-	}
-
-	public async getMeetingById(
-		id: number,
-		token?: string,
-	): Promise<MeetingDetailedResponseDto> {
-		const response = await (token
-			? this.load(
-					this.getFullEndpoint(`${MeetingsApiPath.$ID_PUBLIC}?token=${token}`, {
-						id: String(id),
-					}),
-					{
-						contentType: ContentType.JSON,
-						hasAuth: false,
-						method: "GET",
-					},
-				)
-			: this.load(
-					this.getFullEndpoint(MeetingsApiPath.$ID, { id: String(id) }),
-					{
-						contentType: ContentType.JSON,
-						hasAuth: true,
-						method: "GET",
-					},
-				));
-
-		return await response.json<MeetingDetailedResponseDto>();
-	}
-
-	public async getPublicShareUrl(
-		id: number,
-	): Promise<MeetingGetPublicUrlResponseDto> {
-		const response = await this.load(
-			this.getFullEndpoint(MeetingsApiPath.$ID_URL, { id: String(id) }),
-			{
-				contentType: ContentType.JSON,
-				hasAuth: true,
-				method: "GET",
-			},
-		);
-
-		return await response.json<MeetingGetPublicUrlResponseDto>();
 	}
 }
 

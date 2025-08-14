@@ -52,18 +52,18 @@ class BaseS3 {
 	}
 
 	public async deleteObject({ bucket, key }: DeleteOptions): Promise<void> {
-		const Bucket = bucket ?? this.defaultBucket;
+		const bucketName = bucket ?? this.defaultBucket;
 
-		if (!Bucket) {
+		if (!bucketName) {
 			throw new Error("Bucket name is required to delete object.");
 		}
 
 		const input: DeleteObjectCommandInput = {
-			Bucket,
+			Bucket: bucketName,
 			Key: key,
 		};
 
-		this.logger.info(`[S3] Delete start -> ${Bucket}/${key}`);
+		this.logger.info(`[S3] Delete start -> ${bucketName}/${key}`);
 		await this.client.send(new DeleteObjectCommand(input));
 		this.logger.info("[S3] Delete done");
 	}
@@ -89,24 +89,24 @@ class BaseS3 {
 		key,
 		metadata,
 	}: UploadOptions): Promise<{ key: string; url: string }> {
-		const Bucket = bucket ?? this.defaultBucket;
+		const bucketName = bucket ?? this.defaultBucket;
 
-		if (!Bucket) {
+		if (!bucketName) {
 			throw new Error("Bucket name is required to upload object.");
 		}
 
 		const input: PutObjectCommandInput = {
 			Body: body,
-			Bucket,
+			Bucket: bucketName,
 			ContentType: contentType,
 			Key: key,
 			...(metadata ? { Metadata: metadata } : {}),
 		};
 
-		this.logger.info(`[S3] Upload start -> ${Bucket}/${key}`);
+		this.logger.info(`[S3] Upload start -> ${bucketName}/${key}`);
 		await this.client.send(new PutObjectCommand(input));
 
-		const url = this.getPublicUrl(key, Bucket);
+		const url = this.getPublicUrl(key, bucketName);
 		this.logger.info(`[S3] Upload done -> ${url}`);
 
 		return { key, url };

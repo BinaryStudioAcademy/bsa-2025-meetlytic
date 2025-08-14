@@ -1,7 +1,7 @@
 const HTTPMethod = {
 	DELETE: "DELETE",
 	GET: "GET",
+	PATCH: "PATCH",
 	POST: "POST",
-	PUT: "PATCH",
 };
 export { HTTPMethod };

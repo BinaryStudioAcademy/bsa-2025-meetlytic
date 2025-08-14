@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.6.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.5.0...backend-v1.6.0) (2025-08-14)
+
+
+### Features
+
+* add edit user profile ml-56 ([#76](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/76)) ([35e5b8f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/35e5b8f58179e01e7e2519d57ceeab46f7f7acbf))
+* end meeting recording from the frontend ml-160 ([#184](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/184)) ([084b147](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/084b1479fa64d9ccc0a4345a7a74e235d34ff96c))
+
+
+### Bug Fixes
+
+* first and last names blank fields ml-193 ([#195](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/195)) ([48340cf](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/48340cf4ab227d76fc8ed7a4f7be2469e1c247db))
+
+## [1.5.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.4.2...backend-v1.5.0) (2025-08-13)
+
+
+### Features
+
+* add meeting public url ml-143 ([#163](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/163)) ([73b8c8d](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/73b8c8dbb9a6e168c0e74d7eb8bb29ff06e8a348))
+
+## [1.4.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.4.1...backend-v1.4.2) (2025-08-13)
+
+
+### Bug Fixes
+
+* generate different error codes for validation signup and signin ml-162 ([#167](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/167)) ([6b37ff4](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/6b37ff400a4cbd5b51b03ece8696311cdf8acba0))
+
 ## [1.4.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.4.0...backend-v1.4.1) (2025-08-12)
 
 

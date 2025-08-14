@@ -1,14 +1,16 @@
 .auth {
 	display: flex;
+	flex-direction: column;
 	height: 100vh;
 	font-family: var(--font-family);
 }
 
 .auth-left {
 	display: flex;
-	flex: 1;
+	flex: 0 1 27%;
 	align-items: center;
 	justify-content: center;
+	padding-top: 36px;
 	background-color: var(--color-background-1);
 }
 
@@ -20,22 +22,54 @@
 
 .auth-right {
 	display: flex;
-	flex: 1;
-	align-items: center;
+	flex: 1 1 32%;
+	align-items: flex-start;
 	justify-content: center;
-	padding: 28px 17px;
+	padding: 18px 17px 28px;
 	background-color: var(--color-background-1);
 }
 
 .auth-form-wrapper {
 	position: relative;
 	display: flex;
+	flex: 0 1 600px;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	width: 700px;
-	max-width: 100%;
-	height: 95vh;
+	height: auto;
+	min-height: min-content;
+	max-height: 80%;
+	padding-inline: 24px;
 	background-color: var(--color-background-4);
 	border-radius: var(--border-radius-lg);
+}
+
+@media screen and (768px <= width) {
+	.auth-form-wrapper {
+		height: max(70%, 80%);
+	}
+}
+
+@media screen and (990px <= width) {
+	.auth {
+		flex-direction: row;
+	}
+
+	.auth-left {
+		flex: 1;
+		padding-top: unset;
+	}
+
+	.auth-right {
+		flex: 1;
+		align-items: center;
+		padding-top: 28px;
+	}
+
+	.auth-form-wrapper {
+		flex-basis: 700px;
+		height: 95vh;
+		max-height: unset;
+		padding-inline: 0;
+	}
 }

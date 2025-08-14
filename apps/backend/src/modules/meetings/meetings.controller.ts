@@ -4,7 +4,7 @@ import {
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
-import { HTTPCode } from "~/libs/modules/http/http.js";
+import { HTTPCode, HTTPMethod } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserResponseDto } from "~/modules/users/users.js";
 
@@ -13,7 +13,10 @@ import {
 	type CreateMeetingOptions,
 	type DeleteMeetingOptions,
 	type FindAllMeetingOptions,
+	type FindBySignedUrlOptions,
 	type FindMeetingOptions,
+	type GetPublicUrlOptions,
+	type StopRecordingOptions,
 	type UpdateMeetingOptions,
 } from "./libs/types/types.js";
 import {
@@ -35,8 +38,6 @@ import { type MeetingService } from "./meetings.service.js";
  *           type: string
  *           enum:
  *             - zoom
- *         instanceId:
- *           type: string
  *           nullable: true
  *         ownerId:
  *           type: number
@@ -45,10 +46,15 @@ import { type MeetingService } from "./meetings.service.js";
  *           enum:
  *             - started
  *             - ended
+ *         createdAt:
+ *           type: string
+ *         meetingId:
+ *           type: string
+ *         meetingPassword:
+ *           type: string
  *       required:
  *         - id
  *         - host
- *         - instanceId
  *         - ownerId
  *         - status
  *     MeetingCreateRequest:
@@ -88,14 +94,14 @@ class MeetingsController extends BaseController {
 
 		this.addRoute({
 			handler: (options) => this.create(options as CreateMeetingOptions),
-			method: "POST",
+			method: HTTPMethod.POST,
 			path: MeetingsApiPath.ROOT,
 			validation: { body: meetingCreateValidationSchema },
 		});
 
 		this.addRoute({
 			handler: (options) => this.update(options as UpdateMeetingOptions),
-			method: "PATCH",
+			method: HTTPMethod.PATCH,
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 			validation: { body: meetingUpdateValidationSchema },
@@ -103,22 +109,40 @@ class MeetingsController extends BaseController {
 
 		this.addRoute({
 			handler: (options) => this.delete(options as DeleteMeetingOptions),
-			method: "DELETE",
+			method: HTTPMethod.DELETE,
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 
 		this.addRoute({
 			handler: (options) => this.find(options as FindMeetingOptions),
-			method: "GET",
+			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 
 		this.addRoute({
 			handler: (options) => this.findAll(options as FindAllMeetingOptions),
-			method: "GET",
+			method: HTTPMethod.GET,
 			path: MeetingsApiPath.ROOT,
+			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+		});
+		this.addRoute({
+			handler: (options) => this.getPublicUrl(options as GetPublicUrlOptions),
+			method: HTTPMethod.GET,
+			path: MeetingsApiPath.$ID_URL,
+			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+		});
+		this.addRoute({
+			handler: (options) =>
+				this.findBySignedUrl(options as FindBySignedUrlOptions),
+			method: HTTPMethod.GET,
+			path: MeetingsApiPath.$ID_PUBLIC,
+		});
+		this.addRoute({
+			handler: (options) => this.stopRecording(options as StopRecordingOptions),
+			method: HTTPMethod.DELETE,
+			path: MeetingsApiPath.$ID_STOP_RECORDING,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 	}
@@ -241,6 +265,110 @@ class MeetingsController extends BaseController {
 		});
 
 		return { payload: meetings, status: HTTPCode.OK };
+	}
+
+	/**
+	 * @swagger
+	 *  /meetings/{id}/public:
+	 *   get:
+	 *     summary: Get a meeting using signed URL
+	 *     tags:
+	 *       - Meetings
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: number
+	 *       - in: query
+	 *         name: token
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       200:
+	 *         description: Meeting data
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: "#/components/schemas/Meeting"
+	 *       404:
+	 *         description: Meeting not found
+	 *       401:
+	 *         description: Signed URL was malformed
+	 */
+	private async findBySignedUrl(
+		options: FindBySignedUrlOptions,
+	): Promise<APIHandlerResponse> {
+		const id = Number(options.params.id);
+		const token = options.query.token;
+		const meeting = await this.meetingService.findBySignedUrl(id, token);
+
+		return { payload: meeting, status: HTTPCode.OK };
+	}
+
+	/**
+	 * @swagger
+	 * /meetings/{id}/url:
+	 *   get:
+	 *     summary: Generate a public URL for the meeting
+	 *     tags:
+	 *       - Meetings
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: number
+	 *     responses:
+	 *       200:
+	 *         description: Public URL returned
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               properties:
+	 *                 publicUrl:
+	 *                   type: string
+	 *       404:
+	 *         description: Meeting not found
+	 */
+	private async getPublicUrl(
+		options: GetPublicUrlOptions,
+	): Promise<APIHandlerResponse> {
+		const id = Number(options.params.id);
+		const url = await this.meetingService.getPublicUrl(id);
+
+		return { payload: url, status: HTTPCode.OK };
+	}
+
+	/**
+	 * @swagger
+	 * /meetings/{id}/stop-recording:
+	 *   delete:
+	 *     summary: Initiate request to stop meeting recording
+	 *     tags:
+	 *       - Meetings
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: number
+	 *     responses:
+	 *       202:
+	 *         description: Request to stop recording accepted
+	 *       404:
+	 *         description: Meeting not found
+	 *       500:
+	 *         description: Failed to delete stack
+	 */
+	private async stopRecording(
+		options: StopRecordingOptions,
+	): Promise<APIHandlerResponse> {
+		const id = Number(options.params.id);
+		await this.meetingService.stopRecording(id);
+
+		return { payload: null, status: HTTPCode.ACCEPTED };
 	}
 
 	/**

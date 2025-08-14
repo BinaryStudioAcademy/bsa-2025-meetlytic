@@ -1,4 +1,4 @@
-import { APIPath, ContentType } from "~/libs/enums/enums.js";
+import { APIPath, ContentType, HTTPMethod } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
@@ -29,7 +29,7 @@ class MeetingApi extends BaseHTTPApi {
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,
-				method: "POST",
+				method: HTTPMethod.POST,
 				payload: JSON.stringify(payload),
 			},
 		);
@@ -43,11 +43,23 @@ class MeetingApi extends BaseHTTPApi {
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,
-				method: "GET",
+				method: HTTPMethod.GET,
 			},
 		);
 
 		return await response.json<MeetingGetAllResponseDto>();
+	}
+
+	public async stopRecording(id: string): Promise<void> {
+		await this.load(
+			this.getFullEndpoint(MeetingsApiPath.$ID_STOP_RECORDING, {
+				id,
+			}),
+			{
+				hasAuth: true,
+				method: HTTPMethod.DELETE,
+			},
+		);
 	}
 }
 

@@ -65,7 +65,6 @@
 	}
 
 	.header__avatar-logout-wrapper {
-		display: flex;
 		justify-self: end;
 	}
 

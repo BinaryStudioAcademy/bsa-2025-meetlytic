@@ -124,7 +124,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return isDeleted;
 	}
 
-	public async endMeeting(id: number): Promise<MeetingResponseDto> {
+	public async endMeeting(id: number): Promise<MeetingDetailedResponseDto> {
 		await this.cloudFormation.delete(id);
 		const meeting = await this.meetingRepository.update(id, {
 			instanceId: null,
@@ -138,7 +138,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return meeting.toObject();
+		return meeting.toDetailedObject();
 	}
 	public async find(id: number): Promise<MeetingDetailedResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
@@ -189,6 +189,13 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return {
 			publicUrl: `${APIPath.PUBLIC_MEETINGS}/${String(id)}?token=${token}`,
 		};
+	}
+
+	public async stopRecording(id: number): Promise<void> {
+		// TODO:
+		// 1. emit a message for the bot (bot stops audio recording, transcribes full audio, gets summary and action points)
+		// 2. move endMeeting(id) call to the websocket event handler
+		await this.endMeeting(id);
 	}
 
 	public async update(

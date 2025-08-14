@@ -147,6 +147,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		return meeting.toDetailedObject();
 	}
+
 	public async find(id: number): Promise<MeetingDetailedResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
 

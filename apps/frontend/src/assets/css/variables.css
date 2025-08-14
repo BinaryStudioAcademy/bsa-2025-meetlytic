@@ -14,4 +14,7 @@
 	--border-radius-lg: 10px;
 	--font-family: "Inter", sans-serif;
 	--second-font-family: "Nunito", sans-serif;
+	--z-index-low: 10;
+	--z-index-medium: 100;
+	--z-index-high: 1000;
 }

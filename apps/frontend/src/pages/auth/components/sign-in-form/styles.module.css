@@ -1,7 +1,7 @@
 .title {
-	margin-top: auto;
+	margin-top: 30px;
 	margin-bottom: 20px;
-	font-size: 36px;
+	font-size: 24px;
 	font-weight: 700;
 	color: var(--color-brand);
 	text-align: center;
@@ -38,9 +38,11 @@
 
 .register {
 	display: flex;
+	flex-wrap: wrap;
 	gap: 10px;
-	margin-top: auto;
-	margin-bottom: 60px;
+	justify-content: center;
+	margin-top: 25px;
+	margin-bottom: 40px;
 	font-size: 16px;
 	font-weight: 600;
 }
@@ -48,4 +50,22 @@
 .create-account {
 	color: var(--color-brand);
 	text-decoration: none;
+}
+
+@media screen and (768px <= width) {
+	.title {
+		font-size: 32px;
+	}
+}
+
+@media screen and (990px <= width) {
+	.title {
+		margin-top: auto;
+		font-size: 36px;
+	}
+
+	.register {
+		margin-top: auto;
+		margin-bottom: 60px;
+	}
 }

@@ -17,3 +17,7 @@
 .logo__image--large {
 	height: clamp(40px, 5vw, 400px);
 }
+
+.logo__image--extra-large {
+	height: clamp(50px, 5.5vw, 450px);
+}

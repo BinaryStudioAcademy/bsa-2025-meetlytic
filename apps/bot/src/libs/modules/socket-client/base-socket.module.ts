@@ -6,9 +6,8 @@ import {
 	type SocketReservedEvents,
 } from "./libs/types/types.js";
 
-type Listener<
-	K extends keyof ServerToClientEvents | keyof SocketReservedEvents,
-> = K extends keyof SocketReservedEvents
+type EventKeys = keyof ServerToClientEvents | keyof SocketReservedEvents;
+type Listener<K extends EventKeys> = K extends keyof SocketReservedEvents
 	? SocketReservedEvents[K]
 	: K extends keyof ServerToClientEvents
 		? ServerToClientEvents[K]

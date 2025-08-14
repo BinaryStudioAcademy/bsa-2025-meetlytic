@@ -1,9 +1,9 @@
 const MeetingTranscriptionAttribute = {
-	CHUNK_TEXT: "chunk_text",
-	CREATED_AT: "created_at",
+	CHUNK_TEXT: "chunkText",
+	CREATED_AT: "createdAt",
 	ID: "id",
-	MEETING_ID: "meeting_id",
-	UPDATED_AT: "updated_at",
+	MEETING_ID: "meetingId",
+	UPDATED_AT: "updatedAt",
 } as const;
 
 export { MeetingTranscriptionAttribute };

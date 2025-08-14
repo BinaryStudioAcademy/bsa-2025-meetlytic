@@ -97,7 +97,7 @@ class BaseConfig implements Config {
 				},
 				MEETING_ID: {
 					default: null,
-					doc: "meeting ID primary key",
+					doc: "Meeting ID primary key",
 					env: "MEETING_ID",
 					format: Number,
 				},

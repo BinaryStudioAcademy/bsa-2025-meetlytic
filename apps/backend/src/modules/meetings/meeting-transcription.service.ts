@@ -37,6 +37,7 @@ class MeetingTranscriptionService
 
 		return createdTranscription.toObject();
 	}
+
 	public async delete(id: number): Promise<boolean> {
 		const existingTranscription =
 			await this.meetingTranscriptionRepository.find(id);
@@ -48,17 +49,17 @@ class MeetingTranscriptionService
 			});
 		}
 
-		const isDeletedTranscription =
+		const sTranscriptionDeleted =
 			await this.meetingTranscriptionRepository.delete(id);
 
-		if (!isDeletedTranscription) {
+		if (!sTranscriptionDeleted) {
 			throw new MeetingTranscriptionError({
 				message: MeetingTranscriptionErrorMessage.DELETE_FAILED,
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}
 
-		return isDeletedTranscription;
+		return sTranscriptionDeleted;
 	}
 
 	public async find(id: number): Promise<MeetingTranscriptionResponseDto> {

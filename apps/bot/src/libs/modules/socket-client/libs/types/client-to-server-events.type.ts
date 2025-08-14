@@ -1,5 +1,7 @@
+import { type MeetingTranscriptionRequestDto } from "~/libs/types/types.js";
+
 type ClientToServerEvents = {
-	transcribe: (data: { chunkText: string; meetingId: number }) => void;
+	transcribe: (data: MeetingTranscriptionRequestDto) => void;
 };
 
 export { type ClientToServerEvents };

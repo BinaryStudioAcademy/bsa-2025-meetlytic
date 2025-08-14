@@ -1,9 +1,9 @@
-const BYTES_IN_KB = 1024;
-const KB_IN_MB = 1024;
+const MEMORY_UNIT_SIZE = 1024;
 
 const DEFAULT_MAX_FILES = 1;
 const DEFAULT_MAX_FILE_SIZE_MB = 5;
-const DEFAULT_MAX_FILE_SIZE = DEFAULT_MAX_FILE_SIZE_MB * BYTES_IN_KB * KB_IN_MB;
+const DEFAULT_MAX_FILE_SIZE =
+	DEFAULT_MAX_FILE_SIZE_MB * MEMORY_UNIT_SIZE * MEMORY_UNIT_SIZE;
 
 const DEFAULT_ALLOWED_IMAGE_MIME_TYPES = [
 	"image/jpeg",
@@ -17,7 +17,7 @@ const FILENAME_FALLBACK = "upload";
 const FILENAME_SANITIZE_REGEX = /[^\w.-]+/g;
 
 const TO_MB = (bytes: number): string =>
-	Math.floor(bytes / (BYTES_IN_KB * KB_IN_MB)).toString();
+	Math.floor(bytes / (MEMORY_UNIT_SIZE * MEMORY_UNIT_SIZE)).toString();
 
 export {
 	DEFAULT_ALLOWED_IMAGE_MIME_TYPES,

@@ -29,23 +29,11 @@ class BaseConfig implements Config {
 					env: "NODE_ENV",
 					format: Object.values(AppEnvironment),
 				},
-				HOST: {
-					default: null,
-					doc: "Host for server app",
-					env: "HOST",
-					format: String,
-				},
 				ORIGIN: {
 					default: null,
 					doc: "Origin URL",
 					env: "ORIGIN",
 					format: String,
-				},
-				PORT: {
-					default: null,
-					doc: "Port for incoming connections",
-					env: "PORT",
-					format: Number,
 				},
 			},
 			AUDIO_RECORDER: {

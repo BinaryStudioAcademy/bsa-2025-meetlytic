@@ -25,12 +25,12 @@ class UserAvatarService {
 	private readonly MAX_FILE_SIZE_BYTES = DEFAULT_MAX_FILE_SIZE;
 
 	public constructor(config: Config, logger: Logger) {
-		const bucket = config.ENV.AWS.AVATAR_BUCKET_NAME;
+		const bucket = config.ENV.AWS.BUCKET_NAME;
 
 		this.logger = logger;
 
 		if (!bucket) {
-			throw new Error("AVATAR_BUCKET_NAME is not defined");
+			throw new Error("BUCKET_NAME is not defined");
 		}
 
 		this.bucketName = bucket;

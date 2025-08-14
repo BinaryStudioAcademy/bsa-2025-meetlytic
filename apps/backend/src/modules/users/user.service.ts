@@ -143,10 +143,10 @@ class UserService implements Service {
 		});
 
 		return {
-			email: payload.email,
-			firstName: payload.firstName ?? "",
+			email: user.toObject().email,
+			firstName: details.toObject().firstName,
 			id: user.toObject().id,
-			lastName: payload.lastName ?? "",
+			lastName: details.toObject().lastName,
 		};
 	}
 }

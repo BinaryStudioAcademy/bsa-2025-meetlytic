@@ -1,6 +1,6 @@
 const ColumnName = {
 	ID: "id",
-	USER_ID: "user_id",
+	USER_ID: "userId",
 } as const;
 
 export { ColumnName };

@@ -1,0 +1,30 @@
+.profile {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	height: 100%;
+}
+
+.profile__title {
+	margin-bottom: 12px;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 25px;
+}
+
+.profile__content {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: 46px;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--color-background-3);
+	border-radius: var(--border-radius-md);
+}
+
+.profile__header {
+	display: flex;
+	align-items: flex-start;
+	width: 476px;
+}

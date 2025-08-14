@@ -1,4 +1,5 @@
 import {
+	LandingBackground,
 	LandingCTA,
 	LandingFeatures,
 	LandingFooter,
@@ -9,7 +10,8 @@ import {
 import styles from "./styles.module.css";
 
 const LandingPage: React.FC = () => (
-	<>
+	<div className={styles["landing"]}>
+		<LandingBackground />
 		<LandingHeader />
 		<main className={styles["landing-page"]} role="main">
 			<LandingHero />
@@ -18,7 +20,7 @@ const LandingPage: React.FC = () => (
 			<LandingCTA />
 		</main>
 		<LandingFooter />
-	</>
+	</div>
 );
 
 export { LandingPage };

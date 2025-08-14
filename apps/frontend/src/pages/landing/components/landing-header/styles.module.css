@@ -1,5 +1,5 @@
 .landing-header {
-	background-color: var(--color-background-1);
+	z-index: 5;
 }
 
 .landing-header__inner {

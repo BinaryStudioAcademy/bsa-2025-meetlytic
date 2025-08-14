@@ -6,7 +6,6 @@ const COMPANY_LINKS: LinkGroup = {
 	links: [
 		{ label: "Home", to: AppRoute.ROOT },
 		{ label: "Features", to: AppRoute.ROOT },
-		{ label: "Download The App", to: AppRoute.ROOT },
 	],
 	title: "Company",
 };

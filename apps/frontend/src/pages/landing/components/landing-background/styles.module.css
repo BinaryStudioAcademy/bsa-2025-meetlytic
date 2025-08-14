@@ -1,0 +1,16 @@
+.landing-background {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	contain: layout paint;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.landing__ring {
+	position: absolute;
+	pointer-events: none;
+	user-select: none;
+	backface-visibility: hidden;
+	will-change: transform;
+}

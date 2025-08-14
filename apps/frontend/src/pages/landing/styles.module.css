@@ -1,6 +1,11 @@
-.landing-page {
+.landing {
 	position: relative;
 	overflow: hidden;
 	background-color: var(--color-background-1);
 	isolation: isolate;
+}
+
+.landing-page {
+	position: relative;
+	z-index: 1;
 }

@@ -1,3 +1,4 @@
+export { LandingBackground } from "./landing-background/landing-background.js";
 export { LandingCTA } from "./landing-cta/landing-cta.js";
 export { LandingFeatures } from "./landing-features/landing-features.js";
 export { LandingFooter } from "./landing-footer/landing-footer.js";

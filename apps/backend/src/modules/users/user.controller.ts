@@ -6,16 +6,16 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode, HTTPMethod } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import {
-	singleFilePreHandler,
-	type UploadedFile,
-} from "~/libs/plugins/uploads/upload.plugin.js";
+import { singleFilePreHandler } from "~/libs/plugins/uploads/upload.plugin.js";
 import { type FileService } from "~/modules/files/file.service.js";
 import { type UserAvatarService } from "~/modules/users/user-avatar.service.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
 import {
+	type UploadAvatarHandlerOptions,
+	type UploadAvatarOptions,
+	type UploadBody,
 	type UserResponseDto,
 	type UserUpdateResponseDto,
 } from "./libs/types/types.js";
@@ -26,8 +26,6 @@ type Deps = {
 	userAvatarService: UserAvatarService;
 	userService: UserService;
 };
-
-type UploadBody = { file: UploadedFile };
 
 /**
  * @swagger
@@ -314,7 +312,7 @@ class UserController extends BaseController {
 	 *         description: Server error
 	 */
 	private async uploadAvatar(
-		options: APIHandlerOptions<{ body: UploadBody; user: { id: number } }>,
+		options: UploadAvatarHandlerOptions,
 	): Promise<APIHandlerResponse> {
 		try {
 			const { body, user } = options;
@@ -322,12 +320,14 @@ class UserController extends BaseController {
 
 			this.userAvatarService.validate(mimetype, size);
 
-			const { key, url } = await this.userAvatarService.uploadAvatar({
+			const avatarOptions: UploadAvatarOptions = {
 				buffer,
 				filename,
 				mimetype,
 				userId: user.id,
-			});
+			};
+			const { key, url } =
+				await this.userAvatarService.uploadAvatar(avatarOptions);
 
 			const detailsId = await this.userService.getOrCreateDetailsId(user.id);
 

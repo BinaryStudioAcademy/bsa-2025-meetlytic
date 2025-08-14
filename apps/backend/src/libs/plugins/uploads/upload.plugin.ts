@@ -1,4 +1,4 @@
-import multipart, { type MultipartFile } from "@fastify/multipart";
+import multipart from "@fastify/multipart";
 import {
 	type FastifyPluginCallback,
 	type FastifyReply,
@@ -17,26 +17,16 @@ import {
 } from "~/libs/constants/constants.js";
 import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 
+import {
+	type UploadedFile,
+	type UploadPluginOptions,
+} from "./libs/types/types.js";
+
 declare module "fastify" {
 	interface FastifyRequest {
 		getFileOrThrow: (options?: { fieldName?: string }) => Promise<UploadedFile>;
 	}
 }
-
-type UploadedFile = {
-	buffer: Buffer;
-	file: MultipartFile;
-	filename: string;
-	mimetype: string;
-	size: number;
-};
-
-type UploadPluginOptions = {
-	allowedMimeTypes?: string[];
-	fieldName?: string;
-	maxFiles?: number;
-	maxFileSize?: number;
-};
 
 const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 	fastify,
@@ -123,4 +113,4 @@ const singleFilePreHandler = (fieldName = "file") => {
 	};
 };
 
-export { type UploadedFile, singleFilePreHandler, uploadPlugin };
+export { singleFilePreHandler, uploadPlugin };

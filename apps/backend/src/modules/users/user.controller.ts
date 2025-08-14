@@ -11,7 +11,7 @@ import { type FileService } from "~/modules/files/file.service.js";
 import { type UserAvatarService } from "~/modules/users/user-avatar.service.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
-import { UsersApiPath } from "./libs/enums/enums.js";
+import { UserErrorMessage, UsersApiPath } from "./libs/enums/enums.js";
 import {
 	type UploadAvatarHandlerOptions,
 	type UploadAvatarOptions,
@@ -208,7 +208,10 @@ class UserController extends BaseController {
 
 		if (!detailsId) {
 			return {
-				payload: { error: "Not Found", message: "User details not found" },
+				payload: {
+					error: "Not Found",
+					message: UserErrorMessage.DETAILS_NOT_FOUND,
+				},
 				status: HTTPCode.NOT_FOUND,
 			};
 		}
@@ -217,7 +220,10 @@ class UserController extends BaseController {
 
 		if (!existing) {
 			return {
-				payload: { error: "Not Found", message: "Avatar not set" },
+				payload: {
+					error: "Not Found",
+					message: UserErrorMessage.AVATAR_NOT_SET,
+				},
 				status: HTTPCode.NOT_FOUND,
 			};
 		}
@@ -333,7 +339,10 @@ class UserController extends BaseController {
 
 			if (!detailsId) {
 				return {
-					payload: { error: "Not Found", message: "User details not found" },
+					payload: {
+						error: "Not Found",
+						message: UserErrorMessage.DETAILS_NOT_FOUND,
+					},
 					status: HTTPCode.NOT_FOUND,
 				};
 			}
@@ -345,7 +354,7 @@ class UserController extends BaseController {
 			});
 
 			if (!fileRecord.id) {
-				throw new Error("Failed to create file record");
+				throw new Error(UserErrorMessage.FILE_RECORD_CREATION_FAILED);
 			}
 
 			await this.userService.updateUserDetailsFileId(detailsId, fileRecord.id);
@@ -358,7 +367,7 @@ class UserController extends BaseController {
 			return {
 				payload: {
 					error: "Internal Server Error",
-					message: "Failed to upload avatar",
+					message: UserErrorMessage.AVATAR_UPLOAD_FAILED,
 				},
 				status: HTTPCode.INTERNAL_SERVER_ERROR,
 			};

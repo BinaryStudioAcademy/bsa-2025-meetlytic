@@ -70,6 +70,7 @@ export {
 	type UserSignUpRequestDto,
 	type UserUpdateResponseDto,
 	type UserWithDetailsDto,
+	UserAvatarErrorMessage,
 	UserErrorMessage,
 	UsersApiPath,
 	userSignInValidationSchema,

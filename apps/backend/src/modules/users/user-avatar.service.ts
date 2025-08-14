@@ -2,11 +2,12 @@ import {
 	DEFAULT_ALLOWED_IMAGE_MIME_TYPES,
 	DEFAULT_MAX_FILE_SIZE,
 	FILENAME_SANITIZE_REGEX,
-	TO_MB,
 } from "~/libs/constants/constants.js";
 import { s3Instance } from "~/libs/modules/aws/s3.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+
+import { UserAvatarErrorMessage } from "./libs/enums/enums.js";
 
 type UploadAvatarOptions = {
 	buffer: Buffer;
@@ -30,7 +31,7 @@ class UserAvatarService {
 		this.logger = logger;
 
 		if (!bucket) {
-			throw new Error("BUCKET_NAME is not defined");
+			throw new Error(UserAvatarErrorMessage.BUCKET_NOT_DEFINED);
 		}
 
 		this.bucketName = bucket;
@@ -78,15 +79,11 @@ class UserAvatarService {
 
 	public validate(mimetype: string, size: number): void {
 		if (!this.ALLOWED_MIME_TYPES.includes(mimetype)) {
-			throw new Error(
-				"Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed",
-			);
+			throw new Error(UserAvatarErrorMessage.INVALID_FILE_TYPE);
 		}
 
 		if (size > this.MAX_FILE_SIZE_BYTES) {
-			throw new Error(
-				`File too large. Max file size is ${TO_MB(this.MAX_FILE_SIZE_BYTES)} MB.`,
-			);
+			throw new Error(UserAvatarErrorMessage.FILE_TOO_LARGE);
 		}
 	}
 }

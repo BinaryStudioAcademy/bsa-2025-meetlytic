@@ -27,7 +27,7 @@ class BaseSocketService implements SocketService {
 		this.logger.info(`${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
 
 		socket.on(
-			SocketEvent.TRANSCRIPTION,
+			SocketEvent.TRANSCRIBE,
 			async (payload: MeetingTranscriptionRequestDto) => {
 				try {
 					this.logger.info(SocketMessage.SOCKET_EVENT_RECEIVED);

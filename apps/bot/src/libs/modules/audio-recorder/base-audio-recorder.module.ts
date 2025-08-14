@@ -2,7 +2,13 @@ import { spawn } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 
-import { type Logger } from "~/libs/types/types.js";
+import { SocketEvent } from "~/libs/enums/enums.js";
+import {
+	type BaseConfig,
+	type BaseSocketClient,
+	type Logger,
+	type OpenAI,
+} from "~/libs/types/types.js";
 
 import { AudioRecorderEvent } from "./libs/enums/enums.js";
 import {
@@ -12,24 +18,32 @@ import {
 
 class BaseAudioRecorder implements AudioRecorder {
 	private chunkDuration: number;
-	private chunkListeners: Array<(chunkFilePath: string) => void> = [];
+	private config: BaseConfig;
 	private ffmpegPath: string;
 	private isRecording = false;
 	private logger: Logger;
+	private openAI: OpenAI;
 	private outputDir: string;
+	private socketClient: BaseSocketClient;
 	private useMp3 = true;
 	private VOLUME_RE = /mean[_ ]volume:\s*(-?\d+(?:\.\d+)?)\s*dB/i;
 
 	public constructor({
 		chunkDuration,
+		config,
 		ffmpegPath,
 		logger,
+		openAI,
 		outputDir,
+		socketClient,
 	}: AudioRecorderOptions) {
 		this.chunkDuration = chunkDuration;
+		this.config = config;
 		this.ffmpegPath = ffmpegPath;
 		this.outputDir = outputDir;
 		this.logger = logger;
+		this.openAI = openAI;
+		this.socketClient = socketClient;
 	}
 
 	private logChunkStart(filePath: string, type: string): void {
@@ -44,16 +58,6 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		if (message) {
 			this.logger.info(`[VOL] ${String(message[ONE])} dB`);
-		}
-	}
-
-	private notifyChunkListeners(filePath: string): void {
-		for (const callback of this.chunkListeners) {
-			try {
-				callback(filePath);
-			} catch (error) {
-				this.logger.error(`Error in chunk listener: ${String(error)}`);
-			}
 		}
 	}
 
@@ -119,17 +123,23 @@ class BaseAudioRecorder implements AudioRecorder {
 				`[+] Chunk done | path=${filePath} | code=${String(code)}  signal=${String(signal)}`,
 			);
 
-			this.notifyChunkListeners(filePath);
-
 			if (this.isRecording) {
 				this.recordNextChunk();
 			}
 		});
+
+		this.transcribeAndSend(filePath).catch((error: unknown) => {
+			this.logger.error(`[OPENAI][TRANSCRIBE_ERROR] ${String(error)}`);
+		});
 	}
 
-	public onChunk(callback: (chunkFilePath: string) => void): void {
-		this.chunkListeners.push(callback);
-	}
+	private transcribeAndSend = async (filePath: string): Promise<void> => {
+		const chunkText = await this.openAI.transcribe(filePath);
+		this.socketClient.emit(SocketEvent.TRANSCRIBE, {
+			chunkText,
+			meetingId: this.config.ENV.ZOOM.MEETING_ID,
+		});
+	};
 
 	public start(): void {
 		if (this.isRecording) {

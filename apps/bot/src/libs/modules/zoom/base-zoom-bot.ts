@@ -108,11 +108,9 @@ class BaseZoomBot {
 
 				if (parameters["pwd"]) {
 					password = this.extractPasscode(parameters["pwd"]);
-					this.logger.info(`Passcode extracted from link: ${password}`);
+					this.logger.info(`${ZoomBotMessages.FOUND_PASSCODE} ${password}`);
 				} else {
-					this.logger.info(
-						"No passcode found in link, joining meeting without password",
-					);
+					this.logger.info(ZoomBotMessages.ZOOM_PASSWORD_NOT_FOUND);
 					password = "";
 				}
 			}
@@ -276,35 +274,8 @@ class BaseZoomBot {
 		}
 	}
 
-	private subscribeToAudioChunks(): void {
-		this.audioRecorder.onChunk(async (filePath: string) => {
-			try {
-				const chunkText = await this.openAI.transcribe(filePath);
-				this.socketClient.emit(SocketEvent.TRANSCRIPTION, {
-					chunkText,
-					meetingId: this.config.ENV.ZOOM.MEETING_ID,
-				});
-			} catch (error) {
-				this.logger.error(
-					`${SocketMessage.TRANSCRIPTION_ERROR} ${String(error)}`,
-				);
-			}
-		});
-	}
-
 	public async run(): Promise<void> {
 		this.initSocket();
-		this.socketClient.on(SocketEvent.CONNECT, () => {
-			this.logger.info(
-				`${SocketMessage.CLIENT_CONNECTED} ${String(this.meetingId)}`,
-			);
-		});
-
-		this.socketClient.on(SocketEvent.DISCONNECT, (reason: string) => {
-			this.logger.warn(`${SocketMessage.CLIENT_DISCONNECTED} ${reason}`);
-		});
-
-		this.socketClient.connect();
 
 		try {
 			this.browser = await puppeteer.launch(this.config.getLaunchOptions());
@@ -332,7 +303,6 @@ class BaseZoomBot {
 			this.audioRecorder.start();
 			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
 			await delay(Timeout.FIFTEEN_SECONDS);
-			this.subscribeToAudioChunks();
 			await this.monitorParticipants();
 		} catch (error) {
 			this.logger.error(

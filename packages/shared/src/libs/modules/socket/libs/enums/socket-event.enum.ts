@@ -3,7 +3,7 @@ const SocketEvent = {
 	CONNECTION: "connection",
 	DISCONNECT: "disconnect",
 	ERROR: "error",
-	TRANSCRIPTION: "transcribe",
+	TRANSCRIBE: "transcribe",
 } as const;
 
 export { SocketEvent };

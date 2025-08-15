@@ -4,9 +4,10 @@
 }
 
 .meetings__list {
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 	gap: 26px;
+	justify-items: center;
 }
 
 .meetings__header {
@@ -20,6 +21,7 @@
 	flex-direction: column;
 	gap: 5px;
 	justify-content: center;
+	max-width: 100%;
 }
 
 .meetings__header-name,

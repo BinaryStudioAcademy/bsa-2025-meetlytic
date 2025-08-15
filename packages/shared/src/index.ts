@@ -65,6 +65,8 @@ export {
 } from "./modules/meetings/meetings.js";
 export {
 	type AuthResponseDto,
+	type AvatarFileDto,
+	type AvatarUploadResponseDto,
 	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
@@ -72,6 +74,7 @@ export {
 	type UserSignUpRequestDto,
 	type UserUpdateResponseDto,
 	type UserWithDetailsDto,
+	UserAvatarErrorMessage,
 	UserErrorMessage,
 	UsersApiPath,
 	userSignInValidationSchema,

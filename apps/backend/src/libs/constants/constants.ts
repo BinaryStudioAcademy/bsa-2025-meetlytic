@@ -1,4 +1,10 @@
 export {
+	DEFAULT_ALLOWED_IMAGE_MIME_TYPES,
+	DEFAULT_MAX_FILE_SIZE,
+	FILENAME_FALLBACK,
+	FILENAME_SANITIZE_REGEX,
+} from "./file-upload.constants.js";
+export {
 	DELETE_SUCCESS_THRESHOLD,
 	NO_ROWS_AFFECTED,
 } from "./repository.constant.js";

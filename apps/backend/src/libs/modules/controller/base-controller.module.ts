@@ -55,7 +55,7 @@ class BaseController implements Controller {
 			...options,
 			handler: (request, reply) => this.mapHandler(handler, request, reply),
 			path: fullPath,
-			preHandlers: preHandlers,
+			preHandlers: preHandlers ?? [],
 		});
 	}
 }

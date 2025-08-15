@@ -11,7 +11,11 @@ import {
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { WHITE_ROUTES } from "~/libs/constants/constants.js";
+import {
+	DEFAULT_ALLOWED_IMAGE_MIME_TYPES,
+	DEFAULT_MAX_FILE_SIZE,
+	WHITE_ROUTES,
+} from "~/libs/constants/constants.js";
 import { ServerErrorType } from "~/libs/enums/enums.js";
 import { type ValidationError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";
@@ -21,6 +25,7 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type BaseSocketService } from "~/libs/modules/socket/socket.js";
 import { jwt } from "~/libs/modules/token/token.js";
 import { authorizationPlugin } from "~/libs/plugins/authorization/authorization.plugin.js";
+import { uploadPlugin } from "~/libs/plugins/uploads/upload.plugin.js";
 import {
 	type ServerCommonErrorResponse,
 	type ServerValidationErrorResponse,
@@ -140,6 +145,16 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	private async initPlugins(): Promise<void> {
+		await this.app.register(uploadPlugin, {
+			allowedMimeTypes: [...DEFAULT_ALLOWED_IMAGE_MIME_TYPES],
+			fieldName: "file",
+			maxFiles: DEFAULT_MAX_FILE_SIZE.MAX_FILES,
+			maxFileSize: DEFAULT_MAX_FILE_SIZE.MAX_FILE_SIZE_BYTES,
+		});
+		this.logger.info(
+			`multipart parser: ${String(this.app.hasContentTypeParser("multipart"))}`,
+		);
+
 		await this.app.register(authorizationPlugin, {
 			routesWhiteList: WHITE_ROUTES,
 			services: {
@@ -172,7 +187,7 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	public addRoute(parameters: ServerApplicationRouteParameters): void {
-		const { handler, method, path, validation } = parameters;
+		const { handler, method, path, preHandlers, validation } = parameters;
 
 		const schema: Record<string, unknown> = {};
 
@@ -195,6 +210,7 @@ class BaseServerApplication implements ServerApplication {
 		this.app.route({
 			handler,
 			method,
+			...(preHandlers?.length ? { preHandler: preHandlers } : {}),
 			schema,
 			url: path,
 		});

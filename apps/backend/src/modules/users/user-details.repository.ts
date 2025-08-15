@@ -84,6 +84,20 @@ class UserDetailsRepository implements Repository {
 
 		return updatedRows > NO_ROWS_AFFECTED;
 	}
+
+	public async updateFileId(
+		detailsId: number,
+		fileId: number,
+	): Promise<boolean> {
+		const updatedRow = await this.userDetailsModel
+			.query()
+			.patch({ fileId })
+			.where("id", detailsId)
+			.returning("*")
+			.execute();
+
+		return updatedRow.length > NO_ROWS_AFFECTED;
+	}
 }
 
 export { UserDetailsRepository };

@@ -8,14 +8,13 @@ import {
 import fp from "fastify-plugin";
 
 import {
-	bytesToMegabytes,
 	DEFAULT_ALLOWED_IMAGE_MIME_TYPES,
 	DEFAULT_MAX_FILE_SIZE,
-	DEFAULT_MAX_FILES,
 	FILENAME_FALLBACK,
 	FILENAME_SANITIZE_REGEX,
 } from "~/libs/constants/constants.js";
 import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
+import { bytesToMegabytes } from "~/libs/utils/utilities.js";
 
 import {
 	type UploadedFile,
@@ -36,8 +35,8 @@ const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 	const {
 		allowedMimeTypes = [...DEFAULT_ALLOWED_IMAGE_MIME_TYPES],
 		fieldName = "file",
-		maxFiles = DEFAULT_MAX_FILES,
-		maxFileSize = DEFAULT_MAX_FILE_SIZE,
+		maxFiles = DEFAULT_MAX_FILE_SIZE.MAX_FILES,
+		maxFileSize = DEFAULT_MAX_FILE_SIZE.MAX_FILE_SIZE_BYTES,
 	} = options;
 
 	fastify.register(multipart, {

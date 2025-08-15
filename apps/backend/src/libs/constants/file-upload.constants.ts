@@ -1,9 +1,12 @@
-const MEMORY_UNIT_SIZE = 1024;
+import { MEMORY_UNIT_SIZE } from "./memory-bytes.constants.js";
 
-const DEFAULT_MAX_FILES = 1;
-const DEFAULT_MAX_FILE_SIZE_MB = 5;
-const DEFAULT_MAX_FILE_SIZE =
-	DEFAULT_MAX_FILE_SIZE_MB * MEMORY_UNIT_SIZE * MEMORY_UNIT_SIZE;
+const MAX_FILE_SIZE_MB = 5;
+
+const DEFAULT_MAX_FILE_SIZE = {
+	MAX_FILE_SIZE_BYTES: MAX_FILE_SIZE_MB * MEMORY_UNIT_SIZE * MEMORY_UNIT_SIZE,
+	MAX_FILE_SIZE_MB,
+	MAX_FILES: 1,
+} as const;
 
 const DEFAULT_ALLOWED_IMAGE_MIME_TYPES = [
 	"image/jpeg",
@@ -16,14 +19,9 @@ const DEFAULT_ALLOWED_IMAGE_MIME_TYPES = [
 const FILENAME_FALLBACK = "upload";
 const FILENAME_SANITIZE_REGEX = /[^\w.-]+/g;
 
-const bytesToMegabytes = (bytes: number): string =>
-	Math.floor(bytes / (MEMORY_UNIT_SIZE * MEMORY_UNIT_SIZE)).toString();
-
 export {
-	bytesToMegabytes,
 	DEFAULT_ALLOWED_IMAGE_MIME_TYPES,
 	DEFAULT_MAX_FILE_SIZE,
-	DEFAULT_MAX_FILES,
 	FILENAME_FALLBACK,
 	FILENAME_SANITIZE_REGEX,
 };

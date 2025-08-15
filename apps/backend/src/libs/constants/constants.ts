@@ -1,8 +1,6 @@
 export {
-	bytesToMegabytes,
 	DEFAULT_ALLOWED_IMAGE_MIME_TYPES,
 	DEFAULT_MAX_FILE_SIZE,
-	DEFAULT_MAX_FILES,
 	FILENAME_FALLBACK,
 	FILENAME_SANITIZE_REGEX,
 } from "./file-upload.constants.js";

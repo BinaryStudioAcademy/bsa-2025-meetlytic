@@ -23,7 +23,8 @@ class UserAvatarService {
 
 	private bucketName: string;
 	private logger: Logger;
-	private readonly MAX_FILE_SIZE_BYTES = DEFAULT_MAX_FILE_SIZE;
+	private readonly MAX_FILE_SIZE_BYTES =
+		DEFAULT_MAX_FILE_SIZE.MAX_FILE_SIZE_BYTES;
 
 	public constructor(config: Config, logger: Logger) {
 		const bucket = config.ENV.AWS.BUCKET_NAME;

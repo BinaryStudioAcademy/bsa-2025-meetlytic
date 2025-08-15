@@ -28,12 +28,12 @@ const useCarousel = ({
 			return;
 		}
 
-		const id = globalThis.setInterval(() => {
+		const intervalId = globalThis.setInterval(() => {
 			setIndex((previous) => (previous + CarouselConfig.INCREMENT) % length);
 		}, delayMs);
 
 		return (): void => {
-			globalThis.clearInterval(id);
+			globalThis.clearInterval(intervalId);
 		};
 	}, [delayMs, length, isPaused]);
 

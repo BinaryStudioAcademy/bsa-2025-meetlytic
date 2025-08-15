@@ -13,17 +13,19 @@ import styles from "./styles.module.css";
 const usePrefersReducedMotion = (): boolean => {
 	const [reduced, setReduced] = useState(false);
 	useEffect(() => {
-		const mq = globalThis.matchMedia("(prefers-reduced-motion: reduce)");
+		const mediaQuery = globalThis.matchMedia(
+			"(prefers-reduced-motion: reduce)",
+		);
 
-		const set = (): void => {
-			setReduced(mq.matches);
+		const updateReducedMotion = (): void => {
+			setReduced(mediaQuery.matches);
 		};
 
-		set();
-		mq.addEventListener("change", set);
+		updateReducedMotion();
+		mediaQuery.addEventListener("change", updateReducedMotion);
 
 		return (): void => {
-			mq.removeEventListener("change", set);
+			mediaQuery.removeEventListener("change", updateReducedMotion);
 		};
 	}, []);
 
@@ -46,7 +48,7 @@ const FeatureItem: React.FC<Feature> = ({
 		element.style.opacity = "0";
 		element.style.transform = `translateX(${isReversed ? "-28px" : "28px"})`;
 
-		const stop = inView(
+		const unsubscribeInView = inView(
 			element,
 			() => {
 				animate(
@@ -56,13 +58,13 @@ const FeatureItem: React.FC<Feature> = ({
 				);
 
 				return (): void => {
-					stop();
+					unsubscribeInView();
 				};
 			},
 			{ amount: 0.25, margin: "0px 0px -15% 0px" },
 		);
 
-		return stop;
+		return unsubscribeInView;
 	}, [isReversed, reduced]);
 
 	return (

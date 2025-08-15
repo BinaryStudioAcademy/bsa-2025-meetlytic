@@ -16,45 +16,50 @@ const useLandingAnimation = (
 ): void => {
 	const rafReference = useRef<null | number>(null);
 	const lastReference = useRef<number>(LANDING_BG_NUMERIC.ZERO);
-	const stepReference = useRef<((t: number) => void) | null>(null);
+	const stepReference = useRef<((timestamp: number) => void) | null>(null);
 	const dtReference = useRef<number>(LANDING_BG_NUMERIC.ZERO);
 
-	const start = (): void => {
+	const startAnimation = (): void => {
 		if (rafReference.current != null) {
 			return;
 		}
 
 		lastReference.current = performance.now();
-		rafReference.current = requestAnimationFrame((t) => {
-			stepReference.current?.(t);
+		rafReference.current = requestAnimationFrame((timestamp) => {
+			stepReference.current?.(timestamp);
 		});
 	};
 
-	const step = useCallback(
-		(t: number): void => {
+	const animationStep = useCallback(
+		(timestamp: number): void => {
 			const root = rootReference.current;
 
 			if (root === null) {
 				return;
 			}
 
-			const previous = lastReference.current || t;
+			const previous = lastReference.current || timestamp;
 			dtReference.current = Math.max(
 				LANDING_BG_NUMERIC.ZERO,
-				(t - previous) / LANDING_BG_NUMERIC.MS_IN_SECOND,
+				(timestamp - previous) / LANDING_BG_NUMERIC.MS_IN_SECOND,
 			);
-			lastReference.current = t;
+			lastReference.current = timestamp;
 
-			const w = root.clientWidth;
-			const h = root.clientHeight;
+			const containerWidth = root.clientWidth;
+			const containerHeight = root.clientHeight;
 
-			handleBounds({ dt: dtReference.current, h, rings, w });
+			handleBounds({
+				containerHeight,
+				containerWidth,
+				deltaTime: dtReference.current,
+				rings,
+			});
 			handleCollisions(rings);
 			applyTransforms(rings);
 
 			if (stepReference.current) {
-				rafReference.current = requestAnimationFrame((tt) => {
-					stepReference.current?.(tt);
+				rafReference.current = requestAnimationFrame((nextTimestamp) => {
+					stepReference.current?.(nextTimestamp);
 				});
 			}
 		},
@@ -62,9 +67,9 @@ const useLandingAnimation = (
 	);
 
 	useEffect(() => {
-		stepReference.current = step;
+		stepReference.current = animationStep;
 
-		const stop = (): void => {
+		const stopAnimation = (): void => {
 			if (rafReference.current != null) {
 				cancelAnimationFrame(rafReference.current);
 				rafReference.current = null;
@@ -72,16 +77,16 @@ const useLandingAnimation = (
 		};
 
 		if (isInView) {
-			start();
+			startAnimation();
 		} else {
-			stop();
+			stopAnimation();
 		}
 
 		const onVisibility = (): void => {
 			if (document.hidden) {
-				stop();
+				stopAnimation();
 			} else if (isInView) {
-				start();
+				startAnimation();
 			}
 		};
 
@@ -89,9 +94,9 @@ const useLandingAnimation = (
 
 		return (): void => {
 			document.removeEventListener(DomEvent.VISIBILITY_CHANGE, onVisibility);
-			stop();
+			stopAnimation();
 		};
-	}, [isInView, step]);
+	}, [isInView, animationStep]);
 };
 
 export { useLandingAnimation };

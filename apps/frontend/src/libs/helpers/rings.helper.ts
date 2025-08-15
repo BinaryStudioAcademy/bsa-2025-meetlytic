@@ -23,21 +23,21 @@ const safeRandom = (): number => {
 	return value / (LANDING_BG_NUMERIC.UINT32_MAX + LANDING_BG_NUMERIC.ONE);
 };
 
-const ensureMinSpeed = (v: number, min: number): number => {
-	if (Math.abs(v) < min) {
-		return v < LANDING_BG_NUMERIC.ZERO ? -min : min;
+const ensureMinSpeed = (value: number, minValue: number): number => {
+	if (Math.abs(value) < minValue) {
+		return value < LANDING_BG_NUMERIC.ZERO ? -minValue : minValue;
 	}
 
-	return v;
+	return value;
 };
 
-const getInsideCoord = (size: number, max: number): number =>
-	size >= max
-		? (max - size) / LANDING_BG_NUMERIC.HALF
-		: safeRandom() * (max - size);
+const getInsideCoord = (ringSize: number, maxValue: number): number =>
+	ringSize >= maxValue
+		? (maxValue - ringSize) / LANDING_BG_NUMERIC.HALF
+		: safeRandom() * (maxValue - ringSize);
 
-const randInRange = (min: number, max: number): number =>
-	min + safeRandom() * (max - min);
+const randInRange = (minValue: number, maxValue: number): number =>
+	minValue + safeRandom() * (maxValue - minValue);
 
 const initRings = ({
 	ringLarge,
@@ -56,8 +56,8 @@ const initRings = ({
 		[LandingBgRingType.SMALL]: false,
 	};
 
-	const w = root.clientWidth;
-	const h = root.clientHeight;
+	const containerWidth = root.clientWidth;
+	const containerHeight = root.clientHeight;
 
 	const rings: RingConfig[] = [];
 	const mapSource: Record<RingType, string> = {
@@ -70,92 +70,106 @@ const initRings = ({
 
 	for (const img of imgs) {
 		const type = img.dataset["ring"] as RingType;
-		const size = LANDING_BG_RING_SIZE[type];
+		const ringSize = LANDING_BG_RING_SIZE[type];
 
-		img.style.width = `${String(size)}px`;
-		img.style.height = `${String(size)}px`;
+		img.style.width = `${String(ringSize)}px`;
+		img.style.height = `${String(ringSize)}px`;
 
 		if (!img.src) {
 			img.src = mapSource[type];
 		}
 
-		let x: number;
-		let y: number;
+		let positionX: number;
+		let positionY: number;
 
 		if (seededInside[type]) {
-			const side = Math.floor(safeRandom() * LANDING_BG_NUMERIC.SIDES_COUNT);
-			const minX = -size * LANDING_BG_PHYSICS.MARGIN;
-			const maxX =
-				w - size * (LANDING_BG_NUMERIC.ONE - LANDING_BG_PHYSICS.MARGIN);
-			const minY = -size * LANDING_BG_PHYSICS.MARGIN;
-			const maxY =
-				h - size * (LANDING_BG_NUMERIC.ONE - LANDING_BG_PHYSICS.MARGIN);
+			const randomSide = Math.floor(
+				safeRandom() * LANDING_BG_NUMERIC.SIDES_COUNT,
+			);
+			const minPositionX = -ringSize * LANDING_BG_PHYSICS.MARGIN;
+			const maxPositionX =
+				containerWidth -
+				ringSize * (LANDING_BG_NUMERIC.ONE - LANDING_BG_PHYSICS.MARGIN);
+			const minPositionY = -ringSize * LANDING_BG_PHYSICS.MARGIN;
+			const maxPositionY =
+				containerHeight -
+				ringSize * (LANDING_BG_NUMERIC.ONE - LANDING_BG_PHYSICS.MARGIN);
 
-			switch (side) {
+			switch (randomSide) {
 				case LandingBgSide.BOTTOM: {
-					x = randInRange(minX, maxX);
-					y = h + size * LANDING_BG_PHYSICS.MARGIN;
+					positionX = randInRange(minPositionX, maxPositionX);
+					positionY = containerHeight + ringSize * LANDING_BG_PHYSICS.MARGIN;
 					break;
 				}
 
 				case LandingBgSide.LEFT: {
-					x = -size * (LANDING_BG_NUMERIC.ONE + LANDING_BG_PHYSICS.MARGIN);
-					y = randInRange(minY, maxY);
+					positionX =
+						-ringSize * (LANDING_BG_NUMERIC.ONE + LANDING_BG_PHYSICS.MARGIN);
+					positionY = randInRange(minPositionY, maxPositionY);
 					break;
 				}
 
 				case LandingBgSide.RIGHT: {
-					x = w + size * LANDING_BG_PHYSICS.MARGIN;
-					y = randInRange(minY, maxY);
+					positionX = containerWidth + ringSize * LANDING_BG_PHYSICS.MARGIN;
+					positionY = randInRange(minPositionY, maxPositionY);
 					break;
 				}
 
 				default: {
-					x = randInRange(minX, maxX);
-					y = -size * (LANDING_BG_NUMERIC.ONE + LANDING_BG_PHYSICS.MARGIN);
+					positionX = randInRange(minPositionX, maxPositionX);
+					positionY =
+						-ringSize * (LANDING_BG_NUMERIC.ONE + LANDING_BG_PHYSICS.MARGIN);
 					break;
 				}
 			}
 		} else {
 			seededInside[type] = true;
-			x = getInsideCoord(size, w);
-			y = getInsideCoord(size, h);
+			positionX = getInsideCoord(ringSize, containerWidth);
+			positionY = getInsideCoord(ringSize, containerHeight);
 		}
 
-		const baseX =
+		const baseVelocityX =
 			(safeRandom() * LANDING_BG_INIT.INITIAL_SPEED_RANGE -
 				LANDING_BG_INIT.INITIAL_SPEED_HALF) *
 			LANDING_BG_PHYSICS.SPEED_MULTIPLIER *
 			LANDING_BG_RING_SPEED_SCALE[type];
-		const baseY =
+		const baseVelocityY =
 			(safeRandom() * LANDING_BG_INIT.INITIAL_SPEED_RANGE -
 				LANDING_BG_INIT.INITIAL_SPEED_HALF) *
 			LANDING_BG_PHYSICS.SPEED_MULTIPLIER *
 			LANDING_BG_RING_SPEED_SCALE[type];
 
-		const vx = clamp(
-			ensureMinSpeed(baseX, LANDING_BG_RING_MIN_SPEED[type]),
+		const velocityX = clamp(
+			ensureMinSpeed(baseVelocityX, LANDING_BG_RING_MIN_SPEED[type]),
 			-LANDING_BG_PHYSICS.MAX_SPEED,
 			LANDING_BG_PHYSICS.MAX_SPEED,
 		);
-		const vy = clamp(
-			ensureMinSpeed(baseY, LANDING_BG_RING_MIN_SPEED[type]),
+		const velocityY = clamp(
+			ensureMinSpeed(baseVelocityY, LANDING_BG_RING_MIN_SPEED[type]),
 			-LANDING_BG_PHYSICS.MAX_SPEED,
 			LANDING_BG_PHYSICS.MAX_SPEED,
 		);
 
-		img.style.transform = `translate3d(${String(x)}px, ${String(y)}px, 0)`;
+		img.style.transform = `translate3d(${String(positionX)}px, ${String(positionY)}px, 0)`;
 		img.style.opacity = "1";
 
-		rings.push({ el: img, size, type, vx, vy, x, y });
+		rings.push({
+			imageElement: img,
+			positionX,
+			positionY,
+			size: ringSize,
+			type,
+			velocityX,
+			velocityY,
+		});
 	}
 
 	return rings;
 };
 
 const applyTransforms = (rings: RingConfig[]): void => {
-	for (const r of rings) {
-		r.el.style.transform = `translate3d(${String(r.x)}px, ${String(r.y)}px, 0)`;
+	for (const ring of rings) {
+		ring.imageElement.style.transform = `translate3d(${String(ring.positionX)}px, ${String(ring.positionY)}px, 0)`;
 	}
 };
 

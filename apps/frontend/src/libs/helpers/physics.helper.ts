@@ -5,8 +5,8 @@ import {
 } from "../../pages/landing/constants/constants.js";
 import { type RingConfig } from "../../pages/landing/types/types.js";
 
-const clamp = (v: number, min: number, max: number): number =>
-	Math.max(min, Math.min(max, v));
+const clamp = (value: number, minValue: number, maxValue: number): number =>
+	Math.max(minValue, Math.min(maxValue, value));
 
 const handleCollisions = (rings: RingConfig[]): void => {
 	for (let index = 0; index < rings.length; index++) {
@@ -15,66 +15,92 @@ const handleCollisions = (rings: RingConfig[]): void => {
 			index_ < rings.length;
 			index_++
 		) {
-			const a = rings[index];
-			const b = rings[index_];
+			const ringA = rings[index];
+			const ringB = rings[index_];
 
-			if (!a || !b) {
+			if (!ringA || !ringB) {
 				continue;
 			}
 
-			const ax = a.x + a.size / LANDING_BG_NUMERIC.HALF;
-			const ay = a.y + a.size / LANDING_BG_NUMERIC.HALF;
-			const bx = b.x + b.size / LANDING_BG_NUMERIC.HALF;
-			const by = b.y + b.size / LANDING_BG_NUMERIC.HALF;
+			let ringAPositionX = ringA.positionX;
+			let ringAPositionY = ringA.positionY;
+			let ringBPositionX = ringB.positionX;
+			let ringBPositionY = ringB.positionY;
 
-			const dx = bx - ax;
-			const dy = by - ay;
-			const distribution = Math.hypot(dx, dy);
-			const minDistribution = (a.size + b.size) / LANDING_BG_NUMERIC.HALF;
+			const ringACenterX =
+				ringAPositionX + ringA.size / LANDING_BG_NUMERIC.HALF;
+			const ringACenterY =
+				ringAPositionY + ringA.size / LANDING_BG_NUMERIC.HALF;
+			const ringBCenterX =
+				ringBPositionX + ringB.size / LANDING_BG_NUMERIC.HALF;
+			const ringBCenterY =
+				ringBPositionY + ringB.size / LANDING_BG_NUMERIC.HALF;
 
-			if (distribution < minDistribution) {
-				const nx = dx / (distribution || LANDING_BG_NUMERIC.ONE);
-				const ny = dy / (distribution || LANDING_BG_NUMERIC.ONE);
+			const centerDeltaX = ringBCenterX - ringACenterX;
+			const centerDeltaY = ringBCenterY - ringACenterY;
+			const centerDistance = Math.hypot(centerDeltaX, centerDeltaY);
+			const minCenterDistance =
+				(ringA.size + ringB.size) / LANDING_BG_NUMERIC.HALF;
+
+			if (centerDistance < minCenterDistance) {
+				const normalX =
+					centerDeltaX / (centerDistance || LANDING_BG_NUMERIC.ONE);
+				const normalY =
+					centerDeltaY / (centerDistance || LANDING_BG_NUMERIC.ONE);
 
 				const maxOverlap =
-					Math.min(a.size, b.size) * LANDING_BG_COLLISION.MAX_OVERLAP_FRACTION;
+					Math.min(ringA.size, ringB.size) *
+					LANDING_BG_COLLISION.MAX_OVERLAP_FRACTION;
 				const overlap = Math.min(
-					minDistribution - distribution + LANDING_BG_COLLISION.OVERLAP_EPSILON,
+					minCenterDistance -
+						centerDistance +
+						LANDING_BG_COLLISION.OVERLAP_EPSILON,
 					maxOverlap,
 				);
 
-				a.x -= (nx * overlap) / LANDING_BG_NUMERIC.HALF;
-				a.y -= (ny * overlap) / LANDING_BG_NUMERIC.HALF;
-				b.x += (nx * overlap) / LANDING_BG_NUMERIC.HALF;
-				b.y += (ny * overlap) / LANDING_BG_NUMERIC.HALF;
+				ringAPositionX -= (normalX * overlap) / LANDING_BG_NUMERIC.HALF;
+				ringAPositionY -= (normalY * overlap) / LANDING_BG_NUMERIC.HALF;
+				ringBPositionX += (normalX * overlap) / LANDING_BG_NUMERIC.HALF;
+				ringBPositionY += (normalY * overlap) / LANDING_BG_NUMERIC.HALF;
 
-				const va = a.vx * nx + a.vy * ny;
-				const vb = b.vx * nx + b.vy * ny;
+				const ringAVelocityAlongNormal =
+					ringA.velocityX * normalX + ringA.velocityY * normalY;
+				const ringBVelocityAlongNormal =
+					ringB.velocityX * normalX + ringB.velocityY * normalY;
 
-				const vaAfter = vb;
-				const vbAfter = va;
+				const ringAVelocityAfter = ringBVelocityAlongNormal;
+				const ringBVelocityAfter = ringAVelocityAlongNormal;
 
-				a.vx += (vaAfter - va) * nx;
-				a.vy += (vaAfter - va) * ny;
-				b.vx += (vbAfter - vb) * nx;
-				b.vy += (vbAfter - vb) * ny;
+				ringA.velocityX +=
+					(ringAVelocityAfter - ringAVelocityAlongNormal) * normalX;
+				ringA.velocityY +=
+					(ringAVelocityAfter - ringAVelocityAlongNormal) * normalY;
+				ringB.velocityX +=
+					(ringBVelocityAfter - ringBVelocityAlongNormal) * normalX;
+				ringB.velocityY +=
+					(ringBVelocityAfter - ringBVelocityAlongNormal) * normalY;
 
-				a.vx *= LANDING_BG_PHYSICS.DAMPING;
-				a.vy *= LANDING_BG_PHYSICS.DAMPING;
-				b.vx *= LANDING_BG_PHYSICS.DAMPING;
-				b.vy *= LANDING_BG_PHYSICS.DAMPING;
+				ringA.velocityX *= LANDING_BG_PHYSICS.DAMPING;
+				ringA.velocityY *= LANDING_BG_PHYSICS.DAMPING;
+				ringB.velocityX *= LANDING_BG_PHYSICS.DAMPING;
+				ringB.velocityY *= LANDING_BG_PHYSICS.DAMPING;
 			}
+
+			ringA.positionX = ringAPositionX;
+			ringA.positionY = ringAPositionY;
+			ringB.positionX = ringBPositionX;
+			ringB.positionY = ringBPositionY;
 		}
 	}
 
-	for (const r of rings) {
-		r.vx = clamp(
-			r.vx,
+	for (const ring of rings) {
+		ring.velocityX = clamp(
+			ring.velocityX,
 			-LANDING_BG_PHYSICS.MAX_SPEED,
 			LANDING_BG_PHYSICS.MAX_SPEED,
 		);
-		r.vy = clamp(
-			r.vy,
+		ring.velocityY = clamp(
+			ring.velocityY,
 			-LANDING_BG_PHYSICS.MAX_SPEED,
 			LANDING_BG_PHYSICS.MAX_SPEED,
 		);
@@ -82,41 +108,43 @@ const handleCollisions = (rings: RingConfig[]): void => {
 };
 
 const handleBounds = ({
-	dt,
-	h,
+	containerHeight,
+	containerWidth,
+	deltaTime,
 	rings,
-	w,
 }: {
-	dt: number;
-	h: number;
+	containerHeight: number;
+	containerWidth: number;
+	deltaTime: number;
 	rings: RingConfig[];
-	w: number;
 }): void => {
-	for (const r of rings) {
-		r.x += r.vx * dt;
-		r.y += r.vy * dt;
+	for (const ring of rings) {
+		ring.positionX += ring.velocityX * deltaTime;
+		ring.positionY += ring.velocityY * deltaTime;
 
-		const minX = -r.size * LANDING_BG_PHYSICS.MARGIN;
+		const minX = -ring.size * LANDING_BG_PHYSICS.MARGIN;
 		const maxX =
-			w - r.size * (LANDING_BG_NUMERIC.ONE - LANDING_BG_PHYSICS.MARGIN);
-		const minY = -r.size * LANDING_BG_PHYSICS.MARGIN;
+			containerWidth -
+			ring.size * (LANDING_BG_NUMERIC.ONE - LANDING_BG_PHYSICS.MARGIN);
+		const minY = -ring.size * LANDING_BG_PHYSICS.MARGIN;
 		const maxY =
-			h - r.size * (LANDING_BG_NUMERIC.ONE - LANDING_BG_PHYSICS.MARGIN);
+			containerHeight -
+			ring.size * (LANDING_BG_NUMERIC.ONE - LANDING_BG_PHYSICS.MARGIN);
 
-		if (r.x < minX) {
-			r.x = minX;
-			r.vx = Math.abs(r.vx) * LANDING_BG_PHYSICS.DAMPING;
-		} else if (r.x > maxX) {
-			r.x = maxX;
-			r.vx = -Math.abs(r.vx) * LANDING_BG_PHYSICS.DAMPING;
+		if (ring.positionX < minX) {
+			ring.positionX = minX;
+			ring.velocityX = Math.abs(ring.velocityX) * LANDING_BG_PHYSICS.DAMPING;
+		} else if (ring.positionX > maxX) {
+			ring.positionX = maxX;
+			ring.velocityX = -Math.abs(ring.velocityX) * LANDING_BG_PHYSICS.DAMPING;
 		}
 
-		if (r.y < minY) {
-			r.y = minY;
-			r.vy = Math.abs(r.vy) * LANDING_BG_PHYSICS.DAMPING;
-		} else if (r.y > maxY) {
-			r.y = maxY;
-			r.vy = -Math.abs(r.vy) * LANDING_BG_PHYSICS.DAMPING;
+		if (ring.positionY < minY) {
+			ring.positionY = minY;
+			ring.velocityY = Math.abs(ring.velocityY) * LANDING_BG_PHYSICS.DAMPING;
+		} else if (ring.positionY > maxY) {
+			ring.positionY = maxY;
+			ring.velocityY = -Math.abs(ring.velocityY) * LANDING_BG_PHYSICS.DAMPING;
 		}
 	}
 };

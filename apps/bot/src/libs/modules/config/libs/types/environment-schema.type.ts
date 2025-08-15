@@ -4,6 +4,7 @@ import { type ValueOf } from "~/libs/types/types.js";
 type EnvironmentSchema = {
 	APP: {
 		ENVIRONMENT: ValueOf<typeof AppEnvironment>;
+		ORIGIN: string;
 	};
 	AUDIO_RECORDER: {
 		CHUNK_DURATION: number;
@@ -17,6 +18,7 @@ type EnvironmentSchema = {
 	};
 	ZOOM: {
 		BOT_NAME: string;
+		MEETING_ID: number;
 		MEETING_LINK: string;
 		MEETING_PASSWORD: string;
 	};

@@ -4,4 +4,10 @@ export { type MeetingDetailsRequestDto } from "./meeting-details-request-dto.typ
 export { type MeetingGetAllResponseDto } from "./meeting-get-all-response-dto.type.js";
 export { type MeetingGetPublicUrlResponseDto } from "./meeting-get-public-url-response-dto.type.js";
 export { type MeetingResponseDto } from "./meeting-response-dto.type.js";
+export {
+	type MeetingTranscriptionGetAllResponseDto,
+	type MeetingTranscriptionRequestDto,
+	type MeetingTranscriptionResponseDto,
+	type MeetingUpdateTranscriptionRequestDto,
+} from "./meeting-transcription/types.js";
 export { type MeetingUpdateRequestDto } from "./meeting-update-request-dto.type.js";

@@ -1,6 +1,7 @@
 import { config } from "~/libs/modules/config/config.js";
 import { database } from "~/libs/modules/database/database.js";
 import { logger } from "~/libs/modules/logger/logger.js";
+import { socketService } from "~/libs/modules/socket/socket.js";
 import { authController } from "~/modules/auth/auth.js";
 import { meetingsController } from "~/modules/meetings/meetings.js";
 import { userController } from "~/modules/users/users.js";
@@ -20,6 +21,7 @@ const serverApplication = new BaseServerApplication({
 	config,
 	database,
 	logger,
+	socketService,
 	title: "Meetlytic",
 });
 

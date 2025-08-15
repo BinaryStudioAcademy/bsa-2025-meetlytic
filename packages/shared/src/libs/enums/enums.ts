@@ -4,3 +4,4 @@ export { ContentType } from "./content-type.enum.js";
 export { ExceptionMessage } from "./exception-message.enum.js";
 export { KeyboardKey } from "./keyboard-key.enum.js";
 export { ServerErrorType } from "./server-error-type.enum.js";
+export { SortOrder } from "./sort-order.enum.js";

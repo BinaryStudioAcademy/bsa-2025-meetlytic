@@ -10,6 +10,8 @@ const {
 	SECRET_ACCESS_KEY: secretAccessKey,
 } = config.ENV.AWS;
 
+const { ORIGIN: origin } = config.ENV.APP;
+
 const { NAME: botName } = config.ENV.BOT;
 
 const {
@@ -26,6 +28,7 @@ const cloudFormation = new BaseCloudFormation({
 	settings: {
 		botName,
 		openAIKey,
+		origin,
 		textGenerationModel,
 		transcriptionModel,
 	},

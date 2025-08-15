@@ -18,6 +18,7 @@ import { type Config } from "~/libs/modules/config/config.js";
 import { type Database } from "~/libs/modules/database/database.js";
 import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type BaseSocketService } from "~/libs/modules/socket/socket.js";
 import { jwt } from "~/libs/modules/token/token.js";
 import { authorizationPlugin } from "~/libs/plugins/authorization/authorization.plugin.js";
 import {
@@ -37,6 +38,7 @@ type Constructor = {
 	config: Config;
 	database: Database;
 	logger: Logger;
+	socketService: BaseSocketService;
 	title: string;
 };
 
@@ -51,12 +53,22 @@ class BaseServerApplication implements ServerApplication {
 
 	private logger: Logger;
 
+	private socketService: BaseSocketService;
+
 	private title: string;
 
-	public constructor({ apis, config, database, logger, title }: Constructor) {
+	public constructor({
+		apis,
+		config,
+		database,
+		logger,
+		socketService,
+		title,
+	}: Constructor) {
 		this.title = title;
 		this.config = config;
 		this.logger = logger;
+		this.socketService = socketService;
 		this.database = database;
 		this.apis = apis;
 
@@ -155,6 +167,10 @@ class BaseServerApplication implements ServerApplication {
 		});
 	}
 
+	private initSocket(): void {
+		this.socketService.initialize(this.app.server);
+	}
+
 	public addRoute(parameters: ServerApplicationRouteParameters): void {
 		const { handler, method, path, validation } = parameters;
 
@@ -203,6 +219,8 @@ class BaseServerApplication implements ServerApplication {
 		await this.initPlugins();
 
 		this.initRoutes();
+
+		this.initSocket();
 
 		this.database.connect();
 

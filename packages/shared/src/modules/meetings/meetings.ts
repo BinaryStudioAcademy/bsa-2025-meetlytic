@@ -3,6 +3,7 @@ export {
 	MeetingHost,
 	MeetingsApiPath,
 	MeetingStatus,
+	MeetingTranscriptionErrorMessage,
 } from "./libs/enums/enums.js";
 export {
 	type MeetingCreateRequestDto,
@@ -11,7 +12,11 @@ export {
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingTranscriptionGetAllResponseDto,
+	type MeetingTranscriptionRequestDto,
+	type MeetingTranscriptionResponseDto,
 	type MeetingUpdateRequestDto,
+	type MeetingUpdateTranscriptionRequestDto,
 } from "./libs/types/types.js";
 export {
 	meetingCreate as meetingCreateValidationSchema,

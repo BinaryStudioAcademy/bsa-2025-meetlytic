@@ -69,6 +69,22 @@ apt install -y \
 	build-essential
 echo "[+] Core libraries and tools installed."
 
+# --- Install Google Chrome if not present ---
+echo "[i] Checking for Google Chrome..."
+if ! command -v google-chrome &> /dev/null; then
+	echo "[+] Google Chrome not found. Installing..."
+	apt install -y wget gnupg
+	wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-linux-signing-key.gpg
+	echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-key.gpg] http://dl.google.com/linux/chrome/deb/ stable main" \
+		> /etc/apt/sources.list.d/google-chrome.list
+	apt update -y
+	apt install -y google-chrome-stable
+	echo "[+] Google Chrome installed successfully."
+else
+	echo "[✓] Google Chrome already installed."
+fi
+
+
 # ─── PulseAudio ─────────────────────────────────────────────────────────
 # We run PulseAudio as *root* in system-style “per-user” mode so that it
 # survives the session and is ready before the bot (Chromium) starts.
@@ -128,11 +144,13 @@ fi
 # Use jq to parse JSON into bash variables
 AWS_ACCESS_KEY_ID=$(echo "$SETTINGS_JSON" | jq -r '.accessKeyId')
 BOT_NAME=$(echo "$SETTINGS_JSON" | jq -r '.botName')
+MEETING_ID=$(echo "$SETTINGS_JSON" | jq -r '.id')
 MEETING_LINK=$(echo "$SETTINGS_JSON" | jq -r '.meetingLink')
 MEETING_PASSWORD=$(echo "$SETTINGS_JSON" | jq -r '.meetingPassword')
 OPEN_AI_KEY=$(echo "$SETTINGS_JSON" | jq -r '.openAIKey')
 AWS_REGION=$(echo "$SETTINGS_JSON" | jq -r '.region')
 AWS_SECRET_ACCESS_KEY=$(echo "$SETTINGS_JSON" | jq -r '.secretAccessKey')
+ORIGIN=$(echo "$SETTINGS_JSON" | jq -r '.origin')
 TEXT_GENERATION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.textGenerationModel')
 TRANSCRIPTION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.transcriptionModel')
 BUCKET_NAME=$(echo"$SETTINGS_JSON" | jq -r '.bucketName')
@@ -146,17 +164,22 @@ echo "[+] Writing environment variables..."
 cat <<EOF > .env
 # APP
 NODE_ENV=production
+PORT=3001
+HOST=localhost
+ORIGIN=$ORIGIN
+
 # BOT
 BOT_NAME="$BOT_NAME"
 
 # ZOOM
-MEETING_LINK="$MEETING_LINK"
-MEETING_PASSWORD="$MEETING_PASSWORD"
+MEETING_ID=$MEETING_ID
+MEETING_LINK=$MEETING_LINK
+MEETING_PASSWORD=$MEETING_PASSWORD
 
 # OPEN_AI
-OPEN_AI_KEY="$OPEN_AI_KEY"
-TEXT_GENERATION_MODEL="$TEXT_GENERATION_MODEL"
-TRANSCRIPTION_MODEL="$TRANSCRIPTION_MODEL"
+OPEN_AI_KEY=$OPEN_AI_KEY
+TEXT_GENERATION_MODEL=$TEXT_GENERATION_MODEL
+TRANSCRIPTION_MODEL=$TRANSCRIPTION_MODEL
 
 # AUDIO_RECORDER
 CHUNK_DURATION=10

@@ -96,6 +96,7 @@ class BaseCloudFormation implements CloudFormation {
 						ParameterKey: ParameterKey.SETTINGS,
 						ParameterValue: JSON.stringify({
 							...this.settings,
+							id,
 							meetingLink,
 							meetingPassword,
 						}),

@@ -29,6 +29,12 @@ class BaseConfig implements Config {
 					env: "NODE_ENV",
 					format: Object.values(AppEnvironment),
 				},
+				ORIGIN: {
+					default: null,
+					doc: "Origin URL",
+					env: "ORIGIN",
+					format: String,
+				},
 			},
 			AUDIO_RECORDER: {
 				CHUNK_DURATION: {
@@ -110,6 +116,12 @@ class BaseConfig implements Config {
 					doc: "Name of the bot in the Zoom meeting",
 					env: "BOT_NAME",
 					format: String,
+				},
+				MEETING_ID: {
+					default: null,
+					doc: "Meeting ID primary key",
+					env: "MEETING_ID",
+					format: Number,
 				},
 				MEETING_LINK: {
 					default: null,

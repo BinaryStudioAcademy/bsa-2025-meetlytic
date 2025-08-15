@@ -2,9 +2,15 @@ import { type ChildProcessWithoutNullStreams, spawn } from "node:child_process";
 import { accessSync, mkdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 
-import { TIMEOUTS } from "~/libs/constants/constants.js";
+import { SocketEvent, Timeout } from "~/libs/enums/enums.js";
 import { type UploadResult } from "~/libs/modules/s3/s3.js";
-import { type Logger, type OpenAI, type S3 } from "~/libs/types/types.js";
+import {
+	type BaseConfig,
+	type BaseSocketClient,
+	type Logger,
+	type OpenAI,
+	type S3,
+} from "~/libs/types/types.js";
 
 import { AudioRecorderEvent } from "./libs/enums/enums.js";
 import {
@@ -16,6 +22,7 @@ import {
 
 class BaseAudioRecorder implements AudioRecorder {
 	private chunkDuration: number;
+	private config: BaseConfig;
 	private ffmpegPath: string;
 	private fullPath: null | string = null;
 	private fullRecordingProccess: ChildProcessWithoutNullStreams | null = null;
@@ -24,23 +31,28 @@ class BaseAudioRecorder implements AudioRecorder {
 	private openAI: OpenAI;
 	private outputDir: string;
 	private s3: S3;
+	private socketClient: BaseSocketClient;
 	private useMp3 = true;
 	private VOLUME_RE = /mean[_ ]volume:\s*(-?\d+(?:\.\d+)?)\s*dB/i;
 
 	public constructor({
 		chunkDuration,
+		config,
 		ffmpegPath,
 		logger,
 		openAI,
 		outputDir,
 		s3,
+		socketClient,
 	}: AudioRecorderOptions) {
 		this.chunkDuration = chunkDuration;
+		this.config = config;
 		this.ffmpegPath = ffmpegPath;
 		this.outputDir = outputDir;
-		this.openAI = openAI;
 		this.logger = logger;
 		this.s3 = s3;
+		this.openAI = openAI;
+		this.socketClient = socketClient;
 	}
 
 	private logChunkStart(filePath: string, type: string): void {
@@ -123,11 +135,22 @@ class BaseAudioRecorder implements AudioRecorder {
 				this.recordNextChunk();
 			}
 
-			this.openAI.transcribe(filePath).catch((error: unknown) => {
-				this.logger.error(String(error));
-			});
+			void this.transcribeAndSend(filePath);
 		});
 	}
+
+	private transcribeAndSend = async (filePath: string): Promise<void> => {
+		try {
+			const chunkText = await this.openAI.transcribe(filePath);
+
+			this.socketClient.emit(SocketEvent.TRANSCRIBE, {
+				chunkText,
+				meetingId: this.config.ENV.ZOOM.MEETING_ID,
+			});
+		} catch (error: unknown) {
+			this.logger.error(`[OPENAI][TRANSCRIBE_ERROR] ${String(error)}`);
+		}
+	};
 
 	public async finalize(options: FinalizeOptions): Promise<FinalizeResult> {
 		this.isRecording = false;
@@ -274,9 +297,7 @@ class BaseAudioRecorder implements AudioRecorder {
 			new Promise<void>((resolve) =>
 				this.fullRecordingProccess?.once("exit", resolve),
 			),
-			new Promise<void>((resolve) =>
-				setTimeout(resolve, TIMEOUTS.FIVE_SECONDS),
-			),
+			new Promise<void>((resolve) => setTimeout(resolve, Timeout.FIVE_SECONDS)),
 		]);
 
 		this.logger.info("[-] Full recording stopped by caller");

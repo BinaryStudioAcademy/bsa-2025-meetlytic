@@ -1,4 +1,4 @@
-const TIMEOUTS = {
+const Timeout = {
 	FIFTEEN_SECONDS: 15_000,
 	FIVE_SECONDS: 5000,
 	ONE_SECOND: 1000,
@@ -6,4 +6,4 @@ const TIMEOUTS = {
 	TEN_SECONDS: 10_000,
 } as const;
 
-export { TIMEOUTS };
+export { Timeout };

@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.6.0...backend-v1.7.0) (2025-08-15)
+
+
+### Features
+
+* add web socket ml-108 ([#179](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/179)) ([368beb6](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/368beb6345dcc630905a83a591aa35a8826030c3))
+
+
+### Bug Fixes
+
+* first and last names blank fields ml-193 ([#203](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/203)) ([fb55843](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/fb558437d58f2f307e291b8795c4bde988ed6093))
+
 ## [1.6.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.5.0...backend-v1.6.0) (2025-08-14)
 
 

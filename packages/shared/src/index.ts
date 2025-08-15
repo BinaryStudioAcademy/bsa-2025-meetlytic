@@ -10,11 +10,13 @@ export {
 	ExceptionMessage,
 	KeyboardKey,
 	ServerErrorType,
+	SortOrder,
 } from "./libs/enums/enums.js";
 export {
 	AuthError,
 	HTTPError,
 	MeetingError,
+	MeetingTranscriptionError,
 	UserError,
 	ValidationError,
 } from "./libs/exceptions/exceptions.js";
@@ -31,6 +33,7 @@ export {
 	HTTPHeader,
 	HTTPMethod,
 } from "./libs/modules/http/http.js";
+export { SocketEvent, SocketMessage } from "./libs/modules/socket/socket.js";
 export { type Storage } from "./libs/modules/storage/storage.js";
 export {
 	type ServerCommonErrorResponse,
@@ -42,21 +45,22 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthStatusMessage } from "./modules/auth/auth.js";
 export {
-	MeetingErrorMessage,
-	MeetingHost,
-	MeetingsApiPath,
-	MeetingStatus,
-} from "./modules/meetings/meetings.js";
-export {
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingTranscriptionGetAllResponseDto,
+	type MeetingTranscriptionRequestDto,
+	type MeetingTranscriptionResponseDto,
 	type MeetingUpdateRequestDto,
-} from "./modules/meetings/meetings.js";
-export {
+	type MeetingUpdateTranscriptionRequestDto,
 	meetingCreateValidationSchema,
+	MeetingErrorMessage,
+	MeetingHost,
+	MeetingsApiPath,
+	MeetingStatus,
+	MeetingTranscriptionErrorMessage,
 	meetingUpdateValidationSchema,
 } from "./modules/meetings/meetings.js";
 export {

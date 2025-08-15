@@ -54,17 +54,12 @@
 	justify-content: flex-end;
 }
 
-.start-meeting-inner {
-	width: auto;
-}
-
 .variable-component__mobile {
 	display: none;
 }
 
 .variable-component__desktop {
 	display: block;
-	width: 100%;
 }
 
 @media (width <= 480px) {
@@ -84,6 +79,5 @@
 
 	.variable-component__mobile {
 		display: block;
-		width: 100%;
 	}
 }

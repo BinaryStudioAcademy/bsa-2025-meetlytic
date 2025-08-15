@@ -11,6 +11,7 @@ type EnvironmentSchema = {
 	AWS: {
 		ACCESS_KEY_ID: string;
 		AMI_ID: string;
+		BUCKET_NAME: string;
 		REGION: string;
 		SECRET_ACCESS_KEY: string;
 	};
@@ -30,6 +31,11 @@ type EnvironmentSchema = {
 		KEY: string;
 		TEXT_GENERATION_MODEL: string;
 		TRANSCRIPTION_MODEL: string;
+	};
+	S3: {
+		BUCKET_NAME: string;
+		CONTET_TYPE_AUDIO: string;
+		PREFIX_AUDIO: string;
 	};
 	SHARED_TOKEN: {
 		ALGORITHM: string;

@@ -131,6 +131,20 @@ class BaseZoomBot {
 		return rawPasscode?.replace(/^\d/, "") || "";
 	}
 
+	private getMeetingId(): null | string {
+		const ONE = 1;
+
+		const url = new URL(this.config.ENV.ZOOM.MEETING_LINK);
+		const meetingIdRegex = /\/(?:wc\/join|j)\/(\d+)/;
+		const regexMatchArray = meetingIdRegex.exec(url.pathname);
+
+		if (regexMatchArray?.[ONE]) {
+			return regexMatchArray[ONE];
+		}
+
+		return null;
+	}
+
 	private async getParticipantsCount(): Promise<number> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
@@ -265,7 +279,7 @@ class BaseZoomBot {
 			if (count <= MINIMUM_PARTICIPANTS_THRESHOLD) {
 				this.logger.info(ZoomBotMessages.ONLY_ONE_PARTICIPANT_DETECTED);
 				this.audioRecorder.stop();
-				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
+				await this.audioRecorder.stopFullMeetingRecording();
 				await this.leaveMeeting();
 				this.shouldMonitor = false;
 			}
@@ -275,6 +289,9 @@ class BaseZoomBot {
 	}
 
 	public async run(): Promise<void> {
+		const meetingId = this.getMeetingId();
+		let fullStarted = false;
+		let fullStopped = false;
 		this.initSocket();
 
 		try {
@@ -282,9 +299,6 @@ class BaseZoomBot {
 			this.page = await this.browser.newPage();
 			await this.page.setUserAgent(USER_AGENT);
 
-			this.logger.info(
-				`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
-			);
 			await this.page.goto(
 				this.convertToZoomWebClientUrl(this.config.ENV.ZOOM.MEETING_LINK),
 				{
@@ -292,7 +306,7 @@ class BaseZoomBot {
 					waitUntil: "networkidle2",
 				},
 			);
-			await this.page.screenshot({ path: "goto.png" });
+
 			await this.handleInitialPopups();
 			await this.joinMeeting();
 			await this.page.waitForSelector(ZoomUILabel.LEAVE, {
@@ -301,14 +315,47 @@ class BaseZoomBot {
 			});
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
 			this.audioRecorder.start();
-			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
+
+			if (meetingId) {
+				this.audioRecorder.startFullMeetingRecording(meetingId);
+				fullStarted = true;
+			}
+
 			await delay(Timeout.FIFTEEN_SECONDS);
 			await this.monitorParticipants();
+			fullStopped = true;
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessages.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,
 			);
 		} finally {
+			if (fullStarted && !fullStopped) {
+				await this.audioRecorder.stopFullMeetingRecording();
+			}
+
+			try {
+				if (fullStarted && meetingId) {
+					const audioPrefix = this.config.ENV.S3.PREFIX_AUDIO;
+					const prefix = `${audioPrefix}/${meetingId}`;
+					const contentType = "audio/mpeg";
+					const result = await this.audioRecorder.finalize({
+						contentType,
+						meetingId,
+						prefix,
+					});
+
+					if (result.s3) {
+						this.logger.info(
+							`[S3] Uploaded: key=${result.s3.key} version=${String(result.s3.versionId)} etag=${String(result.s3.etag)}`,
+						);
+					}
+				}
+			} catch (error) {
+				this.logger.error(
+					`Finalize failed: ${error instanceof Error ? error.message : String(error)}`,
+				);
+			}
+
 			await this.browser?.close();
 		}
 	}

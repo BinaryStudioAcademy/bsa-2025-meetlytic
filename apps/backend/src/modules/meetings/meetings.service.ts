@@ -16,6 +16,8 @@ import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
 import { extractZoomMeetingId } from "./libs/helpers/helpers.js";
 import {
+	type MeetingAudioRequestDto,
+	type MeetingAudioResponseDto,
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
@@ -25,12 +27,14 @@ import {
 	type MeetingTranscriptionResponseDto,
 	type MeetingUpdateRequestDto,
 } from "./libs/types/types.js";
+import { type MeetingAudioService } from "./meeting-audio.service.js";
 import { type MeetingTranscriptionService } from "./meeting-transcription.service.js";
 import { MeetingEntity } from "./meetings.entity.js";
 import { type MeetingRepository } from "./meetings.repository.js";
 
 type Constructor = {
 	cloudFormation: CloudFormation;
+	meetingAudioService: MeetingAudioService;
 	meetingRepository: MeetingRepository;
 	meetingTranscriptionService: MeetingTranscriptionService;
 	sharedJwt: BaseToken<SharedJwtPayload>;
@@ -38,17 +42,20 @@ type Constructor = {
 
 class MeetingService implements Service<MeetingResponseDto> {
 	private cloudFormation: CloudFormation;
+	private meetingAudioService: MeetingAudioService;
 	private meetingRepository: MeetingRepository;
 	private meetingTranscriptionService: MeetingTranscriptionService;
 	private sharedJwt: BaseToken<SharedJwtPayload>;
 
 	public constructor({
 		cloudFormation,
+		meetingAudioService,
 		meetingRepository,
 		meetingTranscriptionService,
 		sharedJwt,
 	}: Constructor) {
 		this.cloudFormation = cloudFormation;
+		this.meetingAudioService = meetingAudioService;
 		this.meetingRepository = meetingRepository;
 		this.meetingTranscriptionService = meetingTranscriptionService;
 		this.sharedJwt = sharedJwt;
@@ -197,6 +204,20 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return {
 			publicUrl: `${APIPath.PUBLIC_MEETINGS}/${String(id)}?token=${token}`,
 		};
+	}
+
+	public async saveAudio({
+		fileName,
+		fileUrl,
+		meetingId,
+	}: MeetingAudioRequestDto): Promise<MeetingAudioResponseDto> {
+		const audio = await this.meetingAudioService.create({
+			fileName,
+			fileUrl,
+			meetingId,
+		});
+
+		return audio;
 	}
 
 	public async saveChunk({

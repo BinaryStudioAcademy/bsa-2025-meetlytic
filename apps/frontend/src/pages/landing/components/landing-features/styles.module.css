@@ -16,7 +16,7 @@
 	font-size: 48px;
 	font-weight: 700;
 	line-height: 1.46;
-	color: var(--color-text-5);
+	color: var(--color-text-primary);
 }
 
 .features__item {
@@ -24,7 +24,7 @@
 	justify-content: space-between;
 	padding-bottom: 40px;
 	margin-bottom: 40px;
-	border-bottom: 1px solid var(--color-background-6);
+	border-bottom: 1px solid var(--color-background-light-gray);
 }
 
 .features__item:last-child {
@@ -66,7 +66,7 @@
 	font-size: 36px;
 	font-weight: 700;
 	line-height: 34px;
-	color: var(--color-text-4);
+	color: var(--color-text-dark);
 }
 
 .features__text {
@@ -74,7 +74,7 @@
 	font-size: 16px;
 	font-weight: 400;
 	line-height: 20px;
-	color: var(--color-text-6);
+	color: var(--color-text-secondary);
 }
 
 .features__media-card {

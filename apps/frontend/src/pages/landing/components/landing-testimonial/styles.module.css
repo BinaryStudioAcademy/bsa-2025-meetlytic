@@ -1,7 +1,7 @@
 .testimonials {
 	padding: 70px 20px 130px;
-	color: var(--color-text-3);
-	background: var(--color-background-7);
+	color: var(--color-text-light);
+	background: var(--color-background-accent);
 }
 
 .testimonials__inner {
@@ -85,7 +85,7 @@
 	font-size: 24px;
 	font-weight: 600;
 	line-height: 28px;
-	color: var(--color-text-3);
+	color: var(--color-text-light);
 }
 
 .testimonial-card__avatar-container {

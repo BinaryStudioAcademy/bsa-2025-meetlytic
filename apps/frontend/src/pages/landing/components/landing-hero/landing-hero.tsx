@@ -21,7 +21,7 @@ const LandingHero: React.FC<Properties> = ({ className }: Properties) => {
 						App your sales &amp; product development — accelerate like never
 						before with AI agents that know your business.
 					</p>
-					<Link to={AppRoute.SIGN_UP}>
+					<Link to={AppRoute.SIGN_IN}>
 						<Button
 							className={styles["hero__button"]}
 							label="Get Started"

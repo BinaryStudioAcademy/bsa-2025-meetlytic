@@ -6,7 +6,9 @@ export { ButtonSize } from "./button-size.enum.js";
 export { ButtonVariant } from "./button-variant.enum.js";
 export { CarouselConfig } from "./carousel-config.enum.js";
 export { DataStatus } from "./data-status.enum.js";
+export { DomEvent } from "./dom-event.enum.js";
 export { InputPasswordType } from "./input-password.enum.js";
+export { LandingAnchor } from "./landing-anchor.enum.js";
 export {
 	LandingBgRingType,
 	LandingBgSide,

@@ -1,7 +1,7 @@
 .landing-footer {
 	position: relative;
 	z-index: var(--z-index-medium);
-	background-color: var(--color-background-5);
+	background-color: var(--color-background-dark);
 }
 
 .landing-footer__inner {
@@ -31,7 +31,7 @@
 	margin: 0 0 16px;
 	font-size: 16px;
 	font-weight: 600;
-	color: var(--color-text-3);
+	color: var(--color-text-light);
 	text-transform: uppercase;
 }
 

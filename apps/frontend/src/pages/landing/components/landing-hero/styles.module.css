@@ -18,7 +18,7 @@
 	font-size: 57px;
 	font-weight: 600;
 	line-height: 1.15;
-	color: var(--color-text-3);
+	color: var(--color-text-light);
 }
 
 .hero__subtitle {

@@ -11,7 +11,7 @@ const LandingCTA: React.FC = () => {
 					Ready to Ignite Your Business <br /> Journey?
 				</h2>
 
-				<Link to={AppRoute.SIGN_UP}>
+				<Link to={AppRoute.SIGN_IN}>
 					<Button
 						className={styles["cta__button"]}
 						label="Get Started"

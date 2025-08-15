@@ -1,3 +1,4 @@
+import { DomEvent } from "~/libs/enums/enums.js";
 import { useCallback, useEffect, useRef } from "~/libs/hooks/hooks.js";
 
 import { LANDING_BG_NUMERIC } from "../../../pages/landing/constants/constants.js";
@@ -23,8 +24,7 @@ const useLandingAnimation = (
 			return;
 		}
 
-		lastReference.current =
-			typeof performance === "undefined" ? Date.now() : performance.now();
+		lastReference.current = performance.now();
 		rafReference.current = requestAnimationFrame((t) => {
 			stepReference.current?.(t);
 		});
@@ -85,10 +85,10 @@ const useLandingAnimation = (
 			}
 		};
 
-		document.addEventListener("visibilitychange", onVisibility);
+		document.addEventListener(DomEvent.VISIBILITY_CHANGE, onVisibility);
 
 		return (): void => {
-			document.removeEventListener("visibilitychange", onVisibility);
+			document.removeEventListener(DomEvent.VISIBILITY_CHANGE, onVisibility);
 			stop();
 		};
 	}, [isInView, step]);

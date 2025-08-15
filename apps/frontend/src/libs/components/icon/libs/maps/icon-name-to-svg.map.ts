@@ -1,4 +1,6 @@
 import ArrowRight from "~/assets/img/icons/arrow-right.svg?react";
+import BurgerMenu from "~/assets/img/icons/burger-menu.svg?react";
+import CloseIcon from "~/assets/img/icons/close-icon.svg?react";
 import HidePassword from "~/assets/img/icons/hide-password.svg?react";
 import Logout from "~/assets/img/icons/logout.svg?react";
 import Meetings from "~/assets/img/icons/meetings.svg?react";
@@ -15,6 +17,8 @@ const iconNameToSvg: Record<
 	React.FC<React.SVGProps<SVGSVGElement>>
 > = {
 	arrowRight: ArrowRight,
+	burgerMenu: BurgerMenu,
+	closeIcon: CloseIcon,
 	hidePassword: HidePassword,
 	logout: Logout,
 	meetings: Meetings,

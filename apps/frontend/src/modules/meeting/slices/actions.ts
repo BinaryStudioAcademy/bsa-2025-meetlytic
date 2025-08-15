@@ -29,4 +29,14 @@ const getAllMeetings = createAsyncThunk<
 	return await meetingApi.getAll();
 });
 
-export { createMeeting, getAllMeetings };
+const stopRecording = createAsyncThunk<
+	Promise<void>,
+	{ id: string },
+	AsyncThunkConfig
+>(`${sliceName}/stop-recording`, async ({ id }, { extra }) => {
+	const { meetingApi } = extra;
+
+	await meetingApi.stopRecording(id);
+});
+
+export { createMeeting, getAllMeetings, stopRecording };

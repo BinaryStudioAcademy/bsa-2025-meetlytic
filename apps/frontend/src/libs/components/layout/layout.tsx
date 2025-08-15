@@ -5,14 +5,32 @@ import {
 	Sidebar,
 } from "~/libs/components/components.js";
 import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
+import { useCallback, useLogout, useState } from "~/libs/hooks/hooks.js";
 
+import { MobileMenu } from "./libs/components/mobile-menu/mobile-menu.js";
 import styles from "./styles.module.css";
 
 const Layout: React.FC = () => {
+	const logout = useLogout();
+
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+	const handleToggleMenu = useCallback(() => {
+		setIsMenuOpen((previous) => !previous);
+	}, []);
+
+	const handleLogout = useCallback((): void => {
+		void logout();
+	}, [logout]);
+
 	return (
 		<div className={styles["layout"]}>
 			<div className={styles["layout__header"]}>
-				<Header />
+				<Header
+					isMenuOpen={isMenuOpen}
+					onLogout={handleLogout}
+					onToggleMenu={handleToggleMenu}
+				/>
 			</div>
 
 			<div className={styles["layout__sidebar"]}>
@@ -24,6 +42,12 @@ const Layout: React.FC = () => {
 			<main className={styles["layout__main"]}>
 				<RouterOutlet />
 			</main>
+
+			<MobileMenu
+				isOpen={isMenuOpen}
+				onClose={handleToggleMenu}
+				onLogout={handleLogout}
+			/>
 		</div>
 	);
 };

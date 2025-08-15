@@ -49,6 +49,18 @@ class MeetingApi extends BaseHTTPApi {
 
 		return await response.json<MeetingGetAllResponseDto>();
 	}
+
+	public async stopRecording(id: string): Promise<void> {
+		await this.load(
+			this.getFullEndpoint(MeetingsApiPath.$ID_STOP_RECORDING, {
+				id,
+			}),
+			{
+				hasAuth: true,
+				method: HTTPMethod.DELETE,
+			},
+		);
+	}
 }
 
 export { MeetingApi };

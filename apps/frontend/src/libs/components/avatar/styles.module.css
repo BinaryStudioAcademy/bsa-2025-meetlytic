@@ -13,6 +13,11 @@
 	height: 88px;
 }
 
+.avatar-mobile {
+	width: 34px;
+	height: 34px;
+}
+
 .avatar-main {
 	padding: 3px;
 	border-color: var(--color-brand);

@@ -31,9 +31,9 @@ import {
 import styles from "./styles.module.css";
 
 const MeetingDetails: React.FC = () => {
+	const dispatch = useAppDispatch();
 	const { id } = useParams<{ id: string }>();
 	const [searchParameters] = useSearchParams();
-	const dispatch = useAppDispatch();
 
 	const { dataStatus, meeting } = useAppSelector(
 		(state) => state.meetingDetails,

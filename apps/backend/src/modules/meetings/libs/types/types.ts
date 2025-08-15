@@ -12,5 +12,9 @@ export {
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingTranscriptionGetAllResponseDto,
+	type MeetingTranscriptionRequestDto,
+	type MeetingTranscriptionResponseDto,
 	type MeetingUpdateRequestDto,
+	type MeetingUpdateTranscriptionRequestDto,
 } from "@meetlytic/shared";

@@ -2,7 +2,13 @@ import { spawn } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 
-import { type Logger, type OpenAI } from "~/libs/types/types.js";
+import { SocketEvent } from "~/libs/enums/enums.js";
+import {
+	type BaseConfig,
+	type BaseSocketClient,
+	type Logger,
+	type OpenAI,
+} from "~/libs/types/types.js";
 
 import { AudioRecorderEvent } from "./libs/enums/enums.js";
 import {
@@ -12,26 +18,32 @@ import {
 
 class BaseAudioRecorder implements AudioRecorder {
 	private chunkDuration: number;
+	private config: BaseConfig;
 	private ffmpegPath: string;
 	private isRecording = false;
 	private logger: Logger;
 	private openAI: OpenAI;
 	private outputDir: string;
+	private socketClient: BaseSocketClient;
 	private useMp3 = true;
 	private VOLUME_RE = /mean[_ ]volume:\s*(-?\d+(?:\.\d+)?)\s*dB/i;
 
 	public constructor({
 		chunkDuration,
+		config,
 		ffmpegPath,
 		logger,
 		openAI,
 		outputDir,
+		socketClient,
 	}: AudioRecorderOptions) {
 		this.chunkDuration = chunkDuration;
+		this.config = config;
 		this.ffmpegPath = ffmpegPath;
 		this.outputDir = outputDir;
-		this.openAI = openAI;
 		this.logger = logger;
+		this.openAI = openAI;
+		this.socketClient = socketClient;
 	}
 
 	private logChunkStart(filePath: string, type: string): void {
@@ -115,12 +127,22 @@ class BaseAudioRecorder implements AudioRecorder {
 				this.recordNextChunk();
 			}
 
-			this.openAI.transcribe(filePath).catch((error: unknown) => {
-				this.logger.error(String(error));
-			});
+			void this.transcribeAndSend(filePath);
 		});
 	}
 
+	private transcribeAndSend = async (filePath: string): Promise<void> => {
+		try {
+			const chunkText = await this.openAI.transcribe(filePath);
+
+			this.socketClient.emit(SocketEvent.TRANSCRIBE, {
+				chunkText,
+				meetingId: this.config.ENV.ZOOM.MEETING_ID,
+			});
+		} catch (error: unknown) {
+			this.logger.error(`[OPENAI][TRANSCRIBE_ERROR] ${String(error)}`);
+		}
+	};
 	public start(): void {
 		if (this.isRecording) {
 			this.logger.warn("[+] Already recording: ignoring start()");

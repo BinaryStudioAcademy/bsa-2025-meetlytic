@@ -34,8 +34,10 @@ class MeetingRepository implements Repository<MeetingEntity> {
 		return meeting ? MeetingEntity.initialize(meeting) : null;
 	}
 
-	public async findAll(): Promise<MeetingEntity[]> {
-		const meetings = await this.meetingModel.query().execute();
+	public async findAll(
+		query: Record<string, unknown>,
+	): Promise<MeetingEntity[]> {
+		const meetings = await this.meetingModel.query().where(query).execute();
 
 		return meetings.map((meeting) => MeetingEntity.initialize(meeting));
 	}

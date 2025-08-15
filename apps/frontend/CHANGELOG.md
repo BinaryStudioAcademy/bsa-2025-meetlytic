@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.5.0...frontend-v1.6.0) (2025-08-15)
+
+
+### Features
+
+* add layout component mobile responsiveness ml-155 ([#181](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/181)) ([4c216fd](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/4c216fd8ff71b44f73663503461594d1ac060ef2))
+
 ## [1.5.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.4.1...frontend-v1.5.0) (2025-08-14)
 
 

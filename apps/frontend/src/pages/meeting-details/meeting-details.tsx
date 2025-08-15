@@ -2,17 +2,18 @@ import {
 	Button,
 	Icon,
 	Loader,
+	Markdown,
 	Navigate,
 	PlayerTrack,
 	SearchInput,
 } from "~/libs/components/components.js";
-import { ZERO_LENGTH } from "~/libs/constants/constants.js";
 import {
 	AppRoute,
 	DataStatus,
 	MeetingErrorMessage,
+	NotificationMessage,
 } from "~/libs/enums/enums.js";
-import { formatDate, getOffsetHours } from "~/libs/helpers/helpers.js";
+import { formatDate } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
@@ -23,9 +24,13 @@ import {
 	useSearchParams,
 } from "~/libs/hooks/hooks.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
+import { rehypeSanitize } from "~/libs/plugins/plugins.js";
+import { DEFAULT_SEARCH_VALUE } from "~/modules/meeting-details/libs/default-values/meeting-details.default-values.js";
 import {
 	actions as meetingDetailsActions,
 	meetingDetailsApi,
+	sanitizeDefaultSchema,
+	searchInputValidationSchema,
 } from "~/modules/meeting-details/meeting-details.js";
 
 import styles from "./styles.module.css";
@@ -35,15 +40,14 @@ const MeetingDetails: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [searchParameters] = useSearchParams();
 
-	const { dataStatus, meeting } = useAppSelector(
+	const { dataStatus, meeting, transcription } = useAppSelector(
 		(state) => state.meetingDetails,
 	);
 	const { user } = useAppSelector((state) => state.auth);
 
 	const { control, errors } = useAppForm({
-		defaultValues: {
-			search: "",
-		},
+		defaultValues: DEFAULT_SEARCH_VALUE,
+		validationSchema: searchInputValidationSchema,
 	});
 
 	useEffect(() => {
@@ -62,9 +66,8 @@ const MeetingDetails: React.FC = () => {
 	}, []);
 
 	const handleShareClick = useCallback(() => {
-		// TODO: !!! Implement handleShareClick logic. Already implemented logic is just for demonstration use and should be changed.
 		if (!meeting || !meeting.id) {
-			notification.error("Meeting data is not available for sharing.");
+			notification.error(NotificationMessage.MEETING_DATA_IS_NOT_AVAILABLE);
 
 			return;
 		}
@@ -74,10 +77,11 @@ const MeetingDetails: React.FC = () => {
 				const { publicUrl } = await meetingDetailsApi.getPublicShareUrl(
 					meeting.id,
 				);
-				void navigator.clipboard.writeText(`http://localhost:3000${publicUrl}`);
-				notification.success("Public link copied to clipboard!");
+				const host = import.meta.env["VITE_APP_HOST"] as string;
+				void navigator.clipboard.writeText(`${host}${publicUrl}`);
+				notification.success(NotificationMessage.PUBLIC_LINK_COPIED_SUCCESS);
 			} catch (error: unknown) {
-				notification.error("Failed to generate share link.");
+				notification.error(NotificationMessage.SHARE_LINK_GENERATION_FAILED);
 
 				throw error;
 			}
@@ -86,13 +90,8 @@ const MeetingDetails: React.FC = () => {
 		void shareMeeting();
 	}, [meeting]);
 
-	const handleExportClick = useCallback(() => {
-		// TODO: implement handleExportClick logic
-		return;
-	}, []);
-
 	if (!id || dataStatus === DataStatus.REJECTED) {
-		return <Navigate replace to={AppRoute.ANY} />;
+		return <Navigate replace to={AppRoute.NOT_FOUND} />;
 	}
 
 	if (dataStatus === DataStatus.PENDING) {
@@ -107,20 +106,12 @@ const MeetingDetails: React.FC = () => {
 		);
 	}
 
-	const actionItemsArray = meeting.actionItems
-		? meeting.actionItems
-				.split(".")
-				.map((item) => item.trim())
-				.filter((item) => item.length > ZERO_LENGTH)
-		: [];
-
 	return (
 		<>
 			<div className={styles["meeting-details"]}>
 				<div className={styles["meeting-details__header"]}>
 					<h1 className={styles["meeting-details__title"]}>
-						Owner {meeting.ownerId}{" "}
-						{getOffsetHours(new Date(meeting.createdAt))} |{" "}
+						Meeting #{meeting.id}{" "}
 						{formatDate(new Date(meeting.createdAt), "D MMMM hA")}
 					</h1>
 					<div className={styles["meeting-details__actions"]}>
@@ -132,7 +123,7 @@ const MeetingDetails: React.FC = () => {
 								<Icon className={styles["action-button__share"]} name="share" />
 							</button>
 						)}
-						<Button label="Export" onClick={handleExportClick} />
+						<Button label="Export" />
 					</div>
 				</div>
 
@@ -152,19 +143,7 @@ const MeetingDetails: React.FC = () => {
 							</div>
 						</div>
 						<div className={styles["transcription-area"]}>
-							<p className={styles["transcription-text"]}>
-								Good afternoon, everyone. Today, we are here to discuss last
-								weeks sales. Today, we are here to discuss last weeks sales.
-								Today, we are here to discuss last weeks sales. Good afternoon,
-								everyone. Today, we are here to discuss last weeks sales. Today,
-								we are here to discuss last weeks sales. Today, we are here to
-								discuss last weeks sales. Good afternoon, everyone. Today, we
-								are here to discuss last weeks sales. Today, we are here to
-								discuss last weeks sales. Today, we are here to discuss last
-								weeks sales. Good afternoon, everyone. Today, we are here to
-								discuss last weeks sales. Today, we are here to discuss last
-								weeks sales. Today, we are here to discuss last weeks sales.
-							</p>
+							<p className={styles["transcription-text"]}>{transcription}</p>
 						</div>
 					</div>
 
@@ -174,10 +153,16 @@ const MeetingDetails: React.FC = () => {
 								<div className={styles["panel-header__text"]}>SUMMARY</div>
 							</div>
 							<div className={styles["summary-area"]}>
-								<p className={styles["summary-text"]}>
-									{meeting.summary ||
-										MeetingErrorMessage.MEETING_SUMMARY_NOT_AVAILABLE}
-								</p>
+								<div className={styles["summary-text"]}>
+									<Markdown
+										rehypePlugins={[
+											[rehypeSanitize, { schema: sanitizeDefaultSchema }],
+										]}
+									>
+										{meeting.summary ||
+											MeetingErrorMessage.MEETING_SUMMARY_NOT_AVAILABLE}
+									</Markdown>
+								</div>
 							</div>
 						</div>
 
@@ -185,20 +170,18 @@ const MeetingDetails: React.FC = () => {
 							<div className={styles["panel-header"]}>
 								<div className={styles["panel-header__text"]}>ACTION ITEMS</div>
 							</div>
-							<ul className={styles["action-items__list"]}>
-								{actionItemsArray.length > ZERO_LENGTH ? (
-									actionItemsArray.map((item, index) => (
-										<li className={styles["action-items__text"]} key={index}>
-											<span className={styles["action-item-dot"]}></span>
-											{item}
-										</li>
-									))
-								) : (
-									<li className={styles["action-items__text"]}>
-										{MeetingErrorMessage.MEETING_ACTION_ITEMS_NOT_AVAILABLE}
-									</li>
-								)}
-							</ul>
+							<div className={styles["action-items-area"]}>
+								<div className={styles["action-items-text"]}>
+									<Markdown
+										rehypePlugins={[
+											[rehypeSanitize, { schema: sanitizeDefaultSchema }],
+										]}
+									>
+										{meeting.actionItems ||
+											MeetingErrorMessage.MEETING_ACTION_ITEMS_NOT_AVAILABLE}
+									</Markdown>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

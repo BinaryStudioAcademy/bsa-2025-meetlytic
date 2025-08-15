@@ -2,6 +2,7 @@ const AppRoute = {
 	ANY: "*",
 	MEETINGS: "/meetings",
 	MEETINGS_$ID: "/meetings/:id",
+	NOT_FOUND: "/404",
 	PROFILE: "/profile",
 	PUBLIC_MEETINGS_$ID: "public/meetings/:id",
 	ROOT: "/",

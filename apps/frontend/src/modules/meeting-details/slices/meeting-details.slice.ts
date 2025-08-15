@@ -9,11 +9,13 @@ import { getMeetingDetailsById } from "./actions.js";
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
 	meeting: MeetingDetailedResponseDto | null;
+	transcription: null | string;
 };
 
 const initialState: State = {
 	dataStatus: DataStatus.IDLE,
 	meeting: null,
+	transcription: null,
 };
 
 const { actions, name, reducer } = createSlice({

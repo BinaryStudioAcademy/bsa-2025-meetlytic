@@ -16,4 +16,8 @@ export {
 	type MeetingDetailsRequestDto,
 	type MeetingGetPublicUrlResponseDto,
 } from "./libs/types/types.js";
+export {
+	sanitizeDefaultSchema,
+	searchInputValidationSchema,
+} from "./libs/validation-schemas/validation-schemas.js";
 export { actions, reducer } from "./slices/meeting-details.js";

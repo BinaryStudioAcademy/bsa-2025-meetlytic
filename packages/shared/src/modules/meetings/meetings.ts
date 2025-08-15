@@ -16,4 +16,5 @@ export {
 export {
 	meetingCreate as meetingCreateValidationSchema,
 	meetingUpdate as meetingUpdateValidationSchema,
+	searchInputValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";

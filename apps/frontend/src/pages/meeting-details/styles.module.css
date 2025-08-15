@@ -109,7 +109,7 @@
 	border-radius: var(--border-radius-lg);
 }
 
-.action-items__list {
+.action-items-area {
 	padding: 20px;
 	margin: 0;
 	list-style: none;
@@ -117,7 +117,7 @@
 	border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
 }
 
-.action-items__text {
+.action-items-text {
 	display: flex;
 	gap: 10px;
 	align-items: flex-start;

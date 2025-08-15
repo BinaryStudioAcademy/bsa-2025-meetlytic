@@ -7,6 +7,7 @@ const MeetingErrorMessage = {
 	MEETING_FAILED_TO_CREATE: "Failed to create a meeting",
 	MEETING_NOT_FOUND: "Meeting not found",
 	MEETING_SUMMARY_NOT_AVAILABLE: "Meeting summary not available.",
+	SEARCH_NOT_EMPTY: "Search input cannot be empty.",
 	UPDATE_FAILED: "Failed to update meeting",
 } as const;
 

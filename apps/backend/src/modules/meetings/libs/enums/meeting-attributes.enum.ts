@@ -1,0 +1,11 @@
+const MeetingAttribute = {
+	HOST: "host",
+	ID: "id",
+	INSTANCE_ID: "instanceId",
+	MEETING_ID: "meetingId",
+	MEETING_PASSWORD: "meetingPassword",
+	OWNER_ID: "ownerId",
+	STATUS: "status",
+} as const;
+
+export { MeetingAttribute };

@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.5.0...shared-v1.6.0) (2025-08-15)
+
+
+### Features
+
+* add web socket ml-108 ([#179](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/179)) ([368beb6](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/368beb6345dcc630905a83a591aa35a8826030c3))
+
+
+### Bug Fixes
+
+* first and last names validation rules ml-194 ([#201](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/201)) ([97509a4](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/97509a477b30f913110caf193a5e7f936ed402e4))
+
 ## [1.5.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.4.0...shared-v1.5.0) (2025-08-14)
 
 

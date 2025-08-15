@@ -21,29 +21,36 @@ import {
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingTranscriptionRequestDto,
+	type MeetingTranscriptionResponseDto,
 	type MeetingUpdateRequestDto,
 } from "./libs/types/types.js";
+import { type MeetingTranscriptionService } from "./meeting-transcription.service.js";
 import { MeetingEntity } from "./meetings.entity.js";
 import { type MeetingRepository } from "./meetings.repository.js";
 
 type Constructor = {
 	cloudFormation: CloudFormation;
 	meetingRepository: MeetingRepository;
+	meetingTranscriptionService: MeetingTranscriptionService;
 	sharedJwt: BaseToken<SharedJwtPayload>;
 };
 
 class MeetingService implements Service<MeetingResponseDto> {
 	private cloudFormation: CloudFormation;
 	private meetingRepository: MeetingRepository;
+	private meetingTranscriptionService: MeetingTranscriptionService;
 	private sharedJwt: BaseToken<SharedJwtPayload>;
 
 	public constructor({
 		cloudFormation,
 		meetingRepository,
+		meetingTranscriptionService,
 		sharedJwt,
 	}: Constructor) {
 		this.cloudFormation = cloudFormation;
 		this.meetingRepository = meetingRepository;
+		this.meetingTranscriptionService = meetingTranscriptionService;
 		this.sharedJwt = sharedJwt;
 	}
 
@@ -140,6 +147,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		return meeting.toDetailedObject();
 	}
+
 	public async find(id: number): Promise<MeetingDetailedResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
 
@@ -189,6 +197,18 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return {
 			publicUrl: `${APIPath.PUBLIC_MEETINGS}/${String(id)}?token=${token}`,
 		};
+	}
+
+	public async saveChunk({
+		chunkText,
+		meetingId,
+	}: MeetingTranscriptionRequestDto): Promise<MeetingTranscriptionResponseDto> {
+		const transcription = await this.meetingTranscriptionService.create({
+			chunkText,
+			meetingId,
+		});
+
+		return transcription;
 	}
 
 	public async stopRecording(id: number): Promise<void> {

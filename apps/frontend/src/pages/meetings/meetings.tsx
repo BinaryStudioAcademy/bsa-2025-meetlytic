@@ -23,18 +23,25 @@ const Meetings: React.FC = () => {
 
 	return (
 		<>
-			<MeetingCreationModal />
 			<div className={styles["meetings"]}>
 				<div className={styles["meetings__header"]}>
-					<Avatar size={AvatarSize.LARGE} />
-					<div className={styles["meetings__header-text"]}>
-						<h5 className={styles["meetings__header-name"]}>
-							{userEmail ?? "Username"}
-						</h5>
-						<h4 className={styles["meetings__header-library"]}>
-							Personal Library
-						</h4>
+					<div className={styles["meetings__avatar-wrapper"]}>
+						<div className={styles["variable-component__mobile"]}>
+							<Avatar size={AvatarSize.MEDIUM} />
+						</div>
+						<div className={styles["variable-component__desktop"]}>
+							<Avatar size={AvatarSize.LARGE} />
+						</div>
+						<div className={styles["meetings__header-text"]}>
+							<h5 className={styles["meetings__header-name"]}>
+								{userEmail ?? "Username"}
+							</h5>
+							<h4 className={styles["meetings__header-library"]}>
+								Personal Library
+							</h4>
+						</div>
 					</div>
+					<MeetingCreationModal />
 				</div>
 				<div className={styles["meetings__list"]}>
 					{meetings.map((meeting) => {

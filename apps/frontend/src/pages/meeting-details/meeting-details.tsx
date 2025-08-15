@@ -24,7 +24,7 @@ import {
 	useSearchParams,
 } from "~/libs/hooks/hooks.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
-import { rehypeSanitize } from "~/libs/plugins/plugins.js";
+import { rehypeSanitize, remarkGfm } from "~/libs/plugins/plugins.js";
 import { DEFAULT_SEARCH_VALUE } from "~/modules/meeting-details/libs/default-values/meeting-details.default-values.js";
 import {
 	actions as meetingDetailsActions,
@@ -111,7 +111,7 @@ const MeetingDetails: React.FC = () => {
 			<div className={styles["meeting-details"]}>
 				<div className={styles["meeting-details__header"]}>
 					<h1 className={styles["meeting-details__title"]}>
-						Meeting #{meeting.id}{" "}
+						Meeting #{meeting.id} |{" "}
 						{formatDate(new Date(meeting.createdAt), "D MMMM hA")}
 					</h1>
 					<div className={styles["meeting-details__actions"]}>
@@ -158,6 +158,7 @@ const MeetingDetails: React.FC = () => {
 										rehypePlugins={[
 											[rehypeSanitize, { schema: sanitizeDefaultSchema }],
 										]}
+										remarkPlugins={[remarkGfm]}
 									>
 										{meeting.summary ||
 											MeetingErrorMessage.MEETING_SUMMARY_NOT_AVAILABLE}
@@ -172,10 +173,12 @@ const MeetingDetails: React.FC = () => {
 							</div>
 							<div className={styles["action-items-area"]}>
 								<div className={styles["action-items-text"]}>
+									<span className={styles["action-item-dot"]} />
 									<Markdown
 										rehypePlugins={[
 											[rehypeSanitize, { schema: sanitizeDefaultSchema }],
 										]}
+										remarkPlugins={[remarkGfm]}
 									>
 										{meeting.actionItems ||
 											MeetingErrorMessage.MEETING_ACTION_ITEMS_NOT_AVAILABLE}

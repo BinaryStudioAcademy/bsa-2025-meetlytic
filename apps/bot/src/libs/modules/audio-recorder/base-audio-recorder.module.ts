@@ -118,11 +118,6 @@ class BaseAudioRecorder implements AudioRecorder {
 
 			for (const line of lines) {
 				this.logVolume(line);
-				// f (/error|invalid|failed|no such/i.test(line)) {
-				// 	this.logger.error(`[FFMPEG][ERROR?] ${line}`);
-				// } else if (line && !line.startsWith("size=")) {
-				// 	this.logger.debug(`[FFMPEG][INFO] ${line}`);
-				// }
 			}
 		});
 
@@ -174,16 +169,25 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		const buffer = readFileSync(filePath);
 
-		const uploaded: UploadResult = await this.s3.upload({
+		const uploadResult: UploadResult = await this.s3.upload({
 			body: buffer,
 			contentType,
 			fileName: expectedName,
 			prefix,
 		});
 
+		if (uploadResult.url) {
+			this.socketClient.emit(SocketEvent.AUDIO_SAVE, {
+				fileName: expectedName,
+				fileUrl: uploadResult.url,
+				meetingId: this.config.ENV.ZOOM.MEETING_ID,
+			});
+			this.logger.info(`[WS] Emitted audio:save file=${expectedName}`);
+		}
+
 		return {
 			localPath: filePath,
-			s3: uploaded,
+			s3: uploadResult,
 		};
 	}
 

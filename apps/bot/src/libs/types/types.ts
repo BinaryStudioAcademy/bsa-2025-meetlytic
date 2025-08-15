@@ -1,4 +1,5 @@
 export {
+	type MeetingAudioRequestDto,
 	type MeetingTranscriptionRequestDto,
 	type ValueOf,
 } from "@meetlytic/shared";

@@ -28,11 +28,23 @@ class BaseS3 {
 	private bucketName: string;
 	private client: S3Client;
 	private logger: Logger;
+	private region: string;
 
 	public constructor({ bucketName, credentials, logger, region }: Constructor) {
 		this.bucketName = bucketName;
 		this.logger = logger;
+		this.region = region;
 		this.client = new S3Client({ credentials, region });
+	}
+
+	private buildHttpsUrl(key: string): string {
+		const host = `s3.${this.region}.amazonaws.com`;
+
+		if (this.bucketName.includes(".")) {
+			return `https://${host}/${this.bucketName}/${key}`;
+		}
+
+		return `https://${this.bucketName}.${host}/${key}`;
 	}
 
 	private buildKey(folderPrefix: string, originalFileName: string): string {
@@ -79,6 +91,7 @@ class BaseS3 {
 		return {
 			etag: uploadResultAws.ETag ?? undefined,
 			key: objectKey,
+			url: this.buildHttpsUrl(objectKey),
 			versionId: uploadResultAws.VersionId ?? undefined,
 		};
 	}

@@ -6,7 +6,7 @@ export { useCarousel } from "./use-carousel/use-carousel.hook.js";
 export { useLandingAnimation } from "./use-landing-background-animation/use-landing-background-animation.hook.js";
 export { useLogout } from "./use-logout/use-logout.hook.js";
 export { useProgress } from "./use-progress/use-progress.js";
-export { animate, inView, useInView } from "motion/react";
+export { useInView } from "motion/react";
 export { useCallback, useEffect, useMemo, useRef, useState } from "react";
 export { useController as useFormController } from "react-hook-form";
 export { useLocation, useNavigate, useParams } from "react-router-dom";

@@ -1,11 +1,5 @@
-import { getValidClassNames } from "~/libs/helpers/helpers.js";
-import {
-	animate,
-	inView,
-	useEffect,
-	useRef,
-	useState,
-} from "~/libs/hooks/hooks.js";
+import { animate, getValidClassNames, inView } from "~/libs/helpers/helpers.js";
+import { useEffect, useRef, useState } from "~/libs/hooks/hooks.js";
 
 import { type Feature } from "../../types/types.js";
 import styles from "./styles.module.css";

@@ -4,8 +4,16 @@ export { AvatarSize } from "./avatar-size.enum.js";
 export { AvatarType } from "./avatar-type.enum.js";
 export { ButtonSize } from "./button-size.enum.js";
 export { ButtonVariant } from "./button-variant.enum.js";
+export { CarouselConfig } from "./carousel-config.enum.js";
 export { DataStatus } from "./data-status.enum.js";
+export { DomEvent } from "./dom-event.enum.js";
 export { InputPasswordType } from "./input-password.enum.js";
+export { LandingAnchor } from "./landing-anchor.enum.js";
+export {
+	LandingBgRingType,
+	LandingBgSide,
+} from "./landing-background.enums.js";
+export { LandingTestimonialConfig } from "./landing-testimonial.enum.js";
 export { LoaderIconConfig } from "./loader-icon-config.enum.js";
 export { LoaderProgressConfig } from "./loader-progress-config.enum.js";
 export { LogoSize } from "./logo-size.enum.js";

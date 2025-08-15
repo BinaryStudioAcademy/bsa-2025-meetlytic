@@ -154,6 +154,8 @@ ORIGIN=$(echo "$SETTINGS_JSON" | jq -r '.origin')
 TEXT_GENERATION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.textGenerationModel')
 TRANSCRIPTION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.transcriptionModel')
 BUCKET_NAME=$(echo"$SETTINGS_JSON" | jq -r '.bucketName')
+PREFIX_AUDIO=$(echo"$SETTINGS_JSON" | jq -r '.prefixAudio')
+CONTENT_TYPE_AUDIO=$(echo"$SETTINGS_JSON" | jq -r '.contentTypeAudio')
 
 if [ -z "$BOT_NAME" ] || [ -z "$MEETING_LINK" ]; then
 echo "Error: Missing required settings in JSON."
@@ -192,8 +194,9 @@ AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
 AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
 
 # S3
-S3_BUCKET_NAME=meetlytic-s3
-S3_PREFIX_AUDIO=audio
+S3_BUCKET_NAME="$BUCKET_NAME"
+S3_PREFIX_AUDIO="$PREFIX_AUDIO"
+S3_CONTET_TYPE_AUDIO="$CONTENT_TYPE_AUDIO"
 
 EOF
 

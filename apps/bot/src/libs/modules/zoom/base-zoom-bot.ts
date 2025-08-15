@@ -131,7 +131,7 @@ class BaseZoomBot {
 		return rawPasscode?.replace(/^\d/, "") || "";
 	}
 
-	private getMeetingId(): string {
+	private getMeetingId(): null | string {
 		const ONE = 1;
 
 		const url = new URL(this.config.ENV.ZOOM.MEETING_LINK);
@@ -142,7 +142,7 @@ class BaseZoomBot {
 			return regexMatchArray[ONE];
 		}
 
-		return "unknown";
+		return null;
 	}
 
 	private async getParticipantsCount(): Promise<number> {
@@ -280,7 +280,6 @@ class BaseZoomBot {
 				this.logger.info(ZoomBotMessages.ONLY_ONE_PARTICIPANT_DETECTED);
 				this.audioRecorder.stop();
 				await this.audioRecorder.stopFullMeetingRecording();
-				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
 				await this.leaveMeeting();
 				this.shouldMonitor = false;
 			}
@@ -316,9 +315,12 @@ class BaseZoomBot {
 			});
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
 			this.audioRecorder.start();
-			this.audioRecorder.startFullMeetingRecording(meetingId);
-			fullStarted = true;
-			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
+
+			if (meetingId) {
+				this.audioRecorder.startFullMeetingRecording(meetingId);
+				fullStarted = true;
+			}
+
 			await delay(Timeout.FIFTEEN_SECONDS);
 			await this.monitorParticipants();
 			fullStopped = true;
@@ -332,7 +334,7 @@ class BaseZoomBot {
 			}
 
 			try {
-				if (fullStarted) {
+				if (fullStarted && meetingId) {
 					const audioPrefix = this.config.ENV.S3.PREFIX_AUDIO;
 					const prefix = `${audioPrefix}/${meetingId}`;
 					const contentType = "audio/mpeg";

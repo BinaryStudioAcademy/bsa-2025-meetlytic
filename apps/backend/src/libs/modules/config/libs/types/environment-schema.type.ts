@@ -32,6 +32,11 @@ type EnvironmentSchema = {
 		TEXT_GENERATION_MODEL: string;
 		TRANSCRIPTION_MODEL: string;
 	};
+	S3: {
+		BUCKET_NAME: string;
+		CONTET_TYPE_AUDIO: string;
+		PREFIX_AUDIO: string;
+	};
 	SHARED_TOKEN: {
 		ALGORITHM: string;
 		EXPIRES_IN: string;

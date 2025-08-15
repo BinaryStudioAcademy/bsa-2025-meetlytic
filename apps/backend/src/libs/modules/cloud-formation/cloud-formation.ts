@@ -6,10 +6,15 @@ import { BaseCloudFormation } from "./base-cloud-formation.module.js";
 const {
 	ACCESS_KEY_ID: accessKeyId,
 	AMI_ID: imageId,
-	BUCKET_NAME: bucketName,
 	REGION: region,
 	SECRET_ACCESS_KEY: secretAccessKey,
 } = config.ENV.AWS;
+
+const {
+	BUCKET_NAME: bucketName,
+	CONTET_TYPE_AUDIO: contentTypeAudio,
+	PREFIX_AUDIO: prefixAudio,
+} = config.ENV.S3;
 
 const { ORIGIN: origin } = config.ENV.APP;
 
@@ -30,8 +35,10 @@ const cloudFormation = new BaseCloudFormation({
 		accessKeyId,
 		botName,
 		bucketName,
+		contentTypeAudio,
 		openAIKey,
 		origin,
+		prefixAudio,
 		region,
 		secretAccessKey,
 		textGenerationModel,

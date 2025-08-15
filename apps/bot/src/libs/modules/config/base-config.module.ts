@@ -103,6 +103,12 @@ class BaseConfig implements Config {
 					env: "S3_BUCKET_NAME",
 					format: String,
 				},
+				CONTET_TYPE_AUDIO: {
+					default: "audio/mpeg",
+					doc: "Content type for audio files",
+					env: "S3_CONTET_TYPE_AUDIO",
+					format: String,
+				},
 				PREFIX_AUDIO: {
 					default: null,
 					doc: "S3 Prefix for audio files",

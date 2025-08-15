@@ -83,7 +83,7 @@ class BaseS3 {
 			new PutObjectCommand({
 				Body: parameters.body,
 				Bucket: this.bucketName,
-				ContentType: parameters.contentType ?? "audio/mpeg",
+				ContentType: parameters.contentType,
 				Key: objectKey,
 			}),
 		);

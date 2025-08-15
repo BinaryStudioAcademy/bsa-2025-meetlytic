@@ -1,6 +1,6 @@
 import { animate, getValidClassNames, inView } from "~/libs/helpers/helpers.js";
 import { useEffect, useRef, useState } from "~/libs/hooks/hooks.js";
-import { type Feature } from "~/modules/landing/libs/types/types.js";
+import { type Feature } from "~/modules/landing/landing.js";
 
 import styles from "./styles.module.css";
 

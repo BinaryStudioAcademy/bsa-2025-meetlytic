@@ -6,11 +6,9 @@ import {
 	LandingBgRingMinSpeed,
 	LandingBgRingSize,
 	LandingBgRingSpeedScale,
-} from "~/modules/landing/libs/constants/constants.js";
-import {
 	type RingConfig,
 	type RingType,
-} from "~/modules/landing/libs/types/types.js";
+} from "~/modules/landing/landing.js";
 
 import { clamp } from "./helpers.js";
 

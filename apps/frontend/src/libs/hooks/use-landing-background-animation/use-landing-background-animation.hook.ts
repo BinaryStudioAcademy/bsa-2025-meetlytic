@@ -5,8 +5,10 @@ import {
 	handleCollisions,
 } from "~/libs/helpers/helpers.js";
 import { useCallback, useEffect, useRef } from "~/libs/hooks/hooks.js";
-import { LandingBgNumeric } from "~/modules/landing/libs/constants/constants.js";
-import { type RingConfig } from "~/modules/landing/libs/types/types.js";
+import {
+	LandingBgNumeric,
+	type RingConfig,
+} from "~/modules/landing/landing.js";
 
 const useLandingAnimation = (
 	isInView: boolean,

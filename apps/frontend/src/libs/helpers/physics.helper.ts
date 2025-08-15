@@ -2,8 +2,8 @@ import {
 	LandingBgCollision,
 	LandingBgNumeric,
 	LandingBgPhysics,
-} from "~/modules/landing/libs/constants/constants.js";
-import { type RingConfig } from "~/modules/landing/libs/types/types.js";
+	type RingConfig,
+} from "~/modules/landing/landing.js";
 
 const clamp = (value: number, minValue: number, maxValue: number): number =>
 	Math.max(minValue, Math.min(maxValue, value));

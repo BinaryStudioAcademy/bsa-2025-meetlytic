@@ -13,8 +13,8 @@ import {
 import {
 	LandingBgInit,
 	LandingBgNumeric,
-} from "~/modules/landing/libs/constants/constants.js";
-import { type RingConfig } from "~/modules/landing/libs/types/types.js";
+	type RingConfig,
+} from "~/modules/landing/landing.js";
 
 import styles from "./styles.module.css";
 

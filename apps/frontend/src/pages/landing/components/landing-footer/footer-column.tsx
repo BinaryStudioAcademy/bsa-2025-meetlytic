@@ -1,4 +1,4 @@
-import { type LinkGroup } from "~/modules/landing/libs/types/types.js";
+import { type LinkGroup } from "~/modules/landing/landing.js";
 
 import styles from "./styles.module.css";
 

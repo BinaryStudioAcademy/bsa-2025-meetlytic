@@ -10,12 +10,12 @@ import {
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
-
 import {
-	LANDING_BG_INIT,
-	LANDING_BG_NUMERIC,
-} from "../../constants/constants.js";
-import { type RingConfig } from "../../types/types.js";
+	LandingBgInit,
+	LandingBgNumeric,
+} from "~/modules/landing/libs/constants/constants.js";
+import { type RingConfig } from "~/modules/landing/libs/types/types.js";
+
 import styles from "./styles.module.css";
 
 const LandingBackground: React.FC = () => {
@@ -26,7 +26,7 @@ const LandingBackground: React.FC = () => {
 	useEffect(() => {
 		const root = scope.current;
 
-		if (root && rings.length === LANDING_BG_NUMERIC.ZERO) {
+		if (root && rings.length === LandingBgNumeric.ZERO) {
 			setRings(initRings({ ringLarge, ringMiddle, ringSmall, root }));
 		}
 	}, [rings.length]);
@@ -42,7 +42,7 @@ const LandingBackground: React.FC = () => {
 			{Object.values(LandingBgRingType)
 				.filter((v) => typeof v === "string")
 				.flatMap((type) =>
-					Array.from({ length: LANDING_BG_INIT.RINGS_PER_SIZE }, (_, index) => {
+					Array.from({ length: LandingBgInit.RINGS_PER_SIZE }, (_, index) => {
 						let source: string;
 
 						switch (type) {
@@ -67,11 +67,9 @@ const LandingBackground: React.FC = () => {
 								className={styles["landing__ring"]}
 								data-ring={type}
 								decoding="async"
-								fetchPriority={
-									index === LANDING_BG_NUMERIC.ZERO ? "high" : "low"
-								}
+								fetchPriority={index === LandingBgNumeric.ZERO ? "high" : "low"}
 								key={`${type}-${String(index)}`}
-								loading={index === LANDING_BG_NUMERIC.ZERO ? "eager" : "lazy"}
+								loading={index === LandingBgNumeric.ZERO ? "eager" : "lazy"}
 								src={source}
 							/>
 						);

@@ -1,4 +1,5 @@
-import { FEATURE_DATA } from "../../constants/constants.js";
+import { FEATURE_DATA } from "~/modules/landing/libs/constants/constants.js";
+
 import { FeatureItem } from "./feature-item.js";
 import styles from "./styles.module.css";
 

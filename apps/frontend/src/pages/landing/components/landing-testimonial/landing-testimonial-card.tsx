@@ -1,4 +1,5 @@
-import { type Testimonial } from "../../types/types.js";
+import { type Testimonial } from "~/modules/landing/libs/types/types.js";
+
 import styles from "./styles.module.css";
 
 type Properties = { testimonial: Testimonial };

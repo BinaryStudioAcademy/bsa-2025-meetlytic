@@ -1,9 +1,9 @@
 import {
-	LANDING_BG_COLLISION,
-	LANDING_BG_NUMERIC,
-	LANDING_BG_PHYSICS,
-} from "../../pages/landing/constants/constants.js";
-import { type RingConfig } from "../../pages/landing/types/types.js";
+	LandingBgCollision,
+	LandingBgNumeric,
+	LandingBgPhysics,
+} from "~/modules/landing/libs/constants/constants.js";
+import { type RingConfig } from "~/modules/landing/libs/types/types.js";
 
 const clamp = (value: number, minValue: number, maxValue: number): number =>
 	Math.max(minValue, Math.min(maxValue, value));
@@ -11,7 +11,7 @@ const clamp = (value: number, minValue: number, maxValue: number): number =>
 const handleCollisions = (rings: RingConfig[]): void => {
 	for (let index = 0; index < rings.length; index++) {
 		for (
-			let index_ = index + LANDING_BG_NUMERIC.ONE;
+			let index_ = index + LandingBgNumeric.ONE;
 			index_ < rings.length;
 			index_++
 		) {
@@ -27,41 +27,35 @@ const handleCollisions = (rings: RingConfig[]): void => {
 			let ringBPositionX = ringB.positionX;
 			let ringBPositionY = ringB.positionY;
 
-			const ringACenterX =
-				ringAPositionX + ringA.size / LANDING_BG_NUMERIC.HALF;
-			const ringACenterY =
-				ringAPositionY + ringA.size / LANDING_BG_NUMERIC.HALF;
-			const ringBCenterX =
-				ringBPositionX + ringB.size / LANDING_BG_NUMERIC.HALF;
-			const ringBCenterY =
-				ringBPositionY + ringB.size / LANDING_BG_NUMERIC.HALF;
+			const ringACenterX = ringAPositionX + ringA.size / LandingBgNumeric.HALF;
+			const ringACenterY = ringAPositionY + ringA.size / LandingBgNumeric.HALF;
+			const ringBCenterX = ringBPositionX + ringB.size / LandingBgNumeric.HALF;
+			const ringBCenterY = ringBPositionY + ringB.size / LandingBgNumeric.HALF;
 
 			const centerDeltaX = ringBCenterX - ringACenterX;
 			const centerDeltaY = ringBCenterY - ringACenterY;
 			const centerDistance = Math.hypot(centerDeltaX, centerDeltaY);
 			const minCenterDistance =
-				(ringA.size + ringB.size) / LANDING_BG_NUMERIC.HALF;
+				(ringA.size + ringB.size) / LandingBgNumeric.HALF;
 
 			if (centerDistance < minCenterDistance) {
-				const normalX =
-					centerDeltaX / (centerDistance || LANDING_BG_NUMERIC.ONE);
-				const normalY =
-					centerDeltaY / (centerDistance || LANDING_BG_NUMERIC.ONE);
+				const normalX = centerDeltaX / (centerDistance || LandingBgNumeric.ONE);
+				const normalY = centerDeltaY / (centerDistance || LandingBgNumeric.ONE);
 
 				const maxOverlap =
 					Math.min(ringA.size, ringB.size) *
-					LANDING_BG_COLLISION.MAX_OVERLAP_FRACTION;
+					LandingBgCollision.MAX_OVERLAP_FRACTION;
 				const overlap = Math.min(
 					minCenterDistance -
 						centerDistance +
-						LANDING_BG_COLLISION.OVERLAP_EPSILON,
+						LandingBgCollision.OVERLAP_EPSILON,
 					maxOverlap,
 				);
 
-				ringAPositionX -= (normalX * overlap) / LANDING_BG_NUMERIC.HALF;
-				ringAPositionY -= (normalY * overlap) / LANDING_BG_NUMERIC.HALF;
-				ringBPositionX += (normalX * overlap) / LANDING_BG_NUMERIC.HALF;
-				ringBPositionY += (normalY * overlap) / LANDING_BG_NUMERIC.HALF;
+				ringAPositionX -= (normalX * overlap) / LandingBgNumeric.HALF;
+				ringAPositionY -= (normalY * overlap) / LandingBgNumeric.HALF;
+				ringBPositionX += (normalX * overlap) / LandingBgNumeric.HALF;
+				ringBPositionY += (normalY * overlap) / LandingBgNumeric.HALF;
 
 				const ringAVelocityAlongNormal =
 					ringA.velocityX * normalX + ringA.velocityY * normalY;
@@ -80,10 +74,10 @@ const handleCollisions = (rings: RingConfig[]): void => {
 				ringB.velocityY +=
 					(ringBVelocityAfter - ringBVelocityAlongNormal) * normalY;
 
-				ringA.velocityX *= LANDING_BG_PHYSICS.DAMPING;
-				ringA.velocityY *= LANDING_BG_PHYSICS.DAMPING;
-				ringB.velocityX *= LANDING_BG_PHYSICS.DAMPING;
-				ringB.velocityY *= LANDING_BG_PHYSICS.DAMPING;
+				ringA.velocityX *= LandingBgPhysics.DAMPING;
+				ringA.velocityY *= LandingBgPhysics.DAMPING;
+				ringB.velocityX *= LandingBgPhysics.DAMPING;
+				ringB.velocityY *= LandingBgPhysics.DAMPING;
 			}
 
 			ringA.positionX = ringAPositionX;
@@ -96,13 +90,13 @@ const handleCollisions = (rings: RingConfig[]): void => {
 	for (const ring of rings) {
 		ring.velocityX = clamp(
 			ring.velocityX,
-			-LANDING_BG_PHYSICS.MAX_SPEED,
-			LANDING_BG_PHYSICS.MAX_SPEED,
+			-LandingBgPhysics.MAX_SPEED,
+			LandingBgPhysics.MAX_SPEED,
 		);
 		ring.velocityY = clamp(
 			ring.velocityY,
-			-LANDING_BG_PHYSICS.MAX_SPEED,
-			LANDING_BG_PHYSICS.MAX_SPEED,
+			-LandingBgPhysics.MAX_SPEED,
+			LandingBgPhysics.MAX_SPEED,
 		);
 	}
 };
@@ -122,29 +116,29 @@ const handleBounds = ({
 		ring.positionX += ring.velocityX * deltaTime;
 		ring.positionY += ring.velocityY * deltaTime;
 
-		const minX = -ring.size * LANDING_BG_PHYSICS.MARGIN;
+		const minX = -ring.size * LandingBgPhysics.MARGIN;
 		const maxX =
 			containerWidth -
-			ring.size * (LANDING_BG_NUMERIC.ONE - LANDING_BG_PHYSICS.MARGIN);
-		const minY = -ring.size * LANDING_BG_PHYSICS.MARGIN;
+			ring.size * (LandingBgNumeric.ONE - LandingBgPhysics.MARGIN);
+		const minY = -ring.size * LandingBgPhysics.MARGIN;
 		const maxY =
 			containerHeight -
-			ring.size * (LANDING_BG_NUMERIC.ONE - LANDING_BG_PHYSICS.MARGIN);
+			ring.size * (LandingBgNumeric.ONE - LandingBgPhysics.MARGIN);
 
 		if (ring.positionX < minX) {
 			ring.positionX = minX;
-			ring.velocityX = Math.abs(ring.velocityX) * LANDING_BG_PHYSICS.DAMPING;
+			ring.velocityX = Math.abs(ring.velocityX) * LandingBgPhysics.DAMPING;
 		} else if (ring.positionX > maxX) {
 			ring.positionX = maxX;
-			ring.velocityX = -Math.abs(ring.velocityX) * LANDING_BG_PHYSICS.DAMPING;
+			ring.velocityX = -Math.abs(ring.velocityX) * LandingBgPhysics.DAMPING;
 		}
 
 		if (ring.positionY < minY) {
 			ring.positionY = minY;
-			ring.velocityY = Math.abs(ring.velocityY) * LANDING_BG_PHYSICS.DAMPING;
+			ring.velocityY = Math.abs(ring.velocityY) * LandingBgPhysics.DAMPING;
 		} else if (ring.positionY > maxY) {
 			ring.positionY = maxY;
-			ring.velocityY = -Math.abs(ring.velocityY) * LANDING_BG_PHYSICS.DAMPING;
+			ring.velocityY = -Math.abs(ring.velocityY) * LandingBgPhysics.DAMPING;
 		}
 	}
 };

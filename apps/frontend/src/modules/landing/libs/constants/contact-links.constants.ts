@@ -1,6 +1,6 @@
 import { AppRoute } from "~/libs/enums/enums.js";
 
-import { type LinkGroup } from "./../types/types.js";
+import { type LinkGroup } from "../types/types.js";
 
 const CONTACT_LINKS: LinkGroup = {
 	links: [

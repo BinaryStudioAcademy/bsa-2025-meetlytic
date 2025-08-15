@@ -1,4 +1,5 @@
-import { type LinkGroup } from "../../types/types.js";
+import { type LinkGroup } from "~/modules/landing/libs/types/types.js";
+
 import styles from "./styles.module.css";
 
 type Properties = {

@@ -1,40 +1,40 @@
-const LANDING_BG_RING_MIN_SPEED = {
+const LandingBgRingMinSpeed = {
 	LARGE: 10,
 	MIDDLE: 16,
 	SMALL: 20,
 } as const;
 
-const LANDING_BG_RING_SIZE = {
+const LandingBgRingSize = {
 	LARGE: 959,
 	MIDDLE: 293,
 	SMALL: 166,
 } as const;
 
-const LANDING_BG_RING_SPEED_SCALE = {
+const LandingBgRingSpeedScale = {
 	LARGE: 0.55,
 	MIDDLE: 1,
 	SMALL: 1.35,
 } as const;
 
-const LANDING_BG_PHYSICS = {
+const LandingBgPhysics = {
 	DAMPING: 0.985,
 	MARGIN: 0.2,
 	MAX_SPEED: 220,
 	SPEED_MULTIPLIER: 2,
 } as const;
 
-const LANDING_BG_COLLISION = {
+const LandingBgCollision = {
 	MAX_OVERLAP_FRACTION: 0.15,
 	OVERLAP_EPSILON: 0.5,
 } as const;
 
-const LANDING_BG_INIT = {
+const LandingBgInit = {
 	INITIAL_SPEED_HALF: 10,
 	INITIAL_SPEED_RANGE: 20,
 	RINGS_PER_SIZE: 3,
 } as const;
 
-const LANDING_BG_NUMERIC = {
+const LandingBgNumeric = {
 	HALF: 2,
 	MS_IN_SECOND: 1000,
 	ONE: 1,
@@ -46,11 +46,11 @@ const LANDING_BG_NUMERIC = {
 } as const;
 
 export {
-	LANDING_BG_COLLISION,
-	LANDING_BG_INIT,
-	LANDING_BG_NUMERIC,
-	LANDING_BG_PHYSICS,
-	LANDING_BG_RING_MIN_SPEED,
-	LANDING_BG_RING_SIZE,
-	LANDING_BG_RING_SPEED_SCALE,
+	LandingBgCollision,
+	LandingBgInit,
+	LandingBgNumeric,
+	LandingBgPhysics,
+	LandingBgRingMinSpeed,
+	LandingBgRingSize,
+	LandingBgRingSpeedScale,
 };

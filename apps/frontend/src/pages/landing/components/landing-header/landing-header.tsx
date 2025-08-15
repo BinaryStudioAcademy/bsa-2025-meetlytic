@@ -7,8 +7,8 @@ import {
 	LogoTheme,
 } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
+import { HEADER_LINKS } from "~/modules/landing/libs/constants/constants.js";
 
-import { HEADER_LINKS } from "../../constants/constants.js";
 import styles from "./styles.module.css";
 
 type Properties = { className?: string };

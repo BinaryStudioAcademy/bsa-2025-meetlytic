@@ -1,13 +1,12 @@
 import { DomEvent } from "~/libs/enums/enums.js";
-import { useCallback, useEffect, useRef } from "~/libs/hooks/hooks.js";
-
-import { LANDING_BG_NUMERIC } from "../../../pages/landing/constants/constants.js";
-import { type RingConfig } from "../../../pages/landing/types/types.js";
 import {
 	applyTransforms,
 	handleBounds,
 	handleCollisions,
-} from "../../helpers/helpers.js";
+} from "~/libs/helpers/helpers.js";
+import { useCallback, useEffect, useRef } from "~/libs/hooks/hooks.js";
+import { LandingBgNumeric } from "~/modules/landing/libs/constants/constants.js";
+import { type RingConfig } from "~/modules/landing/libs/types/types.js";
 
 const useLandingAnimation = (
 	isInView: boolean,
@@ -15,9 +14,9 @@ const useLandingAnimation = (
 	rootReference: { current: HTMLDivElement | null },
 ): void => {
 	const rafReference = useRef<null | number>(null);
-	const lastReference = useRef<number>(LANDING_BG_NUMERIC.ZERO);
+	const lastReference = useRef<number>(LandingBgNumeric.ZERO);
 	const stepReference = useRef<((timestamp: number) => void) | null>(null);
-	const dtReference = useRef<number>(LANDING_BG_NUMERIC.ZERO);
+	const dtReference = useRef<number>(LandingBgNumeric.ZERO);
 
 	const startAnimation = (): void => {
 		if (rafReference.current != null) {
@@ -40,8 +39,8 @@ const useLandingAnimation = (
 
 			const previous = lastReference.current || timestamp;
 			dtReference.current = Math.max(
-				LANDING_BG_NUMERIC.ZERO,
-				(timestamp - previous) / LANDING_BG_NUMERIC.MS_IN_SECOND,
+				LandingBgNumeric.ZERO,
+				(timestamp - previous) / LandingBgNumeric.MS_IN_SECOND,
 			);
 			lastReference.current = timestamp;
 

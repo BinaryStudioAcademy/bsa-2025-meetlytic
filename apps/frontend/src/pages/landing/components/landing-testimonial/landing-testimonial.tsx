@@ -1,9 +1,9 @@
 import { Button } from "~/libs/components/components.js";
 import { LandingTestimonialConfig } from "~/libs/enums/enums.js";
 import { useCallback, useCarousel, useState } from "~/libs/hooks/hooks.js";
+import { TESTIMONIAL_ITEMS } from "~/modules/landing/libs/constants/constants.js";
+import { type Testimonial } from "~/modules/landing/libs/types/testimonial.type.js";
 
-import { TESTIMONIAL_ITEMS } from "../../constants/constants.js";
-import { type Testimonial } from "../../types/testimonial.type.js";
 import { LandingTestimonialCard } from "./landing-testimonial-card.js";
 import styles from "./styles.module.css";
 

@@ -1,4 +1,5 @@
 export {
+	MeetingAudioErrorMessage,
 	MeetingErrorMessage,
 	MeetingHost,
 	MeetingsApiPath,
@@ -6,6 +7,9 @@ export {
 	MeetingTranscriptionErrorMessage,
 } from "./libs/enums/enums.js";
 export {
+	type MeetingAudioGetAllResponseDto,
+	type MeetingAudioRequestDto,
+	type MeetingAudioResponseDto,
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
@@ -14,6 +18,7 @@ export {
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,
 	type MeetingTranscriptionResponseDto,
+	type MeetingUpdateAudioRequestDto,
 	type MeetingUpdateRequestDto,
 	type MeetingUpdateTranscriptionRequestDto,
 } from "./libs/types/types.js";

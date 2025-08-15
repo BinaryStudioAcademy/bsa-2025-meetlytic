@@ -15,6 +15,7 @@ export {
 export {
 	AuthError,
 	HTTPError,
+	MeetingAudioError,
 	MeetingError,
 	MeetingTranscriptionError,
 	UserError,
@@ -45,6 +46,9 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthStatusMessage } from "./modules/auth/auth.js";
 export {
+	type MeetingAudioGetAllResponseDto,
+	type MeetingAudioRequestDto,
+	type MeetingAudioResponseDto,
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
@@ -53,8 +57,10 @@ export {
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,
 	type MeetingTranscriptionResponseDto,
+	type MeetingUpdateAudioRequestDto,
 	type MeetingUpdateRequestDto,
 	type MeetingUpdateTranscriptionRequestDto,
+	MeetingAudioErrorMessage,
 	meetingCreateValidationSchema,
 	MeetingErrorMessage,
 	MeetingHost,

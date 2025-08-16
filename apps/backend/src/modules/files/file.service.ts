@@ -17,10 +17,8 @@ class FileService {
 		this.userAvatarService = userAvatarService;
 	}
 
-	public async findById(id: number): Promise<File | undefined> {
-		const fileRow = await this.fileRepository.findById(id);
-
-		return fileRow;
+	public findById(id: number): Promise<File | undefined> {
+		return this.fileRepository.findById(id);
 	}
 
 	public async findByUserDetailsId(

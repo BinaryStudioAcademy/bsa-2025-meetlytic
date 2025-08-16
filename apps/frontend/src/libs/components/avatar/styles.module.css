@@ -5,16 +5,25 @@
 
 .avatar-small {
 	width: 44px;
+	min-width: 44px;
 	height: 44px;
+}
+
+.avatar-medium {
+	width: 66px;
+	min-width: 66px;
+	height: 66px;
 }
 
 .avatar-large {
 	width: 88px;
+	min-width: 88px;
 	height: 88px;
 }
 
 .avatar-mobile {
 	width: 34px;
+	min-width: 34px;
 	height: 34px;
 }
 

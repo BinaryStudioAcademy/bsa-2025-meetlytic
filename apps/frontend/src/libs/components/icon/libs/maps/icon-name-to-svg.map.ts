@@ -8,6 +8,7 @@ import Pause from "~/assets/img/icons/pause.svg?react";
 import Play from "~/assets/img/icons/play.svg?react";
 import Search from "~/assets/img/icons/search.svg?react";
 import Settings from "~/assets/img/icons/settings.svg?react";
+import Share from "~/assets/img/icons/share.svg?react";
 import ShowPassword from "~/assets/img/icons/show-password.svg?react";
 import { type IconName } from "~/libs/types/types.js";
 
@@ -25,6 +26,7 @@ const iconNameToSvg: Record<
 	play: Play,
 	search: Search,
 	settings: Settings,
+	share: Share,
 	showPassword: ShowPassword,
 };
 

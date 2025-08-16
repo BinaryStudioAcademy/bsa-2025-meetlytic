@@ -1,0 +1,41 @@
+import { createSlice } from "@reduxjs/toolkit";
+
+import { DataStatus } from "~/libs/enums/enums.js";
+import { type ValueOf } from "~/libs/types/types.js";
+import { type MeetingDetailedResponseDto } from "~/modules/meeting-details/meeting-details.js";
+
+import { getMeetingDetailsById } from "./actions.js";
+
+type State = {
+	dataStatus: ValueOf<typeof DataStatus>;
+	meeting: MeetingDetailedResponseDto | null;
+	transcription: null | string;
+};
+
+const initialState: State = {
+	dataStatus: DataStatus.IDLE,
+	meeting: null,
+	transcription: null,
+};
+
+const { actions, name, reducer } = createSlice({
+	extraReducers(builder) {
+		builder.addCase(getMeetingDetailsById.pending, (state) => {
+			state.dataStatus = DataStatus.PENDING;
+			state.meeting = null;
+		});
+		builder.addCase(getMeetingDetailsById.fulfilled, (state, action) => {
+			state.dataStatus = DataStatus.FULFILLED;
+			state.meeting = action.payload;
+		});
+		builder.addCase(getMeetingDetailsById.rejected, (state) => {
+			state.dataStatus = DataStatus.REJECTED;
+			state.meeting = null;
+		});
+	},
+	initialState,
+	name: "meetingDetails",
+	reducers: {},
+});
+
+export { actions, name, reducer };

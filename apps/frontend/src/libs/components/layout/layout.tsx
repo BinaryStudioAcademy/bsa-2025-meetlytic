@@ -13,7 +13,7 @@ import styles from "./styles.module.css";
 const Layout: React.FC = () => {
 	const logout = useLogout();
 
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
 	const handleToggleMenu = useCallback(() => {
 		setIsMenuOpen((previous) => !previous);

@@ -8,6 +8,7 @@ export {
 export {
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
+	type MeetingDetailsRequestDto,
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
@@ -20,4 +21,5 @@ export {
 export {
 	meetingCreate as meetingCreateValidationSchema,
 	meetingUpdate as meetingUpdateValidationSchema,
+	searchInputValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";

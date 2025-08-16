@@ -3,8 +3,11 @@ const MeetingErrorMessage = {
 	DELETE_FAILED: "Failed to delete meeting",
 	FORBIDDEN: "Access denied",
 	INVALID_MEETING_LINK: "Invalid Zoom meeting link",
+	MEETING_ACTION_ITEMS_NOT_AVAILABLE: "Meeting action items not available",
 	MEETING_FAILED_TO_CREATE: "Failed to create a meeting",
 	MEETING_NOT_FOUND: "Meeting not found",
+	MEETING_SUMMARY_NOT_AVAILABLE: "Meeting summary not available.",
+	SEARCH_NOT_EMPTY: "Search input cannot be empty.",
 	UPDATE_FAILED: "Failed to update meeting",
 } as const;
 

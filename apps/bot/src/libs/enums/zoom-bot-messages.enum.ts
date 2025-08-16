@@ -17,6 +17,8 @@ const ZoomBotMessages = {
 	GO_TO_SIGN_IN_PAGE: "Navigating to Zoom login page:",
 	JOINED_MEETING: "Joined Zoom meeting successfully",
 	JOINING_MEETING: "is joining the meeting...",
+	LOGIN_EMAIL_INPUT_NOT_FOUND: "Login email input not found.",
+	LOGIN_PASSWORD_INPUT_NOT_FOUND: "Login password input not found.",
 	NAVIGATION_TO_ZOOM: "Navigating to Zoom meeting:",
 	ONLY_ONE_PARTICIPANT_DETECTED: "Only 1 participant detected. Leaving...",
 	PAGE_NOT_INITIALIZED: "Page not initialized.",

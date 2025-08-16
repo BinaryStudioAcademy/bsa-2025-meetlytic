@@ -4,6 +4,8 @@ const Timeout = {
 	ONE_SECOND: 1000,
 	SIXTEEN_SECONDS: 60_000,
 	TEN_SECONDS: 10_000,
+	THREE_SECONDS: 3000,
+	TWO_SECONDS: 2000,
 } as const;
 
 export { Timeout };

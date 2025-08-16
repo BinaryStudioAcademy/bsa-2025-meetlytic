@@ -83,6 +83,18 @@ class BaseConfig implements Config {
 					env: "BOT_NAME",
 					format: String,
 				},
+				LOGIN_EMAIL: {
+					default: "",
+					doc: "Zoom login email",
+					env: "LOGIN_EMAIL",
+					format: String,
+				},
+				LOGIN_PASSWORD: {
+					default: "",
+					doc: "Zoom login password",
+					env: "LOGIN_PASSWORD",
+					format: String,
+				},
 				MEETING_ID: {
 					default: null,
 					doc: "Meeting ID primary key",

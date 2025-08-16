@@ -77,6 +77,15 @@ class BaseZoomBot {
 		}
 	}
 
+	private async clickThenIdle(
+		selector: string,
+		timeout = Timeout.FIVE_SECONDS,
+	): Promise<void> {
+		await this.clickHelper(selector, timeout);
+
+		await this.waitIdle();
+	}
+
 	private convertToZoomWebClientUrl(url: string): string {
 		const parsed = new URL(url);
 
@@ -85,6 +94,67 @@ class BaseZoomBot {
 		}
 
 		return parsed.toString();
+	}
+
+	private async enterLoginEmail(email?: string): Promise<boolean> {
+		this.logger.info(ZoomBotMessages.START_ENTER_EMAIL_STEP);
+
+		if (
+			!(await this.exists(ZoomUILabel.LOGIN_EMAIL_INPUT, Timeout.TWO_SECONDS))
+		) {
+			this.logger.error("Email field didn't be found, cannot sign in.");
+
+			return false;
+		}
+
+		if (!email) {
+			this.logger.error("ZOOM.LOGIN_EMAIL is empty, cannot sign in.");
+
+			return false;
+		}
+
+		await this.typeHelper(ZoomUILabel.LOGIN_EMAIL_INPUT, email);
+
+		if (await this.exists(ZoomUILabel.SIGN_IN_NEXT_BTN, Timeout.TWO_SECONDS)) {
+			await this.clickThenIdle(ZoomUILabel.SIGN_IN_NEXT_BTN);
+		}
+
+		this.logger.info(ZoomBotMessages.COMPLETE_ENTER_EMAIL_STEP);
+
+		return true;
+	}
+
+	private async enterLoginPassword(password?: string): Promise<boolean> {
+		this.logger.info(ZoomBotMessages.START_ENTER_PASSWORD_STEP);
+
+		if (
+			!(await this.exists(
+				ZoomUILabel.LOGIN_PASSWORD_INPUT,
+				Timeout.THREE_SECONDS,
+			))
+		) {
+			this.logger.error("Password field didn't be found, cannot sign in.");
+
+			return false;
+		}
+
+		if (!password) {
+			this.logger.error("ZOOM.LOGIN_PASSWORD is empty, cannot sign in.");
+
+			return false;
+		}
+
+		await this.typeHelper(ZoomUILabel.LOGIN_PASSWORD_INPUT, password);
+
+		if (
+			await this.exists(ZoomUILabel.SIGN_IN_SUBMIT_BTN, Timeout.TWO_SECONDS)
+		) {
+			await this.clickThenIdle(ZoomUILabel.SIGN_IN_SUBMIT_BTN);
+		}
+
+		this.logger.info(ZoomBotMessages.COMPLETE_ENTER_PASSWORD_STEP);
+
+		return true;
 	}
 
 	private async enterMeetingPassword(): Promise<void> {
@@ -122,6 +192,20 @@ class BaseZoomBot {
 			this.logger.error(
 				`${ZoomBotMessages.FAILED_TO_ENTER_PASSWORD} ${error instanceof Error ? error.message : String(error)}`,
 			);
+		}
+	}
+
+	private async exists(selector: string, timeout: number): Promise<boolean> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+		}
+
+		try {
+			await this.page.waitForSelector(selector, { timeout });
+
+			return true;
+		} catch {
+			return false;
 		}
 	}
 
@@ -164,6 +248,25 @@ class BaseZoomBot {
 		}
 
 		return parameters;
+	}
+
+	private async goToSignIn(): Promise<boolean> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+		}
+
+		if (!(await this.exists(ZoomUILabel.SIGN_IN_LINK, Timeout.THREE_SECONDS))) {
+			this.logger.info(ZoomBotMessages.SKIP_AUTHENTICATE_STEP);
+
+			return false;
+		}
+
+		this.logger.info(ZoomBotMessages.GO_TO_SIGN_IN_PAGE);
+		await this.clickThenIdle(ZoomUILabel.SIGN_IN_LINK);
+
+		this.logger.info(`Current page: ${this.page.url()}`);
+
+		return true;
 	}
 
 	private async handleInitialPopups(): Promise<void> {
@@ -210,6 +313,13 @@ class BaseZoomBot {
 
 		this.socketClient.connect();
 	}
+	private async isOnLoginScreen(): Promise<boolean> {
+		return (
+			(await this.exists(ZoomUILabel.LOGIN_EMAIL_INPUT, Timeout.ONE_SECOND)) ||
+			(await this.exists(ZoomUILabel.LOGIN_PASSWORD_INPUT, Timeout.ONE_SECOND))
+		);
+	}
+
 	private async joinMeeting(): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
@@ -254,6 +364,35 @@ class BaseZoomBot {
 		}
 	}
 
+	private async maybeAuthenticate(): Promise<boolean> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+		}
+
+		const navigatedToLogin = await this.goToSignIn();
+
+		if (!navigatedToLogin && !(await this.isOnLoginScreen())) {
+			return true;
+		}
+
+		if (!(await this.isOnLoginScreen())) {
+			return true;
+		}
+
+		const { LOGIN_EMAIL: email, LOGIN_PASSWORD: password } =
+			this.config.ENV.ZOOM;
+
+		if (!(await this.enterLoginEmail(email))) {
+			return false;
+		}
+
+		if (!(await this.enterLoginPassword(password))) {
+			return false;
+		}
+
+		return !(await this.isOnLoginScreen());
+	}
+
 	private async monitorParticipants(): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
@@ -274,6 +413,34 @@ class BaseZoomBot {
 		}
 	}
 
+	private async typeHelper(
+		selector: string,
+		text: string,
+		timeout = Timeout.FIVE_SECONDS,
+	): Promise<void> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+		}
+
+		await this.page.waitForSelector(selector, { timeout, visible: true });
+		await this.page.click(selector, { clickCount: 3 });
+		await this.page.keyboard.press(KeyboardKey.BACKSPACE);
+		await this.page.type(selector, text);
+	}
+
+	private async waitIdle(): Promise<void> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+		}
+
+		await this.page
+			.waitForNavigation({
+				timeout: Timeout.SIXTEEN_SECONDS,
+				waitUntil: "networkidle2",
+			})
+			.catch(() => {});
+	}
+
 	public async run(): Promise<void> {
 		this.initSocket();
 
@@ -282,26 +449,41 @@ class BaseZoomBot {
 			this.page = await this.browser.newPage();
 			await this.page.setUserAgent(USER_AGENT);
 
-			this.logger.info(
-				`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
+			const meetingUrl = this.convertToZoomWebClientUrl(
+				this.config.ENV.ZOOM.MEETING_LINK,
 			);
-			await this.page.goto(
-				this.convertToZoomWebClientUrl(this.config.ENV.ZOOM.MEETING_LINK),
-				{
+			this.logger.info(`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${meetingUrl}`);
+			await this.page.goto(meetingUrl, {
+				timeout: Timeout.SIXTEEN_SECONDS,
+				waitUntil: "networkidle2",
+			});
+
+			await this.handleInitialPopups();
+
+			const authed = await this.maybeAuthenticate();
+
+			if (!authed) {
+				throw new Error(ZoomBotMessages.FAILED_TO_LOGIN);
+			}
+
+			if (!/\/wc\/join\//.test(this.page.url())) {
+				await this.page.goto(meetingUrl, {
 					timeout: Timeout.SIXTEEN_SECONDS,
 					waitUntil: "networkidle2",
-				},
-			);
-			await this.page.screenshot({ path: "goto.png" });
-			await this.handleInitialPopups();
+				});
+			}
+
 			await this.joinMeeting();
+
 			await this.page.waitForSelector(ZoomUILabel.LEAVE, {
 				timeout: Timeout.TEN_SECONDS,
 				visible: true,
 			});
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
+
 			this.audioRecorder.start();
 			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
+
 			await delay(Timeout.FIFTEEN_SECONDS);
 			await this.monitorParticipants();
 		} catch (error) {

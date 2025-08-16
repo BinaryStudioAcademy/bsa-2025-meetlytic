@@ -7,13 +7,13 @@ const ZoomUILabel = {
 	INPUT_PASSWORD: "#input-for-pwd",
 	JOIN: "button[type='button']",
 	LEAVE: "button[aria-label='Leave']",
-	LOGIN_EMAIL_INPUT: "input[name='account'], input[type='email']", //
-	LOGIN_PASSWORD_INPUT: "input[name='password'][type='password']", //
+	LOGIN_EMAIL_INPUT: "input[name='account'], input[type='email']",
+	LOGIN_PASSWORD_INPUT: "input[name='password'][type='password']",
 	MUTE: "button[aria-label='mute my microphone']",
 	MUTE_LOGIN: "button[aria-label='Mute']",
 	PARTISIPANTS_COUNT: ".footer-button__number-counter span",
-	SIGN_IN_LINK: "a[href*='/signin']", //
-	SIGN_IN_NEXT_BTN: "#signin_btn_next", //
+	SIGN_IN_LINK: "a[href*='/signin']",
+	SIGN_IN_NEXT_BTN: "#signin_btn_next",
 	SIGN_IN_SUBMIT_BTN: "#js_btn_login",
 	SPINNER: "button .spinner",
 	STOP_VIDEO: "button[aria-label='stop my video']",

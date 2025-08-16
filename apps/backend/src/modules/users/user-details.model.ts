@@ -10,7 +10,7 @@ import { ColumnName } from "./libs/enums/enums.js";
 import { UserModel } from "./user.model.js";
 
 class UserDetailsModel extends AbstractModel {
-	public fileId!: null | number;
+	public avatarFileId!: null | number;
 
 	public firstName!: string;
 
@@ -22,7 +22,7 @@ class UserDetailsModel extends AbstractModel {
 		return {
 			avatarFile: {
 				join: {
-					from: `${DatabaseTableName.USER_DETAILS}.${ColumnName.FILE_ID}`,
+					from: `${DatabaseTableName.USER_DETAILS}.${ColumnName.AVATAR_FILE_ID}`,
 					to: `${DatabaseTableName.FILES}.id`,
 				},
 				modelClass: FileModel,

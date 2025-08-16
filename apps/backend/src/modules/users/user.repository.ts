@@ -66,7 +66,7 @@ class UserRepository implements Repository {
 
 		return UserEntity.initialize({
 			details: UserDetailsEntity.initialize({
-				fileId: userWithDetails.userDetails.fileId ?? null,
+				avatarFileId: userWithDetails.userDetails.avatarFileId ?? null,
 				firstName: userWithDetails.userDetails.firstName,
 				id: userWithDetails.userDetails.id,
 				lastName: userWithDetails.userDetails.lastName,
@@ -91,7 +91,7 @@ class UserRepository implements Repository {
 
 		return UserEntity.initialize({
 			details: UserDetailsEntity.initialize({
-				fileId: userWithDetails.userDetails.fileId ?? null,
+				avatarFileId: userWithDetails.userDetails.avatarFileId ?? null,
 				firstName: userWithDetails.userDetails.firstName,
 				id: userWithDetails.userDetails.id,
 				lastName: userWithDetails.userDetails.lastName,

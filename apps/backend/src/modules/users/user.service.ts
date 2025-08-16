@@ -95,10 +95,10 @@ class UserService implements Service {
 		}
 
 		let avatarFile: null | { key: string; url: string } = null;
-		const fileId = details.getFileId();
+		const avatarFileId = details.getAvatarFileId();
 
-		if (fileId != null) {
-			const file = await this.fileService.findById(fileId);
+		if (avatarFileId != null) {
+			const file = await this.fileService.findById(avatarFileId);
 
 			if (file && file.url) {
 				avatarFile = { key: file.key, url: file.url };
@@ -195,9 +195,9 @@ class UserService implements Service {
 
 	public async updateUserDetailsFileId(
 		detailsId: number,
-		fileId: number,
+		avatarFileId: number,
 	): Promise<void> {
-		await this.userDetailsRepository.updateFileId(detailsId, fileId);
+		await this.userDetailsRepository.updateFileId(detailsId, avatarFileId);
 	}
 }
 

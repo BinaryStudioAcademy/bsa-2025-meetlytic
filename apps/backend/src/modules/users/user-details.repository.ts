@@ -87,11 +87,11 @@ class UserDetailsRepository implements Repository {
 
 	public async updateFileId(
 		detailsId: number,
-		fileId: number,
+		avatarFileId: number,
 	): Promise<boolean> {
 		const updatedRow = await this.userDetailsModel
 			.query()
-			.patch({ fileId })
+			.patch({ avatarFileId })
 			.where("id", detailsId)
 			.returning("*")
 			.execute();

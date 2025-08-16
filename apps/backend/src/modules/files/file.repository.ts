@@ -33,7 +33,7 @@ class FileRepository {
 
 		await this.userDetailsModel
 			.query()
-			.patch({ fileId: fileRow.id })
+			.patch({ avatarFileId: fileRow.id })
 			.where("id", user_details_id);
 
 		return { ...fileRow.toJSON(), type: FILE_TYPE_AVATAR } as File;
@@ -57,14 +57,16 @@ class FileRepository {
 		const userDetails = await this.userDetailsModel
 			.query()
 			.findById(user_details_id)
-			.select("file_id")
+			.select("avatar_file_id")
 			.first();
 
-		if (!userDetails?.fileId) {
+		if (!userDetails?.avatarFileId) {
 			return undefined;
 		}
 
-		const fileRow = await this.fileModel.query().findById(userDetails.fileId);
+		const fileRow = await this.fileModel
+			.query()
+			.findById(userDetails.avatarFileId);
 
 		if (!fileRow) {
 			return undefined;
@@ -76,7 +78,7 @@ class FileRepository {
 	public async unsetFileId(user_details_id: number): Promise<number> {
 		return await this.userDetailsModel
 			.query()
-			.patch({ fileId: null })
+			.patch({ avatarFileId: null })
 			.where("id", user_details_id);
 	}
 

@@ -12,7 +12,11 @@ const {
 
 const { ORIGIN: origin } = config.ENV.APP;
 
-const { NAME: botName } = config.ENV.BOT;
+const {
+	LOGIN_EMAIL: loginEmail,
+	LOGIN_PASSWORD: loginPassword,
+	NAME: botName,
+} = config.ENV.BOT;
 
 const {
 	KEY: openAIKey,
@@ -27,6 +31,8 @@ const cloudFormation = new BaseCloudFormation({
 	region: REGION,
 	settings: {
 		botName,
+		loginEmail,
+		loginPassword,
 		openAIKey,
 		origin,
 		textGenerationModel,

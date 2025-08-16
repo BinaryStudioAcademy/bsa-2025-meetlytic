@@ -15,6 +15,8 @@ type EnvironmentSchema = {
 		SECRET_ACCESS_KEY: string;
 	};
 	BOT: {
+		LOGIN_EMAIL: string;
+		LOGIN_PASSWORD: string;
 		NAME: string;
 	};
 	DB: {

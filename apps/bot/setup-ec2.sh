@@ -150,6 +150,8 @@ OPEN_AI_KEY=$(echo "$SETTINGS_JSON" | jq -r '.openAIKey')
 ORIGIN=$(echo "$SETTINGS_JSON" | jq -r '.origin')
 TEXT_GENERATION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.textGenerationModel')
 TRANSCRIPTION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.transcriptionModel')
+LOGIN_EMAIL=$(echo "$SETTINGS_JSON" | jq -r '.loginEmail')
+LOGIN_PASSWORD=$(echo "$SETTINGS_JSON" | jq -r '.loginPassword')
 
 if [ -z "$BOT_NAME" ] || [ -z "$MEETING_LINK" ]; then
 echo "Error: Missing required settings in JSON."
@@ -166,6 +168,8 @@ ORIGIN=$ORIGIN
 
 # BOT
 BOT_NAME="$BOT_NAME"
+LOGIN_EMAIL="$LOGIN_EMAIL"
+LOGIN_PASSWORD="$LOGIN_PASSWORD"
 
 # ZOOM
 MEETING_ID=$MEETING_ID

@@ -83,6 +83,18 @@ class BaseConfig implements Config {
 				},
 			},
 			BOT: {
+				LOGIN_EMAIL: {
+					default: null,
+					doc: "Bot login email",
+					env: "LOGIN_EMAIL",
+					format: String,
+				},
+				LOGIN_PASSWORD: {
+					default: null,
+					doc: "Bot login password",
+					env: "LOGIN_PASSWORD",
+					format: String,
+				},
 				NAME: {
 					default: null,
 					doc: "Bot name",

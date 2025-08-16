@@ -124,6 +124,19 @@ class BaseZoomBot {
 			);
 		}
 	}
+	private async exists(selector: string, timeout: number): Promise<boolean> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+		}
+
+		try {
+			await this.page.waitForSelector(selector, { timeout });
+
+			return true;
+		} catch {
+			return false;
+		}
+	}
 
 	private extractPasscode(token: string): string {
 		const [, rawPasscode] = token.split(".");
@@ -254,6 +267,109 @@ class BaseZoomBot {
 		}
 	}
 
+	private async maybeAuthenticate(): Promise<boolean> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+		}
+
+		if (await this.exists(ZoomUILabel.SIGN_IN_LINK, Timeout.THREE_SECONDS)) {
+			await this.clickHelper(ZoomUILabel.SIGN_IN_LINK, Timeout.FIVE_SECONDS);
+			await this.page
+				.waitForNavigation({
+					timeout: Timeout.SIXTEEN_SECONDS,
+					waitUntil: "networkidle2",
+				})
+				.catch(() => {});
+		}
+
+		const email = this.config.ENV.ZOOM.LOGIN_EMAIL;
+		const password = this.config.ENV.ZOOM.LOGIN_PASSWORD;
+
+		if (
+			!(await this.exists(
+				ZoomUILabel.LOGIN_EMAIL_INPUT,
+				Timeout.TWO_SECONDS,
+			)) &&
+			!(await this.exists(
+				ZoomUILabel.LOGIN_PASSWORD_INPUT,
+				Timeout.TWO_SECONDS,
+			))
+		) {
+			return true;
+		}
+
+		if (
+			await this.exists(ZoomUILabel.LOGIN_EMAIL_INPUT, Timeout.THREE_SECONDS)
+		) {
+			if (!email) {
+				this.logger.error("ZOOM.LOGIN_EMAIL is empty, cannot sign in.");
+
+				return false;
+			}
+
+			await this.typeHelper(ZoomUILabel.LOGIN_EMAIL_INPUT, email);
+
+			if (
+				await this.exists(ZoomUILabel.SIGN_IN_NEXT_BTN, Timeout.TWO_SECONDS)
+			) {
+				await this.clickHelper(
+					ZoomUILabel.SIGN_IN_NEXT_BTN,
+					Timeout.FIVE_SECONDS,
+				);
+				await this.page
+					.waitForNavigation({
+						timeout: Timeout.SIXTEEN_SECONDS,
+						waitUntil: "networkidle2",
+					})
+					.catch(() => {});
+			}
+		}
+
+		if (
+			await this.exists(
+				ZoomUILabel.LOGIN_PASSWORD_INPUT,
+				Timeout.FIFTEEN_SECONDS,
+			)
+		) {
+			if (!password) {
+				this.logger.error("ZOOM.LOGIN_PASSWORD is empty, cannot sign in.");
+
+				return false;
+			}
+
+			await this.typeHelper(ZoomUILabel.LOGIN_PASSWORD_INPUT, password);
+
+			if (
+				await this.exists(ZoomUILabel.SIGN_IN_SUBMIT_BTN, Timeout.TWO_SECONDS)
+			) {
+				await this.clickHelper(
+					ZoomUILabel.SIGN_IN_SUBMIT_BTN,
+					Timeout.FIVE_SECONDS,
+				);
+			} else if (
+				await this.exists(ZoomUILabel.SIGN_IN_NEXT_BTN, Timeout.TWO_SECONDS)
+			) {
+				await this.clickHelper(
+					ZoomUILabel.SIGN_IN_NEXT_BTN,
+					Timeout.FIVE_SECONDS,
+				);
+			}
+
+			await this.page
+				.waitForNavigation({
+					timeout: Timeout.SIXTEEN_SECONDS,
+					waitUntil: "networkidle2",
+				})
+				.catch(() => {});
+		}
+
+		const stillOnLogin =
+			(await this.exists(ZoomUILabel.LOGIN_EMAIL_INPUT, Timeout.ONE_SECOND)) ||
+			(await this.exists(ZoomUILabel.LOGIN_PASSWORD_INPUT, Timeout.ONE_SECOND));
+
+		return !stillOnLogin;
+	}
+
 	private async monitorParticipants(): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
@@ -274,6 +390,21 @@ class BaseZoomBot {
 		}
 	}
 
+	private async typeHelper(
+		selector: string,
+		text: string,
+		timeout = Timeout.FIVE_SECONDS,
+	): Promise<void> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+		}
+
+		await this.page.waitForSelector(selector, { timeout, visible: true });
+		await this.page.click(selector, { clickCount: 3 });
+		await this.page.keyboard.press(KeyboardKey.BACKSPACE);
+		await this.page.type(selector, text);
+	}
+
 	public async run(): Promise<void> {
 		this.initSocket();
 
@@ -282,26 +413,69 @@ class BaseZoomBot {
 			this.page = await this.browser.newPage();
 			await this.page.setUserAgent(USER_AGENT);
 
-			this.logger.info(
-				`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
+			const meetingUrl = this.convertToZoomWebClientUrl(
+				this.config.ENV.ZOOM.MEETING_LINK,
 			);
-			await this.page.goto(
-				this.convertToZoomWebClientUrl(this.config.ENV.ZOOM.MEETING_LINK),
-				{
+			this.logger.info(`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${meetingUrl}`);
+			await this.page.goto(meetingUrl, {
+				timeout: Timeout.SIXTEEN_SECONDS,
+				waitUntil: "networkidle2",
+			});
+
+			await this.handleInitialPopups();
+
+			const authed = await this.maybeAuthenticate();
+
+			if (!authed) {
+				throw new Error(
+					"Failed to authenticate to Zoom (check credentials or 2FA/SSO).",
+				);
+			}
+
+			if (!/\/wc\/join\//.test(this.page.url())) {
+				await this.page.goto(meetingUrl, {
 					timeout: Timeout.SIXTEEN_SECONDS,
 					waitUntil: "networkidle2",
-				},
-			);
-			await this.page.screenshot({ path: "goto.png" });
-			await this.handleInitialPopups();
+				});
+			}
+
 			await this.joinMeeting();
+
+			if (
+				(await this.exists(
+					ZoomUILabel.LOGIN_EMAIL_INPUT,
+					Timeout.TWO_SECONDS,
+				)) ||
+				(await this.exists(
+					ZoomUILabel.LOGIN_PASSWORD_INPUT,
+					Timeout.TWO_SECONDS,
+				))
+			) {
+				this.logger.warn(
+					"Redirected to sign-in after Join. Trying to authenticate again…",
+				);
+				const ok = await this.maybeAuthenticate();
+
+				if (ok) {
+					await this.page.goto(meetingUrl, {
+						timeout: Timeout.SIXTEEN_SECONDS,
+						waitUntil: "networkidle2",
+					});
+					await this.joinMeeting();
+				} else {
+					throw new Error("Failed to authenticate after Join.");
+				}
+			}
+
 			await this.page.waitForSelector(ZoomUILabel.LEAVE, {
 				timeout: Timeout.TEN_SECONDS,
 				visible: true,
 			});
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
+
 			this.audioRecorder.start();
 			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
+
 			await delay(Timeout.FIFTEEN_SECONDS);
 			await this.monitorParticipants();
 		} catch (error) {

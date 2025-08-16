@@ -1,10 +1,15 @@
-import { type APIHandlerOptions } from "~/libs/modules/controller/controller.js";
+import { type FastifyRequest } from "fastify";
+
 import { type UploadedFile } from "~/libs/plugins/uploads/libs/types/types.js";
 
-type UploadAvatarHandlerOptions = APIHandlerOptions<{
-	body: UploadBody;
-	user: { id: number };
-}>;
+type UploadAvatarHandlerOptions = {
+	request: FastifyRequest & {
+		getFileOrThrow: (localOptions?: {
+			fieldName?: string;
+		}) => Promise<UploadedFile>;
+		user: { id: number };
+	};
+};
 
 type UploadAvatarOptions = {
 	buffer: Buffer;
@@ -13,10 +18,4 @@ type UploadAvatarOptions = {
 	userId: number;
 };
 
-type UploadBody = { file: UploadedFile };
-
-export {
-	type UploadAvatarHandlerOptions,
-	type UploadAvatarOptions,
-	type UploadBody,
-};
+export { type UploadAvatarHandlerOptions, type UploadAvatarOptions };

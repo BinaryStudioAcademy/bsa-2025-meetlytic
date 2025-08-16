@@ -1,15 +1,8 @@
 import multipart from "@fastify/multipart";
-import {
-	type FastifyPluginCallback,
-	type FastifyReply,
-	type FastifyRequest,
-	type HookHandlerDoneFunction,
-} from "fastify";
+import { type FastifyPluginCallback, type FastifyRequest } from "fastify";
 import fp from "fastify-plugin";
 
 import {
-	DEFAULT_ALLOWED_IMAGE_MIME_TYPES,
-	DEFAULT_MAX_FILE_SIZE,
 	FILENAME_FALLBACK,
 	FILENAME_SANITIZE_REGEX,
 } from "~/libs/constants/constants.js";
@@ -21,27 +14,23 @@ import {
 	type UploadPluginOptions,
 } from "./libs/types/types.js";
 
-declare module "fastify" {
-	interface FastifyRequest {
-		getFileOrThrow: (options?: { fieldName?: string }) => Promise<UploadedFile>;
-	}
-}
-
 const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 	fastify,
 	options,
 	done,
 ) => {
 	const {
-		allowedMimeTypes = [...DEFAULT_ALLOWED_IMAGE_MIME_TYPES],
+		allowedMimeTypes,
 		fieldName = "file",
-		maxFiles = DEFAULT_MAX_FILE_SIZE.MAX_FILES,
-		maxFileSize = DEFAULT_MAX_FILE_SIZE.MAX_FILE_SIZE_BYTES,
+		maxFiles,
+		maxFileSize,
 	} = options;
 
 	fastify.register(multipart, {
 		limits: { files: maxFiles, fileSize: maxFileSize },
 	});
+
+	fastify.decorateRequest("uploadedFile", null);
 
 	fastify.decorateRequest(
 		"getFileOrThrow",
@@ -49,12 +38,12 @@ const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 			this: FastifyRequest,
 			localOptions?: { fieldName?: string },
 		): Promise<UploadedFile> {
-			const name = localOptions?.fieldName ?? fieldName;
+			const expectedFieldName = localOptions?.fieldName ?? fieldName;
 			const file = await this.file({ limits: { fileSize: maxFileSize } });
 
 			if (!file) {
 				throw new HTTPError({
-					message: `Missing file field "${name}"`,
+					message: `Missing file field "${expectedFieldName}"`,
 					status: HTTPCode.BAD_REQUEST,
 				});
 			}
@@ -75,17 +64,20 @@ const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 				});
 			}
 
-			const filename =
-				(file.filename as string | undefined) ?? FILENAME_FALLBACK;
-			const safeName = filename.replace(FILENAME_SANITIZE_REGEX, "_");
+			const originalFilename = file.filename || FILENAME_FALLBACK;
+			const safeName = originalFilename.replace(FILENAME_SANITIZE_REGEX, "_");
 
-			return {
+			const uploaded: UploadedFile = {
 				buffer,
 				file,
 				filename: safeName,
 				mimetype: file.mimetype,
 				size: buffer.length,
 			};
+
+			this.uploadedFile = uploaded;
+
+			return uploaded;
 		},
 	);
 
@@ -94,22 +86,4 @@ const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 
 const uploadPlugin = fp(rawUploadPlugin, { name: "upload-plugin" });
 
-const singleFilePreHandler = (fieldName = "file") => {
-	return (
-		request: FastifyRequest,
-		_reply: FastifyReply,
-		done: HookHandlerDoneFunction,
-	): void => {
-		request
-			.getFileOrThrow({ fieldName })
-			.then((uploaded) => {
-				(request as FastifyRequest & { body?: unknown }).body = {
-					file: uploaded,
-				};
-				done();
-			})
-			.catch(done);
-	};
-};
-
-export { singleFilePreHandler, uploadPlugin };
+export { uploadPlugin };

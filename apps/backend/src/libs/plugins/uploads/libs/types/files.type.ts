@@ -9,10 +9,10 @@ type UploadedFile = {
 };
 
 type UploadPluginOptions = {
-	allowedMimeTypes?: string[];
-	fieldName?: string;
-	maxFiles?: number;
-	maxFileSize?: number;
+	allowedMimeTypes: string[];
+	fieldName: string;
+	maxFiles: number;
+	maxFileSize: number;
 };
 
 export { type UploadedFile, type UploadPluginOptions };

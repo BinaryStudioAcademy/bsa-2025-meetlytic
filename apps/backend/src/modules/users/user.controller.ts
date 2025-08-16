@@ -4,9 +4,8 @@ import {
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
-import { HTTPCode, HTTPMethod } from "~/libs/modules/http/http.js";
+import { HTTPCode, HTTPError, HTTPMethod } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import { singleFilePreHandler } from "~/libs/plugins/uploads/upload.plugin.js";
 import { type FileService } from "~/modules/files/file.service.js";
 import { type UserAvatarService } from "~/modules/users/user-avatar.service.js";
 import { type UserService } from "~/modules/users/user.service.js";
@@ -15,7 +14,6 @@ import { UserErrorMessage, UsersApiPath } from "./libs/enums/enums.js";
 import {
 	type UploadAvatarHandlerOptions,
 	type UploadAvatarOptions,
-	type UploadBody,
 	type UserResponseDto,
 	type UserUpdateResponseDto,
 } from "./libs/types/types.js";
@@ -141,15 +139,9 @@ class UserController extends BaseController {
 
 		this.addRoute({
 			handler: (options) =>
-				this.uploadAvatar(
-					options as APIHandlerOptions<{
-						body: UploadBody;
-						user: { id: number };
-					}>,
-				),
+				this.uploadAvatar(options as UploadAvatarHandlerOptions),
 			method: HTTPMethod.POST,
 			path: UsersApiPath.AVATAR,
-			preHandlers: [singleFilePreHandler("file")],
 		});
 
 		this.addRoute({
@@ -207,32 +199,29 @@ class UserController extends BaseController {
 		const detailsId = await this.userService.getOrCreateDetailsId(user.id);
 
 		if (!detailsId) {
-			return {
-				payload: {
-					error: "Not Found",
-					message: UserErrorMessage.DETAILS_NOT_FOUND,
-				},
+			throw new HTTPError({
+				message: UserErrorMessage.DETAILS_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
-			};
+			});
 		}
 
 		const existing = await this.fileService.findByUserDetailsId(detailsId);
 
 		if (!existing) {
-			return {
-				payload: {
-					error: "Not Found",
-					message: UserErrorMessage.AVATAR_NOT_SET,
-				},
+			throw new HTTPError({
+				message: UserErrorMessage.AVATAR_NOT_SET,
 				status: HTTPCode.NOT_FOUND,
-			};
+			});
 		}
 
 		await this.userAvatarService.deleteAvatar(existing.key);
 		await this.fileService.removeAvatarRecord(detailsId);
 
 		return {
-			payload: { message: "Avatar deleted successfully", success: true },
+			payload: {
+				message: UserErrorMessage.AVATAR_DELETED_SUCCESSFULLY,
+				success: true,
+			},
 			status: HTTPCode.OK,
 		};
 	}
@@ -321,10 +310,13 @@ class UserController extends BaseController {
 		options: UploadAvatarHandlerOptions,
 	): Promise<APIHandlerResponse> {
 		try {
-			const { body, user } = options;
-			const { buffer, filename, mimetype, size } = body.file;
+			const { request } = options;
 
-			this.userAvatarService.validate(mimetype, size);
+			const user = request.user;
+
+			const uploadedFile = await request.getFileOrThrow();
+
+			const { buffer, filename, mimetype } = uploadedFile;
 
 			const avatarOptions: UploadAvatarOptions = {
 				buffer,
@@ -338,13 +330,10 @@ class UserController extends BaseController {
 			const detailsId = await this.userService.getOrCreateDetailsId(user.id);
 
 			if (!detailsId) {
-				return {
-					payload: {
-						error: "Not Found",
-						message: UserErrorMessage.DETAILS_NOT_FOUND,
-					},
+				throw new HTTPError({
+					message: UserErrorMessage.DETAILS_NOT_FOUND,
 					status: HTTPCode.NOT_FOUND,
-				};
+				});
 			}
 
 			const fileRecord = await this.fileService.replaceAvatarRecord({

@@ -69,7 +69,9 @@ class BaseZoomBot {
 				timeout,
 				visible: true,
 			});
+			this.logger.info(`Clicking on selector: ${selector}`);
 			await this.page.click(selector);
+			this.logger.info(`Clicked on selector: ${selector}`);
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessages.FAILED_TO_CLICK_SELECTOR} "${selector}": ${error instanceof Error ? error.message : String(error)}`,
@@ -77,12 +79,9 @@ class BaseZoomBot {
 		}
 	}
 
-	private async clickThenIdle(
-		selector: string,
-		timeout = Timeout.FIVE_SECONDS,
-	): Promise<void> {
-		await this.clickHelper(selector, timeout);
-
+	private async clickThenIdle(selector: string): Promise<void> {
+		await this.clickHelper(selector, Timeout.FIVE_SECONDS);
+		await delay(Timeout.ONE_SECOND);
 		await this.waitIdle();
 	}
 
@@ -255,11 +254,13 @@ class BaseZoomBot {
 			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
 		}
 
-		if (!(await this.exists(ZoomUILabel.SIGN_IN_LINK, Timeout.THREE_SECONDS))) {
+		if (!(await this.exists(ZoomUILabel.SIGN_IN_LINK, Timeout.FIVE_SECONDS))) {
 			this.logger.info(ZoomBotMessages.SKIP_AUTHENTICATE_STEP);
 
 			return false;
 		}
+
+		this.logger.info("find sign in link");
 
 		this.logger.info(ZoomBotMessages.GO_TO_SIGN_IN_PAGE);
 		await this.clickThenIdle(ZoomUILabel.SIGN_IN_LINK);
@@ -435,7 +436,7 @@ class BaseZoomBot {
 
 		await this.page
 			.waitForNavigation({
-				timeout: Timeout.SIXTEEN_SECONDS,
+				timeout: Timeout.FIVE_SECONDS,
 				waitUntil: "networkidle2",
 			})
 			.catch(() => {});

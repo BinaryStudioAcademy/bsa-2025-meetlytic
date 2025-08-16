@@ -37,12 +37,15 @@ class MeetingDetailsApi extends BaseHTTPApi {
 
 	public async getMeetingByIdPublic(
 		id: number,
-		token: string,
+		sharedToken: string,
 	): Promise<MeetingDetailedResponseDto> {
 		const response = await this.load(
-			this.getFullEndpoint(`${MeetingsApiPath.$ID_PUBLIC}?token=${token}`, {
-				id: String(id),
-			}),
+			this.getFullEndpoint(
+				`${MeetingsApiPath.$ID_PUBLIC}?token=${sharedToken}`,
+				{
+					id: String(id),
+				},
+			),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: false,

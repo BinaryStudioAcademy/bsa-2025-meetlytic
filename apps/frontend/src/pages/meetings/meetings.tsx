@@ -26,10 +26,10 @@ const Meetings: React.FC = () => {
 			<div className={styles["meetings"]}>
 				<div className={styles["meetings__header"]}>
 					<div className={styles["meetings__avatar-wrapper"]}>
-						<div className={styles["variable-component__mobile"]}>
+						<div className={styles["visible-on-mobile"]}>
 							<Avatar size={AvatarSize.MEDIUM} />
 						</div>
-						<div className={styles["variable-component__desktop"]}>
+						<div className={styles["visible-on-desktop"]}>
 							<Avatar size={AvatarSize.LARGE} />
 						</div>
 						<div className={styles["meetings__header-text"]}>

@@ -54,11 +54,11 @@
 	justify-content: flex-end;
 }
 
-.variable-component__mobile {
+.visible-on-mobile {
 	display: none;
 }
 
-.variable-component__desktop {
+.visible-on-desktop {
 	display: block;
 }
 
@@ -73,11 +73,11 @@
 }
 
 @media (width <= 768px) {
-	.variable-component__desktop {
+	.visible-on-desktop {
 		display: none;
 	}
 
-	.variable-component__mobile {
+	.visible-on-mobile {
 		display: block;
 	}
 }

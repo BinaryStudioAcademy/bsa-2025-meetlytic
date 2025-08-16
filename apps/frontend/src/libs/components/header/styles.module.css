@@ -35,11 +35,11 @@
 	display: none;
 }
 
-.variable-component__mobile {
+.visible-on-mobile {
 	display: none;
 }
 
-.variable-component__desktop {
+.visible-on-desktop {
 	display: block;
 	width: 100%;
 }
@@ -66,11 +66,11 @@
 		justify-self: end;
 	}
 
-	.variable-component__desktop {
+	.visible-on-desktop {
 		display: none;
 	}
 
-	.variable-component__mobile {
+	.visible-on-mobile {
 		display: block;
 		width: 100%;
 	}

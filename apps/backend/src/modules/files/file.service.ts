@@ -1,20 +1,15 @@
-import { type UserAvatarService } from "~/modules/users/user-avatar.service.js";
-
 import { type FileRepository } from "./file.repository.js";
 import { type File } from "./libs/types/types.js";
 
 type Constructor = {
 	fileRepository: FileRepository;
-	userAvatarService: UserAvatarService;
 };
 
 class FileService {
 	private fileRepository: FileRepository;
-	private userAvatarService: UserAvatarService;
 
-	public constructor({ fileRepository, userAvatarService }: Constructor) {
+	public constructor({ fileRepository }: Constructor) {
 		this.fileRepository = fileRepository;
-		this.userAvatarService = userAvatarService;
 	}
 
 	public findById(id: number): Promise<File | undefined> {
@@ -29,6 +24,15 @@ class FileService {
 		return file;
 	}
 
+	public async getAvatarKeyForDeletion(
+		user_details_id: number,
+	): Promise<null | string> {
+		const avatarFile =
+			await this.fileRepository.findByUserDetailsId(user_details_id);
+
+		return avatarFile?.key || null;
+	}
+
 	public async removeAvatarRecord(user_details_id: number): Promise<boolean> {
 		const avatarFile =
 			await this.fileRepository.findByUserDetailsId(user_details_id);
@@ -37,10 +41,7 @@ class FileService {
 			return false;
 		}
 
-		await this.userAvatarService.deleteAvatar(avatarFile.key);
-
 		await this.fileRepository.delete(avatarFile.id);
-
 		await this.fileRepository.unsetFileId(user_details_id);
 
 		return true;
@@ -57,7 +58,6 @@ class FileService {
 			await this.fileRepository.findByUserDetailsId(user_details_id);
 
 		if (avatarFile) {
-			await this.userAvatarService.deleteAvatar(avatarFile.key);
 			const updated = await this.fileRepository.update(avatarFile.id, {
 				key,
 				url,

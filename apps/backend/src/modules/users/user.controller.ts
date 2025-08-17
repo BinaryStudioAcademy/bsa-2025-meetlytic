@@ -10,10 +10,13 @@ import { type FileService } from "~/modules/files/file.service.js";
 import { type UserAvatarService } from "~/modules/users/user-avatar.service.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
-import { UserErrorMessage, UsersApiPath } from "./libs/enums/enums.js";
+import {
+	UserAvatarErrorMessage,
+	UserErrorMessage,
+	UsersApiPath,
+} from "./libs/enums/enums.js";
 import {
 	type UploadAvatarHandlerOptions,
-	type UploadAvatarOptions,
 	type UserResponseDto,
 	type UserUpdateResponseDto,
 } from "./libs/types/types.js";
@@ -205,21 +208,11 @@ class UserController extends BaseController {
 			});
 		}
 
-		const existing = await this.fileService.findByUserDetailsId(detailsId);
-
-		if (!existing) {
-			throw new HTTPError({
-				message: UserErrorMessage.AVATAR_NOT_SET,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		await this.userAvatarService.deleteAvatar(existing.key);
-		await this.fileService.removeAvatarRecord(detailsId);
+		await this.userAvatarService.deleteAvatar(user.id);
 
 		return {
 			payload: {
-				message: UserErrorMessage.AVATAR_DELETED_SUCCESSFULLY,
+				message: UserAvatarErrorMessage.AVATAR_DELETED_SUCCESSFULLY,
 				success: true,
 			},
 			status: HTTPCode.OK,
@@ -309,58 +302,25 @@ class UserController extends BaseController {
 	private async uploadAvatar(
 		options: UploadAvatarHandlerOptions,
 	): Promise<APIHandlerResponse> {
-		try {
-			const { request } = options;
+		const { request } = options;
 
-			const user = request.user;
+		const user = request.user;
 
-			const uploadedFile = await request.getFileOrThrow();
+		const uploadedFile = await request.getFileOrThrow();
 
-			const { buffer, filename, mimetype } = uploadedFile;
+		const { buffer, filename, mimetype } = uploadedFile;
 
-			const avatarOptions: UploadAvatarOptions = {
-				buffer,
-				filename,
-				mimetype,
-				userId: user.id,
-			};
-			const { key, url } =
-				await this.userAvatarService.uploadAvatar(avatarOptions);
+		const { key, url } = await this.userAvatarService.uploadAvatar({
+			buffer,
+			filename,
+			mimetype,
+			userId: user.id,
+		});
 
-			const detailsId = await this.userService.getOrCreateDetailsId(user.id);
-
-			if (!detailsId) {
-				throw new HTTPError({
-					message: UserErrorMessage.DETAILS_NOT_FOUND,
-					status: HTTPCode.NOT_FOUND,
-				});
-			}
-
-			const fileRecord = await this.fileService.replaceAvatarRecord({
-				key,
-				url,
-				user_details_id: detailsId,
-			});
-
-			if (!fileRecord.id) {
-				throw new Error(UserErrorMessage.FILE_RECORD_CREATION_FAILED);
-			}
-
-			await this.userService.updateUserDetailsFileId(detailsId, fileRecord.id);
-
-			return {
-				payload: { data: { key, url }, success: true },
-				status: HTTPCode.CREATED,
-			};
-		} catch {
-			return {
-				payload: {
-					error: "Internal Server Error",
-					message: UserErrorMessage.AVATAR_UPLOAD_FAILED,
-				},
-				status: HTTPCode.INTERNAL_SERVER_ERROR,
-			};
-		}
+		return {
+			payload: { data: { key, url }, success: true },
+			status: HTTPCode.CREATED,
+		};
 	}
 
 	/**

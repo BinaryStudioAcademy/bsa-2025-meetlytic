@@ -2,13 +2,15 @@ import { type FastifyRequest } from "fastify";
 
 import { type UploadedFile } from "~/libs/plugins/uploads/libs/types/types.js";
 
+type RequestWithFile = FastifyRequest & {
+	getFileOrThrow: (localOptions?: {
+		fieldName?: string;
+	}) => Promise<UploadedFile>;
+	user: { id: number };
+};
+
 type UploadAvatarHandlerOptions = {
-	request: FastifyRequest & {
-		getFileOrThrow: (localOptions?: {
-			fieldName?: string;
-		}) => Promise<UploadedFile>;
-		user: { id: number };
-	};
+	request: RequestWithFile;
 };
 
 type UploadAvatarOptions = {

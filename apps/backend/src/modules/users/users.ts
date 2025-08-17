@@ -18,13 +18,19 @@ const fileRepository = new FileRepository({
 });
 const userRepository = new UserRepository(UserModel);
 const userDetailsRepository = new UserDetailsRepository(UserDetailsModel);
-const userAvatarService = new UserAvatarService(config, logger);
-const fileService = new FileService({ fileRepository, userAvatarService });
+const fileService = new FileService({ fileRepository });
+
 const userService = new UserService(
 	userRepository,
 	userDetailsRepository,
 	fileService,
 );
+const userAvatarService = new UserAvatarService(
+	config,
+	fileService,
+	userService,
+);
+
 const userController = new UserController({
 	fileService,
 	logger,

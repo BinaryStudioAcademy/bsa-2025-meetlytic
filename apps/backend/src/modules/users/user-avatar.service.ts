@@ -17,7 +17,7 @@ class UserAvatarService {
 	private logger: Logger;
 
 	public constructor(config: Config, logger: Logger) {
-		const bucket = config.ENV.AWS.BUCKET_NAME;
+		const bucket = config.ENV.AWS.S3_BUCKET_NAME;
 
 		this.logger = logger;
 

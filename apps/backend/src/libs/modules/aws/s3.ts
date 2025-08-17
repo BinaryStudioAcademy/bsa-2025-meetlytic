@@ -5,8 +5,8 @@ import { BaseS3 } from "./base-s3.module.js";
 
 const {
 	ACCESS_KEY_ID: accessKeyId,
-	BUCKET_NAME: bucketName,
 	REGION: region,
+	S3_BUCKET_NAME: bucketName,
 	SECRET_ACCESS_KEY: secretAccessKey,
 } = config.ENV.AWS;
 

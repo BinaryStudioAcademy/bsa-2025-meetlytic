@@ -11,8 +11,8 @@ type EnvironmentSchema = {
 	AWS: {
 		ACCESS_KEY_ID: string;
 		AMI_ID: string;
-		BUCKET_NAME: string;
 		REGION: string;
+		S3_BUCKET_NAME: string;
 		SECRET_ACCESS_KEY: string;
 	};
 	BOT: {

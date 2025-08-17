@@ -6,7 +6,7 @@ const ZoomUILabel = {
 	INPUT_NAME: "#input-for-name",
 	INPUT_PASSWORD: "#input-for-pwd",
 	JOIN: "button[type='button']",
-	LEAVE: "button[aria-label='End']",
+	LEAVE: "button[aria-label='Leave']",
 	MUTE: "button[aria-label='mute my microphone']",
 	MUTE_LOGIN: "button[aria-label='Mute']",
 	PARTISIPANTS_COUNT: ".footer-button__number-counter span",

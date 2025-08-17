@@ -14,11 +14,11 @@ const getMeetingDetailsById = createAsyncThunk<
 	AsyncThunkConfig
 >(
 	`${sliceName}/get-meeting-details-by-id`,
-	async ({ id, token }, { extra }) => {
+	async ({ id, sharedToken }, { extra }) => {
 		const { meetingDetailsApi } = extra;
 
-		return await (token
-			? meetingDetailsApi.getMeetingByIdPublic(id, token)
+		return await (sharedToken
+			? meetingDetailsApi.getMeetingByIdPublic(id, sharedToken)
 			: meetingDetailsApi.getMeetingByIdAuth(id));
 	},
 );

@@ -1,6 +1,6 @@
 type MeetingDetailsRequestDto = {
 	id: number;
-	token?: string | undefined;
+	sharedToken?: string | undefined;
 };
 
 export { type MeetingDetailsRequestDto };

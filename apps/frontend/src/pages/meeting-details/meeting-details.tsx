@@ -43,11 +43,11 @@ const MeetingDetails: React.FC = () => {
 	const { user } = useAppSelector((state) => state.auth);
 
 	useEffect(() => {
-		const shareToken = searchParameters.get("token");
+		const sharedToken = searchParameters.get("token");
 		void dispatch(
 			meetingDetailsActions.getMeetingDetailsById({
 				id: Number(id),
-				token: shareToken ?? undefined,
+				sharedToken: sharedToken ?? undefined,
 			}),
 		);
 	}, [id, dispatch, searchParameters]);
@@ -123,7 +123,7 @@ const MeetingDetails: React.FC = () => {
 					<div className={styles["meeting-details__right-panel"]}>
 						<div>
 							<div className={styles["panel-header"]}>
-								<div className={styles["panel-header__text"]}>SUMMARY</div>
+								<h3 className={styles["panel-header__text"]}>SUMMARY</h3>
 							</div>
 							<div className={styles["summary-area"]}>
 								<div className={styles["summary-text"]}>
@@ -142,7 +142,7 @@ const MeetingDetails: React.FC = () => {
 
 						<div>
 							<div className={styles["panel-header"]}>
-								<div className={styles["panel-header__text"]}>ACTION ITEMS</div>
+								<h3 className={styles["panel-header__text"]}>ACTION ITEMS</h3>
 							</div>
 							<div className={styles["action-items-area"]}>
 								<div className={styles["action-items-text"]}>

@@ -85,7 +85,7 @@ class BaseZoomBot {
 		this.logger.info(ZoomBotMessages.START_ENTER_EMAIL_STEP);
 
 		if (
-			!(await this.exists(ZoomUILabel.LOGIN_EMAIL_INPUT, Timeout.TWO_SECONDS))
+			!(await this.exists(ZoomUILabel.LOGIN_EMAIL_INPUT, Timeout.FIVE_SECONDS))
 		) {
 			this.logger.error(ZoomBotMessages.LOGIN_EMAIL_INPUT_NOT_FOUND);
 
@@ -106,7 +106,7 @@ class BaseZoomBot {
 		if (
 			!(await this.exists(
 				ZoomUILabel.LOGIN_PASSWORD_INPUT,
-				Timeout.THREE_SECONDS,
+				Timeout.FIVE_SECONDS,
 			))
 		) {
 			this.logger.error(ZoomBotMessages.LOGIN_PASSWORD_INPUT_NOT_FOUND);

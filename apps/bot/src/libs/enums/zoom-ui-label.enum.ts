@@ -9,7 +9,8 @@ const ZoomUILabel = {
 	LEAVE: "button[aria-label='Leave']",
 	LOGIN_EMAIL_INPUT:
 		"input#email, input[name='email'], input[name='new-account']",
-	LOGIN_PASSWORD_INPUT: "input[type='password']",
+	LOGIN_PASSWORD_INPUT:
+		"input#password.zm-input__inner, input[name='password'][type='password']",
 	MUTE: "button[aria-label='mute my microphone']",
 	MUTE_LOGIN: "button[aria-label='Mute']",
 	PARTISIPANTS_COUNT: ".footer-button__number-counter span",

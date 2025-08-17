@@ -1,4 +1,3 @@
-import { FILENAME_SANITIZE_REGEX } from "~/libs/constants/constants.js";
 import { s3Instance } from "~/libs/modules/aws/s3.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type FileService } from "~/modules/files/file.service.js";
@@ -29,12 +28,6 @@ class UserAvatarService {
 		this.bucketName = bucket;
 		this.fileService = fileService;
 		this.userService = userService;
-	}
-
-	private buildKey(userId: number, filename: string): string {
-		const safe = filename.replace(FILENAME_SANITIZE_REGEX, "_");
-
-		return `avatars/${String(userId)}/${String(Date.now())}_${safe}`;
 	}
 
 	public async deleteAvatar(
@@ -84,7 +77,7 @@ class UserAvatarService {
 			await this.fileService.getAvatarKeyForDeletion(detailsId);
 
 		try {
-			const key = this.buildKey(userId, filename);
+			const key = s3Instance.buildKey("avatars", filename, userId);
 
 			const { key: savedKey, url } = await s3Instance.uploadObject({
 				body: buffer,

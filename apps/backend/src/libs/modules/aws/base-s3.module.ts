@@ -6,6 +6,7 @@ import {
 	S3Client,
 } from "@aws-sdk/client-s3";
 
+import { FILENAME_SANITIZE_REGEX } from "~/libs/constants/constants.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { S3ErrorMessage } from "./libs/enums/enum.js";
@@ -48,6 +49,18 @@ class BaseS3 {
 		this.client = new S3Client({ credentials, region });
 	}
 
+	public buildKey(
+		folderPrefix: string,
+		originalFileName: string,
+		userId?: number,
+	): string {
+		const safeFileName = originalFileName.replace(FILENAME_SANITIZE_REGEX, "_");
+		const timestamp = Date.now();
+		const prefix = userId ? `${folderPrefix}/${String(userId)}` : folderPrefix;
+
+		return `${prefix}/${String(timestamp)}_${safeFileName}`;
+	}
+
 	public async deleteObject({ bucket, key }: DeleteOptions): Promise<void> {
 		const bucketName = bucket ?? this.bucketName;
 
@@ -60,9 +73,8 @@ class BaseS3 {
 			Key: key,
 		};
 
-		this.logger.info(`[S3] Delete start -> ${bucketName}/${key}`);
 		await this.client.send(new DeleteObjectCommand(input));
-		this.logger.info("[S3] Delete done");
+		this.logger.info(`[S3] Deleted s3://${bucketName}/${key}`);
 	}
 
 	public getClient(): S3Client {
@@ -100,11 +112,10 @@ class BaseS3 {
 			...(metadata ? { Metadata: metadata } : {}),
 		};
 
-		this.logger.info(`[S3] Upload start -> ${bucketName}/${key}`);
 		await this.client.send(new PutObjectCommand(input));
 
 		const url = this.getPublicUrl(key, bucketName);
-		this.logger.info(`[S3] Upload done -> ${url}`);
+		this.logger.info(`[S3] Uploaded -> ${url}`);
 
 		return { key, url };
 	}

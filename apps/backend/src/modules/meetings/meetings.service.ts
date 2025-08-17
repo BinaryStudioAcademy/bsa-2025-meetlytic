@@ -96,7 +96,17 @@ class MeetingService implements Service<MeetingResponseDto> {
 			ownerId: payload.ownerId,
 		});
 
-		const newMeeting = await this.meetingRepository.create(meeting);
+		let newMeeting;
+
+		try {
+			newMeeting = await this.meetingRepository.create(meeting);
+		} catch {
+			throw new MeetingError({
+				message: MeetingErrorMessage.DUPLICATED_MEETING,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const { id, meetingPassword } = newMeeting.toObject();
 
 		if (!id) {

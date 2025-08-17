@@ -13,6 +13,7 @@ const allowedStatus = Object.values(MeetingStatus);
 
 const meetingUpdate = z
 	.object({
+		actionItems: z.string(),
 		host: z
 			.string()
 			.min(MeetingValidationRule.MINIMAL_HOST_LENGTH, {
@@ -34,6 +35,7 @@ const meetingUpdate = z
 					message: MeetingValidationMessage.STATUS_WRONG,
 				},
 			),
+		summary: z.string(),
 	})
 	.required();
 

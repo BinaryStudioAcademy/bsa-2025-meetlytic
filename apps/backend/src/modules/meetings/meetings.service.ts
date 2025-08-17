@@ -263,7 +263,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		const updatedMeeting = await this.meetingRepository.update(
 			id,
-			meeting.toNewObject(),
+			meeting.toDetailedObject(),
 		);
 
 		if (!updatedMeeting) {

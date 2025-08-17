@@ -6,10 +6,9 @@ import {
 import { configureString } from "~/libs/helpers/helpers.js";
 import {
 	type HTTP,
-	type HTTPCode,
+	HTTPCode,
 	HTTPError,
 	HTTPHeader,
-	HTTPCode as LibraryHTTPCode,
 } from "~/libs/modules/http/http.js";
 import { type Storage, StorageKey } from "~/libs/modules/storage/storage.js";
 import { type ServerErrorResponse, type ValueOf } from "~/libs/types/types.js";
@@ -72,7 +71,7 @@ class BaseHTTPApi implements HTTPApi {
 				details: [],
 				errorType: ServerErrorType.NO_INTERNET,
 				message: NotificationMessage.NO_INTERNET,
-				status: LibraryHTTPCode.NO_INTERNET as ValueOf<typeof HTTPCode>,
+				status: HTTPCode.NO_INTERNET as ValueOf<typeof HTTPCode>,
 			});
 		}
 	}

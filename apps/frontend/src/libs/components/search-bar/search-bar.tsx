@@ -1,8 +1,8 @@
 import { SearchInput } from "~/libs/components/components.js";
 import { useAppForm } from "~/libs/hooks/hooks.js";
-import { DEFAULT_SEARCH_VALUE } from "~/modules/meeting-details/libs/default-values/meeting-details.default-values.js";
 import { searchInputValidationSchema } from "~/modules/meeting-details/meeting-details.js";
 
+import { DEFAULT_SEARCH_VALUE } from "./libs/constants/constants.js";
 import styles from "./search-bar.module.css";
 
 type Properties = {

@@ -8,6 +8,7 @@ type EnvironmentSchema = {
 	};
 	APP: {
 		ENVIRONMENT: ValueOf<typeof AppEnvironment>;
+		HOST: string;
 	};
 };
 

@@ -22,6 +22,7 @@ class BaseConfig implements Config {
 				ENVIRONMENT: import.meta.env["VITE_APP_NODE_ENV"] as ValueOf<
 					typeof AppEnvironment
 				>,
+				HOST: import.meta.env["VITE_APP_HOST"] as string,
 			},
 		};
 	}

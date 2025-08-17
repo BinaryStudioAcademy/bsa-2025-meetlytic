@@ -43,6 +43,7 @@ class BaseSocketService implements SocketService {
 		});
 
 		socket.on(SocketEvent.RECORDING_STOPPED, async (meetingId: string) => {
+			this.logger.info(`Getting full transcript of meeting ${meetingId}`);
 			const tarnscriptChunks = await meetingService.getTranscriptById(
 				Number(meetingId),
 			);
@@ -60,7 +61,11 @@ class BaseSocketService implements SocketService {
 			SocketEvent.SAVE_SUMMARY_ACTION_ITEMS,
 			async (payload: MeetingSummaryActionPointsResponseDto) => {
 				const { meetingId, ...summaryActionItems } = payload;
+				this.logger.info(
+					`Updating summary/ action items of meeting ${meetingId} ${summaryActionItems.summary} ${summaryActionItems.actionItems}`,
+				);
 				await meetingService.update(Number(meetingId), summaryActionItems);
+				this.logger.info(`Ending meeting ${meetingId}`);
 				await meetingService.endMeeting(Number(meetingId));
 			},
 		);

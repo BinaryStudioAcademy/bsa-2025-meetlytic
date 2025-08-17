@@ -220,7 +220,9 @@ class BaseZoomBot {
 			// TODO:
 			// audioRecorder.finalize()
 			// audioRecorder.stopFullMeetingRecording()
-
+			this.logger.info(
+				`Stopping recording of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
+			);
 			this.audioRecorder.stop();
 			await this.leaveMeeting();
 			this.socketClient.emit(
@@ -317,7 +319,7 @@ class BaseZoomBot {
 			await this.page.setUserAgent(USER_AGENT);
 
 			this.logger.info(
-				`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK} webClient:${this.convertToZoomWebClientUrl(this.config.ENV.ZOOM.MEETING_LINK)}`,
+				`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
 			);
 			await this.page.goto(
 				this.convertToZoomWebClientUrl(this.config.ENV.ZOOM.MEETING_LINK),

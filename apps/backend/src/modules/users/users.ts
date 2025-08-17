@@ -1,3 +1,4 @@
+import { s3Instance } from "~/libs/modules/aws/s3.js";
 import { logger } from "~/libs/modules/logger/logger.js";
 
 import { FileModel } from "../files/file.model.js";
@@ -24,7 +25,11 @@ const userService = new UserService(
 	userDetailsRepository,
 	fileService,
 );
-const userAvatarService = new UserAvatarService(fileService, userService);
+const userAvatarService = new UserAvatarService(
+	fileService,
+	userService,
+	s3Instance,
+);
 
 const userController = new UserController({
 	fileService,

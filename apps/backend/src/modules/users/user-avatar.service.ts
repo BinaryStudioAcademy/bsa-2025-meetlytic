@@ -1,4 +1,4 @@
-import { s3Instance } from "~/libs/modules/aws/s3.js";
+import { type BaseS3 } from "~/libs/modules/aws/base-s3.module.js";
 import { type FileService } from "~/modules/files/file.service.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
@@ -10,11 +10,17 @@ import { type UploadAvatarOptions } from "./libs/types/types.js";
 
 class UserAvatarService {
 	private fileService: FileService;
+	private s3: BaseS3;
 	private userService: UserService;
 
-	public constructor(fileService: FileService, userService: UserService) {
+	public constructor(
+		fileService: FileService,
+		userService: UserService,
+		s3: BaseS3,
+	) {
 		this.fileService = fileService;
 		this.userService = userService;
+		this.s3 = s3;
 	}
 
 	public async deleteAvatar(
@@ -33,7 +39,7 @@ class UserAvatarService {
 		}
 
 		try {
-			await s3Instance.deleteObject({ key: avatarKey });
+			await this.s3.deleteObject({ key: avatarKey });
 			await this.fileService.removeAvatarRecord(detailsId);
 
 			return {
@@ -60,9 +66,9 @@ class UserAvatarService {
 			await this.fileService.getAvatarKeyForDeletion(detailsId);
 
 		try {
-			const key = s3Instance.buildKey("avatars", filename, userId);
+			const key = this.s3.buildKey("avatars", filename, userId);
 
-			const { key: savedKey, url } = await s3Instance.uploadObject({
+			const { key: savedKey, url } = await this.s3.uploadObject({
 				body: buffer,
 				contentType: mimetype,
 				key,
@@ -81,7 +87,7 @@ class UserAvatarService {
 			await this.userService.updateUserDetailsFileId(detailsId, fileRecord.id);
 
 			if (oldAvatarKey) {
-				await s3Instance.deleteObject({ key: oldAvatarKey });
+				await this.s3.deleteObject({ key: oldAvatarKey });
 			}
 
 			return { key: savedKey, url };

@@ -106,7 +106,22 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return await this.createInstance({ id, meetingLink, meetingPassword });
+		try {
+			const instanse = await this.createInstance({
+				id,
+				meetingLink,
+				meetingPassword,
+			});
+
+			return instanse;
+		} catch {
+			await this.meetingRepository.delete(id);
+
+			throw new MeetingError({
+				message: MeetingErrorMessage.MEETING_FAILED_TO_CREATE,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
 	}
 
 	public async delete(id: number): Promise<boolean> {

@@ -5,7 +5,7 @@ import {
 	Markdown,
 	Navigate,
 	PlayerTrack,
-	SearchInput,
+	TranscriptionPanel,
 } from "~/libs/components/components.js";
 import {
 	AppRoute,
@@ -16,7 +16,6 @@ import {
 import { formatDate } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
-	useAppForm,
 	useAppSelector,
 	useCallback,
 	useEffect,
@@ -25,12 +24,10 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
 import { rehypeSanitize, remarkGfm } from "~/libs/plugins/plugins.js";
-import { DEFAULT_SEARCH_VALUE } from "~/modules/meeting-details/libs/default-values/meeting-details.default-values.js";
 import {
 	actions as meetingDetailsActions,
 	meetingDetailsApi,
 	sanitizeDefaultSchema,
-	searchInputValidationSchema,
 } from "~/modules/meeting-details/meeting-details.js";
 
 import styles from "./styles.module.css";
@@ -40,15 +37,10 @@ const MeetingDetails: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [searchParameters] = useSearchParams();
 
-	const { dataStatus, meeting, transcription } = useAppSelector(
+	const { dataStatus, meeting } = useAppSelector(
 		(state) => state.meetingDetails,
 	);
 	const { user } = useAppSelector((state) => state.auth);
-
-	const { control, errors } = useAppForm({
-		defaultValues: DEFAULT_SEARCH_VALUE,
-		validationSchema: searchInputValidationSchema,
-	});
 
 	useEffect(() => {
 		const shareToken = searchParameters.get("token");
@@ -59,11 +51,6 @@ const MeetingDetails: React.FC = () => {
 			}),
 		);
 	}, [id, dispatch, searchParameters]);
-
-	const handleTranscriptionSearch = useCallback((value: string) => {
-		// TODO: implement handleTranscriptionSearch logic
-		return value;
-	}, []);
 
 	const handleShareClick = useCallback(() => {
 		if (!meeting || !meeting.id) {
@@ -128,24 +115,10 @@ const MeetingDetails: React.FC = () => {
 				</div>
 
 				<div className={styles["meeting-details__content"]}>
-					<div className={styles["meeting-details__transcription-panel"]}>
-						<div className={styles["panel-header"]}>
-							<div className={styles["panel-header__text"]}>TRANSCRIPT</div>
-							<div className={styles["panel-header__search"]}>
-								<SearchInput
-									control={control}
-									errors={errors}
-									hasVisuallyHiddenLabel={true}
-									label="Search"
-									name="search"
-									onSearch={handleTranscriptionSearch}
-								/>
-							</div>
-						</div>
-						<div className={styles["transcription-area"]}>
-							<p className={styles["transcription-text"]}>{transcription}</p>
-						</div>
-					</div>
+					<TranscriptionPanel
+						meetingId={meeting.id}
+						meetingStatus={meeting.status}
+					/>
 
 					<div className={styles["meeting-details__right-panel"]}>
 						<div>

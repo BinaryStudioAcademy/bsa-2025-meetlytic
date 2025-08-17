@@ -17,6 +17,7 @@ export {
 	HTTPError,
 	MeetingError,
 	MeetingTranscriptionError,
+	UploadError,
 	UserError,
 	ValidationError,
 } from "./libs/exceptions/exceptions.js";

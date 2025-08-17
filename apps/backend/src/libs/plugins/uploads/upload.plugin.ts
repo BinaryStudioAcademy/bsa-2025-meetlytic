@@ -6,7 +6,8 @@ import {
 	FILENAME_FALLBACK,
 	FILENAME_SANITIZE_REGEX,
 } from "~/libs/constants/constants.js";
-import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
+import { UploadError } from "~/libs/exceptions/exceptions.js";
+import { HTTPCode } from "~/libs/modules/http/http.js";
 import { bytesToMegabytes } from "~/libs/utils/utilities.js";
 
 import {
@@ -42,14 +43,14 @@ const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 			const file = await this.file({ limits: { fileSize: maxFileSize } });
 
 			if (!file) {
-				throw new HTTPError({
+				throw new UploadError({
 					message: `Missing file field "${expectedFieldName}"`,
 					status: HTTPCode.BAD_REQUEST,
 				});
 			}
 
 			if (!allowedMimeTypes.includes(file.mimetype)) {
-				throw new HTTPError({
+				throw new UploadError({
 					message: `Invalid file type "${file.mimetype}". Allowed: ${allowedMimeTypes.join(", ")}`,
 					status: HTTPCode.BAD_REQUEST,
 				});
@@ -58,7 +59,7 @@ const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 			const buffer = await file.toBuffer();
 
 			if (buffer.length > maxFileSize) {
-				throw new HTTPError({
+				throw new UploadError({
 					message: `File too large. Max ${bytesToMegabytes(maxFileSize)} MB`,
 					status: HTTPCode.PAYLOAD_TOO_LARGE,
 				});

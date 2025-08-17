@@ -65,7 +65,7 @@ class BaseHTTPApi implements HTTPApi {
 		return response;
 	}
 
-	private ensureOnline(): void {
+	private ensureUserIsOnline(): void {
 		if (typeof navigator !== "undefined" && !navigator.onLine) {
 			throw new HTTPError({
 				details: [],
@@ -125,7 +125,7 @@ class BaseHTTPApi implements HTTPApi {
 	): Promise<HTTPApiResponse> {
 		const { contentType, hasAuth, method, payload = null } = options;
 
-		this.ensureOnline();
+		this.ensureUserIsOnline();
 
 		const headers = await this.getHeaders(hasAuth, contentType);
 

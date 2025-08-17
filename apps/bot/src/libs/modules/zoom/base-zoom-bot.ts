@@ -1,3 +1,4 @@
+import { webcrypto as nodeCrypto } from "node:crypto";
 import puppeteer, { type Browser, type Page } from "puppeteer";
 
 import {
@@ -82,6 +83,10 @@ class BaseZoomBot {
 	}
 
 	private async enterLoginEmail(email: string): Promise<boolean> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+		}
+
 		this.logger.info(ZoomBotMessages.START_ENTER_EMAIL_STEP);
 
 		if (
@@ -92,8 +97,9 @@ class BaseZoomBot {
 			return false;
 		}
 
-		await this.typeHelper(ZoomUILabel.LOGIN_EMAIL_INPUT, email);
-		await this.clickHelper(ZoomUILabel.SIGN_IN_NEXT_BTN, Timeout.THREE_SECONDS);
+		await this.typeWithRandomDelay(email);
+		await this.page.keyboard.press(KeyboardKey.ENTER);
+
 		await this.waitForNetwork();
 		this.logger.info(ZoomBotMessages.COMPLETE_ENTER_EMAIL_STEP);
 
@@ -101,6 +107,10 @@ class BaseZoomBot {
 	}
 
 	private async enterLoginPassword(password: string): Promise<boolean> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+		}
+
 		this.logger.info(ZoomBotMessages.START_ENTER_PASSWORD_STEP);
 
 		if (
@@ -114,11 +124,9 @@ class BaseZoomBot {
 			return false;
 		}
 
-		await this.typeHelper(ZoomUILabel.LOGIN_PASSWORD_INPUT, password);
-		await this.clickHelper(
-			ZoomUILabel.SIGN_IN_SUBMIT_BTN,
-			Timeout.THREE_SECONDS,
-		);
+		await this.typeWithRandomDelay(password);
+		await this.page.keyboard.press(KeyboardKey.ENTER);
+
 		await this.waitForNetwork();
 		this.logger.info(ZoomBotMessages.COMPLETE_ENTER_PASSWORD_STEP);
 
@@ -156,6 +164,8 @@ class BaseZoomBot {
 			if (password) {
 				await this.page.type(ZoomUILabel.INPUT_PASSWORD, password);
 			}
+
+			await delay(Timeout.TEN_SECONDS);
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessages.FAILED_TO_ENTER_PASSWORD} ${error instanceof Error ? error.message : String(error)}`,
@@ -229,9 +239,17 @@ class BaseZoomBot {
 			return false;
 		}
 
-		this.logger.info(ZoomBotMessages.GO_TO_SIGN_IN_PAGE);
-		await this.clickHelper(ZoomUILabel.SIGN_IN_LINK, Timeout.THREE_SECONDS);
+		const countToPressTab = 7;
+
+		for (let index = 0; index < countToPressTab; index++) {
+			await this.page.keyboard.press(KeyboardKey.TAB);
+			await delay(Timeout.TWO_SECONDS);
+		}
+
+		await this.page.keyboard.press(KeyboardKey.ENTER);
+
 		await this.waitForNetwork();
+		this.logger.info(ZoomBotMessages.GO_TO_SIGN_IN_PAGE);
 
 		return true;
 	}
@@ -389,7 +407,42 @@ class BaseZoomBot {
 		await this.page.waitForSelector(selector, { timeout, visible: true });
 		await this.page.click(selector, { clickCount: 3 });
 		await this.page.keyboard.press(KeyboardKey.BACKSPACE);
-		await this.page.type(selector, text);
+		await this.page.type(selector, text, { delay: 100 });
+		await delay(Timeout.ONE_SECOND);
+	}
+
+	private async typeWithRandomDelay(
+		text: string,
+		selector?: string,
+	): Promise<void> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+		}
+
+		const ONE = 1;
+		const ZERO = 0;
+		const crypto = nodeCrypto;
+		const minDelay = 50;
+		const maxDelay = 200;
+
+		const randInt = (min: number, max: number): number => {
+			const buf = new Uint32Array(ONE);
+			crypto.getRandomValues(buf);
+			const span = max - min + ONE;
+			const value = buf[ZERO] ?? ZERO;
+
+			return min + (value % span);
+		};
+
+		if (selector) {
+			await this.page.focus(selector);
+		}
+
+		for (const char of text) {
+			await this.page.keyboard.type(char);
+			const delay = randInt(minDelay, maxDelay);
+			await new Promise((r) => setTimeout(r, delay));
+		}
 	}
 
 	private async waitForNetwork(): Promise<void> {

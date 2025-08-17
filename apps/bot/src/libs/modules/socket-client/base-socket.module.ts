@@ -1,5 +1,7 @@
 import { io, type Socket } from "socket.io-client";
 
+import { logger } from "../logger/logger.js";
+import { SocketNamespace } from "./enums/enums.js";
 import {
 	type ClientToServerEvents,
 	type ServerToClientEvents,
@@ -13,6 +15,9 @@ type Listener<K extends EventKeys> = K extends keyof SocketReservedEvents
 		? ServerToClientEvents[K]
 		: never;
 
+const getOrigin = (url: string, namespace: string): string =>
+	`${url}${namespace}`;
+
 class BaseSocketClient {
 	private socket: null | Socket<ServerToClientEvents, ClientToServerEvents> =
 		null;
@@ -23,12 +28,16 @@ class BaseSocketClient {
 
 	public connect(): void {
 		if (!this.socket) {
-			this.socket = io(this.url, {
+			this.socket = io(getOrigin(this.url, SocketNamespace.BOTS), {
 				reconnection: true,
 				reconnectionAttempts: Infinity,
 				reconnectionDelay: 1000,
 				transports: ["websocket"],
 			});
+
+			logger.info(
+				`Bot is connecting to  ${getOrigin(this.url, SocketNamespace.BOTS)}`,
+			);
 		} else if (!this.socket.connected) {
 			this.socket.connect();
 		}

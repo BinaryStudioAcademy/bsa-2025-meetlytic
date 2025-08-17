@@ -198,9 +198,17 @@ class BaseZoomBot {
 		}
 	}
 	private initSocket(): void {
+		this.logger.info("calling this.socketClient.connect()");
+		this.socketClient.connect();
+
 		this.socketClient.on(SocketEvent.CONNECT, () => {
 			this.logger.info(
 				`${SocketMessage.CLIENT_CONNECTED} ${String(this.meetingId)}`,
+			);
+			this.logger.info(`JOIN_ROOM event emitted ${String(this.meetingId)}`);
+			this.socketClient.emit(
+				SocketEvent.JOIN_ROOM,
+				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
 		});
 
@@ -208,7 +216,33 @@ class BaseZoomBot {
 			this.logger.warn(`${SocketMessage.CLIENT_DISCONNECTED} ${reason}`);
 		});
 
-		this.socketClient.connect();
+		this.socketClient.on(SocketEvent.STOP_RECORDING, async () => {
+			// TODO:
+			// audioRecorder.finalize()
+			// audioRecorder.stopFullMeetingRecording()
+
+			this.audioRecorder.stop();
+			await this.leaveMeeting();
+			this.socketClient.emit(
+				SocketEvent.RECORDING_STOPPED,
+				String(this.config.ENV.ZOOM.MEETING_ID),
+			);
+		});
+
+		this.socketClient.on(
+			SocketEvent.GENERATE_SUMMARY_ACTION_ITEMS,
+			async (transcript: string) => {
+				const summary = await this.openAI.summarize(transcript);
+				const actionItems = await this.openAI.createActionItems(transcript);
+
+				this.socketClient.emit(SocketEvent.SAVE_SUMMARY_ACTION_ITEMS, {
+					actionItems,
+					meetingId: String(this.config.ENV.ZOOM.MEETING_ID),
+					summary,
+				});
+				this.socketClient.disconnect();
+			},
+		);
 	}
 	private async joinMeeting(): Promise<void> {
 		if (!this.page) {

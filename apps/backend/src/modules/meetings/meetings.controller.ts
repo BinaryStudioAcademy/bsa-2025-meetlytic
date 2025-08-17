@@ -359,8 +359,6 @@ class MeetingsController extends BaseController {
 	 *         description: Request to stop recording accepted
 	 *       404:
 	 *         description: Meeting not found
-	 *       500:
-	 *         description: Failed to delete stack
 	 */
 	private async stopRecording(
 		options: StopRecordingOptions,

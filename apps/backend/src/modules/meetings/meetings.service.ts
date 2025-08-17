@@ -7,6 +7,11 @@ import {
 import template from "~/libs/modules/cloud-formation/libs/templates/ec2-instance-template.json" with { type: "json" };
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import {
+	SocketEvent,
+	SocketNamespace,
+} from "~/libs/modules/socket/libs/enums/enums.js";
+import { socketService } from "~/libs/modules/socket/socket.js";
+import {
 	type BaseToken,
 	type SharedJwtPayload,
 } from "~/libs/modules/token/token.js";
@@ -199,6 +204,12 @@ class MeetingService implements Service<MeetingResponseDto> {
 		};
 	}
 
+	public async getTranscriptById(
+		id: number,
+	): Promise<MeetingTranscriptionResponseDto[]> {
+		return await this.meetingTranscriptionService.getByMeetingId(id);
+	}
+
 	public async saveChunk({
 		chunkText,
 		meetingId,
@@ -215,7 +226,12 @@ class MeetingService implements Service<MeetingResponseDto> {
 		// TODO:
 		// 1. emit a message for the bot (bot stops audio recording, transcribes full audio, gets summary and action points)
 		// 2. move endMeeting(id) call to the websocket event handler
-		await this.endMeeting(id);
+		const meeting = await this.find(id);
+		socketService.emitTo({
+			event: SocketEvent.STOP_RECORDING,
+			namespace: SocketNamespace.BOTS,
+			room: String(meeting.id),
+		});
 	}
 
 	public async update(
@@ -232,16 +248,17 @@ class MeetingService implements Service<MeetingResponseDto> {
 		}
 
 		const meeting = MeetingEntity.initialize({
-			actionItems: meetingEntity.toDetailedObject().actionItems,
+			actionItems:
+				payload.actionItems ?? meetingEntity.toDetailedObject().actionItems,
 			createdAt: meetingEntity.toObject().createdAt,
-			host: payload.host,
+			host: payload.host ?? meetingEntity.toObject().host,
 			id,
 			instanceId: meetingEntity.toObject().instanceId,
 			meetingId: meetingEntity.toObject().meetingId,
 			meetingPassword: meetingEntity.toObject().meetingPassword,
 			ownerId: meetingEntity.toObject().ownerId,
-			status: payload.status,
-			summary: meetingEntity.toDetailedObject().summary,
+			status: payload.status ?? meetingEntity.toObject().status,
+			summary: payload.summary ?? meetingEntity.toDetailedObject().summary,
 		});
 
 		const updatedMeeting = await this.meetingRepository.update(

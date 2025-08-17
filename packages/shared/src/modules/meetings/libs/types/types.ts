@@ -3,6 +3,7 @@ export { type MeetingDetailedResponseDto } from "./meeting-detailed-response-dto
 export { type MeetingGetAllResponseDto } from "./meeting-get-all-response-dto.type.js";
 export { type MeetingGetPublicUrlResponseDto } from "./meeting-get-public-url-response-dto.type.js";
 export { type MeetingResponseDto } from "./meeting-response-dto.type.js";
+export { type MeetingSummaryActionPointsResponseDto } from "./meeting-summary-action-points-response-dto.js";
 export {
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,

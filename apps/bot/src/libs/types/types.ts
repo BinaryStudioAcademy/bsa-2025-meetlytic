@@ -1,4 +1,5 @@
 export {
+	type MeetingSummaryActionPointsResponseDto,
 	type MeetingTranscriptionRequestDto,
 	type ValueOf,
 } from "@meetlytic/shared";

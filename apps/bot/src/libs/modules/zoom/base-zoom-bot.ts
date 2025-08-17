@@ -317,7 +317,7 @@ class BaseZoomBot {
 			await this.page.setUserAgent(USER_AGENT);
 
 			this.logger.info(
-				`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
+				`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK} webClient:${this.convertToZoomWebClientUrl(this.config.ENV.ZOOM.MEETING_LINK)}`,
 			);
 			await this.page.goto(
 				this.convertToZoomWebClientUrl(this.config.ENV.ZOOM.MEETING_LINK),

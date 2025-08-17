@@ -23,9 +23,9 @@ import {
 	useParams,
 	useSearchParams,
 } from "~/libs/hooks/hooks.js";
+import { config } from "~/libs/modules/config/config.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
 import { rehypeSanitize, remarkGfm } from "~/libs/plugins/plugins.js";
-import { DEFAULT_SEARCH_VALUE } from "~/modules/meeting-details/libs/default-values/meeting-details.default-values.js";
 import {
 	actions as meetingDetailsActions,
 	meetingDetailsApi,
@@ -33,6 +33,7 @@ import {
 	searchInputValidationSchema,
 } from "~/modules/meeting-details/meeting-details.js";
 
+import { DEFAULT_SEARCH_VALUE } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 const MeetingDetails: React.FC = () => {
@@ -55,7 +56,7 @@ const MeetingDetails: React.FC = () => {
 		void dispatch(
 			meetingDetailsActions.getMeetingDetailsById({
 				id: Number(id),
-				sharedToken: sharedToken ?? undefined,
+				sharedToken,
 			}),
 		);
 	}, [id, dispatch, searchParameters]);
@@ -66,7 +67,7 @@ const MeetingDetails: React.FC = () => {
 	}, []);
 
 	const handleShareClick = useCallback(() => {
-		if (!meeting || !meeting.id) {
+		if (!meeting?.id) {
 			notification.error(NotificationMessage.MEETING_DATA_IS_NOT_AVAILABLE);
 
 			return;
@@ -77,7 +78,7 @@ const MeetingDetails: React.FC = () => {
 				const { publicUrl } = await meetingDetailsApi.getPublicShareUrl(
 					meeting.id,
 				);
-				const host = import.meta.env["VITE_APP_HOST"] as string;
+				const host = config.ENV.APP.HOST;
 				void navigator.clipboard.writeText(`${host}${publicUrl}`);
 				notification.success(NotificationMessage.PUBLIC_LINK_COPIED_SUCCESS);
 			} catch (error: unknown) {
@@ -135,7 +136,7 @@ const MeetingDetails: React.FC = () => {
 								<SearchInput
 									control={control}
 									errors={errors}
-									hasVisuallyHiddenLabel={true}
+									hasVisuallyHiddenLabel
 									label="Search"
 									name="search"
 									onSearch={handleTranscriptionSearch}

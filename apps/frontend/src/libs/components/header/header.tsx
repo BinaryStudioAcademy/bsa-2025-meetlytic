@@ -19,7 +19,7 @@ import styles from "./styles.module.css";
 
 type Properties = {
 	isMenuOpen: boolean;
-	onLogout: () => void;
+	onLogout?: (() => void) | undefined;
 	onToggleMenu: () => void;
 };
 

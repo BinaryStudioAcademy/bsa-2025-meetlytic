@@ -88,11 +88,13 @@ class MeetingTranscriptionService
 
 	public async getByMeetingId(
 		meetingId: number,
-	): Promise<MeetingTranscriptionResponseDto[]> {
+	): Promise<MeetingTranscriptionGetAllResponseDto> {
 		const transcriptions =
 			await this.meetingTranscriptionRepository.findByMeetingId(meetingId);
 
-		return transcriptions.map((transcription) => transcription.toObject());
+		return {
+			items: transcriptions.map((transcription) => transcription.toObject()),
+		};
 	}
 
 	public async update(

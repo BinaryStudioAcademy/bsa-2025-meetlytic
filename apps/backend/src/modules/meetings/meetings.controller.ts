@@ -145,6 +145,16 @@ class MeetingsController extends BaseController {
 			path: MeetingsApiPath.$ID_STOP_RECORDING,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
+		this.addRoute({
+			handler: (options) =>
+				this.getTranscriptionsByMeetingId(
+					options as { params: { id: string } },
+				),
+			method: HTTPMethod.GET,
+			path: MeetingsApiPath.$ID_MEETING_TRANSCRIPTIONS,
+			//TODO ask coach do we need to check if meeting owner
+			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+		});
 	}
 
 	/**
@@ -343,6 +353,66 @@ class MeetingsController extends BaseController {
 
 	/**
 	 * @swagger
+	 * /meetings/{id}/transcriptions:
+	 *   get:
+	 *     summary: Get all transcriptions for a meeting
+	 *     tags:
+	 *       - Meetings
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         description: ID of the meeting
+	 *         schema:
+	 *           type: number
+	 *     responses:
+	 *       200:
+	 *         description: List of transcriptions for the meeting
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 payload:
+	 *                   type: array
+	 *                   items:
+	 *                     type: object
+	 *                     properties:
+	 *                       id:
+	 *                         type: number
+	 *                         description: Transcription ID
+	 *                       meetingId:
+	 *                         type: number
+	 *                         description: ID of the meeting
+	 *                       chunkText:
+	 *                         type: string
+	 *                         description: Transcribed text chunk
+	 *                       createdAt:
+	 *                         type: string
+	 *                         format: date-time
+	 *                         description: Creation timestamp
+	 *                       updatedAt:
+	 *                         type: string
+	 *                         format: date-time
+	 *                         description: Last update timestamp
+	 *                 status:
+	 *                   type: number
+	 *                   description: HTTP status code
+	 *       404:
+	 *         description: No transcriptions found for the given meeting
+	 */
+	private async getTranscriptionsByMeetingId(options: {
+		params: { id: string };
+	}): Promise<APIHandlerResponse> {
+		const meetingId = options.params.id;
+		const transcriptions =
+			await this.meetingService.getTranscriptionsByMeetingId(Number(meetingId));
+
+		return { payload: transcriptions, status: HTTPCode.OK };
+	}
+
+	/**
+	 * @swagger
 	 * /meetings/{id}/stop-recording:
 	 *   delete:
 	 *     summary: Initiate request to stop meeting recording
@@ -362,6 +432,7 @@ class MeetingsController extends BaseController {
 	 *       500:
 	 *         description: Failed to delete stack
 	 */
+
 	private async stopRecording(
 		options: StopRecordingOptions,
 	): Promise<APIHandlerResponse> {

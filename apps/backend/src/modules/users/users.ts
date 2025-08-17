@@ -1,4 +1,3 @@
-import { config } from "~/libs/modules/config/config.js";
 import { logger } from "~/libs/modules/logger/logger.js";
 
 import { FileModel } from "../files/file.model.js";
@@ -25,11 +24,7 @@ const userService = new UserService(
 	userDetailsRepository,
 	fileService,
 );
-const userAvatarService = new UserAvatarService(
-	config,
-	fileService,
-	userService,
-);
+const userAvatarService = new UserAvatarService(fileService, userService);
 
 const userController = new UserController({
 	fileService,

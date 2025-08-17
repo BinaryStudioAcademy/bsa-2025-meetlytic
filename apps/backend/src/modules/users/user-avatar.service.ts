@@ -1,5 +1,4 @@
 import { s3Instance } from "~/libs/modules/aws/s3.js";
-import { type Config } from "~/libs/modules/config/config.js";
 import { type FileService } from "~/modules/files/file.service.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
@@ -10,22 +9,10 @@ import {
 import { type UploadAvatarOptions } from "./libs/types/types.js";
 
 class UserAvatarService {
-	private bucketName: string;
 	private fileService: FileService;
 	private userService: UserService;
 
-	public constructor(
-		config: Config,
-		fileService: FileService,
-		userService: UserService,
-	) {
-		const bucket = config.ENV.AWS.S3_BUCKET_NAME;
-
-		if (!bucket) {
-			throw new Error(UserAvatarErrorMessage.BUCKET_NOT_DEFINED);
-		}
-
-		this.bucketName = bucket;
+	public constructor(fileService: FileService, userService: UserService) {
 		this.fileService = fileService;
 		this.userService = userService;
 	}
@@ -46,11 +33,7 @@ class UserAvatarService {
 		}
 
 		try {
-			await s3Instance.deleteObject({
-				bucket: this.bucketName,
-				key: avatarKey,
-			});
-
+			await s3Instance.deleteObject({ key: avatarKey });
 			await this.fileService.removeAvatarRecord(detailsId);
 
 			return {
@@ -81,7 +64,6 @@ class UserAvatarService {
 
 			const { key: savedKey, url } = await s3Instance.uploadObject({
 				body: buffer,
-				bucket: this.bucketName,
 				contentType: mimetype,
 				key,
 			});
@@ -99,10 +81,7 @@ class UserAvatarService {
 			await this.userService.updateUserDetailsFileId(detailsId, fileRecord.id);
 
 			if (oldAvatarKey) {
-				await s3Instance.deleteObject({
-					bucket: this.bucketName,
-					key: oldAvatarKey,
-				});
+				await s3Instance.deleteObject({ key: oldAvatarKey });
 			}
 
 			return { key: savedKey, url };

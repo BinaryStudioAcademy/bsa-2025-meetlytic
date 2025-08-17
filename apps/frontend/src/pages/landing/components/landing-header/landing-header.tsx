@@ -1,12 +1,14 @@
 import { Button, Link, Logo } from "~/libs/components/components.js";
 import {
 	AppRoute,
+	Breakpoint,
 	ButtonSize,
 	ButtonVariant,
 	LogoSize,
 	LogoTheme,
 } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
+import { useMediaQuery } from "~/libs/hooks/hooks.js";
 import { HEADER_LINKS } from "~/modules/landing/landing.js";
 
 import styles from "./styles.module.css";
@@ -14,33 +16,37 @@ import styles from "./styles.module.css";
 type Properties = { className?: string };
 
 const LandingHeader: React.FC<Properties> = ({ className }: Properties) => {
+	const isMobile = useMediaQuery(Breakpoint.MOBILE);
+
 	return (
 		<header className={getValidClassNames(styles["landing-header"], className)}>
 			<div className={styles["landing-header__inner"]}>
-				<div className={styles["landing-header__left"]}>
-					<div className={styles["landing-header__logo"]}>
-						<Logo hasLink size={LogoSize.SMALL} theme={LogoTheme.LIGHT} />
-					</div>
-
-					<nav
-						aria-label="Header navigation"
-						className={styles["landing-header__nav"]}
-					>
-						<ul className={styles["landing-header__nav-list"]}>
-							{HEADER_LINKS.map(({ label, to }) => (
-								<li className={styles["landing-header__nav-item"]} key={label}>
-									<a
-										aria-label={label}
-										className={styles["landing-header__nav-link"]}
-										href={to}
-									>
-										{label}
-									</a>
-								</li>
-							))}
-						</ul>
-					</nav>
+				<div className={styles["landing-header__logo"]}>
+					<Logo
+						hasLink
+						size={isMobile ? LogoSize.TINY : LogoSize.SMALL}
+						theme={LogoTheme.LIGHT}
+					/>
 				</div>
+
+				<nav
+					aria-label="Header navigation"
+					className={styles["landing-header__nav"]}
+				>
+					<ul className={styles["landing-header__nav-list"]}>
+						{HEADER_LINKS.map(({ label, to }) => (
+							<li className={styles["landing-header__nav-item"]} key={label}>
+								<a
+									aria-label={label}
+									className={styles["landing-header__nav-link"]}
+									href={to}
+								>
+									{label}
+								</a>
+							</li>
+						))}
+					</ul>
+				</nav>
 
 				<div className={styles["landing-header__actions"]}>
 					<Link to={AppRoute.SIGN_IN}>

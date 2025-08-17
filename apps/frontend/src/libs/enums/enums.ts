@@ -2,6 +2,7 @@ export { AppRoute } from "./app-route.enum.js";
 export { AudioEvent } from "./audio-event.enum.js";
 export { AvatarSize } from "./avatar-size.enum.js";
 export { AvatarType } from "./avatar-type.enum.js";
+export { Breakpoint } from "./breakpoint.enum.js";
 export { ButtonSize } from "./button-size.enum.js";
 export { ButtonVariant } from "./button-variant.enum.js";
 export { CarouselConfig } from "./carousel-config.enum.js";

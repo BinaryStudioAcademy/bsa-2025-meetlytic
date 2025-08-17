@@ -5,6 +5,7 @@ export { useAppSelector } from "./use-app-selector/use-app-selector.hook.js";
 export { useCarousel } from "./use-carousel/use-carousel.hook.js";
 export { useLandingAnimation } from "./use-landing-background-animation/use-landing-background-animation.hook.js";
 export { useLogout } from "./use-logout/use-logout.hook.js";
+export { useMediaQuery } from "./use-media-query/use-media-query.js";
 export { useProgress } from "./use-progress/use-progress.js";
 export { useInView } from "motion/react";
 export { useCallback, useEffect, useMemo, useRef, useState } from "react";

@@ -1,5 +1,8 @@
 .hero {
+	display: flex;
+	align-items: center;
 	max-width: 1440px;
+	min-height: calc(100vh - var(--header-height));
 	margin: 0 auto;
 }
 
@@ -8,6 +11,7 @@
 	grid-template-columns: 1.1fr 1fr;
 	gap: 40px;
 	align-items: center;
+	width: 100%;
 	padding: 10px 92px 50px;
 }
 

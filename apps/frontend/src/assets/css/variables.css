@@ -27,4 +27,9 @@
 	--z-index-low: 10;
 	--z-index-medium: 100;
 	--z-index-high: 1000;
+	--container-max: 1440px;
+	--container-gutter-sm: 16px;
+	--container-gutter-md: 32px;
+	--container-gutter-lg: 92px;
+	--header-height: 110px;
 }

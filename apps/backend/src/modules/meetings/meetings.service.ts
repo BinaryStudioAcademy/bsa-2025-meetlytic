@@ -117,13 +117,13 @@ class MeetingService implements Service<MeetingResponseDto> {
 		}
 
 		try {
-			const instanse = await this.createInstance({
+			const instance = await this.createInstance({
 				id,
 				meetingLink,
 				meetingPassword,
 			});
 
-			return instanse;
+			return instance;
 		} catch {
 			await this.meetingRepository.delete(id);
 

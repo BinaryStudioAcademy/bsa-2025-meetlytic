@@ -37,10 +37,7 @@ class BaseSocketClient {
 	}
 
 	public disconnect(): void {
-		if (this.socket) {
-			this.socket.disconnect();
-			this.socket = null;
-		}
+		this.socket?.disconnect();
 	}
 
 	public emit<K extends keyof ClientToServerEvents>(

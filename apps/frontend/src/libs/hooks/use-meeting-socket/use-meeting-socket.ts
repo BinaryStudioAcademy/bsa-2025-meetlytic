@@ -1,10 +1,9 @@
-import { useEffect } from "react";
-
 import {
 	MeetingStatus,
 	SocketEvent,
 	SocketNamespace,
 } from "~/libs/enums/enums.js";
+import { useEffect } from "~/libs/hooks/hooks.js";
 import { socketClient } from "~/libs/modules/socket/socket.js";
 import { type MeetingTranscriptionResponseDto } from "~/modules/transcription/transcription.js";
 

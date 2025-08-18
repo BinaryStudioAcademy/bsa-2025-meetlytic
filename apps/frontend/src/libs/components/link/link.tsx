@@ -5,17 +5,15 @@ import { type ValueOf } from "~/libs/types/types.js";
 type Properties = {
 	children: React.ReactNode;
 	className?: string | undefined;
-	smooth?: boolean;
 	to: ValueOf<typeof AppRoute> | ValueOf<typeof LandingSection>;
 };
 
 const Link: React.FC<Properties> = ({
 	children,
 	className = "",
-	smooth,
 	to,
 }: Properties) => (
-	<HashLink className={className} smooth={smooth} to={to}>
+	<HashLink className={className} smooth to={to}>
 		{children}
 	</HashLink>
 );

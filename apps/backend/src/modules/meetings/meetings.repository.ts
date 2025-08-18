@@ -1,6 +1,7 @@
 import { DELETE_SUCCESS_THRESHOLD } from "~/libs/constants/constants.js";
 import { type Repository } from "~/libs/types/types.js";
 
+import { SortOrder } from "./libs/enums/enums.js";
 import { MeetingEntity } from "./meetings.entity.js";
 import { type MeetingModel } from "./meetings.model.js";
 
@@ -57,7 +58,7 @@ class MeetingRepository implements Repository<MeetingEntity> {
 		const meeting = await this.meetingModel
 			.query()
 			.where({ meetingId })
-			.orderBy("createdAt", "desc")
+			.orderBy("createdAt", SortOrder.DESC)
 			.first();
 
 		return meeting ? MeetingEntity.initialize(meeting) : null;

@@ -34,7 +34,7 @@ class BaseSocketService implements SocketService {
 		this.logger = logger;
 	}
 
-	private botsConnectionHandler(socket: Socket): void {
+	private handleBotsConnection(socket: Socket): void {
 		this.logger.info(`${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
 
 		socket.on(SocketEvent.JOIN_ROOM, async (meetingId: string) => {
@@ -44,13 +44,13 @@ class BaseSocketService implements SocketService {
 
 		socket.on(SocketEvent.RECORDING_STOPPED, async (meetingId: string) => {
 			this.logger.info(`Getting full transcript of meeting ${meetingId}`);
-			const tarnscriptChunks = await meetingService.getTranscriptById(
+			const transcriptChunks = await meetingService.getTranscriptById(
 				Number(meetingId),
 			);
 
 			let transcript = "";
 
-			for (const chunk of tarnscriptChunks) {
+			for (const chunk of transcriptChunks) {
 				transcript += chunk.chunkText;
 			}
 
@@ -94,7 +94,7 @@ class BaseSocketService implements SocketService {
 		});
 	}
 
-	private usersConnectionHandler(socket: Socket): void {
+	private handleUsersConnection(socket: Socket): void {
 		this.logger.info(`${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
 
 		socket.on(SocketEvent.DISCONNECT, (reason) => {
@@ -129,10 +129,10 @@ class BaseSocketService implements SocketService {
 		});
 		this.io
 			.of(SocketNamespace.BOTS)
-			.on(SocketEvent.CONNECTION, this.botsConnectionHandler.bind(this));
+			.on(SocketEvent.CONNECTION, this.handleBotsConnection.bind(this));
 		this.io
 			.of(SocketNamespace.USERS)
-			.on(SocketEvent.CONNECTION, this.usersConnectionHandler.bind(this));
+			.on(SocketEvent.CONNECTION, this.handleUsersConnection.bind(this));
 	}
 }
 

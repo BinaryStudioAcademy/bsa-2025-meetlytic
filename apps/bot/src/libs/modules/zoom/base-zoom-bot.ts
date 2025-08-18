@@ -204,7 +204,9 @@ class BaseZoomBot {
 			this.logger.info(
 				`${SocketMessage.CLIENT_CONNECTED} ${String(this.meetingId)}`,
 			);
-			this.logger.info(`JOIN_ROOM event emitted ${String(this.meetingId)}`);
+			this.logger.info(
+				`${SocketEvent.JOIN_ROOM} event emitted ${String(this.meetingId)}`,
+			);
 			this.socketClient.emit(
 				SocketEvent.JOIN_ROOM,
 				String(this.config.ENV.ZOOM.MEETING_ID),

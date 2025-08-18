@@ -21,3 +21,4 @@ export { ToastProvider } from "./toast-provider/toast-provider.js";
 export { default as Markdown } from "react-markdown";
 export { Provider as StoreProvider } from "react-redux";
 export { Navigate, NavLink, Outlet as RouterOutlet } from "react-router-dom";
+export { HashLink } from "react-router-hash-link";

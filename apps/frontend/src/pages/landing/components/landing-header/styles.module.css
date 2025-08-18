@@ -18,6 +18,7 @@
 }
 
 .landing-header__nav {
+	z-index: var(--z-index-high);
 	justify-self: start;
 }
 

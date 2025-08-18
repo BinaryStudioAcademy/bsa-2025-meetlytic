@@ -11,6 +11,7 @@ import {
 	useCallback,
 	useEffect,
 } from "~/libs/hooks/hooks.js";
+import { StorageKey } from "~/libs/modules/storage/storage.js";
 import {
 	actions as userActions,
 	type UserUpdateResponseDto,
@@ -20,7 +21,7 @@ import { ProfileForm } from "./components/components.js";
 import styles from "./styles.module.css";
 
 const Profile: React.FC = () => {
-	const token = localStorage.getItem("token");
+	const token = localStorage.getItem(StorageKey.TOKEN);
 	const dispatch = useAppDispatch();
 	const user = useAppSelector((state) => state.users.user);
 	const status = useAppSelector((state) => state.users.dataStatus);

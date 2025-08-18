@@ -1,8 +1,11 @@
+import { type SocketEvent } from "../enums/enums.js";
 import { type MeetingTranscriptionRequestDto } from "./types.js";
 
 type ServerToClientEvents = {
-	connect: () => void;
-	transcribe: (data: MeetingTranscriptionRequestDto) => void;
+	[SocketEvent.CONNECT]: () => void;
+	[SocketEvent.TRANSCRIBE_SAVE_CHUNK]: (
+		data: MeetingTranscriptionRequestDto,
+	) => void;
 };
 
 export { type ServerToClientEvents };

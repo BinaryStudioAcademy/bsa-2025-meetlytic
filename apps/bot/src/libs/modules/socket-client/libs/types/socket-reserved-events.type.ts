@@ -1,7 +1,9 @@
+import { type SocketEvent } from "../enums/enums.js";
+
 type SocketReservedEvents = {
-	connect: () => void;
-	connect_error: (error: Error) => void;
-	disconnect: (reason: string) => void;
+	[SocketEvent.CONNECT]: () => void;
+	[SocketEvent.CONNECT_ERROR]: (error: Error) => void;
+	[SocketEvent.DISCONNECT]: (reason: string) => void;
 };
 
 export { type SocketReservedEvents };

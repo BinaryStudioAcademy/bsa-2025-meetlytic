@@ -139,7 +139,7 @@ class BaseAudioRecorder implements AudioRecorder {
 		try {
 			const chunkText = await this.openAI.transcribe(filePath);
 
-			this.socketClient.emit(SocketEvent.TRANSCRIBE, {
+			this.socketClient.emit(SocketEvent.TRANSCRIBE_SAVE_CHUNK, {
 				chunkText,
 				meetingId: this.config.ENV.ZOOM.MEETING_ID,
 			});

@@ -6,7 +6,9 @@ import {
 
 type ClientToServerEvents = {
 	[SocketEvent.AUDIO_SAVE]: (data: MeetingAudioSaveDto) => void;
-	[SocketEvent.TRANSCRIBE]: (data: MeetingTranscriptionRequestDto) => void;
+	[SocketEvent.TRANSCRIBE_SAVE_CHUNK]: (
+		data: MeetingTranscriptionRequestDto,
+	) => void;
 };
 
 export { type ClientToServerEvents };

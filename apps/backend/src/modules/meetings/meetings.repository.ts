@@ -51,6 +51,18 @@ class MeetingRepository implements Repository<MeetingEntity> {
 		return meetings.map((meeting) => MeetingEntity.initialize(meeting));
 	}
 
+	public async findLatestByMeetingId(
+		meetingId: string,
+	): Promise<MeetingEntity | null> {
+		const meeting = await this.meetingModel
+			.query()
+			.where({ meetingId })
+			.orderBy("createdAt", "desc")
+			.first();
+
+		return meeting ? MeetingEntity.initialize(meeting) : null;
+	}
+
 	public async update(
 		id: number,
 		payload: Partial<Record<string, unknown>>,

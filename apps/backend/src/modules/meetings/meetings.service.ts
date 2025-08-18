@@ -88,6 +88,19 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
+		const existingMeeting: MeetingEntity | null =
+			await this.meetingRepository.findLatestByMeetingId(meetingId);
+
+		if (
+			existingMeeting &&
+			existingMeeting.toObject().status === MeetingStatus.STARTED
+		) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.DUPLICATED_MEETING,
+				status: HTTPCode.CONFLICT,
+			});
+		}
+
 		const meeting = MeetingEntity.initializeNew({
 			host: payload.host,
 			instanceId: null,

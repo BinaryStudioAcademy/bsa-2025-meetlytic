@@ -34,6 +34,7 @@ class BaseSocketService implements SocketService {
 		this.logger = logger;
 	}
 
+
 	private handleBotsConnection(socket: Socket): void {
 		this.logger.info(`${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
 
@@ -69,14 +70,19 @@ class BaseSocketService implements SocketService {
 				await meetingService.endMeeting(Number(meetingId));
 			},
 		);
-
-		socket.on(
+    socket.on(
 			SocketEvent.TRANSCRIBE,
 			async (payload: MeetingTranscriptionRequestDto) => {
 				try {
 					this.logger.info(SocketMessage.SOCKET_EVENT_RECEIVED);
 
-					await meetingService.saveChunk(payload);
+					const transcription = await meetingService.saveChunk(payload);
+
+					if (payload.meetingId) {
+						this.io
+							.to(String(payload.meetingId))
+							.emit(SocketEvent.TRANSCRIBE, transcription);
+					}
 				} catch (error) {
 					this.logger.error(
 						`${SocketMessage.TRANSCRIPTION_ERROR} ${String(error)}`,
@@ -84,25 +90,31 @@ class BaseSocketService implements SocketService {
 				}
 			},
 		);
-		socket.on(SocketEvent.DISCONNECT, (reason) => {
-			this.logger.warn(
-				`${SocketMessage.CLIENT_DISCONNECTED} ${socket.id},${reason}`,
-			);
-		});
-		socket.on(SocketEvent.ERROR, (error) => {
-			this.logger.error(`${SocketMessage.CLIENT_ERROR} ${String(error)}`);
-		});
-	}
+}
 
 	private handleUsersConnection(socket: Socket): void {
 		this.logger.info(`${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
 
-		socket.on(SocketEvent.DISCONNECT, (reason) => {
-			this.logger.warn(
-				`${SocketMessage.CLIENT_DISCONNECTED} ${socket.id},${reason}`,
-			);
+			socket.on(SocketEvent.JOIN_MEETING, async (meetingId: string) => {
+			try {
+				await socket.join(meetingId);
+				this.logger.info(`Socket ${socket.id} joined room ${meetingId}`);
+			} catch (error) {
+				this.logger.error(`Failed to join room ${meetingId}: ${String(error)}`);
+			}
 		});
-		socket.on(SocketEvent.ERROR, (error) => {
+
+		socket.on(SocketEvent.LEAVE_MEETING, async (meetingId: string) => {
+			try {
+				await socket.leave(meetingId);
+				this.logger.info(`Socket ${socket.id} left room ${meetingId}`);
+			} catch (error) {
+				this.logger.error(
+					`Failed to leave room ${meetingId} for socket ${socket.id}: ${String(error)}`,
+				);
+			}
+		});
+			socket.on(SocketEvent.ERROR, (error) => {
 			this.logger.error(`${SocketMessage.CLIENT_ERROR} ${String(error)}`);
 		});
 	}

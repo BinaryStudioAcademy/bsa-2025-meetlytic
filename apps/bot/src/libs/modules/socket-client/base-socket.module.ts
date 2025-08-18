@@ -1,7 +1,8 @@
 import { io, type Socket } from "socket.io-client";
 
 import { logger } from "../logger/logger.js";
-import { SocketNamespace } from "./enums/enums.js";
+import { SocketNamespace, Timeout } from "./enums/enums.js";
+
 import {
 	type ClientToServerEvents,
 	type ServerToClientEvents,
@@ -31,7 +32,7 @@ class BaseSocketClient {
 			this.socket = io(this.getOrigin(this.url, SocketNamespace.BOTS), {
 				reconnection: true,
 				reconnectionAttempts: Infinity,
-				reconnectionDelay: 1000,
+				reconnectionDelay: Timeout.ONE_SECOND,
 				transports: ["websocket"],
 			});
 
@@ -52,6 +53,13 @@ class BaseSocketClient {
 		...parameters: Parameters<ClientToServerEvents[K]>
 	): void {
 		this.socket?.emit(event, ...parameters);
+	}
+
+	public off<
+		K extends keyof ServerToClientEvents,
+		L extends keyof SocketReservedEvents,
+	>(event: K | L, listener: Listener<K | L>): void {
+		this.socket?.off(event, listener as Listener<K>);
 	}
 
 	public on<

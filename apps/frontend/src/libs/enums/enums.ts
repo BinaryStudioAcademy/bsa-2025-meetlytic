@@ -23,5 +23,7 @@ export {
 	MeetingHost,
 	MeetingStatus,
 	ServerErrorType,
+	SocketEvent,
+	SocketNamespace,
 	UserValidationRule,
 } from "@meetlytic/shared";

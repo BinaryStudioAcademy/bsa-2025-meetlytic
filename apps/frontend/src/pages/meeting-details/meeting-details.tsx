@@ -5,7 +5,7 @@ import {
 	Markdown,
 	Navigate,
 	PlayerTrack,
-	SearchInput,
+	TranscriptionPanel,
 } from "~/libs/components/components.js";
 import {
 	AppRoute,
@@ -17,7 +17,6 @@ import {
 import { formatDate } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
-	useAppForm,
 	useAppSelector,
 	useCallback,
 	useEffect,
@@ -31,11 +30,9 @@ import {
 	actions as meetingDetailsActions,
 	meetingDetailsApi,
 	sanitizeDefaultSchema,
-	searchInputValidationSchema,
 } from "~/modules/meeting-details/meeting-details.js";
 import { actions as meetingActions } from "~/modules/meeting/meeting.js";
 
-import { DEFAULT_SEARCH_VALUE } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 const MeetingDetails: React.FC = () => {
@@ -43,7 +40,7 @@ const MeetingDetails: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [searchParameters] = useSearchParams();
 
-	const { dataStatus, meeting, transcription } = useAppSelector(
+	const { dataStatus, meeting } = useAppSelector(
 		(state) => state.meetingDetails,
 	);
 	const { user } = useAppSelector((state) => state.auth);
@@ -66,11 +63,6 @@ const MeetingDetails: React.FC = () => {
 			}),
 		);
 	}, [id, dispatch, searchParameters]);
-
-	const handleTranscriptionSearch = useCallback((value: string) => {
-		// TODO: implement handleTranscriptionSearch logic
-		return value;
-	}, []);
 
 	const handleShareClick = useCallback(() => {
 		if (!meeting?.id) {
@@ -138,24 +130,10 @@ const MeetingDetails: React.FC = () => {
 				</div>
 
 				<div className={styles["meeting-details__content"]}>
-					<div className={styles["meeting-details__transcription-panel"]}>
-						<div className={styles["panel-header"]}>
-							<h3 className={styles["panel-header__text"]}>TRANSCRIPT</h3>
-							<div className={styles["panel-header__search"]}>
-								<SearchInput
-									control={control}
-									errors={errors}
-									hasVisuallyHiddenLabel
-									label="Search"
-									name="search"
-									onSearch={handleTranscriptionSearch}
-								/>
-							</div>
-						</div>
-						<div className={styles["transcription-area"]}>
-							<p className={styles["transcription-text"]}>{transcription}</p>
-						</div>
-					</div>
+					<TranscriptionPanel
+						meetingId={meeting.id}
+						meetingStatus={meeting.status}
+					/>
 
 					<div className={styles["meeting-details__right-panel"]}>
 						<div>

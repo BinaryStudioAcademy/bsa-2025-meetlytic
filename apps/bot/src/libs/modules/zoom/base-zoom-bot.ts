@@ -132,14 +132,14 @@ class BaseZoomBot {
 	}
 
 	private getMeetingId(): null | string {
-		const ONE = 1;
+		const SECOND_ITEM_INDEX = 1;
 
 		const url = new URL(this.config.ENV.ZOOM.MEETING_LINK);
 		const meetingIdRegex = /\/(?:wc\/join|j)\/(\d+)/;
 		const regexMatchArray = meetingIdRegex.exec(url.pathname);
 
-		if (regexMatchArray?.[ONE]) {
-			return regexMatchArray[ONE];
+		if (regexMatchArray?.[SECOND_ITEM_INDEX]) {
+			return regexMatchArray[SECOND_ITEM_INDEX];
 		}
 
 		return null;

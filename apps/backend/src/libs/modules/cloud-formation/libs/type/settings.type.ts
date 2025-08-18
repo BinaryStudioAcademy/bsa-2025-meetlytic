@@ -2,7 +2,6 @@ type Settings = {
 	accessKeyId: string;
 	botName: string;
 	bucketName: string;
-	contentTypeAudio: string;
 	id?: number;
 	openAIKey: string;
 	origin: string;

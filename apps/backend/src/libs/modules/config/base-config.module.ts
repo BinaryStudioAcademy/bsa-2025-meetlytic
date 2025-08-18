@@ -69,12 +69,6 @@ class BaseConfig implements Config {
 					env: "AMI_ID",
 					format: String,
 				},
-				BUCKET_NAME: {
-					default: null,
-					doc: "AWS Bucket name",
-					env: "BUCKET_NAME",
-					format: String,
-				},
 				REGION: {
 					default: null,
 					doc: "AWS Region",
@@ -155,12 +149,6 @@ class BaseConfig implements Config {
 					default: null,
 					doc: "S3 Bucket Name",
 					env: "S3_BUCKET_NAME",
-					format: String,
-				},
-				CONTET_TYPE_AUDIO: {
-					default: null,
-					doc: "Content type for audio files in S3",
-					env: "S3_CONTET_TYPE_AUDIO",
 					format: String,
 				},
 				PREFIX_AUDIO: {

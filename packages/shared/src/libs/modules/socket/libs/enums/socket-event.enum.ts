@@ -9,7 +9,6 @@ const SocketEvent = {
 	SAVE_SUMMARY_ACTION_ITEMS: "saveSummaryActionItems",
 	STOP_RECORDING: "stopRecording",
 	TRANSCRIBE: "transcribe",
-	UPDATE_MEETING_DETAILS: "updateMeetingDetails",
 } as const;
 
 export { SocketEvent };

@@ -302,28 +302,14 @@ class BaseZoomBot {
 		}
 
 		while (this.shouldMonitor) {
-			try {
-				const count = await this.getParticipantsCount();
+			const count = await this.getParticipantsCount();
 
-				if (count <= MINIMUM_PARTICIPANTS_THRESHOLD) {
-					this.logger.info(ZoomBotMessages.ONLY_ONE_PARTICIPANT_DETECTED);
-					this.audioRecorder.stop();
-					this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
-					await this.leaveMeeting();
-					this.shouldMonitor = false;
-					this.socketClient.emit(
-						SocketEvent.RECORDING_STOPPED,
-						String(this.config.ENV.ZOOM.MEETING_ID),
-					);
-				}
-			} catch (error) {
-				this.logger.error(
-					`[Puppeteer Error] Failed to get participant count: ${error instanceof Error ? error.message : String(error)}`,
-				);
-				this.shouldMonitor = false;
+			if (count <= MINIMUM_PARTICIPANTS_THRESHOLD) {
+				this.logger.info(ZoomBotMessages.ONLY_ONE_PARTICIPANT_DETECTED);
 				this.audioRecorder.stop();
+				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
 				await this.leaveMeeting();
-				this.logger.info("Gracefully exiting due to Puppeteer error.");
+				this.shouldMonitor = false;
 			}
 
 			await delay(Timeout.FIFTEEN_SECONDS);

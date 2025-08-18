@@ -71,7 +71,7 @@ class BaseHTTPApi implements HTTPApi {
 				details: [],
 				errorType: ServerErrorType.NO_INTERNET,
 				message: NotificationMessage.NO_INTERNET,
-				status: HTTPCode.NO_INTERNET as ValueOf<typeof HTTPCode>,
+				status: HTTPCode.TIMEOUT,
 			});
 		}
 	}

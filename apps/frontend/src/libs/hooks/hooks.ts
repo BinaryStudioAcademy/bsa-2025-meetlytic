@@ -7,6 +7,7 @@ export { useInViewAnimation } from "./use-in-view-animation/use-in-view-animatio
 export { useLandingAnimation } from "./use-landing-background-animation/use-landing-background-animation.hook.js";
 export { useLogout } from "./use-logout/use-logout.hook.js";
 export { useMediaQuery } from "./use-media-query/use-media-query.hook.js";
+export { useMeetingSocket } from "./use-meeting-socket/use-meeting-socket.js";
 export { usePrefersReducedMotion } from "./use-prefers-reduced-motion.ts/use-prefers-reduced-motion.hook.js";
 export { useProgress } from "./use-progress/use-progress.js";
 export { useInView } from "motion/react";

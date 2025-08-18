@@ -50,45 +50,6 @@
 	gap: 25px;
 }
 
-.meeting-details__transcription-panel {
-	display: flex;
-	flex-direction: column;
-	background-color: var(--color-background-3);
-	border-radius: var(--border-radius-lg);
-}
-
-.panel-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 10px 20px;
-	background-color: var(--color-background-4);
-	border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
-}
-
-.panel-header__text {
-	font-size: 14px;
-	font-weight: 700;
-}
-
-.panel-header__search {
-	width: 50%;
-}
-
-.transcription-area {
-	padding: 20px;
-	background-color: var(--color-background-3);
-	border-radius: var(--border-radius-lg);
-}
-
-.transcription-text {
-	padding: 10px 20px;
-	font-size: 14px;
-	color: var(--color-text-1);
-	background-color: var(--color-background-4);
-	border-radius: var(--border-radius-lg);
-}
-
 .meeting-details__right-panel {
 	display: flex;
 	flex-direction: column;

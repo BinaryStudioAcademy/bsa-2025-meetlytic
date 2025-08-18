@@ -1,5 +1,7 @@
 import { io, type Socket } from "socket.io-client";
 
+import { Timeout } from "~/libs/enums/enums.js";
+
 import {
 	type ClientToServerEvents,
 	type ServerToClientEvents,
@@ -26,7 +28,7 @@ class BaseSocketClient {
 			this.socket = io(this.url, {
 				reconnection: true,
 				reconnectionAttempts: Infinity,
-				reconnectionDelay: 1000,
+				reconnectionDelay: Timeout.ONE_SECOND,
 				transports: ["websocket"],
 			});
 		} else if (!this.socket.connected) {
@@ -43,6 +45,13 @@ class BaseSocketClient {
 		...parameters: Parameters<ClientToServerEvents[K]>
 	): void {
 		this.socket?.emit(event, ...parameters);
+	}
+
+	public off<
+		K extends keyof ServerToClientEvents,
+		L extends keyof SocketReservedEvents,
+	>(event: K | L, listener: Listener<K | L>): void {
+		this.socket?.off(event, listener as Listener<K>);
 	}
 
 	public on<

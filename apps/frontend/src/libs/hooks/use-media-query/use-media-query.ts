@@ -1,3 +1,4 @@
+import { DomEvent } from "~/libs/enums/enums.js";
 import { useEffect, useState } from "~/libs/hooks/hooks.js";
 
 const useMediaQuery = (query: string): boolean => {
@@ -14,10 +15,10 @@ const useMediaQuery = (query: string): boolean => {
 
 		setMatches(mediaQuery.matches);
 
-		mediaQuery.addEventListener("change", handler);
+		mediaQuery.addEventListener(DomEvent.CHANGE, handler);
 
 		return (): void => {
-			mediaQuery.removeEventListener("change", handler);
+			mediaQuery.removeEventListener(DomEvent.CHANGE, handler);
 		};
 	}, [query]);
 

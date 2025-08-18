@@ -10,32 +10,20 @@ import {
 	type RingType,
 } from "~/modules/landing/landing.js";
 
-import { clamp } from "./helpers.js";
-
-const safeRandom = (): number => {
-	const array = new Uint32Array(LandingBgNumeric.UINT32_ARRAY_LENGTH);
-	crypto.getRandomValues(array);
-
-	const value = array[LandingBgNumeric.ZERO] ?? LandingBgNumeric.ZERO;
-
-	return value / (LandingBgNumeric.UINT32_MAX + LandingBgNumeric.ONE);
-};
+import { clamp, randInRange, safeRandom } from "./helpers.js";
 
 const ensureMinSpeed = (value: number, minValue: number): number => {
-	if (Math.abs(value) < minValue) {
-		return value < LandingBgNumeric.ZERO ? -minValue : minValue;
+	if (Math.abs(value) >= minValue) {
+		return value;
 	}
 
-	return value;
+	return value < LandingBgNumeric.ZERO ? -minValue : minValue;
 };
 
 const getInsideCoord = (ringSize: number, maxValue: number): number =>
 	ringSize >= maxValue
 		? (maxValue - ringSize) / LandingBgNumeric.HALF
 		: safeRandom() * (maxValue - ringSize);
-
-const randInRange = (minValue: number, maxValue: number): number =>
-	minValue + safeRandom() * (maxValue - minValue);
 
 const initRings = ({
 	ringLarge,

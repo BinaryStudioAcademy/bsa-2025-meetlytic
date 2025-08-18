@@ -78,15 +78,15 @@ const LandingTestimonial: React.FC<Properties> = ({
 
 				<ul className={styles["testimonials__dots"]} role="tablist">
 					{items.map((item, index_) => {
-						const active = index_ === index;
+						const isActive = index_ === index;
 
 						return (
 							<li className={styles["testimonials__dot-item"]} key={item.id}>
 								<Button
 									aria-label={`Show testimonial ${item.authorName}`}
-									aria-selected={active}
+									aria-selected={isActive}
 									className={
-										active
+										isActive
 											? styles["testimonials__dot--active"]
 											: styles["testimonials__dot"]
 									}

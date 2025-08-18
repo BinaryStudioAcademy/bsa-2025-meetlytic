@@ -4,6 +4,8 @@ export { extractErrorMessage } from "./extract-error-message.helper.js";
 export { getValidClassNames } from "./get-valid-class-names.helper.js";
 export { handleBounds } from "./handle-bounds.helper.js";
 export { handleCollisions } from "./handle-collisions.helper.js";
+export { randInRange } from "./rand-in-range.helper.js";
 export { applyTransforms, initRings } from "./rings.helper.js";
+export { safeRandom } from "./safe-random.helper.js";
 export { configureString, formatDate } from "@meetlytic/shared";
 export { animate, inView } from "motion/react";

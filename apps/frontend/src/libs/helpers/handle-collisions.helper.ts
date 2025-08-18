@@ -51,27 +51,27 @@ const handleCollisions = (rings: RingConfig[]): void => {
 					maxOverlap,
 				);
 
-				ringAPositionX -= (normalX * overlap) / LandingBgNumeric.HALF;
-				ringAPositionY -= (normalY * overlap) / LandingBgNumeric.HALF;
-				ringBPositionX += (normalX * overlap) / LandingBgNumeric.HALF;
-				ringBPositionY += (normalY * overlap) / LandingBgNumeric.HALF;
+				const offsetX = (normalX * overlap) / LandingBgNumeric.HALF;
+				const offsetY = (normalY * overlap) / LandingBgNumeric.HALF;
+
+				ringAPositionX -= offsetX;
+				ringAPositionY -= offsetY;
+				ringBPositionX += offsetX;
+				ringBPositionY += offsetY;
 
 				const ringAVelocityAlongNormal =
 					ringA.velocityX * normalX + ringA.velocityY * normalY;
 				const ringBVelocityAlongNormal =
 					ringB.velocityX * normalX + ringB.velocityY * normalY;
 
-				const ringAVelocityAfter = ringBVelocityAlongNormal;
-				const ringBVelocityAfter = ringAVelocityAlongNormal;
-
 				ringA.velocityX +=
-					(ringAVelocityAfter - ringAVelocityAlongNormal) * normalX;
+					(ringBVelocityAlongNormal - ringAVelocityAlongNormal) * normalX;
 				ringA.velocityY +=
-					(ringAVelocityAfter - ringAVelocityAlongNormal) * normalY;
+					(ringBVelocityAlongNormal - ringAVelocityAlongNormal) * normalY;
 				ringB.velocityX +=
-					(ringBVelocityAfter - ringBVelocityAlongNormal) * normalX;
+					(ringAVelocityAlongNormal - ringBVelocityAlongNormal) * normalX;
 				ringB.velocityY +=
-					(ringBVelocityAfter - ringBVelocityAlongNormal) * normalY;
+					(ringAVelocityAlongNormal - ringBVelocityAlongNormal) * normalY;
 
 				ringA.velocityX *= LandingBgPhysics.DAMPING;
 				ringA.velocityY *= LandingBgPhysics.DAMPING;

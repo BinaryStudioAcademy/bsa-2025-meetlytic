@@ -18,18 +18,16 @@ const useCarousel = ({
 	const [index, setIndex] = useState<number>(CarouselConfig.INITIAL_INDEX);
 
 	useEffect(() => {
-		if (index >= length) {
-			setIndex(CarouselConfig.INITIAL_INDEX);
-		}
-	}, [length, index]);
-
-	useEffect(() => {
 		if (isPaused || length < CarouselConfig.MIN_CAROUSEL_LENGTH) {
 			return;
 		}
 
 		const intervalId = globalThis.setInterval(() => {
-			setIndex((previous) => (previous + CarouselConfig.INCREMENT) % length);
+			setIndex((previous) => {
+				const nextIndex = (previous + CarouselConfig.INCREMENT) % length;
+
+				return nextIndex < length ? nextIndex : CarouselConfig.INITIAL_INDEX;
+			});
 		}, delayMs);
 
 		return (): void => {

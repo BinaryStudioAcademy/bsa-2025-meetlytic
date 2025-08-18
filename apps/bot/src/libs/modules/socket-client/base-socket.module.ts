@@ -15,9 +15,6 @@ type Listener<K extends EventKeys> = K extends keyof SocketReservedEvents
 		? ServerToClientEvents[K]
 		: never;
 
-const getOrigin = (url: string, namespace: string): string =>
-	`${url}${namespace}`;
-
 class BaseSocketClient {
 	private socket: null | Socket<ServerToClientEvents, ClientToServerEvents> =
 		null;
@@ -26,9 +23,12 @@ class BaseSocketClient {
 		this.url = url;
 	}
 
+	private getOrigin = (url: string, namespace: string): string =>
+		`${url}${namespace}`;
+
 	public connect(): void {
 		if (!this.socket) {
-			this.socket = io(getOrigin(this.url, SocketNamespace.BOTS), {
+			this.socket = io(this.getOrigin(this.url, SocketNamespace.BOTS), {
 				reconnection: true,
 				reconnectionAttempts: Infinity,
 				reconnectionDelay: 1000,
@@ -36,7 +36,7 @@ class BaseSocketClient {
 			});
 
 			logger.info(
-				`Bot is connecting to  ${getOrigin(this.url, SocketNamespace.BOTS)}`,
+				`Bot is connecting to  ${this.getOrigin(this.url, SocketNamespace.BOTS)}`,
 			);
 		} else if (!this.socket.connected) {
 			this.socket.connect();

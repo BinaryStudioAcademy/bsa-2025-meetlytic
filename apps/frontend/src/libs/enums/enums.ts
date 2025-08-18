@@ -21,6 +21,7 @@ export {
 	KeyboardKey,
 	MeetingErrorMessage,
 	MeetingHost,
+	MeetingStatus,
 	ServerErrorType,
 	UserValidationRule,
 } from "@meetlytic/shared";

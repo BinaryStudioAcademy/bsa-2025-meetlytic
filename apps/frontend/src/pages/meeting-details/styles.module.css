@@ -36,6 +36,7 @@
 }
 
 .action-button__share {
+	min-width: 32px;
 	color: var(--color-brand);
 	transition: color 0.3s ease-in-out;
 }

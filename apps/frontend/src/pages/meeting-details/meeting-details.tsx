@@ -11,6 +11,7 @@ import {
 	AppRoute,
 	DataStatus,
 	MeetingErrorMessage,
+	MeetingStatus,
 	NotificationMessage,
 } from "~/libs/enums/enums.js";
 import { formatDate } from "~/libs/helpers/helpers.js";
@@ -32,6 +33,7 @@ import {
 	sanitizeDefaultSchema,
 	searchInputValidationSchema,
 } from "~/modules/meeting-details/meeting-details.js";
+import { actions as meetingActions } from "~/modules/meeting/meeting.js";
 
 import { DEFAULT_SEARCH_VALUE } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
@@ -50,6 +52,10 @@ const MeetingDetails: React.FC = () => {
 		defaultValues: DEFAULT_SEARCH_VALUE,
 		validationSchema: searchInputValidationSchema,
 	});
+
+	const stopRecording = useCallback(() => {
+		void dispatch(meetingActions.stopRecording({ id: id as string }));
+	}, [dispatch, id]);
 
 	useEffect(() => {
 		const sharedToken = searchParameters.get("token");
@@ -123,6 +129,9 @@ const MeetingDetails: React.FC = () => {
 							>
 								<Icon className={styles["action-button__share"]} name="share" />
 							</button>
+						)}
+						{meeting.status === MeetingStatus.STARTED && (
+							<Button label="Stop Recording" onClick={stopRecording} />
 						)}
 						<Button label="Export" />
 					</div>

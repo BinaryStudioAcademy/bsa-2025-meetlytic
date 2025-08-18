@@ -29,13 +29,13 @@ const TranscriptionPanel: React.FC<Properties> = ({
 	);
 
 	useEffect(() => {
-		const containerBootom = containerReference.current;
+		const containerBottom = containerReference.current;
 
-		if (!containerBootom) {
+		if (!containerBottom) {
 			return;
 		}
 
-		containerBootom.scrollIntoView();
+		containerBottom.scrollIntoView();
 	}, [transcriptions.items]);
 
 	useEffect(() => {

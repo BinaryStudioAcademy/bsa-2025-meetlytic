@@ -7,9 +7,7 @@ import {
 	useCallback,
 	useEffect,
 	useMeetingSocket,
-	useMemo,
 	useRef,
-	useState,
 } from "~/libs/hooks/hooks.js";
 import { actions as transcriptionActions } from "~/modules/transcription/transcription.js";
 
@@ -24,13 +22,11 @@ const TranscriptionPanel: React.FC<Properties> = ({
 	meetingId,
 	meetingStatus,
 }: Properties) => {
+	const containerReference = useRef<HTMLDivElement | null>(null);
 	const dispatch = useAppDispatch();
-	const [searchTerm, setSearchTerm] = useState("");
 	const { dataStatus, transcriptions } = useAppSelector(
 		({ transcription }) => transcription,
 	);
-
-	const containerReference = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
 		const containerBootom = containerReference.current;
@@ -54,14 +50,8 @@ const TranscriptionPanel: React.FC<Properties> = ({
 		meetingStatus,
 	);
 
-	const filteredTranscriptions = useMemo(() => {
-		return transcriptions.items.filter((transcription) =>
-			transcription.chunkText.toLowerCase().includes(searchTerm.toLowerCase()),
-		);
-	}, [transcriptions, searchTerm]);
-
-	const handleSearch = useCallback((value: string) => {
-		setSearchTerm(value);
+	const handleSearch = useCallback(() => {
+		// TODO: implement handleSearch logic
 	}, []);
 
 	return (
@@ -71,9 +61,9 @@ const TranscriptionPanel: React.FC<Properties> = ({
 				<SearchBar onSearch={handleSearch} />
 			</div>
 			{dataStatus === DataStatus.PENDING && <Loader isLoading />}
-			{filteredTranscriptions.length > EMPTY_ARRAY_LENGTH ? (
+			{transcriptions.items.length > EMPTY_ARRAY_LENGTH ? (
 				<div className={styles["transcription-area"]}>
-					{filteredTranscriptions.map((transcription) => (
+					{transcriptions.items.map((transcription) => (
 						<p className={styles["transcription-text"]} key={transcription.id}>
 							{transcription.chunkText}
 						</p>

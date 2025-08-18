@@ -71,32 +71,41 @@ class BaseSocketService implements SocketService {
 				return;
 			}
 
-			await socket.join(meetingId);
-			rooms.add(meetingId);
-			this.socketRooms.set(socket.id, rooms);
-
-			this.logger.info(`Socket ${socket.id} joined room ${meetingId}`);
+			try {
+				await socket.join(meetingId);
+				rooms.add(meetingId);
+				this.socketRooms.set(socket.id, rooms);
+				this.logger.info(`Socket ${socket.id} joined room ${meetingId}`);
+			} catch (error) {
+				this.logger.error(`Failed to join room ${meetingId}: ${String(error)}`);
+			}
 		});
 
 		socket.on(SocketEvent.LEAVE_MEETING, async (meetingId: string) => {
-			const rooms = this.socketRooms.get(socket.id);
+			try {
+				const rooms = this.socketRooms.get(socket.id);
 
-			if (!rooms || !rooms.has(meetingId)) {
-				this.logger.info(`Socket ${socket.id} not in room ${meetingId}`);
+				if (!rooms || !rooms.has(meetingId)) {
+					this.logger.info(`Socket ${socket.id} not in room ${meetingId}`);
 
-				return;
+					return;
+				}
+
+				await socket.leave(meetingId);
+				rooms.delete(meetingId);
+
+				if (rooms.size === EMPTY_ROOMS_SIZE) {
+					this.socketRooms.delete(socket.id);
+				} else {
+					this.socketRooms.set(socket.id, rooms);
+				}
+
+				this.logger.info(`Socket ${socket.id} left room ${meetingId}`);
+			} catch (error) {
+				this.logger.error(
+					`Failed to leave room ${meetingId} for socket ${socket.id}: ${String(error)}`,
+				);
 			}
-
-			await socket.leave(meetingId);
-			rooms.delete(meetingId);
-
-			if (rooms.size === EMPTY_ROOMS_SIZE) {
-				this.socketRooms.delete(socket.id);
-			} else {
-				this.socketRooms.set(socket.id, rooms);
-			}
-
-			this.logger.info(`Socket ${socket.id} left room ${meetingId}`);
 		});
 	}
 

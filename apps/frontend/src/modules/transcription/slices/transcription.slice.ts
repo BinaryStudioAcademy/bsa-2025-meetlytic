@@ -30,6 +30,7 @@ const { actions, name, reducer } = createSlice({
 		});
 		builder.addCase(getTranscriptionsByMeetingId.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
+			state.transcriptions = { items: [] };
 		});
 	},
 	initialState,

@@ -152,7 +152,6 @@ class MeetingsController extends BaseController {
 				),
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID_MEETING_TRANSCRIPTIONS,
-			//TODO ask coach do we need to check if meeting owner
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 	}

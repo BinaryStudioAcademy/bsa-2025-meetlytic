@@ -4,6 +4,7 @@ import { searchInputValidationSchema } from "~/modules/meeting-details/meeting-d
 
 import { DEFAULT_SEARCH_VALUE } from "./libs/constants/constants.js";
 import styles from "./search-bar.module.css";
+import { getValidClassNames } from "~/libs/helpers/get-valid-class-names.helper.js";
 
 type Properties = {
 	className?: string;
@@ -20,11 +21,13 @@ const SearchBar: React.FC<Properties> = ({
 	});
 
 	return (
-		<div className={className ?? styles["panel-header__search"]}>
+		<div
+			className={getValidClassNames(className, styles["panel-header__search"])}
+		>
 			<SearchInput
 				control={control}
 				errors={errors}
-				hasVisuallyHiddenLabel={true}
+				hasVisuallyHiddenLabel
 				label="Search"
 				name="search"
 				onSearch={onSearch}

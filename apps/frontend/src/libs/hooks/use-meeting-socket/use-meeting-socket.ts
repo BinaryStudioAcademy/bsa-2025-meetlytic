@@ -28,11 +28,11 @@ const useMeetingSocket = (
 			onMessage(data);
 		};
 
-		socket.on(SocketEvent.MESSAGE, handleMessage);
+		socket.on(SocketEvent.TRANSCRIBE, handleMessage);
 		socket.emit(SocketEvent.JOIN_MEETING, String(meetingId));
 
 		return (): void => {
-			socket.off(SocketEvent.MESSAGE, handleMessage);
+			socket.off(SocketEvent.TRANSCRIBE, handleMessage);
 			socket.emit(SocketEvent.LEAVE_MEETING, String(meetingId));
 		};
 	}, [meetingId, meetingStatus, onMessage]);

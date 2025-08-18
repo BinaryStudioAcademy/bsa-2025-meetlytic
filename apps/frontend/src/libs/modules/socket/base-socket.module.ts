@@ -4,9 +4,12 @@ import { type SocketNamespace } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
 class BaseSocket {
+	private baseUrl: string;
 	private instances: Record<string, null | SocketClient> = {};
 
-	public constructor(private baseUrl: string) {}
+	public constructor(baseUrl: string) {
+		this.baseUrl = baseUrl;
+	}
 
 	public connect(namespace: ValueOf<typeof SocketNamespace>): SocketClient {
 		const socket = this.getInstance(namespace);
@@ -22,16 +25,18 @@ class BaseSocket {
 		const socket = this.instances[namespace];
 
 		if (socket) {
+			socket.removeAllListeners();
 			socket.disconnect();
 			this.instances[namespace] = null;
 		}
 	}
 
 	public disconnectAll(): void {
-		for (const key of Object.keys(this.instances)) {
+		for (const key in this.instances) {
 			const socket = this.instances[key];
 
 			if (socket) {
+				socket.removeAllListeners();
 				socket.disconnect();
 			}
 		}

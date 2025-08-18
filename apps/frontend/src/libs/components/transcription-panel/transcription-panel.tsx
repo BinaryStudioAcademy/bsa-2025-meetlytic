@@ -1,5 +1,4 @@
 import { Loader, SearchBar } from "~/libs/components/components.js";
-import { EMPTY_ARRAY_LENGTH } from "~/libs/constants/constants.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -8,6 +7,7 @@ import {
 	useEffect,
 	useMeetingSocket,
 	useRef,
+	useState,
 } from "~/libs/hooks/hooks.js";
 import { actions as transcriptionActions } from "~/modules/transcription/transcription.js";
 
@@ -22,6 +22,7 @@ const TranscriptionPanel: React.FC<Properties> = ({
 	meetingId,
 	meetingStatus,
 }: Properties) => {
+	const [combinedText, setCombinedText] = useState<string>("");
 	const containerReference = useRef<HTMLDivElement | null>(null);
 	const dispatch = useAppDispatch();
 	const { dataStatus, transcriptions } = useAppSelector(
@@ -36,6 +37,10 @@ const TranscriptionPanel: React.FC<Properties> = ({
 		}
 
 		containerBottom.scrollIntoView();
+	}, [combinedText]);
+
+	useEffect(() => {
+		setCombinedText(transcriptions.items.map((t) => t.chunkText).join(" "));
 	}, [transcriptions.items]);
 
 	useEffect(() => {
@@ -46,6 +51,7 @@ const TranscriptionPanel: React.FC<Properties> = ({
 		meetingId,
 		(data) => {
 			dispatch(transcriptionActions.addTranscription(data));
+			setCombinedText((previous) => previous + " " + data.chunkText);
 		},
 		meetingStatus,
 	);
@@ -61,13 +67,10 @@ const TranscriptionPanel: React.FC<Properties> = ({
 				<SearchBar onSearch={handleSearch} />
 			</div>
 			{dataStatus === DataStatus.PENDING && <Loader isLoading />}
-			{transcriptions.items.length > EMPTY_ARRAY_LENGTH ? (
+
+			{combinedText ? (
 				<div className={styles["transcription-area"]}>
-					{transcriptions.items.map((transcription) => (
-						<p className={styles["transcription-text"]} key={transcription.id}>
-							{transcription.chunkText}
-						</p>
-					))}
+					<p className={styles["transcription-text"]}>{combinedText}</p>
 					<div ref={containerReference} />
 				</div>
 			) : (

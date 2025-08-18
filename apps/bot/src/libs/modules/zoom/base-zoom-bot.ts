@@ -227,7 +227,7 @@ class BaseZoomBot {
 			this.audioRecorder.stop();
 			await this.leaveMeeting();
 			this.socketClient.emit(
-				SocketEvent.STOP_RECORDING,
+				SocketEvent.RECORDING_STOPPED,
 				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
 		});

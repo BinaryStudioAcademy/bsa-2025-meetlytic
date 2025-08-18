@@ -5,8 +5,8 @@ import {
 
 type ClientToServerEvents = {
 	joinRoom: (meetingId: string) => void;
+	recordingStopped: (meetingId: string) => void;
 	saveSummaryActionItems: (data: MeetingSummaryActionPointsResponseDto) => void;
-	stopRecording: (meetingId: string) => void;
 	transcribe: (data: MeetingTranscriptionRequestDto) => void;
 };
 

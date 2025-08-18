@@ -42,7 +42,7 @@ class BaseSocketService implements SocketService {
 			await socket.join(meetingId);
 		});
 
-		socket.on(SocketEvent.STOP_RECORDING, async (meetingId: string) => {
+		socket.on(SocketEvent.RECORDING_STOPPED, async (meetingId: string) => {
 			this.logger.info(`Getting full transcript of meeting ${meetingId}`);
 			const transcriptChunks = await meetingService.getTranscriptById(
 				Number(meetingId),

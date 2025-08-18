@@ -19,6 +19,7 @@ export {
 	ContentType,
 	HTTPMethod,
 	KeyboardKey,
+	MeetingErrorMessage,
 	MeetingHost,
 	ServerErrorType,
 	UserValidationRule,

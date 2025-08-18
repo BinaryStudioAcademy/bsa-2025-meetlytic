@@ -5,6 +5,7 @@ import {
 	DatabaseTableName,
 } from "~/libs/modules/database/database.js";
 import { type ValueOf } from "~/libs/types/types.js";
+import { FileModel } from "~/modules/files/file.model.js";
 
 import {
 	MeetingAttribute,
@@ -16,6 +17,8 @@ import { MeetingTranscriptionModel } from "./meeting-transcription.model.js";
 
 class MeetingModel extends AbstractModel {
 	public actionItems!: null | string;
+
+	public audioFileId!: null | number;
 
 	public host!: ValueOf<typeof MeetingHost>;
 
@@ -33,6 +36,14 @@ class MeetingModel extends AbstractModel {
 
 	public static get relationMappings(): RelationMappings {
 		return {
+			audioFile: {
+				join: {
+					from: `${DatabaseTableName.MEETINGS}.${MeetingAttribute.AUDIO_FILE_ID}`,
+					to: `${DatabaseTableName.FILES}.id`,
+				},
+				modelClass: FileModel,
+				relation: this.BelongsToOneRelation,
+			},
 			transcriptions: {
 				join: {
 					from: `${DatabaseTableName.MEETINGS}.${MeetingAttribute.ID}`,

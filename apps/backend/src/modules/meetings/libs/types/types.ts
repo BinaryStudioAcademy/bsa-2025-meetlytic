@@ -7,9 +7,7 @@ export { type StopRecordingOptions } from "./stop-recording-options.type.js";
 export { type UpdateMeetingOptions } from "./update-meeting-options.type.js";
 export { type FindBySignedUrlOptions } from "./verify-url-options.type.js";
 export {
-	type MeetingAudioGetAllResponseDto,
-	type MeetingAudioRequestDto,
-	type MeetingAudioResponseDto,
+	type MeetingAttachAudioRequestDto,
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
@@ -18,7 +16,6 @@ export {
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,
 	type MeetingTranscriptionResponseDto,
-	type MeetingUpdateAudioRequestDto,
 	type MeetingUpdateRequestDto,
 	type MeetingUpdateTranscriptionRequestDto,
 } from "@meetlytic/shared";

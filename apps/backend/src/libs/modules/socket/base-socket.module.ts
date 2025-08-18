@@ -2,6 +2,7 @@ import { type Server as HttpServer } from "node:http";
 import { type Socket, Server as SocketServer } from "socket.io";
 
 import { HTTPMethod } from "~/libs/modules/http/http.js";
+import { fileService } from "~/modules/files/files.js";
 import { meetingService } from "~/modules/meetings/meetings.js";
 
 import { type Logger } from "../logger/logger.js";
@@ -11,7 +12,7 @@ import {
 	SocketMessage,
 } from "./libs/enums/enums.js";
 import {
-	type MeetingAudioRequestDto,
+	type MeetingAudioSaveDto,
 	type MeetingTranscriptionRequestDto,
 	type SocketService,
 } from "./libs/types/types.js";
@@ -40,19 +41,25 @@ class BaseSocketService implements SocketService {
 	};
 
 	private registerAudioEvents = (socket: Socket): void => {
-		socket.on(
-			SocketEvent.AUDIO_SAVE,
-			async (payload: MeetingAudioRequestDto) => {
-				try {
-					this.logger.info(SocketMessage.AUDIO_SAVE_RECEIVED);
-					await meetingService.saveAudio(payload);
-				} catch (error) {
-					this.logger.error(
-						`${SocketMessage.AUDIO_SAVE_ERROR} ${String(error)}`,
-					);
-				}
-			},
-		);
+		socket.on(SocketEvent.AUDIO_SAVE, async (payload: MeetingAudioSaveDto) => {
+			try {
+				this.logger.info(SocketMessage.AUDIO_SAVE_RECEIVED);
+
+				const createdFile = await fileService.create({
+					contentType: payload.contentType,
+					key: payload.key,
+					url: payload.url,
+				});
+
+				await meetingService.attachAudioFile(payload.meetingId, {
+					fileId: createdFile.id,
+				});
+
+				this.logger.info(SocketMessage.AUDIO_SAVE_RECEIVED);
+			} catch (error) {
+				this.logger.error(`${SocketMessage.AUDIO_SAVE_ERROR} ${String(error)}`);
+			}
+		});
 	};
 
 	private registerTranscriptionEvents = (socket: Socket): void => {

@@ -18,6 +18,7 @@ import {
 	type AudioRecorderOptions,
 	type FinalizeOptions,
 	type FinalizeResult,
+	type MeetingAudioSaveDto,
 } from "./libs/types/types.js";
 
 class BaseAudioRecorder implements AudioRecorder {
@@ -176,13 +177,28 @@ class BaseAudioRecorder implements AudioRecorder {
 			prefix,
 		});
 
-		if (uploadResult.url) {
-			this.socketClient.emit(SocketEvent.AUDIO_SAVE, {
-				fileName: expectedName,
-				fileUrl: uploadResult.url,
-				meetingId: this.config.ENV.ZOOM.MEETING_ID,
-			});
-			this.logger.info(`[WS] Emitted audio:save file=${expectedName}`);
+		if (uploadResult.url && uploadResult.key) {
+			const meetingId =
+				typeof this.config.ENV.ZOOM.MEETING_ID === "number"
+					? this.config.ENV.ZOOM.MEETING_ID
+					: Number(this.config.ENV.ZOOM.MEETING_ID);
+
+			const audioFile: MeetingAudioSaveDto = {
+				contentType,
+				key: uploadResult.key,
+				meetingId,
+				url: uploadResult.url,
+			};
+
+			this.socketClient.emit(SocketEvent.AUDIO_SAVE, audioFile);
+
+			this.logger.info(
+				`[WS] Emitted audio:save meetingId=${String(meetingId)} key=${uploadResult.key} url=${uploadResult.url} contentType=${contentType}`,
+			);
+		} else {
+			this.logger.warn(
+				"[WS] AUDIO_SAVE not emitted: missing url or key from S3 upload result",
+			);
 		}
 
 		return {

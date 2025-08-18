@@ -5,6 +5,8 @@ import { type MeetingHost, MeetingStatus } from "./libs/enums/enums.js";
 class MeetingEntity implements Entity {
 	private actionItems: null | string;
 
+	private audioFileId: null | number;
+
 	private createdAt: null | string;
 
 	private host: ValueOf<typeof MeetingHost>;
@@ -25,6 +27,7 @@ class MeetingEntity implements Entity {
 
 	private constructor({
 		actionItems,
+		audioFileId,
 		createdAt,
 		host,
 		id,
@@ -36,6 +39,7 @@ class MeetingEntity implements Entity {
 		summary,
 	}: {
 		actionItems: null | string;
+		audioFileId: null | number;
 		createdAt: null | string;
 		host: ValueOf<typeof MeetingHost>;
 		id: null | number;
@@ -47,6 +51,7 @@ class MeetingEntity implements Entity {
 		summary: null | string;
 	}) {
 		this.actionItems = actionItems;
+		this.audioFileId = audioFileId;
 		this.createdAt = createdAt;
 		this.id = id;
 		this.host = host;
@@ -60,6 +65,7 @@ class MeetingEntity implements Entity {
 
 	public static initialize({
 		actionItems,
+		audioFileId,
 		createdAt,
 		host,
 		id,
@@ -71,6 +77,7 @@ class MeetingEntity implements Entity {
 		summary,
 	}: {
 		actionItems: null | string;
+		audioFileId: null | number;
 		createdAt: null | string;
 		host: ValueOf<typeof MeetingHost>;
 		id: number;
@@ -83,6 +90,7 @@ class MeetingEntity implements Entity {
 	}): MeetingEntity {
 		return new MeetingEntity({
 			actionItems,
+			audioFileId,
 			createdAt,
 			host,
 			id,
@@ -110,6 +118,7 @@ class MeetingEntity implements Entity {
 	}): MeetingEntity {
 		return new MeetingEntity({
 			actionItems: null,
+			audioFileId: null,
 			createdAt: null,
 			host,
 			id: null,
@@ -123,6 +132,7 @@ class MeetingEntity implements Entity {
 	}
 
 	public toClientObject(): {
+		audioFileId: null | number;
 		createdAt: string;
 		host: ValueOf<typeof MeetingHost>;
 		id: number;
@@ -132,6 +142,7 @@ class MeetingEntity implements Entity {
 		status: ValueOf<typeof MeetingStatus>;
 	} {
 		return {
+			audioFileId: this.audioFileId,
 			createdAt: this.createdAt as string,
 			host: this.host,
 			id: this.id as number,
@@ -144,6 +155,7 @@ class MeetingEntity implements Entity {
 
 	public toDetailedObject(): {
 		actionItems: null | string;
+		audioFileId: null | number;
 		createdAt: string;
 		host: ValueOf<typeof MeetingHost>;
 		id: number;
@@ -155,6 +167,7 @@ class MeetingEntity implements Entity {
 	} {
 		return {
 			actionItems: this.actionItems as string,
+			audioFileId: this.audioFileId,
 			createdAt: this.createdAt as string,
 			host: this.host,
 			id: this.id as number,
@@ -185,6 +198,7 @@ class MeetingEntity implements Entity {
 	}
 
 	public toObject(): {
+		audioFileId: null | number;
 		createdAt: string;
 		host: ValueOf<typeof MeetingHost>;
 		id: number;
@@ -195,6 +209,7 @@ class MeetingEntity implements Entity {
 		status: ValueOf<typeof MeetingStatus>;
 	} {
 		return {
+			audioFileId: this.audioFileId,
 			createdAt: this.createdAt as string,
 			host: this.host,
 			id: this.id as number,

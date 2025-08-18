@@ -1,10 +1,10 @@
 import {
-	type MeetingAudioRequestDto,
+	type MeetingAudioSaveDto,
 	type MeetingTranscriptionRequestDto,
-} from "~/libs/types/types.js";
+} from "./types.js";
 
 type ClientToServerEvents = {
-	"audio:save": (data: MeetingAudioRequestDto) => void;
+	"audio:save": (data: MeetingAudioSaveDto) => void;
 	transcribe: (data: MeetingTranscriptionRequestDto) => void;
 };
 

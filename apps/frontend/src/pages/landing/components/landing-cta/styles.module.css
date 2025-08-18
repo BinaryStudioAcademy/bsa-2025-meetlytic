@@ -27,3 +27,50 @@
 	min-width: 213px;
 	height: 48px;
 }
+
+@media (width <=1200px) {
+	.cta__title {
+		font-size: 42px;
+	}
+}
+
+@media (width <=1024px) {
+	.cta {
+		min-height: 460px;
+		padding: 15px;
+	}
+
+	.cta__title {
+		font-size: 38px;
+	}
+}
+
+@media (width <=768px) {
+	.cta {
+		min-height: 400px;
+	}
+
+	.cta__title {
+		margin-bottom: 22px;
+		font-size: 32px;
+	}
+
+	.cta__button {
+		height: 42px;
+	}
+}
+
+@media (width <=576px) {
+	.cta {
+		min-height: 340px;
+	}
+
+	.cta__title br {
+		display: none;
+	}
+
+	.cta__title {
+		margin-bottom: 18px;
+		font-size: 26px;
+	}
+}

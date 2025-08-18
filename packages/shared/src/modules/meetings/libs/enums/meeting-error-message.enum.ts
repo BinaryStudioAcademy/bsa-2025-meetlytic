@@ -4,6 +4,7 @@ const MeetingErrorMessage = {
 	DUPLICATED_MEETING:
 		"This link has already been used. Please send a unique link to the meeting.",
 	FORBIDDEN: "Access denied",
+	INVALID_MEETING_ID: "Invalid meeting ID",
 	INVALID_MEETING_LINK: "Invalid Zoom meeting link",
 	JOIN_THE_MEETING: "Failed to join a meeting, trying again",
 	MEETING_ACTION_ITEMS_NOT_AVAILABLE: "Meeting action items not available",

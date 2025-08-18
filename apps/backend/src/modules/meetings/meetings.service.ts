@@ -135,6 +135,13 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 
 	public async delete(id: number): Promise<boolean> {
+		if (!Number.isFinite(id) || Math.abs(id) !== id) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.INVALID_MEETING_ID,
+				status: HTTPCode.UNPROCESSED_ENTITY,
+			});
+		}
+
 		const meetingToDelete = await this.meetingRepository.find(id);
 
 		if (!meetingToDelete) {

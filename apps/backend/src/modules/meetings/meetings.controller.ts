@@ -197,6 +197,8 @@ class MeetingsController extends BaseController {
 	 *         description: Meeting deleted
 	 *       404:
 	 *         description: Meeting not found
+	 *       422:
+	 *         description: Invalid meeting ID
 	 */
 	private async delete(
 		options: DeleteMeetingOptions,

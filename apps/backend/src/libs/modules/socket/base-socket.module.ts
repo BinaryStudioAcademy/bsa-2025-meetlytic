@@ -23,16 +23,56 @@ class BaseSocketService implements SocketService {
 		this.logger = logger;
 	}
 
-	private transcriptionsHandler(socket: Socket): void {
+	private handleClientConnection(socket: Socket): void {
 		this.logger.info(`${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
 
+		this.handleJoinMeeting(socket);
+		this.handleTranscription(socket);
+		this.handleError(socket);
+	}
+
+	private handleError(socket: Socket): void {
+		socket.on(SocketEvent.ERROR, (error) => {
+			this.logger.error(`${SocketMessage.CLIENT_ERROR} ${String(error)}`);
+		});
+	}
+
+	private handleJoinMeeting(socket: Socket): void {
+		socket.on(SocketEvent.JOIN_MEETING, async (meetingId: string) => {
+			try {
+				await socket.join(meetingId);
+				this.logger.info(`Socket ${socket.id} joined room ${meetingId}`);
+			} catch (error) {
+				this.logger.error(`Failed to join room ${meetingId}: ${String(error)}`);
+			}
+		});
+
+		socket.on(SocketEvent.LEAVE_MEETING, async (meetingId: string) => {
+			try {
+				await socket.leave(meetingId);
+				this.logger.info(`Socket ${socket.id} left room ${meetingId}`);
+			} catch (error) {
+				this.logger.error(
+					`Failed to leave room ${meetingId} for socket ${socket.id}: ${String(error)}`,
+				);
+			}
+		});
+	}
+
+	private handleTranscription(socket: Socket): void {
 		socket.on(
 			SocketEvent.TRANSCRIBE,
 			async (payload: MeetingTranscriptionRequestDto) => {
 				try {
 					this.logger.info(SocketMessage.SOCKET_EVENT_RECEIVED);
 
-					await meetingService.saveChunk(payload);
+					const transcription = await meetingService.saveChunk(payload);
+
+					if (payload.meetingId) {
+						this.io
+							.to(String(payload.meetingId))
+							.emit(SocketEvent.TRANSCRIBE, transcription);
+					}
 				} catch (error) {
 					this.logger.error(
 						`${SocketMessage.TRANSCRIPTION_ERROR} ${String(error)}`,
@@ -40,14 +80,6 @@ class BaseSocketService implements SocketService {
 				}
 			},
 		);
-		socket.on(SocketEvent.DISCONNECT, (reason) => {
-			this.logger.warn(
-				`${SocketMessage.CLIENT_DISCONNECTED} ${socket.id},${reason}`,
-			);
-		});
-		socket.on(SocketEvent.ERROR, (error) => {
-			this.logger.error(`${SocketMessage.CLIENT_ERROR} ${String(error)}`);
-		});
 	}
 
 	public initialize(server: HttpServer): void {
@@ -57,7 +89,8 @@ class BaseSocketService implements SocketService {
 				origin: AllowedOrigin.ALL,
 			},
 		});
-		this.io.on(SocketEvent.CONNECTION, this.transcriptionsHandler.bind(this));
+
+		this.io.on(SocketEvent.CONNECTION, this.handleClientConnection.bind(this));
 	}
 }
 

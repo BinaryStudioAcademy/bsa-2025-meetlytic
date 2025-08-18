@@ -62,7 +62,7 @@ class BaseSocketService implements SocketService {
 			async (payload: MeetingSummaryActionPointsResponseDto) => {
 				const { meetingId, ...summaryActionItems } = payload;
 				this.logger.info(
-					`Updating summary/ action items of meeting ${meetingId} ${summaryActionItems.summary} ${summaryActionItems.actionItems}`,
+					`Updating summary/action items of the meeting ${meetingId}`,
 				);
 				await meetingService.update(Number(meetingId), summaryActionItems);
 				this.logger.info(`Ending meeting ${meetingId}`);

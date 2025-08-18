@@ -198,7 +198,6 @@ class BaseZoomBot {
 		}
 	}
 	private initSocket(): void {
-		this.logger.info("calling this.socketClient.connect()");
 		this.socketClient.connect();
 
 		this.socketClient.on(SocketEvent.CONNECT, () => {
@@ -234,6 +233,9 @@ class BaseZoomBot {
 		this.socketClient.on(
 			SocketEvent.GENERATE_SUMMARY_ACTION_ITEMS,
 			async (transcript: string) => {
+				this.logger.info(
+					`Generating summary/action items of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
+				);
 				const summary = await this.openAI.summarize(transcript);
 				const actionItems = await this.openAI.createActionItems(transcript);
 

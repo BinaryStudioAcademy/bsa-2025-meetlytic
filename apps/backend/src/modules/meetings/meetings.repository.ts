@@ -1,7 +1,6 @@
 import { DELETE_SUCCESS_THRESHOLD } from "~/libs/constants/constants.js";
 import { type Repository } from "~/libs/types/types.js";
 
-import { SortOrder } from "./libs/enums/enums.js";
 import { MeetingEntity } from "./meetings.entity.js";
 import { type MeetingModel } from "./meetings.model.js";
 
@@ -50,18 +49,6 @@ class MeetingRepository implements Repository<MeetingEntity> {
 			.execute();
 
 		return meetings.map((meeting) => MeetingEntity.initialize(meeting));
-	}
-
-	public async findLatestByMeetingId(
-		meetingId: string,
-	): Promise<MeetingEntity | null> {
-		const meeting = await this.meetingModel
-			.query()
-			.where({ meetingId })
-			.orderBy("createdAt", SortOrder.DESC)
-			.first();
-
-		return meeting ? MeetingEntity.initialize(meeting) : null;
 	}
 
 	public async update(

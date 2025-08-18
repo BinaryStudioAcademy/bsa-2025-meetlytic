@@ -1,3 +1,4 @@
+import { EMPTY_ARRAY_LENGTH } from "~/libs/constants/constants.js";
 import { APIPath } from "~/libs/enums/enums.js";
 import { AuthError } from "~/libs/exceptions/exceptions.js";
 import {
@@ -89,13 +90,12 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		const existingMeeting: MeetingEntity | null =
-			await this.meetingRepository.findLatestByMeetingId(meetingId);
+		const existing = await this.meetingRepository.findAll({
+			meetingId: meetingId,
+			status: MeetingStatus.STARTED,
+		});
 
-		if (
-			existingMeeting &&
-			existingMeeting.toObject().status === MeetingStatus.STARTED
-		) {
+		if (existing.length > EMPTY_ARRAY_LENGTH) {
 			throw new MeetingError({
 				message: MeetingErrorMessage.DUPLICATED_MEETING,
 				status: HTTPCode.CONFLICT,

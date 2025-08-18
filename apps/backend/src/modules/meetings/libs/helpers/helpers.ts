@@ -1,1 +1,1 @@
-export { extractZoomMeetingId, isPositiveNumber } from "@meetlytic/shared";
+export { checkIsValidId, extractZoomMeetingId } from "@meetlytic/shared";

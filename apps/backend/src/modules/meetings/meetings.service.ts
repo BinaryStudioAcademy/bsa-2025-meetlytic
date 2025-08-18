@@ -15,8 +15,8 @@ import { type Service } from "~/libs/types/types.js";
 import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
 import {
+	checkIsValidId,
 	extractZoomMeetingId,
-	isPositiveNumber,
 } from "./libs/helpers/helpers.js";
 import {
 	type MeetingCreateRequestDto,
@@ -138,7 +138,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		if (!isPositiveNumber(id)) {
+		if (!checkIsValidId(id)) {
 			throw new MeetingError({
 				message: MeetingErrorMessage.INVALID_MEETING_ID,
 				status: HTTPCode.UNPROCESSED_ENTITY,
@@ -184,7 +184,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 
 	public async find(id: number): Promise<MeetingDetailedResponseDto> {
-		if (!isPositiveNumber(id)) {
+		if (!checkIsValidId(id)) {
 			throw new MeetingError({
 				message: MeetingErrorMessage.INVALID_MEETING_ID,
 				status: HTTPCode.UNPROCESSED_ENTITY,

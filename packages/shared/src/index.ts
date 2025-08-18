@@ -21,10 +21,10 @@ export {
 	ValidationError,
 } from "./libs/exceptions/exceptions.js";
 export {
+	checkIsValidId,
 	configureString,
 	extractZoomMeetingId,
 	formatDate,
-	isPositiveNumber,
 } from "./libs/helpers/helpers.js";
 export { type Config } from "./libs/modules/config/config.js";
 export {

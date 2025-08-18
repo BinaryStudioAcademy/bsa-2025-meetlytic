@@ -184,6 +184,13 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 
 	public async find(id: number): Promise<MeetingDetailedResponseDto> {
+		if (!isPositiveNumber(id)) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.INVALID_MEETING_ID,
+				status: HTTPCode.UNPROCESSED_ENTITY,
+			});
+		}
+
 		const meeting = await this.meetingRepository.find(id);
 
 		if (!meeting) {

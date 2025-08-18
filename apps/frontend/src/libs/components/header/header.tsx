@@ -9,13 +9,17 @@ import {
 	LogoTheme,
 	LogoType,
 } from "~/libs/enums/enums.js";
-import { useCallback, useNavigate } from "~/libs/hooks/hooks.js";
+import {
+	useAppSelector,
+	useCallback,
+	useNavigate,
+} from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
 	isMenuOpen: boolean;
-	onLogout: () => void;
+	onLogout?: (() => void) | undefined;
 	onToggleMenu: () => void;
 };
 
@@ -25,6 +29,7 @@ const Header: React.FC<Properties> = ({
 	onToggleMenu,
 }: Properties) => {
 	const navigate = useNavigate() as (to: string) => void;
+	const { user } = useAppSelector((state) => state.auth);
 
 	const handleProfileClick = useCallback((): void => {
 		navigate(AppRoute.PROFILE);
@@ -59,31 +64,36 @@ const Header: React.FC<Properties> = ({
 						/>
 					</div>
 				</div>
-				<div className={styles["header__avatar-logout-wrapper"]}>
-					<button
-						className={styles["header__profile-button"]}
-						onClick={handleProfileClick}
-					>
-						<div className={styles["variable-component__mobile"]}>
-							<Avatar size={AvatarSize.MOBILE} type={AvatarType.MAIN} />
-						</div>
-						<div className={styles["variable-component__desktop"]}>
-							<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
-						</div>
-					</button>
+				{user && (
+					<div className={styles["header__avatar-logout-wrapper"]}>
+						<button
+							className={styles["header__profile-button"]}
+							onClick={handleProfileClick}
+						>
+							<div className={styles["variable-component__mobile"]}>
+								<Avatar size={AvatarSize.MOBILE} type={AvatarType.MAIN} />
+							</div>
+							<div className={styles["variable-component__desktop"]}>
+								<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
+							</div>
+						</button>
 
-					<div className={styles["variable-component__desktop"]}>
-						<Button
-							iconLeft={
-								<Icon className={styles["header__logout-icon"]} name="logout" />
-							}
-							label="Logout"
-							onClick={onLogout}
-							size={ButtonSize.SMALL}
-							variant={ButtonVariant.OUTLINED}
-						/>
+						<div className={styles["variable-component__desktop"]}>
+							<Button
+								iconLeft={
+									<Icon
+										className={styles["header__logout-icon"]}
+										name="logout"
+									/>
+								}
+								label="Logout"
+								onClick={onLogout}
+								size={ButtonSize.SMALL}
+								variant={ButtonVariant.OUTLINED}
+							/>
+						</div>
 					</div>
-				</div>
+				)}
 			</div>
 		</header>
 	);

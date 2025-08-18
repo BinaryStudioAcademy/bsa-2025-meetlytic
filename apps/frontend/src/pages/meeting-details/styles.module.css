@@ -119,6 +119,7 @@
 
 .action-items-text {
 	display: flex;
+	flex-direction: column;
 	gap: 10px;
 	align-items: flex-start;
 	padding: 10px 20px;

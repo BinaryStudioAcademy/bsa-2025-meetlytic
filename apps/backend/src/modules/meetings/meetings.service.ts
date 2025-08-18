@@ -223,9 +223,6 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 
 	public async stopRecording(id: number): Promise<void> {
-		// TODO:
-		// 1. emit a message for the bot (bot stops audio recording, transcribes full audio, gets summary and action points)
-		// 2. move endMeeting(id) call to the websocket event handler
 		const meeting = await this.find(id);
 		socketService.emitTo({
 			event: SocketEvent.STOP_RECORDING,

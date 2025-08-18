@@ -6,6 +6,7 @@ import {
 	App,
 	Layout,
 	ProtectedRoute,
+	PublicLayout,
 	RouterProvider,
 	StoreProvider,
 	ToastProvider,
@@ -60,7 +61,20 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 						],
 						element: <App />,
 					},
+					{
+						children: [
+							{
+								element: <MeetingDetails />,
+								path: AppRoute.PUBLIC_MEETINGS_$ID,
+							},
+						],
+						element: <PublicLayout />,
+					},
 					{ element: <LandingPage />, path: AppRoute.ROOT },
+					{
+						element: <NotFoundPage />,
+						path: AppRoute.NOT_FOUND,
+					},
 					{
 						element: <NotFoundPage />,
 						path: AppRoute.ANY,

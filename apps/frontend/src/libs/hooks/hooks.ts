@@ -10,4 +10,9 @@ export { useProgress } from "./use-progress/use-progress.js";
 export { useInView } from "motion/react";
 export { useCallback, useEffect, useMemo, useRef, useState } from "react";
 export { useController as useFormController } from "react-hook-form";
-export { useLocation, useNavigate, useParams } from "react-router-dom";
+export {
+	useLocation,
+	useNavigate,
+	useParams,
+	useSearchParams,
+} from "react-router-dom";

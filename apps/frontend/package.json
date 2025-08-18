@@ -22,12 +22,16 @@
 		"@reduxjs/toolkit": "2.8.2",
 		"clsx": "2.1.1",
 		"motion": "12.23.12",
+		"hast-util-sanitize": "5.0.2",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
 		"react-hook-form": "7.60.0",
+		"react-markdown": "10.1.0",
 		"react-redux": "9.2.0",
 		"react-router-dom": "7.6.3",
-		"react-toastify": "11.0.5"
+		"react-toastify": "11.0.5",
+		"rehype-sanitize": "6.0.0",
+		"remark-gfm": "4.0.1"
 	},
 	"devDependencies": {
 		"@types/react": "19.1.8",

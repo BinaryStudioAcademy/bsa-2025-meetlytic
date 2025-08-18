@@ -1,10 +1,10 @@
 import { SearchInput } from "~/libs/components/components.js";
+import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { useAppForm } from "~/libs/hooks/hooks.js";
 import { searchInputValidationSchema } from "~/modules/meeting-details/meeting-details.js";
 
 import { DEFAULT_SEARCH_VALUE } from "./libs/constants/constants.js";
 import styles from "./search-bar.module.css";
-import { getValidClassNames } from "~/libs/helpers/get-valid-class-names.helper.js";
 
 type Properties = {
 	className?: string;

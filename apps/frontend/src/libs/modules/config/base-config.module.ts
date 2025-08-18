@@ -14,11 +14,15 @@ class BaseConfig implements Config {
 		return {
 			API: {
 				ORIGIN_URL: import.meta.env["VITE_APP_API_ORIGIN_URL"] as string,
+				PROXY_SERVER_URL: import.meta.env[
+					"VITE_APP_PROXY_SERVER_URL"
+				] as string,
 			},
 			APP: {
 				ENVIRONMENT: import.meta.env["VITE_APP_NODE_ENV"] as ValueOf<
 					typeof AppEnvironment
 				>,
+				HOST: import.meta.env["VITE_APP_HOST"] as string,
 			},
 		};
 	}

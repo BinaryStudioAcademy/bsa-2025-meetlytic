@@ -21,6 +21,7 @@ import {
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,
 	type MeetingTranscriptionResponseDto,
 	type MeetingUpdateRequestDto,
@@ -96,7 +97,17 @@ class MeetingService implements Service<MeetingResponseDto> {
 			ownerId: payload.ownerId,
 		});
 
-		const newMeeting = await this.meetingRepository.create(meeting);
+		let newMeeting;
+
+		try {
+			newMeeting = await this.meetingRepository.create(meeting);
+		} catch {
+			throw new MeetingError({
+				message: MeetingErrorMessage.DUPLICATED_MEETING,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const { id, meetingPassword } = newMeeting.toObject();
 
 		if (!id) {
@@ -106,7 +117,22 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		return await this.createInstance({ id, meetingLink, meetingPassword });
+		try {
+			const instance = await this.createInstance({
+				id,
+				meetingLink,
+				meetingPassword,
+			});
+
+			return instance;
+		} catch {
+			await this.meetingRepository.delete(id);
+
+			throw new MeetingError({
+				message: MeetingErrorMessage.JOIN_THE_MEETING,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
 	}
 
 	public async delete(id: number): Promise<boolean> {
@@ -197,6 +223,12 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return {
 			publicUrl: `${APIPath.PUBLIC_MEETINGS}/${String(id)}?token=${token}`,
 		};
+	}
+
+	public async getTranscriptionsByMeetingId(
+		id: number,
+	): Promise<MeetingTranscriptionGetAllResponseDto> {
+		return await this.meetingTranscriptionService.getByMeetingId(id);
 	}
 
 	public async saveChunk({

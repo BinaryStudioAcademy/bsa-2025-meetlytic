@@ -16,12 +16,11 @@ type Properties = {
 
 const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 	const dispatch = useAppDispatch();
-	const { control, errors, handleSubmit } = useAppForm<MeetingCreateRequestDto>(
-		{
+	const { control, errors, handleSubmit, isSubmitting } =
+		useAppForm<MeetingCreateRequestDto>({
 			defaultValues: CREATE_MEETING_FORM_DEFAULT_VALUES,
 			validationSchema: meetingCreateValidationSchema,
-		},
-	);
+		});
 
 	const handleSubmitMeeting = useCallback(
 		async (data: MeetingCreateRequestDto): Promise<void> => {
@@ -49,7 +48,7 @@ const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 						className={styles["meeting-form__input"]}
 						control={control}
 						errors={errors}
-						hasVisuallyHiddenLabel={true}
+						hasVisuallyHiddenLabel
 						label="Meeting invite link"
 						name="meetingLink"
 						placeholder="Meeting invite link"
@@ -59,7 +58,7 @@ const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 						className={styles["meeting-form__input"]}
 						control={control}
 						errors={errors}
-						hasVisuallyHiddenLabel={true}
+						hasVisuallyHiddenLabel
 						label="Meeting password"
 						name="meetingPassword"
 						placeholder="Meeting password (optional)"
@@ -67,7 +66,12 @@ const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 					/>
 				</div>
 				<div className={styles["meeting-form__actions"]}>
-					<Button label="Start" type="submit" variant={ButtonVariant.PRIMARY} />
+					<Button
+						isDisabled={isSubmitting}
+						label={isSubmitting ? "Creating..." : "Start"}
+						type="submit"
+						variant={ButtonVariant.PRIMARY}
+					/>
 					<Button
 						label="Cancel"
 						onClick={onClose}

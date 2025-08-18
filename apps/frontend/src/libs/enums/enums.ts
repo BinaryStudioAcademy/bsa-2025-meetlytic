@@ -19,7 +19,11 @@ export {
 	ContentType,
 	HTTPMethod,
 	KeyboardKey,
+	MeetingErrorMessage,
 	MeetingHost,
+	MeetingStatus,
 	ServerErrorType,
+	SocketEvent,
+	SocketNamespace,
 	UserValidationRule,
 } from "@meetlytic/shared";

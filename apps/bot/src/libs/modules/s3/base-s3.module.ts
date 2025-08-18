@@ -17,7 +17,6 @@ type Constructor = {
 	bucketName: string;
 	credentials: {
 		accessKeyId: string;
-
 		secretAccessKey: string;
 	};
 	logger: Logger;

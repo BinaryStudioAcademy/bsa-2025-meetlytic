@@ -14,7 +14,10 @@ import { type Service } from "~/libs/types/types.js";
 
 import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
-import { extractZoomMeetingId } from "./libs/helpers/helpers.js";
+import {
+	extractZoomMeetingId,
+	isPositiveNumber,
+} from "./libs/helpers/helpers.js";
 import {
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
@@ -135,7 +138,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		if (!Number.isFinite(id) || Math.abs(id) !== id) {
+		if (!isPositiveNumber(id)) {
 			throw new MeetingError({
 				message: MeetingErrorMessage.INVALID_MEETING_ID,
 				status: HTTPCode.UNPROCESSED_ENTITY,

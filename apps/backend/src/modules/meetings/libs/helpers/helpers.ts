@@ -1,1 +1,1 @@
-export { extractZoomMeetingId } from "@meetlytic/shared";
+export { extractZoomMeetingId, isPositiveNumber } from "@meetlytic/shared";

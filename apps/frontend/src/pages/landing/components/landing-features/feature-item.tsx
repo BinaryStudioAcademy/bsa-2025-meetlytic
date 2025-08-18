@@ -1,30 +1,13 @@
-import { animate, getValidClassNames, inView } from "~/libs/helpers/helpers.js";
-import { useEffect, useRef, useState } from "~/libs/hooks/hooks.js";
+import { FeatureAnimation } from "~/libs/enums/enums.js";
+import { getValidClassNames } from "~/libs/helpers/helpers.js";
+import {
+	useInViewAnimation,
+	usePrefersReducedMotion,
+	useRef,
+} from "~/libs/hooks/hooks.js";
 import { type Feature } from "~/modules/landing/landing.js";
 
 import styles from "./styles.module.css";
-
-const usePrefersReducedMotion = (): boolean => {
-	const [reduced, setReduced] = useState(false);
-	useEffect(() => {
-		const mediaQuery = globalThis.matchMedia(
-			"(prefers-reduced-motion: reduce)",
-		);
-
-		const updateReducedMotion = (): void => {
-			setReduced(mediaQuery.matches);
-		};
-
-		updateReducedMotion();
-		mediaQuery.addEventListener("change", updateReducedMotion);
-
-		return (): void => {
-			mediaQuery.removeEventListener("change", updateReducedMotion);
-		};
-	}, []);
-
-	return reduced;
-};
 
 const FeatureItem: React.FC<Feature> = ({
 	eyebrow,
@@ -36,30 +19,18 @@ const FeatureItem: React.FC<Feature> = ({
 	const rootReference = useRef<HTMLDivElement | null>(null);
 	const reduced = usePrefersReducedMotion();
 
-	useEffect(() => {
-		const element = rootReference.current as HTMLElement;
-
-		element.style.opacity = "0";
-		element.style.transform = `translateX(${isReversed ? "-28px" : "28px"})`;
-
-		const unsubscribeInView = inView(
-			element,
-			() => {
-				animate(
-					element,
-					{ opacity: 1, transform: "translateX(0px)" },
-					{ duration: 0.6 },
-				);
-
-				return (): void => {
-					unsubscribeInView();
-				};
-			},
-			{ amount: 0.25, margin: "0px 0px -15% 0px" },
-		);
-
-		return unsubscribeInView;
-	}, [isReversed, reduced]);
+	useInViewAnimation({
+		final: {
+			opacity: "1",
+			transform: "translateX(0px)",
+		},
+		initial: {
+			opacity: "0",
+			transform: `translateX(${(isReversed ? -FeatureAnimation.OFFSET_PX : FeatureAnimation.OFFSET_PX).toString()}px)`,
+		},
+		isDisabled: reduced,
+		ref: rootReference as React.RefObject<HTMLElement>,
+	});
 
 	return (
 		<div

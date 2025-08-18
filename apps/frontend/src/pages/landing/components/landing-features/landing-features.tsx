@@ -11,7 +11,9 @@ const LandingFeatures: React.FC = () => {
 			id="features"
 		>
 			<div className={styles["features__container"]}>
-				<h2 className={styles["features__title"]}>Features</h2>
+				<h2 className={styles["features__title"]} id="features-title">
+					Features
+				</h2>
 				{FEATURE_DATA.map((feature) => (
 					<FeatureItem key={feature.id} {...feature} />
 				))}

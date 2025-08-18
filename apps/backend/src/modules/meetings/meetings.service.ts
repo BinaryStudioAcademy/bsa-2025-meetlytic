@@ -128,7 +128,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			await this.meetingRepository.delete(id);
 
 			throw new MeetingError({
-				message: MeetingErrorMessage.MEETING_FAILED_TO_CREATE,
+				message: MeetingErrorMessage.JOIN_THE_MEETING,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}

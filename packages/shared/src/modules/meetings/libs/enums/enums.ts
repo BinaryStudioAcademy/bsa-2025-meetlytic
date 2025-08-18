@@ -1,4 +1,3 @@
-export { MeetingAudioErrorMessage } from "./meeting-audio-error-message.enum.js";
 export { MeetingErrorMessage } from "./meeting-error-message.enum.js";
 export { MeetingStatus } from "./meeting-status.enum.js";
 export { MeetingTranscriptionErrorMessage } from "./meeting-transcription-error-message.enum.js";

@@ -1,9 +1,5 @@
-export {
-	type MeetingAudioGetAllResponseDto,
-	type MeetingAudioRequestDto,
-	type MeetingAudioResponseDto,
-	type MeetingUpdateAudioRequestDto,
-} from "./meeting-audio/types.js";
+export { type MeetingAttachAudioRequestDto } from "./meeting-attach-audio-request-dto.type.js";
+export { type MeetingAudioSaveDto } from "./meeting-audio-save-dto.type.js";
 export { type MeetingCreateRequestDto } from "./meeting-create-request-dto.type.js";
 export { type MeetingDetailedResponseDto } from "./meeting-detailed-response-dto.type.js";
 export { type MeetingGetAllResponseDto } from "./meeting-get-all-response-dto.type.js";

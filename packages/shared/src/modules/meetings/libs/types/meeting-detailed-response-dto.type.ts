@@ -3,6 +3,7 @@ import { type MeetingHost, type MeetingStatus } from "../enums/enums.js";
 
 type MeetingDetailedResponseDto = {
 	actionItems: null | string;
+	audioFileId: null | number;
 	createdAt: string;
 	host: ValueOf<typeof MeetingHost>;
 	id: number;

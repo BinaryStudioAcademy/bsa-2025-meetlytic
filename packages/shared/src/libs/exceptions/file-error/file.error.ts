@@ -8,7 +8,7 @@ type Constructor = {
 	status: ValueOf<typeof HTTPCode>;
 };
 
-class MeetingAudioError extends HTTPError {
+class FileError extends HTTPError {
 	public constructor({ cause, message, status }: Constructor) {
 		super({
 			cause,
@@ -18,4 +18,4 @@ class MeetingAudioError extends HTTPError {
 	}
 }
 
-export { MeetingAudioError };
+export { FileError };

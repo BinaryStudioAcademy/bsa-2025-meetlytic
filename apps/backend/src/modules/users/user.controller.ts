@@ -150,7 +150,7 @@ class UserController extends BaseController {
 		this.addRoute({
 			handler: (options) =>
 				this.deleteAvatar(
-					options as APIHandlerOptions<{ user: { id: number } }>,
+					options as APIHandlerOptions<{ user: UserResponseDto }>,
 				),
 			method: HTTPMethod.DELETE,
 			path: UsersApiPath.AVATAR,
@@ -195,11 +195,13 @@ class UserController extends BaseController {
 	 *         description: Server error
 	 */
 	private async deleteAvatar(
-		options: APIHandlerOptions<{ user: { id: number } }>,
+		options: APIHandlerOptions<{ user: UserResponseDto }>,
 	): Promise<APIHandlerResponse> {
 		const { user } = options;
 
-		const detailsId = await this.userService.getOrCreateDetailsId(user.id);
+		const detailsId = await this.userService.getOrCreateDetailsId(
+			(user as UserResponseDto).id,
+		);
 
 		if (!detailsId) {
 			throw new HTTPError({
@@ -208,7 +210,7 @@ class UserController extends BaseController {
 			});
 		}
 
-		await this.userAvatarService.deleteAvatar(user.id);
+		await this.userAvatarService.deleteAvatar((user as UserResponseDto).id);
 
 		return {
 			payload: {
@@ -265,7 +267,9 @@ class UserController extends BaseController {
 	}: APIHandlerOptions<{
 		user: UserResponseDto;
 	}>): Promise<APIHandlerResponse> {
-		const fullUser = await this.userService.findProfileByEmail(user.email);
+		const fullUser = await this.userService.findProfileByEmail(
+			(user as UserResponseDto).email,
+		);
 
 		return {
 			payload: fullUser,
@@ -304,7 +308,7 @@ class UserController extends BaseController {
 	): Promise<APIHandlerResponse> {
 		const { request } = options;
 
-		const user = request.user;
+		const user = request.user as UserResponseDto;
 
 		const uploadedFile = await request.getFileOrThrow();
 
@@ -356,7 +360,10 @@ class UserController extends BaseController {
 		body: UserUpdateResponseDto;
 		user: UserResponseDto;
 	}>): Promise<APIHandlerResponse> {
-		const updatedUser = await this.userService.update(user.id, body);
+		const updatedUser = await this.userService.update(
+			(user as UserResponseDto).id,
+			body,
+		);
 
 		return {
 			payload: updatedUser,

@@ -34,7 +34,11 @@ export {
 	HTTPHeader,
 	HTTPMethod,
 } from "./libs/modules/http/http.js";
-export { SocketEvent, SocketMessage } from "./libs/modules/socket/socket.js";
+export {
+	SocketEvent,
+	SocketMessage,
+	SocketNamespace,
+} from "./libs/modules/socket/socket.js";
 export { type Storage } from "./libs/modules/storage/storage.js";
 export {
 	type ServerCommonErrorResponse,

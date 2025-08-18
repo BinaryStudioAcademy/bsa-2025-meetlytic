@@ -24,6 +24,7 @@ import {
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,
 	type MeetingTranscriptionResponseDto,
 	type MeetingUpdateRequestDto,
@@ -239,6 +240,12 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return {
 			publicUrl: `${APIPath.PUBLIC_MEETINGS}/${String(id)}?token=${token}`,
 		};
+	}
+
+	public async getTranscriptionsByMeetingId(
+		id: number,
+	): Promise<MeetingTranscriptionGetAllResponseDto> {
+		return await this.meetingTranscriptionService.getByMeetingId(id);
 	}
 
 	public async saveChunk({

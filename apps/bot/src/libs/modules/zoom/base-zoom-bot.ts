@@ -308,6 +308,10 @@ class BaseZoomBot {
 				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
 				await this.leaveMeeting();
 				this.shouldMonitor = false;
+				this.socketClient.emit(
+					SocketEvent.RECORDING_STOPPED,
+					String(this.config.ENV.ZOOM.MEETING_ID),
+				);
 			}
 
 			await delay(Timeout.FIFTEEN_SECONDS);

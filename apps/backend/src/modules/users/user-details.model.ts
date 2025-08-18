@@ -20,7 +20,7 @@ class UserDetailsModel extends AbstractModel {
 
 	public static get relationMappings(): RelationMappings {
 		return {
-			avatarFile: {
+			avatar: {
 				join: {
 					from: `${DatabaseTableName.USER_DETAILS}.${ColumnName.AVATAR_FILE_ID}`,
 					to: `${DatabaseTableName.FILES}.id`,

@@ -75,9 +75,10 @@ class UserAvatarService {
 			});
 
 			const fileRecord = await this.fileService.replaceAvatarRecord({
+				contentType: mimetype,
 				key: savedKey,
 				url,
-				user_details_id: detailsId,
+				userDetailsId: detailsId,
 			});
 
 			if (!fileRecord.id) {

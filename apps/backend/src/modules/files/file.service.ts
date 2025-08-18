@@ -12,53 +12,55 @@ class FileService {
 		this.fileRepository = fileRepository;
 	}
 
-	public findById(id: number): Promise<File | undefined> {
+	public findById(id: number): Promise<File | null> {
 		return this.fileRepository.findById(id);
 	}
 
 	public async findByUserDetailsId(
-		user_details_id: number,
-	): Promise<File | undefined> {
-		const file = await this.fileRepository.findByUserDetailsId(user_details_id);
+		userDetailsId: number,
+	): Promise<File | null> {
+		const file = await this.fileRepository.findByUserDetailsId(userDetailsId);
 
 		return file;
 	}
 
 	public async getAvatarKeyForDeletion(
-		user_details_id: number,
+		userDetailsId: number,
 	): Promise<null | string> {
 		const avatarFile =
-			await this.fileRepository.findByUserDetailsId(user_details_id);
+			await this.fileRepository.findByUserDetailsId(userDetailsId);
 
 		return avatarFile?.key || null;
 	}
 
-	public async removeAvatarRecord(user_details_id: number): Promise<boolean> {
+	public async removeAvatarRecord(userDetailsId: number): Promise<boolean> {
 		const avatarFile =
-			await this.fileRepository.findByUserDetailsId(user_details_id);
+			await this.fileRepository.findByUserDetailsId(userDetailsId);
 
 		if (!avatarFile) {
 			return false;
 		}
 
 		await this.fileRepository.delete(avatarFile.id);
-		await this.fileRepository.unsetFileId(user_details_id);
+		await this.fileRepository.unsetFileId(userDetailsId);
 
 		return true;
 	}
 
 	public async replaceAvatarRecord(parameters: {
+		contentType: string;
 		key: string;
 		url: string;
-		user_details_id: number;
+		userDetailsId: number;
 	}): Promise<File> {
-		const { key, url, user_details_id } = parameters;
+		const { contentType, key, url, userDetailsId } = parameters;
 
 		const avatarFile =
-			await this.fileRepository.findByUserDetailsId(user_details_id);
+			await this.fileRepository.findByUserDetailsId(userDetailsId);
 
 		if (avatarFile) {
 			const updated = await this.fileRepository.update(avatarFile.id, {
+				contentType,
 				key,
 				url,
 			});
@@ -67,9 +69,10 @@ class FileService {
 		}
 
 		return await this.fileRepository.create({
+			contentType,
 			key,
 			url,
-			user_details_id,
+			userDetailsId,
 		});
 	}
 }

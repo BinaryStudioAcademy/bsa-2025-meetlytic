@@ -1,16 +1,13 @@
-import { Model } from "objection";
+import { AbstractModel } from "~/libs/modules/database/database.js";
 
 import { TableName } from "./libs/enums/enums.js";
 
-class FileModel extends Model {
-	public created_at!: string;
-	public id!: number;
+class FileModel extends AbstractModel {
+	public contentType!: string;
 	public key!: string;
-	public type!: string;
-	public updated_at!: string;
 	public url!: string;
 
-	public static get tableName(): string {
+	public static override get tableName(): string {
 		return TableName.FILES;
 	}
 }

@@ -20,21 +20,22 @@ class FileRepository {
 	}
 
 	public async create(parameters: {
+		contentType: string;
 		key: string;
 		url: string;
-		user_details_id: number;
+		userDetailsId: number;
 	}): Promise<File> {
-		const { key, url, user_details_id } = parameters;
+		const { contentType, key, url, userDetailsId } = parameters;
 
 		const fileRow = await this.fileModel
 			.query()
-			.insert({ key, url })
+			.insert({ contentType, key, url })
 			.returning("*");
 
 		await this.userDetailsModel
 			.query()
 			.patch({ avatarFileId: fileRow.id })
-			.where("id", user_details_id);
+			.where("id", userDetailsId);
 
 		return { ...fileRow.toJSON(), type: FILE_TYPE_AVATAR } as File;
 	}
@@ -43,25 +44,25 @@ class FileRepository {
 		return await this.fileModel.query().deleteById(id);
 	}
 
-	public async findById(id: number): Promise<File | undefined> {
+	public async findById(id: number): Promise<File | null> {
 		const fileRow = await this.fileModel.query().findById(id);
 
 		return fileRow
 			? ({ ...fileRow.toJSON(), type: FILE_TYPE_AVATAR } as File)
-			: undefined;
+			: null;
 	}
 
 	public async findByUserDetailsId(
-		user_details_id: number,
-	): Promise<File | undefined> {
+		userDetailsId: number,
+	): Promise<File | null> {
 		const userDetails = await this.userDetailsModel
 			.query()
-			.findById(user_details_id)
-			.select("avatar_file_id")
+			.findById(userDetailsId)
+			.select("avatarFileId")
 			.first();
 
 		if (!userDetails?.avatarFileId) {
-			return undefined;
+			return null;
 		}
 
 		const fileRow = await this.fileModel
@@ -69,22 +70,22 @@ class FileRepository {
 			.findById(userDetails.avatarFileId);
 
 		if (!fileRow) {
-			return undefined;
+			return null;
 		}
 
 		return { ...fileRow.toJSON(), type: FILE_TYPE_AVATAR } as File;
 	}
 
-	public async unsetFileId(user_details_id: number): Promise<number> {
+	public async unsetFileId(userDetailsId: number): Promise<number> {
 		return await this.userDetailsModel
 			.query()
 			.patch({ avatarFileId: null })
-			.where("id", user_details_id);
+			.where("id", userDetailsId);
 	}
 
 	public async update(
 		id: number,
-		parameters: { key: string; url: string },
+		parameters: { contentType?: string; key: string; url: string },
 	): Promise<File> {
 		const updatedRow = await this.fileModel
 			.query()

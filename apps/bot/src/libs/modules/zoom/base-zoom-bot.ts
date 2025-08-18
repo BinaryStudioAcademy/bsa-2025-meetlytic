@@ -239,17 +239,9 @@ class BaseZoomBot {
 			return false;
 		}
 
-		const countToPressTab = 7;
-
-		for (let index = 0; index < countToPressTab; index++) {
-			await this.page.keyboard.press(KeyboardKey.TAB);
-			await delay(Timeout.TWO_SECONDS);
-		}
-
-		await this.page.keyboard.press(KeyboardKey.ENTER);
-
-		await this.waitForNetwork();
 		this.logger.info(ZoomBotMessages.GO_TO_SIGN_IN_PAGE);
+		await this.clickHelper(ZoomUILabel.SIGN_IN_LINK, Timeout.THREE_SECONDS);
+		await this.waitForNetwork();
 
 		return true;
 	}

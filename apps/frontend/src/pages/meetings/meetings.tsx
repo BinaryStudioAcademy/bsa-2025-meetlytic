@@ -1,3 +1,4 @@
+import PlaceholderAvatar from "~/assets/img/icons/placeholder-avatar.svg";
 import { Avatar } from "~/libs/components/components.js";
 import { AvatarSize } from "~/libs/enums/enums.js";
 import { formatDate } from "~/libs/helpers/helpers.js";
@@ -26,18 +27,31 @@ const Meetings: React.FC = () => {
 
 	return (
 		<>
-			<MeetingCreationModal />
 			<div className={styles["meetings"]}>
 				<div className={styles["meetings__header"]}>
-					<Avatar size={AvatarSize.LARGE} src={avatarUrl ?? undefined} />
-					<div className={styles["meetings__header-text"]}>
-						<h5 className={styles["meetings__header-name"]}>
-							{userEmail ?? "Username"}
-						</h5>
-						<h4 className={styles["meetings__header-library"]}>
-							Personal Library
-						</h4>
+					<div className={styles["meetings__avatar-wrapper"]}>
+						<div className={styles["mobile"]}>
+							<Avatar
+								size={AvatarSize.MEDIUM}
+								src={avatarUrl ?? PlaceholderAvatar}
+							/>
+						</div>
+						<div className={styles["desktop"]}>
+							<Avatar
+								size={AvatarSize.LARGE}
+								src={avatarUrl ?? PlaceholderAvatar}
+							/>
+						</div>
+						<div className={styles["meetings__header-text"]}>
+							<h5 className={styles["meetings__header-name"]}>
+								{userEmail ?? "Username"}
+							</h5>
+							<h4 className={styles["meetings__header-library"]}>
+								Personal Library
+							</h4>
+						</div>
 					</div>
+					<MeetingCreationModal />
 				</div>
 				<div className={styles["meetings__list"]}>
 					{meetings.map((meeting) => {

@@ -58,7 +58,7 @@ const Header: React.FC<Properties> = ({
 				</button>
 
 				<div className={styles["header__logo"]}>
-					<div className={styles["variable-component__mobile"]}>
+					<div className={styles["mobile"]}>
 						<Logo
 							hasLink
 							size={LogoSize.SMALL}
@@ -66,7 +66,7 @@ const Header: React.FC<Properties> = ({
 							type={LogoType.MOBILE}
 						/>
 					</div>
-					<div className={styles["variable-component__desktop"]}>
+					<div className={styles["desktop"]}>
 						<Logo
 							hasLink
 							size={LogoSize.SMALL}
@@ -81,14 +81,14 @@ const Header: React.FC<Properties> = ({
 							className={styles["header__profile-button"]}
 							onClick={handleProfileClick}
 						>
-							<div className={styles["variable-component__mobile"]}>
+							<div className={styles["mobile"]}>
 								<Avatar
 									size={AvatarSize.MOBILE}
 									src={avatarUrl ?? PlaceholderAvatar}
 									type={AvatarType.MAIN}
 								/>
 							</div>
-							<div className={styles["variable-component__desktop"]}>
+							<div className={styles["desktop"]}>
 								<Avatar
 									size={AvatarSize.SMALL}
 									src={avatarUrl ?? PlaceholderAvatar}
@@ -97,7 +97,7 @@ const Header: React.FC<Properties> = ({
 							</div>
 						</button>
 
-						<div className={styles["variable-component__desktop"]}>
+						<div className={styles["desktop"]}>
 							<Button
 								iconLeft={
 									<Icon

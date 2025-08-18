@@ -1,5 +1,5 @@
+export { checkIsValidId } from "./check-is-valid-id/check-is-valid-id.js";
 export { configureString } from "./configure-string/configure-string.helper.js";
 export { extractZoomMeetingId } from "./extract-zoom-meeting-id/extract-zoom-meeting-id.helper.js";
 export { formatDate } from "./format-date/format-date.js";
-export { isPositiveNumber } from "./is-positive-number/is-positive-number.js";
 export { isZoomLink } from "./validate-zoom-link/validate-zoom-link.js";

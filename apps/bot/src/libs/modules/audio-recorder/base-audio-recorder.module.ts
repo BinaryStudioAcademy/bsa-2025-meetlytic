@@ -114,7 +114,6 @@ class BaseAudioRecorder implements AudioRecorder {
 
 				if (/error|invalid|failed|no such/i.test(line)) {
 					this.logger.error(`[FFMPEG][ERROR?] ${line}`);
-					this.stop();
 				} else if (line && !line.startsWith("size=")) {
 					this.logger.debug(`[FFMPEG][INFO] ${line}`);
 				}

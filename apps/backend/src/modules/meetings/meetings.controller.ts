@@ -231,6 +231,8 @@ class MeetingsController extends BaseController {
 	 *               $ref: "#/components/schemas/Meeting"
 	 *       404:
 	 *         description: Meeting not found
+	 *       422:
+	 *         description: Invalid meeting ID
 	 */
 	private async find(options: FindMeetingOptions): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);

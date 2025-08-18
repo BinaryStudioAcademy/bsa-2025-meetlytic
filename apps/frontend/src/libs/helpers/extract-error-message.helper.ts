@@ -3,6 +3,12 @@ const extractErrorMessage = (
 	fallbackMessage = "Something went wrong",
 ): string => {
 	if (typeof error === "object" && error !== null) {
+		const errorMessage = (error as { message?: unknown }).message;
+
+		if (typeof errorMessage === "string") {
+			return errorMessage;
+		}
+
 		const maybeResponse = (error as { response?: unknown }).response;
 
 		if (

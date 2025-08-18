@@ -1,8 +1,12 @@
-import { type ContentType, ServerErrorType } from "~/libs/enums/enums.js";
+import {
+	type ContentType,
+	NotificationMessage,
+	ServerErrorType,
+} from "~/libs/enums/enums.js";
 import { configureString } from "~/libs/helpers/helpers.js";
 import {
 	type HTTP,
-	type HTTPCode,
+	HTTPCode,
 	HTTPError,
 	HTTPHeader,
 } from "~/libs/modules/http/http.js";
@@ -61,6 +65,17 @@ class BaseHTTPApi implements HTTPApi {
 		return response;
 	}
 
+	private ensureUserIsOnline(): void {
+		if (typeof navigator !== "undefined" && !navigator.onLine) {
+			throw new HTTPError({
+				details: [],
+				errorType: ServerErrorType.NO_INTERNET,
+				message: NotificationMessage.NO_INTERNET,
+				status: HTTPCode.TIMEOUT,
+			});
+		}
+	}
+
 	private async getHeaders(
 		hasAuth: boolean,
 		contentType?: ValueOf<typeof ContentType>,
@@ -109,6 +124,8 @@ class BaseHTTPApi implements HTTPApi {
 		options: HTTPApiOptions,
 	): Promise<HTTPApiResponse> {
 		const { contentType, hasAuth, method, payload = null } = options;
+
+		this.ensureUserIsOnline();
 
 		const headers = await this.getHeaders(hasAuth, contentType);
 

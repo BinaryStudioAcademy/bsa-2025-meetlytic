@@ -10,7 +10,7 @@ type Properties = {
 	iconRight?: React.ReactNode;
 	isDisabled?: boolean;
 	label: string;
-	onClick?: React.MouseEventHandler<HTMLButtonElement>;
+	onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
 	size?: ValueOf<typeof ButtonSize>;
 	type?: "button" | "submit";
 	variant?: ValueOf<typeof ButtonVariant>;

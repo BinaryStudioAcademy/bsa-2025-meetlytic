@@ -20,16 +20,16 @@ import { ProfileForm } from "./components/components.js";
 import styles from "./styles.module.css";
 
 const Profile: React.FC = () => {
+	const token = localStorage.getItem("token");
 	const dispatch = useAppDispatch();
 	const user = useAppSelector((state) => state.users.user);
-
 	const status = useAppSelector((state) => state.users.dataStatus);
 
 	useEffect(() => {
-		if (status === DataStatus.IDLE) {
+		if (status === DataStatus.IDLE && token) {
 			void dispatch(userActions.getProfile());
 		}
-	}, [status, dispatch]);
+	}, [token, status, dispatch]);
 
 	const handleSubmit = useCallback(
 		(payload: UserUpdateResponseDto): void => {

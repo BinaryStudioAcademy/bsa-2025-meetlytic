@@ -54,11 +54,11 @@
 	justify-content: flex-end;
 }
 
-.visible-on-mobile {
+.mobile {
 	display: none;
 }
 
-.visible-on-desktop {
+.desktop {
 	display: block;
 }
 
@@ -73,11 +73,11 @@
 }
 
 @media (width <= 768px) {
-	.visible-on-desktop {
+	.desktop {
 		display: none;
 	}
 
-	.visible-on-mobile {
+	.mobile {
 		display: block;
 	}
 }

@@ -47,7 +47,7 @@ const Header: React.FC<Properties> = ({
 				</button>
 
 				<div className={styles["header__logo"]}>
-					<div className={styles["visible-on-mobile"]}>
+					<div className={styles["mobile"]}>
 						<Logo
 							hasLink
 							size={LogoSize.SMALL}
@@ -55,7 +55,7 @@ const Header: React.FC<Properties> = ({
 							type={LogoType.MOBILE}
 						/>
 					</div>
-					<div className={styles["visible-on-desktop"]}>
+					<div className={styles["desktop"]}>
 						<Logo
 							hasLink
 							size={LogoSize.SMALL}
@@ -70,15 +70,15 @@ const Header: React.FC<Properties> = ({
 							className={styles["header__profile-button"]}
 							onClick={handleProfileClick}
 						>
-							<div className={styles["visible-on-mobile"]}>
+							<div className={styles["mobile"]}>
 								<Avatar size={AvatarSize.MOBILE} type={AvatarType.MAIN} />
 							</div>
-							<div className={styles["visible-on-desktop"]}>
+							<div className={styles["desktop"]}>
 								<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
 							</div>
 						</button>
 
-						<div className={styles["visible-on-desktop"]}>
+						<div className={styles["desktop"]}>
 							<Button
 								iconLeft={
 									<Icon

@@ -35,11 +35,11 @@
 	display: none;
 }
 
-.visible-on-mobile {
+.mobile {
 	display: none;
 }
 
-.visible-on-desktop {
+.desktop {
 	display: block;
 	width: 100%;
 }
@@ -66,11 +66,11 @@
 		justify-self: end;
 	}
 
-	.visible-on-desktop {
+	.desktop {
 		display: none;
 	}
 
-	.visible-on-mobile {
+	.mobile {
 		display: block;
 		width: 100%;
 	}

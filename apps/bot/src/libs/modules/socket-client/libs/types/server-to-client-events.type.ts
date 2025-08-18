@@ -3,9 +3,7 @@ import { type MeetingTranscriptionRequestDto } from "./types.js";
 
 type ServerToClientEvents = {
 	[SocketEvent.CONNECT]: () => void;
-	[SocketEvent.TRANSCRIBE_SAVE_CHUNK]: (
-		data: MeetingTranscriptionRequestDto,
-	) => void;
+	[SocketEvent.TRANSCRIBE]: (data: MeetingTranscriptionRequestDto) => void;
 };
 
 export { type ServerToClientEvents };

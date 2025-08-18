@@ -24,23 +24,8 @@ class BaseSocketService implements SocketService {
 	public constructor(logger: Logger) {
 		this.logger = logger;
 	}
-	private onConnection = (socket: Socket): void => {
-		this.logger.info(`${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
 
-		this.registerTranscriptionEvents(socket);
-		this.registerAudioEvents(socket);
-
-		socket.on(SocketEvent.DISCONNECT, (reason) => {
-			this.logger.warn(
-				`${SocketMessage.CLIENT_DISCONNECTED} ${socket.id}, ${reason}`,
-			);
-		});
-		socket.on(SocketEvent.ERROR, (error) => {
-			this.logger.error(`${SocketMessage.CLIENT_ERROR} ${String(error)}`);
-		});
-	};
-
-	private registerAudioEvents = (socket: Socket): void => {
+	private handleAudioEvents = (socket: Socket): void => {
 		socket.on(SocketEvent.AUDIO_SAVE, async (payload: MeetingAudioSaveDto) => {
 			try {
 				this.logger.info(SocketMessage.AUDIO_SAVE_RECEIVED);
@@ -62,13 +47,58 @@ class BaseSocketService implements SocketService {
 		});
 	};
 
-	private registerTranscriptionEvents = (socket: Socket): void => {
+	private handleClientConnection(socket: Socket): void {
+		this.logger.info(`${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
+
+		this.handleAudioEvents(socket);
+		this.handleJoinMeeting(socket);
+		this.handleTranscription(socket);
+		this.handleError(socket);
+	}
+
+	private handleError(socket: Socket): void {
+		socket.on(SocketEvent.ERROR, (error) => {
+			this.logger.error(`${SocketMessage.CLIENT_ERROR} ${String(error)}`);
+		});
+	}
+
+	private handleJoinMeeting(socket: Socket): void {
+		socket.on(SocketEvent.JOIN_MEETING, async (meetingId: string) => {
+			try {
+				await socket.join(meetingId);
+				this.logger.info(`Socket ${socket.id} joined room ${meetingId}`);
+			} catch (error) {
+				this.logger.error(`Failed to join room ${meetingId}: ${String(error)}`);
+			}
+		});
+
+		socket.on(SocketEvent.LEAVE_MEETING, async (meetingId: string) => {
+			try {
+				await socket.leave(meetingId);
+				this.logger.info(`Socket ${socket.id} left room ${meetingId}`);
+			} catch (error) {
+				this.logger.error(
+					`Failed to leave room ${meetingId} for socket ${socket.id}: ${String(error)}`,
+				);
+			}
+		});
+	}
+
+	private handleTranscription(socket: Socket): void {
 		socket.on(
 			SocketEvent.TRANSCRIBE,
 			async (payload: MeetingTranscriptionRequestDto) => {
 				try {
 					this.logger.info(SocketMessage.SOCKET_EVENT_RECEIVED);
 					await meetingService.saveChunk(payload);
+
+					const transcription = await meetingService.saveChunk(payload);
+
+					if (payload.meetingId) {
+						this.io
+							.to(String(payload.meetingId))
+							.emit(SocketEvent.TRANSCRIBE, transcription);
+					}
 				} catch (error) {
 					this.logger.error(
 						`${SocketMessage.TRANSCRIPTION_ERROR} ${String(error)}`,
@@ -76,7 +106,7 @@ class BaseSocketService implements SocketService {
 				}
 			},
 		);
-	};
+	}
 
 	public initialize(server: HttpServer): void {
 		this.io = new SocketServer(server, {
@@ -86,7 +116,7 @@ class BaseSocketService implements SocketService {
 			},
 		});
 
-		this.io.on(SocketEvent.CONNECTION, this.onConnection);
+		this.io.on(SocketEvent.CONNECTION, this.handleClientConnection.bind(this));
 	}
 }
 

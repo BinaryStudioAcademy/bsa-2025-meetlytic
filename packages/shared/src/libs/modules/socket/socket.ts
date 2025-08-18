@@ -1,1 +1,5 @@
-export { SocketEvent, SocketMessage } from "./libs/enums/enums.js";
+export {
+	SocketEvent,
+	SocketMessage,
+	SocketNamespace,
+} from "./libs/enums/enums.js";

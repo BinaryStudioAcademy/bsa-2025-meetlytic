@@ -4,9 +4,11 @@ import { type ValueOf } from "~/libs/types/types.js";
 type EnvironmentSchema = {
 	API: {
 		ORIGIN_URL: string;
+		PROXY_SERVER_URL: string;
 	};
 	APP: {
 		ENVIRONMENT: ValueOf<typeof AppEnvironment>;
+		HOST: string;
 	};
 };
 

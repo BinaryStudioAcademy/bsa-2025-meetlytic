@@ -1,0 +1,117 @@
+.meeting-details {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	height: 100%;
+}
+
+.meeting-details__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.meeting-details__title {
+	display: flex;
+	gap: 10px;
+	align-items: baseline;
+	font-size: 24px;
+	font-weight: 700;
+	color: var(--color-text-1);
+}
+
+.meeting-details__date {
+	font-size: 16px;
+	font-weight: 400;
+	color: var(--color-text-2);
+}
+
+.meeting-details__actions {
+	display: flex;
+	gap: 15px;
+}
+
+.action-button:hover {
+	cursor: pointer;
+}
+
+.action-button__share {
+	color: var(--color-brand);
+	transition: color 0.3s ease-in-out;
+}
+
+.action-button__share:hover {
+	color: var(--color-brand-hover);
+}
+
+.meeting-details__content {
+	display: grid;
+	grid-template-columns: 2fr 1.5fr;
+	gap: 25px;
+}
+
+.meeting-details__right-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.summary-area {
+	padding: 20px;
+	background-color: var(--color-background-3);
+	border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+}
+
+.summary-text {
+	padding: 10px 20px;
+	font-size: 14px;
+	color: var(--color-text-1);
+	background-color: var(--color-background-4);
+	border-radius: var(--border-radius-lg);
+}
+
+.action-items-area {
+	padding: 20px;
+	margin: 0;
+	list-style: none;
+	background-color: var(--color-background-3);
+	border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+}
+
+.action-items-text {
+	display: flex;
+	gap: 10px;
+	align-items: flex-start;
+	padding: 10px 20px;
+	margin-bottom: 10px;
+	font-size: 14px;
+	color: var(--color-text-1);
+	background-color: var(--color-background-4);
+	border-radius: var(--border-radius-lg);
+}
+
+.action-item-dot {
+	width: 8px;
+	height: 8px;
+	margin-top: 8px;
+	background-color: var(--color-accent-2);
+	border-radius: 50%;
+}
+
+.meeting-details__error,
+.meeting-details__not-found {
+	margin-top: 50px;
+	font-size: 18px;
+	color: var(--color-accent-1);
+	text-align: center;
+}
+
+.meeting-details__player {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	background-color: var(--color-background-4);
+}

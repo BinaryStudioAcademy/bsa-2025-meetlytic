@@ -3,6 +3,7 @@ const NotificationMessage = {
 	EDIT_PROFILE_SUCCESS: "Profile was edited successfully",
 	MEETING_DATA_IS_NOT_AVAILABLE: "Meeting data is not available for sharing.",
 	MEETING_DETAILS_FETCH_FAILED: "Failed to load meeting details.",
+	NO_INTERNET: "No internet connection",
 	PUBLIC_LINK_COPIED_SUCCESS: "Public link copied to clipboard.",
 	SHARE_LINK_GENERATION_FAILED: "Failed to generate share link.",
 	SIGN_IN_FAILED:

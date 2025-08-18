@@ -15,11 +15,11 @@
 }
 
 .navigation-link:hover {
-	background-color: var(--color-background-3);
+	background-color: var(--color-background-2);
 }
 
 .active {
-	background-color: var(--color-background-2);
+	background-color: var(--color-background-3);
 }
 
 .hide-on-mobile {

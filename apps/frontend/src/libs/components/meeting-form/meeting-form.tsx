@@ -49,7 +49,7 @@ const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 						className={styles["meeting-form__input"]}
 						control={control}
 						errors={errors}
-						hasVisuallyHiddenLabel={true}
+						hasVisuallyHiddenLabel
 						label="Meeting invite link"
 						name="meetingLink"
 						placeholder="Meeting invite link"
@@ -59,7 +59,7 @@ const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 						className={styles["meeting-form__input"]}
 						control={control}
 						errors={errors}
-						hasVisuallyHiddenLabel={true}
+						hasVisuallyHiddenLabel
 						label="Meeting password"
 						name="meetingPassword"
 						placeholder="Meeting password (optional)"

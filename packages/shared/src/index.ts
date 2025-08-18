@@ -48,6 +48,7 @@ export { AuthApiPath, AuthStatusMessage } from "./modules/auth/auth.js";
 export {
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
+	type MeetingDetailsRequestDto,
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
@@ -63,6 +64,7 @@ export {
 	MeetingStatus,
 	MeetingTranscriptionErrorMessage,
 	meetingUpdateValidationSchema,
+	searchInputValidationSchema,
 } from "./modules/meetings/meetings.js";
 export {
 	type AuthResponseDto,

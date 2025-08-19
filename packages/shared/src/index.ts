@@ -9,6 +9,7 @@ export {
 	AppEnvironment,
 	ContentType,
 	ExceptionMessage,
+	Extension,
 	KeyboardKey,
 	ServerErrorType,
 	SortOrder,

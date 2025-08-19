@@ -53,6 +53,35 @@ const MeetingDetails: React.FC = () => {
 		);
 	}, [id, dispatch, searchParameters]);
 
+	const handleExportClick = useCallback(() => {
+		if (!meeting?.id) {
+			notification.error(NotificationMessage.MEETING_DATA_IS_NOT_AVAILABLE);
+
+			return;
+		}
+
+		const exportPdf = async (): Promise<void> => {
+			try {
+				const pdfBlob = await meetingDetailsApi.exportMeetingPdf(meeting.id);
+				const url = globalThis.URL.createObjectURL(pdfBlob);
+				const link = document.createElement("a");
+				link.href = url;
+				link.download = `meeting-${meeting.id.toString()}.pdf`;
+				document.body.append(link);
+				link.click();
+				link.remove();
+				globalThis.URL.revokeObjectURL(url);
+				notification.success(NotificationMessage.PDF_EXPORTED_SUCCESSFULLY);
+			} catch (error: unknown) {
+				notification.error(NotificationMessage.PDF_EXPORT_FAILED);
+
+				throw error;
+			}
+		};
+
+		void exportPdf();
+	}, [meeting]);
+
 	const handleShareClick = useCallback(() => {
 		if (!meeting?.id) {
 			notification.error(NotificationMessage.MEETING_DATA_IS_NOT_AVAILABLE);
@@ -111,7 +140,7 @@ const MeetingDetails: React.FC = () => {
 								<Icon className={styles["action-button__share"]} name="share" />
 							</button>
 						)}
-						<Button label="Export" />
+						<Button label="Export" onClick={handleExportClick} />
 					</div>
 				</div>
 

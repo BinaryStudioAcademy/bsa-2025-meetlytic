@@ -4,6 +4,9 @@ const NotificationMessage = {
 	MEETING_DATA_IS_NOT_AVAILABLE: "Meeting data is not available for sharing.",
 	MEETING_DETAILS_FETCH_FAILED: "Failed to load meeting details.",
 	NO_INTERNET: "No internet connection",
+	PDF_EXPORT_FAILED: "PDF export failed.",
+	PDF_EXPORTED_SUCCESSFULLY:
+		"PDF exported succesfully. Check your downloads folder.",
 	PUBLIC_LINK_COPIED_SUCCESS: "Public link copied to clipboard.",
 	SHARE_LINK_GENERATION_FAILED: "Failed to generate share link.",
 	SIGN_IN_FAILED:

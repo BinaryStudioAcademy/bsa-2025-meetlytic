@@ -20,6 +20,20 @@ class MeetingDetailsApi extends BaseHTTPApi {
 		super({ baseUrl, http, path: APIPath.MEETINGS, storage });
 	}
 
+	public async exportMeetingPdf(id: number): Promise<Blob> {
+		const response = await this.load(
+			this.getFullEndpoint(MeetingsApiPath.$ID_PDF, {
+				id: String(id),
+			}),
+			{
+				hasAuth: true,
+				method: HTTPMethod.GET,
+			},
+		);
+
+		return await response.blob();
+	}
+
 	public async getMeetingByIdAuth(
 		id: number,
 	): Promise<MeetingDetailedResponseDto> {

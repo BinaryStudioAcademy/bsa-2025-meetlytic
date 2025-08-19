@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.9.0...v1.10.0) (2025-08-19)
+
+
+### Features
+
+* add a possibility to specify instance type from env file ml-236 ([#239](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/239)) ([4f8c690](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/4f8c690ee04eb5c419258fda7fc9f3b88ba90197))
+
 ## [1.9.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.8.0...v1.9.0) (2025-08-19)
 
 

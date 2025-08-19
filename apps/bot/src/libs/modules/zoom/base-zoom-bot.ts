@@ -1,11 +1,7 @@
 import puppeteer, { type Browser, type Page } from "puppeteer";
 
+import { USER_AGENT } from "~/libs/constants/constants.js";
 import {
-	DEFAULT_PARTICIPANTS_COUNT,
-	USER_AGENT,
-} from "~/libs/constants/constants.js";
-import {
-	KeyboardKey,
 	SocketEvent,
 	SocketMessage,
 	Timeout,
@@ -37,7 +33,6 @@ class BaseZoomBot {
 	private meetingId: null | string = null;
 	private openAI: OpenAI;
 	private page: null | Page = null;
-	private shouldMonitor = true;
 	private socketClient: BaseSocketClient;
 
 	public constructor({
@@ -84,85 +79,6 @@ class BaseZoomBot {
 		}
 
 		return parsed.toString();
-	}
-
-	private async enterMeetingPassword(): Promise<void> {
-		if (!this.page) {
-			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
-		}
-
-		try {
-			await this.page.waitForSelector(ZoomUILabel.INPUT_PASSWORD, {
-				timeout: Timeout.FIVE_SECONDS,
-			});
-			await this.page.click(ZoomUILabel.INPUT_PASSWORD, { clickCount: 3 });
-			await this.page.keyboard.press(KeyboardKey.BACKSPACE);
-
-			let password = this.config.ENV.ZOOM.MEETING_PASSWORD;
-
-			if (!password) {
-				const parameters = this.getSearchParams(
-					this.config.ENV.ZOOM.MEETING_LINK,
-				);
-
-				if (parameters["pwd"]) {
-					password = this.extractPasscode(parameters["pwd"]);
-					this.logger.info(`${ZoomBotMessages.FOUND_PASSCODE} ${password}`);
-				} else {
-					this.logger.info(ZoomBotMessages.ZOOM_PASSWORD_NOT_FOUND);
-					password = "";
-				}
-			}
-
-			if (password) {
-				await this.page.type(ZoomUILabel.INPUT_PASSWORD, password);
-			}
-		} catch (error) {
-			this.logger.error(
-				`${ZoomBotMessages.FAILED_TO_ENTER_PASSWORD} ${error instanceof Error ? error.message : String(error)}`,
-			);
-		}
-	}
-
-	private extractPasscode(token: string): string {
-		const [, rawPasscode] = token.split(".");
-
-		return rawPasscode?.replace(/^\d/, "") || "";
-	}
-
-	private async getParticipantsCount(): Promise<number> {
-		if (!this.page) {
-			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
-		}
-
-		try {
-			await this.page.waitForSelector(ZoomUILabel.PARTISIPANTS_COUNT, {
-				timeout: Timeout.TEN_SECONDS,
-			});
-			const count = await this.page.$eval(
-				ZoomUILabel.PARTISIPANTS_COUNT,
-				({ textContent }) => Number(textContent?.trim() ?? "2"),
-			);
-
-			return count;
-		} catch (error) {
-			this.logger.error(
-				`${ZoomBotMessages.FAILED_TO_GET_PARTICIPANTS_COUNT} ${error instanceof Error ? error.message : String(error)}`,
-			);
-
-			return DEFAULT_PARTICIPANTS_COUNT;
-		}
-	}
-
-	private getSearchParams(url: string): Record<string, string> {
-		const parsedUrl = new URL(url);
-		const parameters: Record<string, string> = {};
-
-		for (const [key, value] of parsedUrl.searchParams) {
-			parameters[key] = value;
-		}
-
-		return parameters;
 	}
 
 	private async handleInitialPopups(): Promise<void> {
@@ -216,7 +132,7 @@ class BaseZoomBot {
 			this.logger.warn(`${SocketMessage.CLIENT_DISCONNECTED} ${reason}`);
 		});
 
-		this.socketClient.on(SocketEvent.STOP_RECORDING, async () => {
+		this.socketClient.on(SocketEvent.STOP_RECORDING, () => {
 			// TODO:
 			// audioRecorder.finalize()
 			// audioRecorder.stopFullMeetingRecording()
@@ -224,7 +140,6 @@ class BaseZoomBot {
 				`Stopping recording of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 			);
 			this.audioRecorder.stop();
-			await this.leaveMeeting();
 			this.socketClient.emit(
 				SocketEvent.RECORDING_STOPPED,
 				String(this.config.ENV.ZOOM.MEETING_ID),
@@ -275,22 +190,6 @@ class BaseZoomBot {
 		await this.clickHelper(ZoomUILabel.MUTE_LOGIN);
 		await this.clickHelper(ZoomUILabel.STOP_VIDEO_LOGIN);
 		await this.clickHelper(ZoomUILabel.JOIN);
-
-		await this.enterMeetingPassword();
-
-		await this.clickHelper(ZoomUILabel.JOIN);
-	}
-
-	private async leaveMeeting(): Promise<void> {
-		try {
-			await this.clickHelper(ZoomUILabel.LEAVE);
-			await delay(Timeout.FIVE_SECONDS);
-			await this.clickHelper(ZoomUILabel.CONFIRM_LEAVE);
-		} catch (error) {
-			this.logger.error(
-				`${ZoomBotMessages.FAILED_TO_LEAVE_MEETING} ${error instanceof Error ? error.message : String(error)}`,
-			);
-		}
 	}
 
 	public async run(): Promise<void> {
@@ -314,14 +213,10 @@ class BaseZoomBot {
 			await this.page.screenshot({ path: "goto.png" });
 			await this.handleInitialPopups();
 			await this.joinMeeting();
-			await this.page.waitForSelector(ZoomUILabel.LEAVE, {
-				timeout: Timeout.TEN_SECONDS,
-				visible: true,
-			});
 			this.logger.info(ZoomBotMessages.JOINED_MEETING);
 			this.audioRecorder.start();
 			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
-			await delay(Timeout.FIFTEEN_SECONDS);
+			await delay(Timeout.ONE_SECOND);
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessages.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,

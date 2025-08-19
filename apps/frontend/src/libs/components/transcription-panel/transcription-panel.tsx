@@ -7,7 +7,6 @@ import {
 	useEffect,
 	useMeetingSocket,
 	useRef,
-	useState,
 } from "~/libs/hooks/hooks.js";
 import {
 	type MeetingTranscriptionResponseDto,
@@ -21,11 +20,12 @@ type Properties = {
 	meetingStatus: string;
 };
 
+const EMPTY_TRANSCRIPT_CHUNKS = 0;
+
 const TranscriptionPanel: React.FC<Properties> = ({
 	meetingId,
 	meetingStatus,
 }: Properties) => {
-	const [combinedText, setCombinedText] = useState<string>("");
 	const containerReference = useRef<HTMLDivElement | null>(null);
 	const dispatch = useAppDispatch();
 	const { dataStatus, transcriptions } = useAppSelector(
@@ -40,25 +40,20 @@ const TranscriptionPanel: React.FC<Properties> = ({
 		}
 
 		containerBottom.scrollIntoView();
-	}, [combinedText]);
-
-	useEffect(() => {
-		setCombinedText(transcriptions.items.map((t) => t.chunkText).join(" "));
-	}, [transcriptions.items]);
+	}, []);
 
 	useEffect(() => {
 		void dispatch(transcriptionActions.getTranscriptionsByMeetingId(meetingId));
 	}, [dispatch, meetingId]);
 
-	const onNewMessage = useCallback(
+	const handleTranscriptUpdate = useCallback(
 		(data: MeetingTranscriptionResponseDto) => {
 			dispatch(transcriptionActions.addTranscription(data));
-			setCombinedText((previous) => previous + " " + data.chunkText);
 		},
-		[dispatch, setCombinedText],
+		[dispatch],
 	);
 
-	useMeetingSocket(meetingId, onNewMessage, meetingStatus);
+	useMeetingSocket(meetingId, handleTranscriptUpdate, meetingStatus);
 
 	const handleSearch = useCallback(() => {
 		// TODO: implement handleSearch logic
@@ -72,9 +67,13 @@ const TranscriptionPanel: React.FC<Properties> = ({
 			</div>
 			{dataStatus === DataStatus.PENDING && <Loader isLoading />}
 
-			{combinedText ? (
+			{transcriptions.items.length > EMPTY_TRANSCRIPT_CHUNKS ? (
 				<div className={styles["transcription-area"]}>
-					<p className={styles["transcription-text"]}>{combinedText}</p>
+					<p className={styles["transcription-text"]}>
+						{transcriptions.items
+							.map((transcription) => transcription.chunkText)
+							.join(" ")}
+					</p>
 					<div ref={containerReference} />
 				</div>
 			) : (

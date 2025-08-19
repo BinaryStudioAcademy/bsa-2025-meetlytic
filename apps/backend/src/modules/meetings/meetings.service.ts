@@ -181,14 +181,14 @@ class MeetingService implements Service<MeetingResponseDto> {
 			status: MeetingStatus.ENDED,
 		});
 
-		await this.cloudFormation.delete(id);
-
 		if (!meeting) {
 			throw new MeetingError({
 				message: MeetingErrorMessage.MEETING_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
+
+		void this.cloudFormation.delete(id);
 
 		return meeting.toDetailedObject();
 	}

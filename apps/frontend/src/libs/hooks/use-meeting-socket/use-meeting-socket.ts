@@ -9,7 +9,7 @@ import { type MeetingTranscriptionResponseDto } from "~/modules/transcription/tr
 
 const useMeetingSocket = (
 	meetingId: number,
-	onMessage: (data: MeetingTranscriptionResponseDto) => void,
+	handleTranscriptUpdate: (data: MeetingTranscriptionResponseDto) => void,
 	meetingStatus: string,
 ): void => {
 	useEffect(() => {
@@ -23,18 +23,14 @@ const useMeetingSocket = (
 			socket.connect();
 		}
 
-		const handleMessage = (data: MeetingTranscriptionResponseDto): void => {
-			onMessage(data);
-		};
-
-		socket.on(SocketEvent.TRANSCRIBE, handleMessage);
+		socket.on(SocketEvent.TRANSCRIBE, handleTranscriptUpdate);
 		socket.emit(SocketEvent.JOIN_ROOM, String(meetingId));
 
 		return (): void => {
-			socket.off(SocketEvent.TRANSCRIBE, handleMessage);
+			socket.off(SocketEvent.TRANSCRIBE, handleTranscriptUpdate);
 			socket.emit(SocketEvent.LEAVE_ROOM, String(meetingId));
 		};
-	}, [meetingId, meetingStatus, onMessage]);
+	}, [meetingId, meetingStatus, handleTranscriptUpdate]);
 };
 
 export { useMeetingSocket };

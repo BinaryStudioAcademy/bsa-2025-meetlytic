@@ -2,6 +2,7 @@ import puppeteer, { type Browser, type Page } from "puppeteer";
 
 import {
 	DEFAULT_PARTICIPANTS_COUNT,
+	FALLBACK_PARTICIPANTS_COUNT,
 	MINIMUM_PARTICIPANTS_THRESHOLD,
 	USER_AGENT,
 } from "~/libs/constants/constants.js";
@@ -142,7 +143,8 @@ class BaseZoomBot {
 			});
 			const count = await this.page.$eval(
 				ZoomUILabel.PARTISIPANTS_COUNT,
-				({ textContent }) => Number(textContent?.trim() ?? "2"),
+				({ textContent }) =>
+					Number(textContent?.trim() ?? FALLBACK_PARTICIPANTS_COUNT.toString()),
 			);
 
 			return count;

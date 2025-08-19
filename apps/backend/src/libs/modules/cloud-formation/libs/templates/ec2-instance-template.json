@@ -4,6 +4,22 @@
 		"ImageId": {
 			"Type": "String"
 		},
+		"InstanceType": {
+			"Type": "String",
+			"Default": "t3.micro",
+			"AllowedValues": [
+				"t3.micro",
+				"t3.small",
+				"t3.medium",
+				"t3.large",
+				"t3.xlarge",
+				"t3.2xlarge",
+				"t2.micro",
+				"t2.small",
+				"t2.medium"
+			],
+			"Description": "EC2 instance type"
+		},
 		"Settings": {
 			"Type": "String",
 			"Description": "Object with meeting settings"
@@ -34,7 +50,7 @@
 			"Type": "AWS::EC2::Instance",
 			"Properties": {
 				"ImageId": { "Ref": "ImageId" },
-				"InstanceType": "t3.micro",
+				"InstanceType": { "Ref": "InstanceType" },
 				"KeyName": "meetlytic-ssh",
 				"SecurityGroupIds": [{ "Ref": "MeetlyticSecurityGroup" }],
 				"UserData": {

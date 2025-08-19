@@ -19,7 +19,7 @@ type Options = {
 	};
 };
 
-const authorizationPlugin: FastifyPluginCallback<Options> = fp(
+const authorization: FastifyPluginCallback<Options> = fp(
 	(fastify, options: Options, done) => {
 		const { routesWhiteList, services } = options;
 		const { jwt, logger, userService } = services;
@@ -95,4 +95,4 @@ const authorizationPlugin: FastifyPluginCallback<Options> = fp(
 	},
 );
 
-export { authorizationPlugin };
+export { authorization };

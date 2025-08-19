@@ -22,7 +22,6 @@ export {
 	ValidationError,
 } from "./libs/exceptions/exceptions.js";
 export {
-	checkIsValidId,
 	configureString,
 	extractZoomMeetingId,
 	formatDate,
@@ -65,6 +64,7 @@ export {
 	meetingCreateValidationSchema,
 	MeetingErrorMessage,
 	MeetingHost,
+	meetingIdValidationSchema,
 	MeetingsApiPath,
 	MeetingStatus,
 	MeetingTranscriptionErrorMessage,

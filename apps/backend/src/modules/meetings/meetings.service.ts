@@ -15,10 +15,7 @@ import { type Service } from "~/libs/types/types.js";
 
 import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
-import {
-	checkIsValidId,
-	extractZoomMeetingId,
-} from "./libs/helpers/helpers.js";
+import { extractZoomMeetingId } from "./libs/helpers/helpers.js";
 import {
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
@@ -152,13 +149,6 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		if (!checkIsValidId(id)) {
-			throw new MeetingError({
-				message: MeetingErrorMessage.INVALID_MEETING_ID,
-				status: HTTPCode.UNPROCESSED_ENTITY,
-			});
-		}
-
 		const meetingToDelete = await this.meetingRepository.find(id);
 
 		if (!meetingToDelete) {
@@ -198,13 +188,6 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 
 	public async find(id: number): Promise<MeetingDetailedResponseDto> {
-		if (!checkIsValidId(id)) {
-			throw new MeetingError({
-				message: MeetingErrorMessage.INVALID_MEETING_ID,
-				status: HTTPCode.UNPROCESSED_ENTITY,
-			});
-		}
-
 		const meeting = await this.meetingRepository.find(id);
 
 		if (!meeting) {

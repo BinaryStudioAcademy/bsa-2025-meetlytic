@@ -21,6 +21,7 @@ import {
 } from "./libs/types/types.js";
 import {
 	meetingCreateValidationSchema,
+	meetingIdValidationSchema,
 	meetingUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 import { type MeetingService } from "./meetings.service.js";
@@ -112,6 +113,9 @@ class MeetingsController extends BaseController {
 			method: HTTPMethod.DELETE,
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+			validation: {
+				params: meetingIdValidationSchema,
+			},
 		});
 
 		this.addRoute({
@@ -119,6 +123,9 @@ class MeetingsController extends BaseController {
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+			validation: {
+				params: meetingIdValidationSchema,
+			},
 		});
 
 		this.addRoute({

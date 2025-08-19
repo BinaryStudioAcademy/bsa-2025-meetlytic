@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.7.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.6.0...frontend-v1.7.0) (2025-08-19)
+
+
+### Features
+
+* add meeting details screen ml-131 ([#191](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/191)) ([1dccbb7](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/1dccbb7f3b4ca85da0533931f54d51d83d5ac604))
+* implement mobile responsiveness for meetings page ml-154 ([#210](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/210)) ([57f6c33](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/57f6c336ca044fd954a6ff1bdbfaf64baa2bef6c))
+* send transcription to frontend real time ml-180 ([#214](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/214)) ([5fc5ee5](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/5fc5ee53cd0d840b3376a5686c8919881de3ffd1))
+
+
+### Bug Fixes
+
+* no internet toast notification ml-173 ([#204](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/204)) ([f57f463](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/f57f463a8a517dee2cf162025aba90f95edd0c2e))
+* profile page cycle of invalid credentials ml-192 ([#227](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/227)) ([8850011](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/8850011d04650a5dac1ab4a53837c29c7e8079cb))
+
 ## [1.6.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.5.0...frontend-v1.6.0) (2025-08-15)
 
 

@@ -11,6 +11,7 @@ type EnvironmentSchema = {
 	AWS: {
 		ACCESS_KEY_ID: string;
 		AMI_ID: string;
+		INSTANCE_TYPE: string;
 		REGION: string;
 		SECRET_ACCESS_KEY: string;
 	};

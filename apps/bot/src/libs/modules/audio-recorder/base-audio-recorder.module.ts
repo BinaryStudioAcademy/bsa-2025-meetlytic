@@ -25,7 +25,7 @@ class BaseAudioRecorder implements AudioRecorder {
 	private openAI: OpenAI;
 	private outputDir: string;
 	private socketClient: BaseSocketClient;
-	private useMp3 = true;
+	private useMp3 = false;
 	private VOLUME_RE = /mean[_ ]volume:\s*(-?\d+(?:\.\d+)?)\s*dB/i;
 
 	public constructor({
@@ -46,16 +46,18 @@ class BaseAudioRecorder implements AudioRecorder {
 		this.socketClient = socketClient;
 	}
 
-	private logChunkStart(chunkName: string, type: string): void {
+	private logChunkStart(filePath: string, type: string): void {
 		this.logger.info(
-			`[+] New chunk - ${chunkName} | type=${type.toUpperCase()} | duration=${String(this.chunkDuration)}s`,
+			`[+] New chunk - ${filePath} | type=${type.toUpperCase()} | duration=${String(this.chunkDuration)}s`,
 		);
 	}
 
 	private logVolume(line: string): void {
-		const match = this.VOLUME_RE.exec(line);
-		if (match) {
-			this.logger.info(`[VOL] ${String(match[1])} dB`);
+		const message = this.VOLUME_RE.exec(line);
+		const ONE = 1;
+
+		if (message) {
+			this.logger.info(`[VOL] ${String(message[ONE])} dB`);
 		}
 	}
 
@@ -66,14 +68,12 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		const timestamp = Date.now().toString();
 		const fileExtension = this.useMp3 ? "mp3" : "wav";
-		const chunkName = `chunk-${timestamp}.${fileExtension}`;
+		const filePath = path.join(
+			this.outputDir,
+			`chunk-${timestamp}.${fileExtension}`,
+		);
 
-		this.logChunkStart(chunkName, fileExtension);
-
-		// Ensure output directory exists
-		mkdirSync(this.outputDir, { recursive: true });
-
-		const ffmpegArguments: string[] = [
+		const ffmpegArguments = [
 			"-hide_banner",
 			"-fflags",
 			"+genpts+igndts",
@@ -85,30 +85,21 @@ class BaseAudioRecorder implements AudioRecorder {
 			"auto_null.monitor",
 			"-t",
 			String(this.chunkDuration),
+			"-af",
+			"astats=metadata=1:reset=1",
 		];
 
-		// Output format to memory
 		if (this.useMp3) {
-			ffmpegArguments.push("-acodec", "libmp3lame", "-b:a", "128k", "pipe:1");
+			ffmpegArguments.push("-acodec", "libmp3lame", "-b:a", "128k");
 		} else {
-			ffmpegArguments.push(
-				"-acodec",
-				"pcm_s16le",
-				"-ar",
-				"16000",
-				"-ac",
-				"1",
-				"pipe:1",
-			);
+			ffmpegArguments.push("-acodec", "pcm_s16le", "-ar", "16000", "-ac", "1");
 		}
 
+		ffmpegArguments.push(filePath);
+
+		this.logChunkStart(filePath, fileExtension);
+
 		const ffmpeg = spawn(this.ffmpegPath, ffmpegArguments);
-
-		const audioChunks: Buffer[] = [];
-
-		ffmpeg.stdout.on("data", (chunk) => {
-			audioChunks.push(chunk as Buffer);
-		});
 
 		ffmpeg.stderr.on(AudioRecorderEvent.DATA, (data) => {
 			const lines = String(data)
@@ -127,23 +118,22 @@ class BaseAudioRecorder implements AudioRecorder {
 			}
 		});
 
-		ffmpeg.on(AudioRecorderEvent.EXIT, async (code, signal) => {
+		ffmpeg.on(AudioRecorderEvent.EXIT, (code, signal) => {
 			this.logger.info(
-				`[+] Chunk done | name=${chunkName} | code=${String(code)} | signal=${String(signal)}`,
+				`[+] Chunk done | path=${filePath} | code=${String(code)}  signal=${String(signal)}`,
 			);
-
-			const audioBuffer = Buffer.concat(audioChunks);
-			await this.transcribeBuffer(audioBuffer);
 
 			if (this.isRecording) {
 				this.recordNextChunk();
 			}
+
+			void this.transcribeAndSend(filePath);
 		});
 	}
 
-	private transcribeBuffer = async (buffer: Buffer): Promise<void> => {
+	private transcribeAndSend = async (filePath: string): Promise<void> => {
 		try {
-			const chunkText = await this.openAI.transcribe(buffer);
+			const chunkText = await this.openAI.transcribe(filePath);
 
 			this.socketClient.emit(SocketEvent.TRANSCRIBE, {
 				chunkText,
@@ -153,17 +143,17 @@ class BaseAudioRecorder implements AudioRecorder {
 			this.logger.error(`[OPENAI][TRANSCRIBE_ERROR] ${String(error)}`);
 		}
 	};
-
 	public start(): void {
 		if (this.isRecording) {
 			this.logger.warn("[+] Already recording: ignoring start()");
+
 			return;
 		}
 
 		mkdirSync(this.outputDir, { recursive: true });
 
 		this.logger.info(
-			`[+] Start recording | dir=${this.outputDir} | chunk=${String(this.chunkDuration)}s | format=${this.useMp3 ? "MP3" : "WAV"}`,
+			`[+] Start recording | dir=${this.outputDir}  |  chunk=${String(this.chunkDuration)}s  |  format=${this.useMp3 ? "MP3" : "WAV"}`,
 		);
 
 		this.isRecording = true;

@@ -5,13 +5,9 @@ import {
 	useAppSelector,
 	useCallback,
 	useEffect,
-	useMeetingSocket,
 	useRef,
 } from "~/libs/hooks/hooks.js";
-import {
-	type MeetingTranscriptionResponseDto,
-	actions as transcriptionActions,
-} from "~/modules/transcription/transcription.js";
+import { actions as transcriptionActions } from "~/modules/transcription/transcription.js";
 
 import styles from "./transcription-panel.module.css";
 
@@ -24,7 +20,6 @@ const EMPTY_TRANSCRIPT_CHUNKS = 0;
 
 const TranscriptionPanel: React.FC<Properties> = ({
 	meetingId,
-	meetingStatus,
 }: Properties) => {
 	const containerReference = useRef<HTMLDivElement | null>(null);
 	const dispatch = useAppDispatch();
@@ -45,15 +40,6 @@ const TranscriptionPanel: React.FC<Properties> = ({
 	useEffect(() => {
 		void dispatch(transcriptionActions.getTranscriptionsByMeetingId(meetingId));
 	}, [dispatch, meetingId]);
-
-	const handleTranscriptUpdate = useCallback(
-		(data: MeetingTranscriptionResponseDto) => {
-			dispatch(transcriptionActions.addTranscription(data));
-		},
-		[dispatch],
-	);
-
-	useMeetingSocket(meetingId, handleTranscriptUpdate, meetingStatus);
 
 	const handleSearch = useCallback(() => {
 		// TODO: implement handleSearch logic

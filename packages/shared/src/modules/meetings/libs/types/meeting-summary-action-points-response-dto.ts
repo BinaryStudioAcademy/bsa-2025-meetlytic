@@ -1,7 +1,7 @@
-type MeetingSummaryActionPointsResponseDto = {
+type MeetingSummaryActionItemsResponseDto = {
 	actionItems: string;
 	meetingId: string;
 	summary: string;
 };
 
-export { type MeetingSummaryActionPointsResponseDto };
+export { type MeetingSummaryActionItemsResponseDto };

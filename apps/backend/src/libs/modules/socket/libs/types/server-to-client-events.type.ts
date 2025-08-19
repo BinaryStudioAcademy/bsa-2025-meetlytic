@@ -1,9 +1,12 @@
-import { type MeetingTranscriptionRequestDto } from "./types.js";
+import {
+	type MeetingSummaryActionItemsResponseDto,
+	type MeetingTranscriptionRequestDto,
+} from "./types.js";
 
 type ServerToClientEvents = {
 	stopRecording: () => Promise<void>;
 	transcribe: (data: MeetingTranscriptionRequestDto) => void;
-	updateMeetingDetails: () => void;
+	updateMeetingDetails: (data: MeetingSummaryActionItemsResponseDto) => void;
 };
 
 export { type ServerToClientEvents };

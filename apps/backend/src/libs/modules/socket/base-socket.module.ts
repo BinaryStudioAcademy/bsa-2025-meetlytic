@@ -12,7 +12,7 @@ import {
 	SocketNamespace,
 } from "./libs/enums/enums.js";
 import {
-	type MeetingSummaryActionPointsResponseDto,
+	type MeetingSummaryActionItemsResponseDto,
 	type MeetingTranscriptionRequestDto,
 	type ServerToClientEvents,
 	type SocketService,
@@ -59,7 +59,7 @@ class BaseSocketService implements SocketService {
 
 		socket.on(
 			SocketEvent.SAVE_SUMMARY_ACTION_ITEMS,
-			async (payload: MeetingSummaryActionPointsResponseDto) => {
+			async (payload: MeetingSummaryActionItemsResponseDto) => {
 				const { meetingId, ...summaryActionItems } = payload;
 				this.logger.info(
 					`Updating summary/action items of the meeting ${meetingId}`,
@@ -70,6 +70,7 @@ class BaseSocketService implements SocketService {
 				this.emitTo({
 					event: SocketEvent.UPDATE_MEETING_DETAILS,
 					namespace: SocketNamespace.USERS,
+					parameters: [payload],
 					room: String(payload.meetingId),
 				});
 			},

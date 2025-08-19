@@ -91,7 +91,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		if (meeting.toObject().audioFileId !== null) {
+		if (meeting.toObject().audioFileId) {
 			throw new MeetingError({
 				message: MeetingErrorMessage.AUDIO_FILE_ALREADY_ATTACHED,
 				status: HTTPCode.BAD_REQUEST,

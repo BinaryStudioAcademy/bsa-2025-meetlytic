@@ -77,25 +77,25 @@ class FileService implements Service<FileResponseDto> {
 		id: number,
 		payload: FileUpdateRequestDto,
 	): Promise<FileResponseDto> {
-		const existing = await this.fileRepository.find(id);
+		const file = await this.fileRepository.find(id);
 
-		if (!existing) {
+		if (!file) {
 			throw new FileError({
 				message: FileErrorMessage.NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
-		const updated = await this.fileRepository.update(id, payload);
+		const updatedFile = await this.fileRepository.update(id, payload);
 
-		if (!updated) {
+		if (!updatedFile) {
 			throw new FileError({
 				message: FileErrorMessage.UPDATE_FAILED,
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}
 
-		return updated.toObject();
+		return updatedFile.toObject();
 	}
 }
 

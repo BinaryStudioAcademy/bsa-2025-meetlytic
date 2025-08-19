@@ -1,6 +1,6 @@
 import { type UserSignUpRequestDto } from "~/modules/users/users.js";
 
-const DEFAULT_SIGN_UP_VALUES: UserSignUpRequestDto = {
+const USER_SIGN_UP_DEFAULT_VALUES: UserSignUpRequestDto = {
 	confirmPassword: "",
 	email: "",
 	firstName: "",
@@ -8,4 +8,4 @@ const DEFAULT_SIGN_UP_VALUES: UserSignUpRequestDto = {
 	password: "",
 };
 
-export { DEFAULT_SIGN_UP_VALUES };
+export { USER_SIGN_UP_DEFAULT_VALUES };

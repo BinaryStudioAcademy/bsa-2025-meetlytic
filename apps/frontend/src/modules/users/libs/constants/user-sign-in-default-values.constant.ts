@@ -1,8 +1,8 @@
 import { type UserSignInRequestDto } from "~/modules/users/users.js";
 
-const DEFAULT_SIGN_IN_VALUES: UserSignInRequestDto = {
+const USER_SIGN_IN_DEFAULT_VALUES: UserSignInRequestDto = {
 	email: "",
 	password: "",
 };
 
-export { DEFAULT_SIGN_IN_VALUES };
+export { USER_SIGN_IN_DEFAULT_VALUES };

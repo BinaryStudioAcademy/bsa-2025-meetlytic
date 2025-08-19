@@ -9,7 +9,10 @@ import {
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
-import { actions as transcriptionActions } from "~/modules/transcription/transcription.js";
+import {
+	type MeetingTranscriptionResponseDto,
+	actions as transcriptionActions,
+} from "~/modules/transcription/transcription.js";
 
 import styles from "./transcription-panel.module.css";
 
@@ -47,14 +50,15 @@ const TranscriptionPanel: React.FC<Properties> = ({
 		void dispatch(transcriptionActions.getTranscriptionsByMeetingId(meetingId));
 	}, [dispatch, meetingId]);
 
-	useMeetingSocket(
-		meetingId,
-		(data) => {
+	const onNewMessage = useCallback(
+		(data: MeetingTranscriptionResponseDto) => {
 			dispatch(transcriptionActions.addTranscription(data));
 			setCombinedText((previous) => previous + " " + data.chunkText);
 		},
-		meetingStatus,
+		[dispatch, setCombinedText],
 	);
+
+	useMeetingSocket(meetingId, onNewMessage, meetingStatus);
 
 	const handleSearch = useCallback(() => {
 		// TODO: implement handleSearch logic

@@ -163,11 +163,12 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 
 	public async endMeeting(id: number): Promise<MeetingDetailedResponseDto> {
-		await this.cloudFormation.delete(id);
 		const meeting = await this.meetingRepository.update(id, {
 			instanceId: null,
 			status: MeetingStatus.ENDED,
 		});
+
+		await this.cloudFormation.delete(id);
 
 		if (!meeting) {
 			throw new MeetingError({

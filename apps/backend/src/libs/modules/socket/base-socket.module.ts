@@ -35,7 +35,7 @@ class BaseSocketService implements SocketService {
 	}
 
 	private handleBotsConnection(socket: Socket): void {
-		this.logger.info(`${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
+		this.logger.info(`BOT ${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
 
 		socket.on(SocketEvent.JOIN_ROOM, async (meetingId: string) => {
 			this.logger.info(`Client ${socket.id} joining room: ${meetingId}`);
@@ -67,6 +67,11 @@ class BaseSocketService implements SocketService {
 				await meetingService.update(Number(meetingId), summaryActionItems);
 				this.logger.info(`Ending meeting ${meetingId}`);
 				await meetingService.endMeeting(Number(meetingId));
+				this.emitTo({
+					event: SocketEvent.UPADTE_MEETING_DETAILS,
+					namespace: SocketNamespace.USERS,
+					room: String(payload.meetingId),
+				});
 			},
 		);
 
@@ -79,9 +84,12 @@ class BaseSocketService implements SocketService {
 					const transcription = await meetingService.saveChunk(payload);
 
 					if (payload.meetingId) {
-						this.io
-							.to(String(payload.meetingId))
-							.emit(SocketEvent.TRANSCRIBE, transcription);
+						this.emitTo({
+							event: SocketEvent.TRANSCRIBE,
+							namespace: SocketNamespace.USERS,
+							parameters: [transcription],
+							room: String(payload.meetingId),
+						});
 					}
 				} catch (error) {
 					this.logger.error(
@@ -93,7 +101,7 @@ class BaseSocketService implements SocketService {
 	}
 
 	private handleUsersConnection(socket: Socket): void {
-		this.logger.info(`${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
+		this.logger.info(`USER ${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
 
 		socket.on(SocketEvent.JOIN_ROOM, async (meetingId: string) => {
 			try {
@@ -146,6 +154,7 @@ class BaseSocketService implements SocketService {
 		this.io
 			.of(SocketNamespace.USERS)
 			.on(SocketEvent.CONNECTION, this.handleUsersConnection.bind(this));
+		this.logger.info("Socket.IO server initialized");
 	}
 }
 

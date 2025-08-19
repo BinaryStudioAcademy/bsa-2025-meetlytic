@@ -2,7 +2,6 @@ import puppeteer, { type Browser, type Page } from "puppeteer";
 
 import {
 	DEFAULT_PARTICIPANTS_COUNT,
-	MINIMUM_PARTICIPANTS_THRESHOLD,
 	USER_AGENT,
 } from "~/libs/constants/constants.js";
 import {
@@ -294,28 +293,6 @@ class BaseZoomBot {
 		}
 	}
 
-	private async monitorParticipants(): Promise<void> {
-		if (!this.page) {
-			this.logger.error("Page not initialized in monitorParticipants.");
-
-			return;
-		}
-
-		while (this.shouldMonitor) {
-			const count = await this.getParticipantsCount();
-
-			if (count <= MINIMUM_PARTICIPANTS_THRESHOLD) {
-				this.logger.info(ZoomBotMessages.ONLY_ONE_PARTICIPANT_DETECTED);
-				this.audioRecorder.stop();
-				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
-				await this.leaveMeeting();
-				this.shouldMonitor = false;
-			}
-
-			await delay(Timeout.FIFTEEN_SECONDS);
-		}
-	}
-
 	public async run(): Promise<void> {
 		this.initSocket();
 
@@ -345,7 +322,6 @@ class BaseZoomBot {
 			this.audioRecorder.start();
 			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
 			await delay(Timeout.FIFTEEN_SECONDS);
-			await this.monitorParticipants();
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessages.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,

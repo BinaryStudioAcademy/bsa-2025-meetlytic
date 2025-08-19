@@ -2,7 +2,7 @@ const MeetingErrorMessage = {
 	CANNOT_UPDATE_NON_EXISTENT: "Meeting was not found",
 	DELETE_FAILED: "Failed to delete meeting",
 	DUPLICATED_MEETING:
-		"This link has already been used. Please send a unique link to the meeting.",
+		"This meeting link is already active. You cannot add a bot if it is already in that meeting.",
 	FORBIDDEN: "Access denied",
 	INVALID_MEETING_ID: "Invalid meeting ID",
 	INVALID_MEETING_LINK: "Invalid Zoom meeting link",

@@ -19,6 +19,7 @@ import {
 	useAppSelector,
 	useCallback,
 	useEffect,
+	useFileUrl,
 	useParams,
 	useSearchParams,
 } from "~/libs/hooks/hooks.js";
@@ -42,9 +43,12 @@ const MeetingDetails: React.FC = () => {
 		(state) => state.meetingDetails,
 	);
 	const { user } = useAppSelector((state) => state.auth);
+	const audioFileId = meeting?.audioFileId ?? null;
+	const { loading: audioLoading, url: audioUrl } = useFileUrl(audioFileId);
 
 	useEffect(() => {
 		const sharedToken = searchParameters.get("token");
+
 		void dispatch(
 			meetingDetailsActions.getMeetingDetailsById({
 				id: Number(id),
@@ -163,7 +167,11 @@ const MeetingDetails: React.FC = () => {
 					</div>
 				</div>
 				<div className={styles["meeting-details__player"]}>
-					<PlayerTrack audioUrl="https://audio-samples.github.io/samples/mp3/wavenet_unconditional/voxceleb2/sample-5.mp3" />
+					<PlayerTrack
+						audioUrl={audioUrl}
+						hasFile={Boolean(audioFileId)}
+						loading={audioLoading}
+					/>
 				</div>
 			</div>
 		</>

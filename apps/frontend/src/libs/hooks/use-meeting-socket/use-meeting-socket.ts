@@ -17,7 +17,7 @@ const useMeetingSocket = (
 			return;
 		}
 
-		const socket = socketClient.getInstance(SocketNamespace.ROOT);
+		const socket = socketClient.getInstance(SocketNamespace.USERS);
 
 		if (!socket.connected) {
 			socket.connect();
@@ -28,11 +28,11 @@ const useMeetingSocket = (
 		};
 
 		socket.on(SocketEvent.TRANSCRIBE, handleMessage);
-		socket.emit(SocketEvent.JOIN_MEETING, String(meetingId));
+		socket.emit(SocketEvent.JOIN_ROOM, String(meetingId));
 
 		return (): void => {
 			socket.off(SocketEvent.TRANSCRIBE, handleMessage);
-			socket.emit(SocketEvent.LEAVE_MEETING, String(meetingId));
+			socket.emit(SocketEvent.LEAVE_ROOM, String(meetingId));
 		};
 	}, [meetingId, meetingStatus, onMessage]);
 };

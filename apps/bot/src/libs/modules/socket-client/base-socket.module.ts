@@ -2,7 +2,6 @@ import { io, type Socket } from "socket.io-client";
 
 import { logger } from "../logger/logger.js";
 import { SocketNamespace, Timeout } from "./enums/enums.js";
-
 import {
 	type ClientToServerEvents,
 	type ServerToClientEvents,

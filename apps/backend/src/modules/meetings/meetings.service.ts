@@ -230,9 +230,9 @@ class MeetingService implements Service<MeetingResponseDto> {
 		};
 	}
 
-	public async getTranscriptById(
+	public async getTranscriptionsByMeetingId(
 		id: number,
-	): Promise<MeetingTranscriptionResponseDto[]> {
+	): Promise<MeetingTranscriptionGetAllResponseDto> {
 		return await this.meetingTranscriptionService.getByMeetingId(id);
 	}
 

@@ -45,12 +45,7 @@ const MeetingDetails: React.FC = () => {
 	);
 	const { user } = useAppSelector((state) => state.auth);
 
-	const { control, errors } = useAppForm({
-		defaultValues: DEFAULT_SEARCH_VALUE,
-		validationSchema: searchInputValidationSchema,
-	});
-
-	const stopRecording = useCallback(() => {
+	const handleStopRecording = useCallback(() => {
 		void dispatch(meetingActions.stopRecording({ id: id as string }));
 	}, [dispatch, id]);
 
@@ -123,7 +118,7 @@ const MeetingDetails: React.FC = () => {
 							</button>
 						)}
 						{meeting.status === MeetingStatus.STARTED && (
-							<Button label="Stop Recording" onClick={stopRecording} />
+							<Button label="Stop Recording" onClick={handleStopRecording} />
 						)}
 						<Button label="Export" />
 					</div>

@@ -4,13 +4,13 @@ const SocketEvent = {
 	DISCONNECT: "disconnect",
 	ERROR: "error",
 	GENERATE_SUMMARY_ACTION_ITEMS: "generateSummaryActionItems",
+	JOIN_MEETING: "joinRoom",
 	JOIN_ROOM: "joinRoom",
+	LEAVE_ROOM: "leaveRoom",
+	MESSAGE: "message",
 	RECORDING_STOPPED: "recordingStopped",
 	SAVE_SUMMARY_ACTION_ITEMS: "saveSummaryActionItems",
 	STOP_RECORDING: "stopRecording",
-	JOIN_MEETING: "join-meeting",
-	LEAVE_MEETING: "leave-meeting",
-	MESSAGE: "message",
 	TRANSCRIBE: "transcribe",
 } as const;
 

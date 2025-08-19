@@ -34,7 +34,6 @@ class BaseSocketService implements SocketService {
 		this.logger = logger;
 	}
 
-
 	private handleBotsConnection(socket: Socket): void {
 		this.logger.info(`${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
 
@@ -45,13 +44,13 @@ class BaseSocketService implements SocketService {
 
 		socket.on(SocketEvent.RECORDING_STOPPED, async (meetingId: string) => {
 			this.logger.info(`Getting full transcript of meeting ${meetingId}`);
-			const transcriptChunks = await meetingService.getTranscriptById(
+			const { items } = await meetingService.getTranscriptionsByMeetingId(
 				Number(meetingId),
 			);
 
 			let transcript = "";
 
-			for (const chunk of transcriptChunks) {
+			for (const chunk of items) {
 				transcript += chunk.chunkText;
 			}
 
@@ -70,7 +69,8 @@ class BaseSocketService implements SocketService {
 				await meetingService.endMeeting(Number(meetingId));
 			},
 		);
-    socket.on(
+
+		socket.on(
 			SocketEvent.TRANSCRIBE,
 			async (payload: MeetingTranscriptionRequestDto) => {
 				try {
@@ -90,12 +90,12 @@ class BaseSocketService implements SocketService {
 				}
 			},
 		);
-}
+	}
 
 	private handleUsersConnection(socket: Socket): void {
 		this.logger.info(`${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
 
-			socket.on(SocketEvent.JOIN_MEETING, async (meetingId: string) => {
+		socket.on(SocketEvent.JOIN_ROOM, async (meetingId: string) => {
 			try {
 				await socket.join(meetingId);
 				this.logger.info(`Socket ${socket.id} joined room ${meetingId}`);
@@ -104,7 +104,7 @@ class BaseSocketService implements SocketService {
 			}
 		});
 
-		socket.on(SocketEvent.LEAVE_MEETING, async (meetingId: string) => {
+		socket.on(SocketEvent.LEAVE_ROOM, async (meetingId: string) => {
 			try {
 				await socket.leave(meetingId);
 				this.logger.info(`Socket ${socket.id} left room ${meetingId}`);
@@ -114,15 +114,16 @@ class BaseSocketService implements SocketService {
 				);
 			}
 		});
-			socket.on(SocketEvent.ERROR, (error) => {
+
+		socket.on(SocketEvent.ERROR, (error) => {
 			this.logger.error(`${SocketMessage.CLIENT_ERROR} ${String(error)}`);
 		});
 	}
 
 	public emitTo<K extends keyof ServerToClientEvents>(
-		parameters_: EmitParameters<K>,
+		options: EmitParameters<K>,
 	): void {
-		const { event, namespace = "/", parameters = [], room } = parameters_;
+		const { event, namespace = "/", parameters = [], room } = options;
 		this.logger.info(
 			`Emmiting event: ${event} to namespace: ${namespace} room: ${room}`,
 		);

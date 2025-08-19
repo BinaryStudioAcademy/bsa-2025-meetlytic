@@ -69,6 +69,12 @@ class BaseConfig implements Config {
 					env: "AMI_ID",
 					format: String,
 				},
+				INSTANCE_TYPE: {
+					default: null,
+					doc: "AWS EC2 instance type",
+					env: "INSTANCE_TYPE",
+					format: String,
+				},
 				REGION: {
 					default: null,
 					doc: "AWS Region",

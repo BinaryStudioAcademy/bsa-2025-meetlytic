@@ -1,4 +1,5 @@
 const MeetingErrorMessage = {
+	CANNOT_DELETE_STARTED: "Cannot delete an active meeting.",
 	CANNOT_UPDATE_NON_EXISTENT: "Meeting was not found",
 	DELETE_FAILED: "Failed to delete meeting",
 	DUPLICATED_MEETING:

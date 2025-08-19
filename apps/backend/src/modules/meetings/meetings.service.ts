@@ -158,6 +158,13 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
+		if (meetingToDelete.toObject().status === MeetingStatus.STARTED) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.CANNOT_DELETE_STARTED,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const isDeleted = await this.meetingRepository.delete(id);
 
 		if (!isDeleted) {

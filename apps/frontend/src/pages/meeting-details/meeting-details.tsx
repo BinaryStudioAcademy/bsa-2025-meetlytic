@@ -43,7 +43,7 @@ import styles from "./styles.module.css";
 
 const MeetingDetails: React.FC = () => {
 	const [isStopRecordingInProgress, setIsStopRecordingInProgress] =
-		useState(false);
+		useState<boolean>(false);
 	const dispatch = useAppDispatch();
 	const { id } = useParams<{ id: string }>();
 	const [searchParameters] = useSearchParams();

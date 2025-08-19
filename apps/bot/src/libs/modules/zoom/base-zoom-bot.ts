@@ -17,6 +17,8 @@ import {
 	type OpenAI,
 } from "~/libs/types/types.js";
 
+import { KeyboardKey } from "../socket-client/enums/enums.js";
+
 type Constructor = {
 	audioRecorder: AudioRecorder;
 	config: BaseConfig;
@@ -79,6 +81,61 @@ class BaseZoomBot {
 		}
 
 		return parsed.toString();
+	}
+
+	private async enterMeetingPassword(): Promise<void> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+		}
+
+		try {
+			await this.page.waitForSelector(ZoomUILabel.INPUT_PASSWORD, {
+				timeout: Timeout.FIVE_SECONDS,
+			});
+			await this.page.click(ZoomUILabel.INPUT_PASSWORD, { clickCount: 3 });
+			await this.page.keyboard.press(KeyboardKey.BACKSPACE);
+
+			let password = this.config.ENV.ZOOM.MEETING_PASSWORD;
+
+			if (!password) {
+				const parameters = this.getSearchParams(
+					this.config.ENV.ZOOM.MEETING_LINK,
+				);
+
+				if (parameters["pwd"]) {
+					password = this.extractPasscode(parameters["pwd"]);
+					this.logger.info(`${ZoomBotMessages.FOUND_PASSCODE} ${password}`);
+				} else {
+					this.logger.info(ZoomBotMessages.ZOOM_PASSWORD_NOT_FOUND);
+					password = "";
+				}
+			}
+
+			if (password) {
+				await this.page.type(ZoomUILabel.INPUT_PASSWORD, password);
+			}
+		} catch (error) {
+			this.logger.error(
+				`${ZoomBotMessages.FAILED_TO_ENTER_PASSWORD} ${error instanceof Error ? error.message : String(error)}`,
+			);
+		}
+	}
+
+	private extractPasscode(token: string): string {
+		const [, rawPasscode] = token.split(".");
+
+		return rawPasscode?.replace(/^\d/, "") || "";
+	}
+
+	private getSearchParams(url: string): Record<string, string> {
+		const parsedUrl = new URL(url);
+		const parameters: Record<string, string> = {};
+
+		for (const [key, value] of parsedUrl.searchParams) {
+			parameters[key] = value;
+		}
+
+		return parameters;
 	}
 
 	private async handleInitialPopups(): Promise<void> {
@@ -189,6 +246,8 @@ class BaseZoomBot {
 
 		await this.clickHelper(ZoomUILabel.MUTE_LOGIN);
 		await this.clickHelper(ZoomUILabel.STOP_VIDEO_LOGIN);
+		await this.clickHelper(ZoomUILabel.JOIN);
+		await this.enterMeetingPassword();
 		await this.clickHelper(ZoomUILabel.JOIN);
 	}
 

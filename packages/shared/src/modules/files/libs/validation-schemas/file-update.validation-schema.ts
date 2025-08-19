@@ -18,7 +18,7 @@ const fileUpdate = z
 					message: FileValidationMessage.CONTENT_TYPE_WRONG,
 				},
 			),
-		key: z.string().nonempty(FileValidationMessage.KEY_REQUIRE).url(),
+		key: z.string().nonempty(FileValidationMessage.KEY_REQUIRE),
 		url: z.string().nonempty(FileValidationMessage.URL_REQUIRE).url(),
 	})
 	.required();

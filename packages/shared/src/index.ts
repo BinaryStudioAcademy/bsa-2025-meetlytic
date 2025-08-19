@@ -65,6 +65,7 @@ export {
 	meetingCreateValidationSchema,
 	MeetingErrorMessage,
 	MeetingHost,
+	meetingIdValidationSchema,
 	MeetingsApiPath,
 	MeetingStatus,
 	MeetingTranscriptionErrorMessage,

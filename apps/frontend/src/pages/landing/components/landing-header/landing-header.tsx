@@ -19,7 +19,10 @@ const LandingHeader: React.FC<Properties> = ({ className }: Properties) => {
 	const isMobile = useMediaQuery(Breakpoint.MOBILE);
 
 	return (
-		<header className={getValidClassNames(styles["landing-header"], className)}>
+		<header
+			className={getValidClassNames(styles["landing-header"], className)}
+			id="home"
+		>
 			<div className={styles["landing-header__inner"]}>
 				<div className={styles["landing-header__logo"]}>
 					<Logo

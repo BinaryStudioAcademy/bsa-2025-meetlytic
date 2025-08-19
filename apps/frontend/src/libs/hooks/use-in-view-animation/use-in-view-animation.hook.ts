@@ -15,8 +15,13 @@ const useInViewAnimation = ({
 	useEffect(() => {
 		const element = ref.current;
 
+		if (element.dataset["animated"] === "true") {
+			return;
+		}
+
 		if (isDisabled) {
 			Object.assign(element.style, final);
+			element.dataset["animated"] = "true";
 
 			return;
 		}
@@ -26,6 +31,10 @@ const useInViewAnimation = ({
 		const unsubscribeInView = inView(
 			element,
 			() => {
+				if (element.dataset["animated"] === "true") {
+					return;
+				}
+
 				const fromOpacity = Number(initial.opacity);
 				const toOpacity = Number(final.opacity);
 				const fromTransform = initial.transform ?? "none";
@@ -39,6 +48,7 @@ const useInViewAnimation = ({
 					},
 					{ duration: FeatureAnimation.DURATION_S },
 				);
+				element.dataset["animated"] = "true";
 
 				return (): void => {
 					unsubscribeInView();

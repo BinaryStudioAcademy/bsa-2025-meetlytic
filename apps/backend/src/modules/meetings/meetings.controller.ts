@@ -21,6 +21,7 @@ import {
 } from "./libs/types/types.js";
 import {
 	meetingCreateValidationSchema,
+	meetingIdValidationSchema,
 	meetingUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 import { type MeetingService } from "./meetings.service.js";
@@ -112,6 +113,9 @@ class MeetingsController extends BaseController {
 			method: HTTPMethod.DELETE,
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+			validation: {
+				params: meetingIdValidationSchema,
+			},
 		});
 
 		this.addRoute({
@@ -119,6 +123,9 @@ class MeetingsController extends BaseController {
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+			validation: {
+				params: meetingIdValidationSchema,
+			},
 		});
 
 		this.addRoute({
@@ -206,6 +213,8 @@ class MeetingsController extends BaseController {
 	 *         description: Meeting deleted
 	 *       404:
 	 *         description: Meeting not found
+	 *       422:
+	 *         description: Invalid meeting ID
 	 */
 	private async delete(
 		options: DeleteMeetingOptions,
@@ -238,6 +247,8 @@ class MeetingsController extends BaseController {
 	 *               $ref: "#/components/schemas/Meeting"
 	 *       404:
 	 *         description: Meeting not found
+	 *       422:
+	 *         description: Invalid meeting ID
 	 */
 	private async find(options: FindMeetingOptions): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);

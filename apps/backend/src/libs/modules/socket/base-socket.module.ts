@@ -8,6 +8,7 @@ import { meetingService } from "~/modules/meetings/meetings.js";
 import { type Logger } from "../logger/logger.js";
 import {
 	AllowedOrigin,
+	ContentType,
 	SocketEvent,
 	SocketMessage,
 } from "./libs/enums/enums.js";
@@ -31,7 +32,7 @@ class BaseSocketService implements SocketService {
 				this.logger.info(SocketMessage.AUDIO_SAVE_RECEIVED);
 
 				const createdFile = await fileService.create({
-					contentType: payload.contentType,
+					contentType: ContentType.AUDIO,
 					key: payload.key,
 					url: payload.url,
 				});
@@ -90,8 +91,6 @@ class BaseSocketService implements SocketService {
 			async (payload: MeetingTranscriptionRequestDto) => {
 				try {
 					this.logger.info(SocketMessage.SOCKET_EVENT_RECEIVED);
-					await meetingService.saveChunk(payload);
-
 					const transcription = await meetingService.saveChunk(payload);
 
 					if (payload.meetingId) {

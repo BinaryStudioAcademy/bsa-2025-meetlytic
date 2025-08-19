@@ -10,7 +10,7 @@ const ColumnName = {
 	ID: "id",
 } as const;
 
-const ON_DELETE = "SET NULL";
+const DELETE_STRATEGY = "SET NULL";
 
 async function down(knex: Knex): Promise<void> {
 	await knex.schema.alterTable(TableName.MEETINGS, (table) => {
@@ -26,7 +26,7 @@ async function up(knex: Knex): Promise<void> {
 			.nullable()
 			.references(ColumnName.ID)
 			.inTable(TableName.FILES)
-			.onDelete(ON_DELETE)
+			.onDelete(DELETE_STRATEGY)
 			.index();
 	});
 }

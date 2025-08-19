@@ -1,2 +1,2 @@
 export { AllowedOrigin } from "./allowed-origin.enum.js";
-export { SocketEvent, SocketMessage } from "@meetlytic/shared";
+export { ContentType, SocketEvent, SocketMessage } from "@meetlytic/shared";

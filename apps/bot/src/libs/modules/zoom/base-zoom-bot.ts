@@ -326,8 +326,6 @@ class BaseZoomBot {
 			this.logger.error(
 				`${ZoomBotMessages.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,
 			);
-		} finally {
-			await this.browser?.close();
 		}
 	}
 }

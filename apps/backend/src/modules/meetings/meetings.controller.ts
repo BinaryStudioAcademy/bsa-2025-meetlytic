@@ -9,6 +9,7 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserResponseDto } from "~/modules/users/users.js";
 
 import { MeetingsApiPath } from "./libs/enums/enums.js";
+import { createMeetingPdf } from "./libs/helpers/create-meeting-pdf.js";
 import {
 	type CreateMeetingOptions,
 	type DeleteMeetingOptions,
@@ -154,6 +155,12 @@ class MeetingsController extends BaseController {
 			path: MeetingsApiPath.$ID_MEETING_TRANSCRIPTIONS,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
+		this.addRoute({
+			handler: (options) => this.export(options as FindMeetingOptions),
+			method: HTTPMethod.GET,
+			path: MeetingsApiPath.$ID_PDF,
+			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+		});
 	}
 
 	/**
@@ -214,6 +221,22 @@ class MeetingsController extends BaseController {
 		await this.meetingService.delete(id);
 
 		return { payload: null, status: HTTPCode.NO_CONTENT };
+	}
+
+	private async export(options: {
+		params: { id: string };
+	}): Promise<APIHandlerResponse> {
+		const meetingId = options.params.id;
+		const pdfBuffer = await createMeetingPdf(meetingId);
+
+		return {
+			headers: {
+				"Content-Disposition": `attachment; filename="meeting-${meetingId}.pdf"`,
+				"Content-Type": "application/pdf",
+			},
+			payload: Buffer.from(pdfBuffer),
+			status: HTTPCode.OK,
+		};
 	}
 
 	/**

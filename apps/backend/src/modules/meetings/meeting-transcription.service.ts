@@ -5,6 +5,7 @@ import {
 	MeetingTranscriptionErrorMessage,
 } from "./libs/enums/enums.js";
 import { MeetingTranscriptionError } from "./libs/exceptions/exceptions.js";
+import { createMeetingPdf } from "./libs/helpers/helpers.js";
 import {
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,
@@ -60,6 +61,10 @@ class MeetingTranscriptionService
 		}
 
 		return isTranscriptionDeleted;
+	}
+
+	public async export(meetingId: string): Promise<Buffer> {
+		return await createMeetingPdf(meetingId);
 	}
 
 	public async find(id: number): Promise<MeetingTranscriptionResponseDto> {

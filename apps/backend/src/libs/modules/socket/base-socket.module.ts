@@ -68,7 +68,7 @@ class BaseSocketService implements SocketService {
 				this.logger.info(`Ending meeting ${meetingId}`);
 				await meetingService.endMeeting(Number(meetingId));
 				this.emitTo({
-					event: SocketEvent.UPADTE_MEETING_DETAILS,
+					event: SocketEvent.UPDATE_MEETING_DETAILS,
 					namespace: SocketNamespace.USERS,
 					room: String(payload.meetingId),
 				});

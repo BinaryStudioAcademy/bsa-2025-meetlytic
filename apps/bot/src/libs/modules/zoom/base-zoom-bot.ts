@@ -217,13 +217,12 @@ class BaseZoomBot {
 				const summaryActinItems = await Promise.all(summaryActinItemsPromises);
 				const [actionItems, summary] = summaryActinItems;
 
-				const actionItemsNonNull = actionItems ?? "";
-				const summaryNonNull = summary ?? "";
-
 				this.socketClient.emit(SocketEvent.SAVE_SUMMARY_ACTION_ITEMS, {
-					actionItems: actionItemsNonNull,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					actionItems: actionItems!,
 					meetingId: String(this.config.ENV.ZOOM.MEETING_ID),
-					summary: summaryNonNull,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					summary: summary!,
 				});
 				this.socketClient.disconnect();
 			},

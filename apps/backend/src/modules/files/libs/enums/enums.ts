@@ -1,1 +1,1 @@
-export { ContentType, FileErrorMessage } from "@meetlytic/shared";
+export { ContentType, FileApiPath, FileErrorMessage } from "@meetlytic/shared";

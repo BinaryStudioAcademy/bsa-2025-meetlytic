@@ -1,6 +1,6 @@
-import { HTTPCode } from "../../../libs/modules/http/http.js";
-import { type ValueOf } from "../../../libs/types/value-of.type.js";
 import { AuthStatusMessage } from "../../../modules/auth/auth.js";
+import { HTTPCode } from "../../modules/http/http.js";
+import { type ValueOf } from "../../types/value-of.type.js";
 import { HTTPError } from "../http-error/http-error.exception.js";
 
 type Constructor = {

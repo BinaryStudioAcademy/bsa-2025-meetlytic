@@ -1,5 +1,6 @@
-import { HashLink } from "~/libs/components/components.js";
+import { NavLink } from "~/libs/components/components.js";
 import { type AppRoute, type LandingSection } from "~/libs/enums/enums.js";
+import { useCallback } from "~/libs/hooks/hooks.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
 type Properties = {
@@ -12,10 +13,23 @@ const Link: React.FC<Properties> = ({
 	children,
 	className = "",
 	to,
-}: Properties) => (
-	<HashLink className={className} smooth to={to}>
-		{children}
-	</HashLink>
-);
+}: Properties) => {
+	const handleClick = useCallback<React.MouseEventHandler<HTMLAnchorElement>>(
+		(event) => {
+			if (globalThis.location.hash === to && to.startsWith("#")) {
+				const element = document.querySelector(to);
+				element?.scrollIntoView();
+				event.preventDefault();
+			}
+		},
+		[to],
+	);
+
+	return (
+		<NavLink className={className} onClick={handleClick} to={to}>
+			{children}
+		</NavLink>
+	);
+};
 
 export { Link };

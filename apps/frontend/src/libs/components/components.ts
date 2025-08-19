@@ -23,4 +23,3 @@ export { TranscriptionPanel } from "./transcription-panel/transcription-panel.js
 export { default as Markdown } from "react-markdown";
 export { Provider as StoreProvider } from "react-redux";
 export { Navigate, NavLink, Outlet as RouterOutlet } from "react-router-dom";
-export { HashLink } from "react-router-hash-link";

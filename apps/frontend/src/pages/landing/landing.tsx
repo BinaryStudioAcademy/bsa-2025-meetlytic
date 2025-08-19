@@ -1,3 +1,5 @@
+import { useScrollToHash } from "~/libs/hooks/hooks.js";
+
 import {
 	LandingBackground,
 	LandingCTA,
@@ -9,18 +11,22 @@ import {
 } from "./components/components.js";
 import styles from "./styles.module.css";
 
-const Landing: React.FC = () => (
-	<div className={styles["landing"]}>
-		<LandingBackground />
-		<LandingHeader />
-		<main className={styles["landing-page"]} role="main">
-			<LandingHero />
-			<LandingFeatures />
-			<LandingTestimonial />
-			<LandingCTA />
-		</main>
-		<LandingFooter />
-	</div>
-);
+const Landing: React.FC = () => {
+	useScrollToHash();
+
+	return (
+		<div className={styles["landing"]}>
+			<LandingBackground />
+			<LandingHeader />
+			<main className={styles["landing-page"]} role="main">
+				<LandingHero />
+				<LandingFeatures />
+				<LandingTestimonial />
+				<LandingCTA />
+			</main>
+			<LandingFooter />
+		</div>
+	);
+};
 
 export { Landing };

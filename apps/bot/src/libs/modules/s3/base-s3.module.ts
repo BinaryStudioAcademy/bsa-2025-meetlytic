@@ -78,7 +78,7 @@ class BaseS3 {
 
 		this.logger.info(`[S3] PUT s3://${this.bucketName}/${objectKey}`);
 
-		const uploadResultAws: PutObjectCommandOutput = await this.client.send(
+		const uploadResult: PutObjectCommandOutput = await this.client.send(
 			new PutObjectCommand({
 				Body: parameters.body,
 				Bucket: this.bucketName,
@@ -90,7 +90,7 @@ class BaseS3 {
 		return {
 			key: objectKey,
 			url: this.buildHttpsUrl(objectKey),
-			versionId: uploadResultAws.VersionId ?? undefined,
+			versionId: uploadResult.VersionId ?? undefined,
 		};
 	}
 }

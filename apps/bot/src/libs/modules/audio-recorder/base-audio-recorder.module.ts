@@ -2,7 +2,7 @@ import { type ChildProcessWithoutNullStreams, spawn } from "node:child_process";
 import { accessSync, mkdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 
-import { SocketEvent, Timeout } from "~/libs/enums/enums.js";
+import { Extension, SocketEvent, Timeout } from "~/libs/enums/enums.js";
 import { type UploadResult } from "~/libs/modules/s3/s3.js";
 import {
 	type BaseConfig,
@@ -77,7 +77,7 @@ class BaseAudioRecorder implements AudioRecorder {
 		}
 
 		const timestamp = Date.now().toString();
-		const fileExtension = this.useMp3 ? "mp3" : "wav";
+		const fileExtension = this.useMp3 ? Extension.MP3 : Extension.WAV;
 		const filePath = path.join(
 			this.outputDir,
 			`chunk-${timestamp}.${fileExtension}`,
@@ -151,7 +151,7 @@ class BaseAudioRecorder implements AudioRecorder {
 	public async finalize(options: FinalizeOptions): Promise<FinalizeResult> {
 		this.isRecording = false;
 
-		const extension = this.useMp3 ? "mp3" : "wav";
+		const extension = this.useMp3 ? Extension.MP3 : Extension.WAV;
 		const expectedName = `${options.meetingId}-audio.${extension}`;
 		const filePath = this.fullPath ?? path.join(this.outputDir, expectedName);
 
@@ -229,7 +229,7 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		mkdirSync(this.outputDir, { recursive: true });
 
-		const extension = this.useMp3 ? "mp3" : "wav";
+		const extension = this.useMp3 ? Extension.MP3 : Extension.WAV;
 		this.fullPath = path.join(
 			this.outputDir,
 			`${meetingId}-audio.${extension}`,

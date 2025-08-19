@@ -24,45 +24,45 @@ class FileService implements Service<FileResponseDto> {
 	}
 
 	public async create(payload: FileRequestDto): Promise<FileResponseDto> {
-		const entity = FileEntity.initializeNew(payload);
-		const created = await this.fileRepository.create(entity);
+		const file = FileEntity.initializeNew(payload);
+		const newFile = await this.fileRepository.create(file);
 
-		return created.toObject();
+		return newFile.toObject();
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		const existing = await this.fileRepository.find(id);
+		const file = await this.fileRepository.find(id);
 
-		if (!existing) {
+		if (!file) {
 			throw new FileError({
 				message: FileErrorMessage.NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
-		const ok = await this.fileRepository.delete(id);
+		const isDeleted = await this.fileRepository.delete(id);
 
-		if (!ok) {
+		if (!isDeleted) {
 			throw new FileError({
 				message: FileErrorMessage.DELETE_FAILED,
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}
 
-		return ok;
+		return isDeleted;
 	}
 
 	public async find(id: number): Promise<FileResponseDto> {
-		const entity = await this.fileRepository.find(id);
+		const file = await this.fileRepository.find(id);
 
-		if (!entity) {
+		if (!file) {
 			throw new FileError({
 				message: FileErrorMessage.NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
-		return entity.toObject();
+		return file.toObject();
 	}
 
 	public async findAll(

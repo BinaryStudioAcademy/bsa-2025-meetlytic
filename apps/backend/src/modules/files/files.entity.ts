@@ -1,12 +1,13 @@
-import { type Entity } from "~/libs/types/types.js";
+import { type Entity, type ValueOf } from "~/libs/types/types.js";
 
+import { type ContentType } from "./libs/enums/enums.js";
 import {
 	type FileRequestProperties,
 	type FileResponseProperties,
 } from "./libs/types/types.js";
 
 type Constructor = {
-	contentType: string;
+	contentType: ValueOf<typeof ContentType>;
 	createdAt: null | string;
 	id: null | number;
 	key: string;
@@ -15,7 +16,7 @@ type Constructor = {
 };
 
 class FileEntity implements Entity {
-	private contentType: string;
+	private contentType: ValueOf<typeof ContentType>;
 	private createdAt: null | string;
 	private id: null | number;
 	private key: string;

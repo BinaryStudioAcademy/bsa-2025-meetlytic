@@ -1,5 +1,9 @@
+import { type ValueOf } from "~/libs/types/types.js";
+
+import { type ContentType } from "../enums/enums.js";
+
 type FileResponseProperties = {
-	contentType: string;
+	contentType: ValueOf<typeof ContentType>;
 	createdAt: string;
 	id: number;
 	key: string;

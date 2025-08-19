@@ -1,3 +1,4 @@
+import { EMPTY_ARRAY_LENGTH } from "~/libs/constants/constants.js";
 import { APIPath } from "~/libs/enums/enums.js";
 import { AuthError } from "~/libs/exceptions/exceptions.js";
 import {
@@ -21,6 +22,7 @@ import {
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,
 	type MeetingTranscriptionResponseDto,
 	type MeetingUpdateRequestDto,
@@ -85,6 +87,18 @@ class MeetingService implements Service<MeetingResponseDto> {
 			throw new MeetingError({
 				message: MeetingErrorMessage.INVALID_MEETING_LINK,
 				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
+		const existing = await this.meetingRepository.findAll({
+			meetingId: meetingId,
+			status: MeetingStatus.STARTED,
+		});
+
+		if (existing.length > EMPTY_ARRAY_LENGTH) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.DUPLICATED_MEETING,
+				status: HTTPCode.CONFLICT,
 			});
 		}
 
@@ -222,6 +236,12 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return {
 			publicUrl: `${APIPath.PUBLIC_MEETINGS}/${String(id)}?token=${token}`,
 		};
+	}
+
+	public async getTranscriptionsByMeetingId(
+		id: number,
+	): Promise<MeetingTranscriptionGetAllResponseDto> {
+		return await this.meetingTranscriptionService.getByMeetingId(id);
 	}
 
 	public async saveChunk({

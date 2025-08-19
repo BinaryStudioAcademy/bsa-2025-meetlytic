@@ -23,6 +23,10 @@ import {
 	meetingApi,
 	reducer as meetingReducer,
 } from "~/modules/meeting/meeting.js";
+import {
+	transcriptionApi,
+	reducer as transcriptionReducer,
+} from "~/modules/transcription/transcription.js";
 import { userApi, reducer as userReducer } from "~/modules/users/users.js";
 
 type ExtraArguments = {
@@ -30,6 +34,7 @@ type ExtraArguments = {
 	meetingApi: typeof meetingApi;
 	meetingDetailsApi: typeof meetingDetailsApi;
 	storage: typeof storage;
+	transcriptionApi: typeof transcriptionApi;
 	userApi: typeof userApi;
 };
 
@@ -37,6 +42,7 @@ type RootReducer = {
 	auth: ReturnType<typeof authReducer>;
 	meeting: ReturnType<typeof meetingReducer>;
 	meetingDetails: ReturnType<typeof meetingDetailsReducer>;
+	transcription: ReturnType<typeof transcriptionReducer>;
 	users: ReturnType<typeof userReducer>;
 };
 
@@ -44,6 +50,7 @@ const rootReducer = combineReducers({
 	auth: authReducer,
 	meeting: meetingReducer,
 	meetingDetails: meetingDetailsReducer,
+	transcription: transcriptionReducer,
 	users: userReducer,
 });
 
@@ -87,6 +94,7 @@ class Store {
 			meetingApi,
 			meetingDetailsApi,
 			storage,
+			transcriptionApi,
 			userApi,
 		};
 	}

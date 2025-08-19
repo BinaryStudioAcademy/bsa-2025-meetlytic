@@ -6,6 +6,7 @@ import { BaseCloudFormation } from "./base-cloud-formation.module.js";
 const {
 	ACCESS_KEY_ID: accessKeyId,
 	AMI_ID: imageId,
+	INSTANCE_TYPE: instanceType,
 	REGION,
 	SECRET_ACCESS_KEY: secretAccessKey,
 } = config.ENV.AWS;
@@ -23,8 +24,10 @@ const {
 const cloudFormation = new BaseCloudFormation({
 	credentials: { accessKeyId, secretAccessKey },
 	imageId,
+	instanceType,
 	logger,
 	region: REGION,
+
 	settings: {
 		botName,
 		openAIKey,

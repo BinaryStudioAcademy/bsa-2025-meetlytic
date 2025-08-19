@@ -83,6 +83,7 @@ const Input = <T extends FieldValues>({
 						{isClickableIcon ? (
 							<button onClick={onClickIcon} type="button">
 								{icon}
+								<span className="visually-hidden">{iconName}</span>
 							</button>
 						) : (
 							icon

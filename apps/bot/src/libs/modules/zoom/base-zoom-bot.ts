@@ -189,7 +189,7 @@ class BaseZoomBot {
 			this.logger.warn(`${SocketMessage.CLIENT_DISCONNECTED} ${reason}`);
 		});
 
-		this.socketClient.on(SocketEvent.STOP_RECORDING, () => {
+		this.socketClient.on(SocketEvent.STOP_RECORDING, async () => {
 			// TODO:
 			// audioRecorder.finalize()
 			// audioRecorder.stopFullMeetingRecording()
@@ -197,6 +197,7 @@ class BaseZoomBot {
 				`Stopping recording of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 			);
 			this.audioRecorder.stop();
+			await this.leaveMeeting();
 			this.socketClient.emit(
 				SocketEvent.RECORDING_STOPPED,
 				String(this.config.ENV.ZOOM.MEETING_ID),
@@ -209,18 +210,26 @@ class BaseZoomBot {
 				this.logger.info(
 					`Generating summary/action items of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 				);
-				const summary = await this.openAI.summarize(transcript);
-				const actionItems = await this.openAI.createActionItems(transcript);
+				const summaryActinItemsPromises = [
+					this.openAI.createActionItems(transcript),
+					this.openAI.summarize(transcript),
+				];
+				const summaryActinItems = await Promise.all(summaryActinItemsPromises);
+				const [actionItems, summary] = summaryActinItems;
+
+				const actionItemsNonNull = actionItems ?? "";
+				const summaryNonNull = summary ?? "";
 
 				this.socketClient.emit(SocketEvent.SAVE_SUMMARY_ACTION_ITEMS, {
-					actionItems,
+					actionItems: actionItemsNonNull,
 					meetingId: String(this.config.ENV.ZOOM.MEETING_ID),
-					summary,
+					summary: summaryNonNull,
 				});
 				this.socketClient.disconnect();
 			},
 		);
 	}
+
 	private async joinMeeting(): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
@@ -249,6 +258,17 @@ class BaseZoomBot {
 		await this.clickHelper(ZoomUILabel.JOIN);
 		await this.enterMeetingPassword();
 		await this.clickHelper(ZoomUILabel.JOIN);
+	}
+	private async leaveMeeting(): Promise<void> {
+		try {
+			await this.clickHelper(ZoomUILabel.LEAVE);
+			await delay(Timeout.FIVE_SECONDS);
+			await this.clickHelper(ZoomUILabel.CONFIRM_LEAVE);
+		} catch (error) {
+			this.logger.error(
+				`${ZoomBotMessages.FAILED_TO_LEAVE_MEETING} ${error instanceof Error ? error.message : String(error)}`,
+			);
+		}
 	}
 
 	public async run(): Promise<void> {

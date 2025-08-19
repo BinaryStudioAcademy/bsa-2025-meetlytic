@@ -9,7 +9,7 @@ import {
 } from "./components/components.js";
 import styles from "./styles.module.css";
 
-const LandingPage: React.FC = () => (
+const Landing: React.FC = () => (
 	<div className={styles["landing"]}>
 		<LandingBackground />
 		<LandingHeader />
@@ -23,4 +23,4 @@ const LandingPage: React.FC = () => (
 	</div>
 );
 
-export { LandingPage };
+export { Landing };

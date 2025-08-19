@@ -1,3 +1,5 @@
+@import url("../../../assets/css/styles.css");
+
 .button {
 	display: flex;
 	gap: 8px;

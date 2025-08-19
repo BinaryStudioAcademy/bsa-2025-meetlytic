@@ -14,7 +14,7 @@ import {
 import { AppRoute } from "~/libs/enums/enums.js";
 import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
-import { LandingPage } from "~/pages/landing/landing-page.js";
+import { Landing } from "~/pages/landing/landing.js";
 import { NotFoundPage } from "~/pages/not-found/not-found.js";
 import { Profile } from "~/pages/profile/profile.jsx";
 
@@ -70,7 +70,7 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 						],
 						element: <PublicLayout />,
 					},
-					{ element: <LandingPage />, path: AppRoute.ROOT },
+					{ element: <Landing />, path: AppRoute.ROOT },
 					{
 						element: <NotFoundPage />,
 						path: AppRoute.NOT_FOUND,

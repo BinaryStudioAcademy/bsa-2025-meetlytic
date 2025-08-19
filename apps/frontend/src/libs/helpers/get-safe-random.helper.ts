@@ -1,6 +1,6 @@
 import { LandingBgNumeric } from "~/modules/landing/landing.js";
 
-const safeRandom = (): number => {
+const getSafeRandomValue = (): number => {
 	const array = new Uint32Array(LandingBgNumeric.UINT32_ARRAY_LENGTH);
 	crypto.getRandomValues(array);
 
@@ -9,4 +9,4 @@ const safeRandom = (): number => {
 	return value / (LandingBgNumeric.UINT32_MAX + LandingBgNumeric.ONE);
 };
 
-export { safeRandom };
+export { getSafeRandomValue };

@@ -4,7 +4,7 @@ import imgWorkflow from "~/assets/img/landing/features/workflow.png";
 
 import { type Feature } from "../types/types.js";
 
-const FEATURE_DATA: Feature[] = [
+const FEATURES: Feature[] = [
 	{
 		eyebrow: "FEATURES 1",
 		id: "feature-1",
@@ -38,4 +38,4 @@ const FEATURE_DATA: Feature[] = [
 	},
 ];
 
-export { FEATURE_DATA };
+export { FEATURES };

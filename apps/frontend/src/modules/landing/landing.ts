@@ -1,7 +1,7 @@
 export {
 	COMPANY_LINKS,
 	CONTACT_LINKS,
-	FEATURE_DATA,
+	FEATURES,
 	HEADER_LINKS,
 	LandingBgCollision,
 	LandingBgInit,
@@ -10,7 +10,7 @@ export {
 	LandingBgRingMinSpeed,
 	LandingBgRingSize,
 	LandingBgRingSpeedScale,
-	TESTIMONIAL_ITEMS,
+	TESTIMONIALS,
 } from "./libs/constants/constants.js";
 export {
 	type Feature,

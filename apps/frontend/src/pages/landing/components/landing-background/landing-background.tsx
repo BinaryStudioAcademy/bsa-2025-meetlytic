@@ -20,7 +20,9 @@ import styles from "./styles.module.css";
 
 const LandingBackground: React.FC = () => {
 	const scope = useRef<HTMLDivElement | null>(null);
-	const isInView = useInView(scope, { amount: 0 });
+	const isInView = useInView(scope, {
+		amount: LandingBgInit.INITIAL_VIEW_AMOUNT,
+	});
 	const [rings, setRings] = useState<RingConfig[]>([]);
 
 	useEffect(() => {
@@ -40,7 +42,7 @@ const LandingBackground: React.FC = () => {
 			ref={scope}
 		>
 			{Object.values(LandingBgRingType)
-				.filter((v) => typeof v === "string")
+				.filter((enumValue) => typeof enumValue === "string")
 				.flatMap((type) =>
 					Array.from({ length: LandingBgInit.RINGS_PER_SIZE }, (_, index) => {
 						let source: string;
@@ -63,7 +65,7 @@ const LandingBackground: React.FC = () => {
 
 						return (
 							<img
-								alt=""
+								alt={`Background ring ${type}`}
 								className={styles["landing__ring"]}
 								data-ring={type}
 								decoding="async"

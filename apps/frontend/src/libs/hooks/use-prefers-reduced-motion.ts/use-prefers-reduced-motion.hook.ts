@@ -2,7 +2,7 @@ import { DomEvent } from "~/libs/enums/enums.js";
 import { useEffect, useState } from "~/libs/hooks/hooks.js";
 
 const usePrefersReducedMotion = (): boolean => {
-	const [reduced, setReduced] = useState(false);
+	const [isReduced, setIsReduced] = useState(false);
 
 	useEffect(() => {
 		const mediaQuery = globalThis.matchMedia(
@@ -10,7 +10,7 @@ const usePrefersReducedMotion = (): boolean => {
 		);
 
 		const update = (): void => {
-			setReduced(mediaQuery.matches);
+			setIsReduced(mediaQuery.matches);
 		};
 
 		update();
@@ -22,7 +22,7 @@ const usePrefersReducedMotion = (): boolean => {
 		};
 	}, []);
 
-	return reduced;
+	return isReduced;
 };
 
 export { usePrefersReducedMotion };

@@ -1,11 +1,12 @@
 export { clamp } from "./clamp.helper.js";
 export { debounce } from "./debounce.helper.js";
 export { extractErrorMessage } from "./extract-error-message.helper.js";
+export { getRandomInRange } from "./get-rand-in-range.helper.js";
+export { getRingPairs } from "./get-ring-pairs.helper.js";
+export { getSafeRandomValue } from "./get-safe-random.helper.js";
 export { getValidClassNames } from "./get-valid-class-names.helper.js";
 export { handleBounds } from "./handle-bounds.helper.js";
 export { handleCollisions } from "./handle-collisions.helper.js";
-export { randInRange } from "./rand-in-range.helper.js";
 export { applyTransforms, initRings } from "./rings.helper.js";
-export { safeRandom } from "./safe-random.helper.js";
 export { configureString, formatDate } from "@meetlytic/shared";
 export { animate, inView } from "motion/react";

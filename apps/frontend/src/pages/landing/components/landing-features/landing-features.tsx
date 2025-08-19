@@ -1,4 +1,4 @@
-import { FEATURE_DATA } from "~/modules/landing/landing.js";
+import { FEATURES } from "~/modules/landing/landing.js";
 
 import { FeatureItem } from "./feature-item.js";
 import styles from "./styles.module.css";
@@ -14,7 +14,7 @@ const LandingFeatures: React.FC = () => {
 				<h2 className={styles["features__title"]} id="features-title">
 					Features
 				</h2>
-				{FEATURE_DATA.map((feature) => (
+				{FEATURES.map((feature) => (
 					<FeatureItem key={feature.id} {...feature} />
 				))}
 			</div>

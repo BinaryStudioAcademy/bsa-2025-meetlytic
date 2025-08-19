@@ -9,7 +9,8 @@ type Properties = {
 	iconLeft?: React.ReactNode;
 	iconRight?: React.ReactNode;
 	isDisabled?: boolean;
-	label: string;
+	isLabelVisuallyHidden?: boolean;
+	label: React.ReactNode;
 	onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
 	size?: ValueOf<typeof ButtonSize>;
 	type?: "button" | "submit";
@@ -21,6 +22,7 @@ const Button: React.FC<Properties> = ({
 	iconLeft,
 	iconRight,
 	isDisabled = false,
+	isLabelVisuallyHidden = false,
 	label,
 	onClick,
 	size = ButtonSize.DEFAULT,
@@ -40,7 +42,13 @@ const Button: React.FC<Properties> = ({
 		type={type}
 	>
 		{iconLeft}
-		<span>{label}</span>
+		<span
+			className={getValidClassNames(
+				isLabelVisuallyHidden && styles["visually-hidden"],
+			)}
+		>
+			{label}
+		</span>
 		{iconRight}
 	</button>
 );

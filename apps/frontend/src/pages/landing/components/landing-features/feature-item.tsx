@@ -21,11 +21,11 @@ const FeatureItem: React.FC<Feature> = ({
 
 	useInViewAnimation({
 		final: {
-			opacity: "1",
-			transform: "translateX(0px)",
+			opacity: FeatureAnimation.FINAL_OPACITY,
+			transform: FeatureAnimation.FINAL_TRANSFORM,
 		},
 		initial: {
-			opacity: "0",
+			opacity: FeatureAnimation.INITIAL_OPACITY,
 			transform: `translateX(${(isReversed ? -FeatureAnimation.OFFSET_PX : FeatureAnimation.OFFSET_PX).toString()}px)`,
 		},
 		isDisabled: reduced,

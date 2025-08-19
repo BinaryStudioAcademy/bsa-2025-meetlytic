@@ -8,7 +8,8 @@ const LandingCTA: React.FC = () => {
 		<section aria-labelledby="cta-title" className={styles["cta"]}>
 			<div className={styles["cta__inner"]}>
 				<h2 className={styles["cta__title"]} id="cta-title">
-					Ready to Ignite Your Business <br /> Journey?
+					Ready to Ignite Your Business <br className={styles["cta__br"]} />{" "}
+					Journey?
 				</h2>
 
 				<Link to={AppRoute.SIGN_IN}>

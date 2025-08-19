@@ -2,7 +2,7 @@ import imgAvatar from "~/assets/img/landing/testimonials/avatar-1.jpg";
 
 import { type Testimonial } from "../types/types.js";
 
-const TESTIMONIAL_ITEMS: Testimonial[] = [
+const TESTIMONIALS: Testimonial[] = [
 	{
 		authorAvatarSrc: imgAvatar,
 		authorName: "Dustin Bali",
@@ -33,4 +33,4 @@ const TESTIMONIAL_ITEMS: Testimonial[] = [
 	},
 ];
 
-export { TESTIMONIAL_ITEMS };
+export { TESTIMONIALS };

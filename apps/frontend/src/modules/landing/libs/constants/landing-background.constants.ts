@@ -31,6 +31,7 @@ const LandingBgCollision = {
 const LandingBgInit = {
 	INITIAL_SPEED_HALF: 10,
 	INITIAL_SPEED_RANGE: 20,
+	INITIAL_VIEW_AMOUNT: 0,
 	RINGS_PER_SIZE: 3,
 } as const;
 

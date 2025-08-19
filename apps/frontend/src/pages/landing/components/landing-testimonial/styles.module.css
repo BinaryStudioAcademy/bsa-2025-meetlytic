@@ -26,8 +26,25 @@
 
 .testimonials__track {
 	display: flex;
+	transform: translateX(calc(-1 * var(--pos, 0) * 100%));
 	transition: transform 450ms ease-in-out;
 	will-change: transform;
+}
+
+.testimonials__track--pos-0 {
+	--pos: 0;
+}
+
+.testimonials__track--pos-1 {
+	--pos: 1;
+}
+
+.testimonials__track--pos-2 {
+	--pos: 2;
+}
+
+.testimonials__track--pos-3 {
+	--pos: 3;
 }
 
 .testimonials__slide {

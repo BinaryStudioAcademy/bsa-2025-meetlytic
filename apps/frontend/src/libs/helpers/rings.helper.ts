@@ -10,20 +10,20 @@ import {
 	type RingType,
 } from "~/modules/landing/landing.js";
 
-import { clamp, randInRange, safeRandom } from "./helpers.js";
+import { clamp, getRandomInRange, getSafeRandomValue } from "./helpers.js";
 
-const ensureMinSpeed = (value: number, minValue: number): number => {
-	if (Math.abs(value) >= minValue) {
+const ensureMinimumSpeed = (value: number, minimumValue: number): number => {
+	if (Math.abs(value) >= minimumValue) {
 		return value;
 	}
 
-	return value < LandingBgNumeric.ZERO ? -minValue : minValue;
+	return value < LandingBgNumeric.ZERO ? -minimumValue : minimumValue;
 };
 
-const getInsideCoord = (ringSize: number, maxValue: number): number =>
-	ringSize >= maxValue
-		? (maxValue - ringSize) / LandingBgNumeric.HALF
-		: safeRandom() * (maxValue - ringSize);
+const getInsideCoord = (ringSize: number, maximumValue: number): number =>
+	ringSize >= maximumValue
+		? (maximumValue - ringSize) / LandingBgNumeric.HALF
+		: getSafeRandomValue() * (maximumValue - ringSize);
 
 const initRings = ({
 	ringLarge,
@@ -70,7 +70,7 @@ const initRings = ({
 
 		if (seededInside[type]) {
 			const randomSide = Math.floor(
-				safeRandom() * LandingBgNumeric.SIDES_COUNT,
+				getSafeRandomValue() * LandingBgNumeric.SIDES_COUNT,
 			);
 			const minPositionX = -ringSize * LandingBgPhysics.MARGIN;
 			const maxPositionX =
@@ -83,7 +83,7 @@ const initRings = ({
 
 			switch (randomSide) {
 				case LandingBgSide.BOTTOM: {
-					positionX = randInRange(minPositionX, maxPositionX);
+					positionX = getRandomInRange(minPositionX, maxPositionX);
 					positionY = containerHeight + ringSize * LandingBgPhysics.MARGIN;
 					break;
 				}
@@ -91,18 +91,18 @@ const initRings = ({
 				case LandingBgSide.LEFT: {
 					positionX =
 						-ringSize * (LandingBgNumeric.ONE + LandingBgPhysics.MARGIN);
-					positionY = randInRange(minPositionY, maxPositionY);
+					positionY = getRandomInRange(minPositionY, maxPositionY);
 					break;
 				}
 
 				case LandingBgSide.RIGHT: {
 					positionX = containerWidth + ringSize * LandingBgPhysics.MARGIN;
-					positionY = randInRange(minPositionY, maxPositionY);
+					positionY = getRandomInRange(minPositionY, maxPositionY);
 					break;
 				}
 
 				default: {
-					positionX = randInRange(minPositionX, maxPositionX);
+					positionX = getRandomInRange(minPositionX, maxPositionX);
 					positionY =
 						-ringSize * (LandingBgNumeric.ONE + LandingBgPhysics.MARGIN);
 					break;
@@ -115,23 +115,23 @@ const initRings = ({
 		}
 
 		const baseVelocityX =
-			(safeRandom() * LandingBgInit.INITIAL_SPEED_RANGE -
+			(getSafeRandomValue() * LandingBgInit.INITIAL_SPEED_RANGE -
 				LandingBgInit.INITIAL_SPEED_HALF) *
 			LandingBgPhysics.SPEED_MULTIPLIER *
 			LandingBgRingSpeedScale[type];
 		const baseVelocityY =
-			(safeRandom() * LandingBgInit.INITIAL_SPEED_RANGE -
+			(getSafeRandomValue() * LandingBgInit.INITIAL_SPEED_RANGE -
 				LandingBgInit.INITIAL_SPEED_HALF) *
 			LandingBgPhysics.SPEED_MULTIPLIER *
 			LandingBgRingSpeedScale[type];
 
 		const velocityX = clamp(
-			ensureMinSpeed(baseVelocityX, LandingBgRingMinSpeed[type]),
+			ensureMinimumSpeed(baseVelocityX, LandingBgRingMinSpeed[type]),
 			-LandingBgPhysics.MAX_SPEED,
 			LandingBgPhysics.MAX_SPEED,
 		);
 		const velocityY = clamp(
-			ensureMinSpeed(baseVelocityY, LandingBgRingMinSpeed[type]),
+			ensureMinimumSpeed(baseVelocityY, LandingBgRingMinSpeed[type]),
 			-LandingBgPhysics.MAX_SPEED,
 			LandingBgPhysics.MAX_SPEED,
 		);

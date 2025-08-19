@@ -1,10 +1,8 @@
 import { Button } from "~/libs/components/components.js";
 import { LandingTestimonialConfig } from "~/libs/enums/enums.js";
+import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { useCallback, useCarousel, useState } from "~/libs/hooks/hooks.js";
-import {
-	type Testimonial,
-	TESTIMONIAL_ITEMS,
-} from "~/modules/landing/landing.js";
+import { type Testimonial, TESTIMONIALS } from "~/modules/landing/landing.js";
 
 import { LandingTestimonialCard } from "./landing-testimonial-card.js";
 import styles from "./styles.module.css";
@@ -16,7 +14,7 @@ type Properties = {
 
 const LandingTestimonial: React.FC<Properties> = ({
 	autoplayDelayMs = LandingTestimonialConfig.AUTOPLAY_DELAY_MS,
-	items = TESTIMONIAL_ITEMS,
+	items = TESTIMONIALS,
 }: Properties) => {
 	const [isPaused, setIsPaused] = useState<boolean>(false);
 
@@ -63,10 +61,10 @@ const LandingTestimonial: React.FC<Properties> = ({
 
 				<div className={styles["testimonials__viewport"]}>
 					<div
-						className={styles["testimonials__track"]}
-						style={{
-							transform: `translateX(-${String(index * LandingTestimonialConfig.SLIDE_WIDTH_PERCENT)}%)`,
-						}}
+						className={getValidClassNames(
+							styles["testimonials__track"],
+							styles[`testimonials__track--pos-${String(index)}`],
+						)}
 					>
 						{items.map((item) => (
 							<div className={styles["testimonials__slide"]} key={item.id}>
@@ -77,8 +75,8 @@ const LandingTestimonial: React.FC<Properties> = ({
 				</div>
 
 				<ul className={styles["testimonials__dots"]} role="tablist">
-					{items.map((item, index_) => {
-						const isActive = index_ === index;
+					{items.map((item, itemIndex) => {
+						const isActive = itemIndex === index;
 
 						return (
 							<li className={styles["testimonials__dot-item"]} key={item.id}>
@@ -90,8 +88,9 @@ const LandingTestimonial: React.FC<Properties> = ({
 											? styles["testimonials__dot--active"]
 											: styles["testimonials__dot"]
 									}
-									label=""
-									onClick={handleDotClickWrapper(index_)}
+									isLabelVisuallyHidden
+									label={`Show testimonial ${item.authorName}`}
+									onClick={handleDotClickWrapper(itemIndex)}
 								/>
 							</li>
 						);

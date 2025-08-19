@@ -1,4 +1,7 @@
-const clamp = (value: number, minValue: number, maxValue: number): number =>
-	Math.max(minValue, Math.min(maxValue, value));
+const clamp = (
+	value: number,
+	minimumValue: number,
+	maximumValue: number,
+): number => Math.max(minimumValue, Math.min(maximumValue, value));
 
 export { clamp };

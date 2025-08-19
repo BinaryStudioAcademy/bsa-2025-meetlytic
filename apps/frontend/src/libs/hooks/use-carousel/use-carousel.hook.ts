@@ -1,20 +1,15 @@
 import { CarouselConfig } from "~/libs/enums/enums.js";
 import { useEffect, useState } from "~/libs/hooks/hooks.js";
-
-type UseCarouselProperties = {
-	delayMs: number;
-	isPaused?: boolean;
-	length: number;
-};
+import {
+	type UseCarouselProperties,
+	type UseCarouselResult,
+} from "~/libs/types/types.js";
 
 const useCarousel = ({
 	delayMs,
 	isPaused = false,
 	length,
-}: UseCarouselProperties): {
-	index: number;
-	setIndex: (value: number) => void;
-} => {
+}: UseCarouselProperties): UseCarouselResult => {
 	const [index, setIndex] = useState<number>(CarouselConfig.INITIAL_INDEX);
 
 	useEffect(() => {

@@ -1,11 +1,7 @@
 import { Navigate } from "~/libs/components/components.js";
-import { type AppRoute, DataStatus } from "~/libs/enums/enums.js";
-import {
-	useAppSelector,
-	useEffect,
-	useLocation,
-	useNavigate,
-} from "~/libs/hooks/hooks.js";
+import { type AppRoute } from "~/libs/enums/enums.js";
+import { useAppSelector, useLocation } from "~/libs/hooks/hooks.js";
+import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
 type Properties = {
@@ -19,20 +15,9 @@ const ProtectedRoute: React.FC<Properties> = ({
 }: Properties) => {
 	const isAuthenticated = useAppSelector((state) => state.auth.user !== null);
 	const location = useLocation();
-	const navigate = useNavigate();
-	const { dataStatus } = useAppSelector((state) => state.auth);
+	const token = localStorage.getItem(StorageKey.TOKEN);
 
-	useEffect(() => {
-		const redirect = async (): Promise<void> => {
-			if (!isAuthenticated) {
-				await navigate(redirectTo);
-			}
-		};
-
-		void redirect();
-	}, [isAuthenticated, navigate, redirectTo]);
-
-	if (!isAuthenticated && dataStatus === DataStatus.FULFILLED) {
+	if (!token || !isAuthenticated) {
 		return (
 			<Navigate replace state={{ from: location.pathname }} to={redirectTo} />
 		);

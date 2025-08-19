@@ -161,8 +161,7 @@ class BaseAudioRecorder implements AudioRecorder {
 			throw new Error("[finalize] full-session file not found");
 		}
 
-		const prefix = options.prefix;
-		const contentType = options.contentType;
+		const { contentType, prefix } = options;
 
 		this.logger.info(
 			`[S3] Uploading ${filePath} -> s3://${prefix}/${expectedName}`,
@@ -178,10 +177,7 @@ class BaseAudioRecorder implements AudioRecorder {
 		});
 
 		if (uploadResult.url && uploadResult.key) {
-			const meetingId =
-				typeof this.config.ENV.ZOOM.MEETING_ID === "number"
-					? this.config.ENV.ZOOM.MEETING_ID
-					: Number(this.config.ENV.ZOOM.MEETING_ID);
+			const meetingId = Number(this.config.ENV.ZOOM.MEETING_ID);
 
 			const audioFile: MeetingAudioSaveDto = {
 				contentType,
@@ -290,7 +286,7 @@ class BaseAudioRecorder implements AudioRecorder {
 			}
 		});
 
-		this.fullRecordingProccess.once("exit", (code, signal) => {
+		this.fullRecordingProccess.once(AudioRecorderEvent.EXIT, (code, signal) => {
 			this.logger.warn(
 				`[full] ffmpeg exited early code=${String(code)} signal=${String(signal)}`,
 			);
@@ -315,7 +311,7 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		await Promise.race([
 			new Promise<void>((resolve) =>
-				this.fullRecordingProccess?.once("exit", resolve),
+				this.fullRecordingProccess?.once(AudioRecorderEvent.EXIT, resolve),
 			),
 			new Promise<void>((resolve) => setTimeout(resolve, Timeout.FIVE_SECONDS)),
 		]);

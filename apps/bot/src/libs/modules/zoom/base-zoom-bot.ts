@@ -22,6 +22,8 @@ import {
 	type OpenAI,
 } from "~/libs/types/types.js";
 
+import { ContentType } from "./libs/enums/enums.js";
+
 type Constructor = {
 	audioRecorder: AudioRecorder;
 	config: BaseConfig;
@@ -326,7 +328,7 @@ class BaseZoomBot {
 				if (meetingId) {
 					const audioPrefix = this.config.ENV.S3.PREFIX_AUDIO;
 					const prefix = `${audioPrefix}/${meetingId}`;
-					const contentType = this.config.ENV.S3.CONTET_TYPE_AUDIO;
+					const contentType = ContentType.AUDIO;
 					await this.audioRecorder.finalize({
 						contentType,
 						meetingId,

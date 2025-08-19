@@ -88,7 +88,6 @@ class BaseS3 {
 		);
 
 		return {
-			etag: uploadResultAws.ETag ?? undefined,
 			key: objectKey,
 			url: this.buildHttpsUrl(objectKey),
 			versionId: uploadResultAws.VersionId ?? undefined,

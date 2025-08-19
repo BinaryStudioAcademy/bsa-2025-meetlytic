@@ -23,7 +23,6 @@ type EnvironmentSchema = {
 	};
 	S3: {
 		BUCKET_NAME: string;
-		CONTET_TYPE_AUDIO: string;
 		PREFIX_AUDIO: string;
 	};
 	ZOOM: {

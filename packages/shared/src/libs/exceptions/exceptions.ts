@@ -1,4 +1,4 @@
-export { AuthError } from "./auth-error/auth-error.exeption.js";
+export { AuthError } from "./auth-error/auth-error.exсeption.js";
 export { HTTPError } from "./http-error/http-error.exception.js";
 export { MeetingError } from "./meetings-error/meeting-error.exception.js";
 export { MeetingTranscriptionError } from "./meetings-transcription-error/meetings-transcription-error.exception.js";

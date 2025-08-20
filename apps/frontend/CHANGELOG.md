@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.7.0...frontend-v1.8.0) (2025-08-20)
+
+
+### Features
+
+* **frontend:** limite width of main container ml-245 ([#248](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/248)) ([9e8e0a5](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/9e8e0a55524844ea902e6449f7714a7ad2aad903))
+
 ## [1.7.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.6.0...frontend-v1.7.0) (2025-08-19)
 
 

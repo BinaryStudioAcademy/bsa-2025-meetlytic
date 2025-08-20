@@ -1,12 +1,15 @@
-import { type SocketEvent } from "../enums/enums.js";
 import {
 	type MeetingAudioSaveDto,
+	type MeetingSummaryActionItemsResponseDto,
 	type MeetingTranscriptionRequestDto,
-} from "./types.js";
+} from "~/libs/types/types.js";
 
 type ClientToServerEvents = {
-	[SocketEvent.AUDIO_SAVE]: (data: MeetingAudioSaveDto) => void;
-	[SocketEvent.TRANSCRIBE]: (data: MeetingTranscriptionRequestDto) => void;
+	audioSave: (data: MeetingAudioSaveDto) => void;
+	joinRoom: (meetingId: string) => void;
+	recordingStopped: (meetingId: string) => void;
+	saveSummaryActionItems: (data: MeetingSummaryActionItemsResponseDto) => void;
+	transcribe: (data: MeetingTranscriptionRequestDto) => void;
 };
 
 export { type ClientToServerEvents };

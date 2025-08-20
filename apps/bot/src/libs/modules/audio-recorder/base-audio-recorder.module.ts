@@ -1,4 +1,8 @@
-import { type ChildProcessWithoutNullStreams, spawn } from "node:child_process";
+import {
+	type ChildProcess,
+	type ChildProcessWithoutNullStreams,
+	spawn,
+} from "node:child_process";
 import { accessSync, mkdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 
@@ -24,6 +28,7 @@ import {
 class BaseAudioRecorder implements AudioRecorder {
 	private chunkDuration: number;
 	private config: BaseConfig;
+	private currentFfmpegProcess: ChildProcess | null = null;
 	private ffmpegPath: string;
 	private fullPath: null | string = null;
 	private fullRecordingProccess: ChildProcessWithoutNullStreams | null = null;
@@ -110,6 +115,7 @@ class BaseAudioRecorder implements AudioRecorder {
 		this.logChunkStart(filePath, fileExtension);
 
 		const ffmpeg = spawn(this.ffmpegPath, ffmpegArguments);
+		this.currentFfmpegProcess = ffmpeg;
 
 		ffmpeg.stderr.on(AudioRecorderEvent.DATA, (data) => {
 			const lines = String(data)
@@ -126,6 +132,8 @@ class BaseAudioRecorder implements AudioRecorder {
 			this.logger.info(
 				`[+] Chunk done | path=${filePath} | code=${String(code)} signal=${String(signal)}`,
 			);
+
+			this.currentFfmpegProcess = null;
 
 			if (this.isRecording) {
 				this.recordNextChunk();
@@ -296,6 +304,8 @@ class BaseAudioRecorder implements AudioRecorder {
 	public stop(): void {
 		this.logger.info("[-] Chunk recording stopped by caller");
 		this.isRecording = false;
+		this.logger.info("[-] Sending SIGINT to FFmpeg process");
+		this.currentFfmpegProcess?.kill("SIGINT");
 	}
 
 	public async stopFullMeetingRecording(): Promise<void> {

@@ -1,14 +1,20 @@
 const SocketEvent = {
-	AUDIO_SAVE: "audio:save",
+	AUDIO_SAVE: "audioSave",
 	CONNECT: "connect",
 	CONNECT_ERROR: "connect_error",
 	CONNECTION: "connection",
 	DISCONNECT: "disconnect",
 	ERROR: "error",
-	JOIN_MEETING: "join-meeting",
-	LEAVE_MEETING: "leave-meeting",
+	GENERATE_SUMMARY_ACTION_ITEMS: "generateSummaryActionItems",
+	JOIN_MEETING: "joinRoom",
+	JOIN_ROOM: "joinRoom",
+	LEAVE_ROOM: "leaveRoom",
 	MESSAGE: "message",
+	RECORDING_STOPPED: "recordingStopped",
+	SAVE_SUMMARY_ACTION_ITEMS: "saveSummaryActionItems",
+	STOP_RECORDING: "stopRecording",
 	TRANSCRIBE: "transcribe",
+	UPDATE_MEETING_DETAILS: "updateMeetingDetails",
 } as const;
 
 export { SocketEvent };

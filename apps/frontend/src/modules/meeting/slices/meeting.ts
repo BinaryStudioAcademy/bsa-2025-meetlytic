@@ -1,9 +1,15 @@
-import { createMeeting, getAllMeetings, stopRecording } from "./actions.js";
+import {
+	createMeeting,
+	deleteMeeting,
+	getAllMeetings,
+	stopRecording,
+} from "./actions.js";
 import { actions } from "./meeting.slice.js";
 
 const allActions = {
 	...actions,
 	createMeeting,
+	deleteMeeting,
 	getAllMeetings,
 	stopRecording,
 };

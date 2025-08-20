@@ -13,7 +13,7 @@ import {
 	MeetingErrorMessage,
 	NotificationMessage,
 } from "~/libs/enums/enums.js";
-import { formatDate } from "~/libs/helpers/helpers.js";
+import { formatDate, shareMeetingPublicUrl } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -22,12 +22,10 @@ import {
 	useParams,
 	useSearchParams,
 } from "~/libs/hooks/hooks.js";
-import { config } from "~/libs/modules/config/config.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
 import { rehypeSanitize, remarkGfm } from "~/libs/plugins/plugins.js";
 import {
 	actions as meetingDetailsActions,
-	meetingDetailsApi,
 	sanitizeDefaultSchema,
 } from "~/modules/meeting-details/meeting-details.js";
 
@@ -60,22 +58,7 @@ const MeetingDetails: React.FC = () => {
 			return;
 		}
 
-		const shareMeeting = async (): Promise<void> => {
-			try {
-				const { publicUrl } = await meetingDetailsApi.getPublicShareUrl(
-					meeting.id,
-				);
-				const host = config.ENV.APP.HOST;
-				void navigator.clipboard.writeText(`${host}${publicUrl}`);
-				notification.success(NotificationMessage.PUBLIC_LINK_COPIED_SUCCESS);
-			} catch (error: unknown) {
-				notification.error(NotificationMessage.SHARE_LINK_GENERATION_FAILED);
-
-				throw error;
-			}
-		};
-
-		void shareMeeting();
+		void shareMeetingPublicUrl(meeting.id);
 	}, [meeting]);
 
 	if (!id || dataStatus === DataStatus.REJECTED) {

@@ -319,6 +319,11 @@ class BaseZoomBot {
 			});
 			this.logger.info(ZoomBotMessage.JOINED_MEETING);
 			this.audioRecorder.start();
+
+			if (meetingId) {
+				this.audioRecorder.startFullMeetingRecording(meetingId);
+			}
+
 			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 			await delay(Timeout.FIFTEEN_SECONDS);
 			await this.monitorParticipants();

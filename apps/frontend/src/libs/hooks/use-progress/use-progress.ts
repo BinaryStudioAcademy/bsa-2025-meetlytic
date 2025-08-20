@@ -18,8 +18,10 @@ const useProgress = (
 		if (isLoading) {
 			setProgress(LoaderProgressConfig.START);
 			interval = setInterval(() => {
-				setProgress((p) =>
-					p < LoaderProgressConfig.FAKE_LIMIT ? p + step : p,
+				setProgress((currentProgress) =>
+					currentProgress < LoaderProgressConfig.FAKE_LIMIT
+						? currentProgress + step
+						: currentProgress,
 				);
 			}, intervalMs);
 		} else {

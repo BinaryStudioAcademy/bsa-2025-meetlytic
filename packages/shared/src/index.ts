@@ -1,4 +1,5 @@
 export {
+	EMPTY_ARRAY_LENGTH,
 	MILLISECONDS_IN_SECOND,
 	PERCENT_MULTIPLIER,
 	START_TIME,
@@ -34,7 +35,11 @@ export {
 	HTTPHeader,
 	HTTPMethod,
 } from "./libs/modules/http/http.js";
-export { SocketEvent, SocketMessage } from "./libs/modules/socket/socket.js";
+export {
+	SocketEvent,
+	SocketMessage,
+	SocketNamespace,
+} from "./libs/modules/socket/socket.js";
 export { type Storage } from "./libs/modules/storage/storage.js";
 export {
 	type ServerCommonErrorResponse,
@@ -52,6 +57,7 @@ export {
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingSummaryActionItemsResponseDto,
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,
 	type MeetingTranscriptionResponseDto,
@@ -60,6 +66,7 @@ export {
 	meetingCreateValidationSchema,
 	MeetingErrorMessage,
 	MeetingHost,
+	meetingIdValidationSchema,
 	MeetingsApiPath,
 	MeetingStatus,
 	MeetingTranscriptionErrorMessage,

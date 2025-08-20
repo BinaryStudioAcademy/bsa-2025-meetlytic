@@ -12,6 +12,10 @@ const userApi = new UsersApi({
 
 export { userApi };
 export {
+	USER_SIGN_IN_DEFAULT_VALUES,
+	USER_SIGN_UP_DEFAULT_VALUES,
+} from "./libs/constants/constants.js";
+export {
 	type AvatarUploadResponseDto,
 	type UserResponseDto,
 	type UserSignInRequestDto,

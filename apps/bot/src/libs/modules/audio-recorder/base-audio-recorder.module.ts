@@ -1,4 +1,4 @@
-import { spawn } from "node:child_process";
+import { type ChildProcess, spawn } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 
@@ -19,6 +19,7 @@ import {
 class BaseAudioRecorder implements AudioRecorder {
 	private chunkDuration: number;
 	private config: BaseConfig;
+	private currentFfmpegProcess: ChildProcess | null = null;
 	private ffmpegPath: string;
 	private isRecording = false;
 	private logger: Logger;
@@ -100,6 +101,7 @@ class BaseAudioRecorder implements AudioRecorder {
 		this.logChunkStart(filePath, fileExtension);
 
 		const ffmpeg = spawn(this.ffmpegPath, ffmpegArguments);
+		this.currentFfmpegProcess = ffmpeg;
 
 		ffmpeg.stderr.on(AudioRecorderEvent.DATA, (data) => {
 			const lines = String(data)
@@ -122,6 +124,8 @@ class BaseAudioRecorder implements AudioRecorder {
 			this.logger.info(
 				`[+] Chunk done | path=${filePath} | code=${String(code)}  signal=${String(signal)}`,
 			);
+
+			this.currentFfmpegProcess = null;
 
 			if (this.isRecording) {
 				this.recordNextChunk();
@@ -163,6 +167,8 @@ class BaseAudioRecorder implements AudioRecorder {
 	public stop(): void {
 		this.logger.info("[-] Recording stopped by caller");
 		this.isRecording = false;
+		this.logger.info("[-] Sending SIGINT to FFmpeg process");
+		this.currentFfmpegProcess?.kill("SIGINT");
 	}
 }
 

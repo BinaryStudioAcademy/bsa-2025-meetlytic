@@ -5,23 +5,25 @@ import {
 	Markdown,
 	Navigate,
 	PlayerTrack,
-	SearchInput,
+	TranscriptionPanel,
 } from "~/libs/components/components.js";
 import {
 	AppRoute,
 	DataStatus,
 	MeetingErrorMessage,
+	MeetingStatus,
 	NotificationMessage,
 } from "~/libs/enums/enums.js";
 import { formatDate } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
-	useAppForm,
 	useAppSelector,
 	useCallback,
 	useEffect,
+	useMeetingSocket,
 	useParams,
 	useSearchParams,
+	useState,
 } from "~/libs/hooks/hooks.js";
 import { config } from "~/libs/modules/config/config.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
@@ -30,28 +32,40 @@ import {
 	actions as meetingDetailsActions,
 	meetingDetailsApi,
 	sanitizeDefaultSchema,
-	searchInputValidationSchema,
 } from "~/modules/meeting-details/meeting-details.js";
+import { actions as meetingActions } from "~/modules/meeting/meeting.js";
+import {
+	type MeetingTranscriptionResponseDto,
+	actions as transcriptionActions,
+} from "~/modules/transcription/transcription.js";
 
-import { DEFAULT_SEARCH_VALUE } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 const MeetingDetails: React.FC = () => {
+	const [isStopRecordingInProgress, setIsStopRecordingInProgress] =
+		useState<boolean>(false);
 	const dispatch = useAppDispatch();
 	const { id } = useParams<{ id: string }>();
 	const [searchParameters] = useSearchParams();
 
-	const { dataStatus, meeting, transcription } = useAppSelector(
+	const { dataStatus, meeting } = useAppSelector(
 		(state) => state.meetingDetails,
 	);
 	const { user } = useAppSelector((state) => state.auth);
 
-	const { control, errors } = useAppForm({
-		defaultValues: DEFAULT_SEARCH_VALUE,
-		validationSchema: searchInputValidationSchema,
-	});
+	const handleStopRecording = useCallback(() => {
+		void dispatch(meetingActions.stopRecording({ id: id as string }));
+		setIsStopRecordingInProgress(true);
+	}, [dispatch, id]);
 
-	useEffect(() => {
+	const handleTranscriptUpdate = useCallback(
+		(data: MeetingTranscriptionResponseDto) => {
+			dispatch(transcriptionActions.addTranscription(data));
+		},
+		[dispatch],
+	);
+
+	const handleSummaryActionItemsUpdate = useCallback(() => {
 		const sharedToken = searchParameters.get("token");
 		void dispatch(
 			meetingDetailsActions.getMeetingDetailsById({
@@ -59,12 +73,16 @@ const MeetingDetails: React.FC = () => {
 				sharedToken,
 			}),
 		);
-	}, [id, dispatch, searchParameters]);
+	}, [dispatch, id, searchParameters]);
 
-	const handleTranscriptionSearch = useCallback((value: string) => {
-		// TODO: implement handleTranscriptionSearch logic
-		return value;
-	}, []);
+	useMeetingSocket({
+		meetingId: Number(id),
+		meetingStatus: dataStatus,
+		onSummaryActionItemsUpdate: handleSummaryActionItemsUpdate,
+		onTranscriptUpdate: handleTranscriptUpdate,
+	});
+
+	useEffect(handleSummaryActionItemsUpdate, [handleSummaryActionItemsUpdate]);
 
 	const handleShareClick = useCallback(() => {
 		if (!meeting?.id) {
@@ -79,7 +97,19 @@ const MeetingDetails: React.FC = () => {
 					meeting.id,
 				);
 				const host = config.ENV.APP.HOST;
-				void navigator.clipboard.writeText(`${host}${publicUrl}`);
+				const fullUrl = `${host}${publicUrl}`;
+
+				const textarea = document.createElement("textarea");
+				textarea.value = fullUrl;
+				textarea.style.position = "absolute";
+				textarea.style.left = "-9999px";
+				textarea.style.opacity = "0";
+				document.body.append(textarea);
+				textarea.select();
+				// eslint-disable-next-line @typescript-eslint/no-deprecated, sonarjs/deprecation
+				document.execCommand("copy");
+				textarea.remove();
+
 				notification.success(NotificationMessage.PUBLIC_LINK_COPIED_SUCCESS);
 			} catch (error: unknown) {
 				notification.error(NotificationMessage.SHARE_LINK_GENERATION_FAILED);
@@ -122,31 +152,29 @@ const MeetingDetails: React.FC = () => {
 								onClick={handleShareClick}
 							>
 								<Icon className={styles["action-button__share"]} name="share" />
+								<span className="visually-hidden">Share meeting</span>
 							</button>
+						)}
+						{meeting.status === MeetingStatus.STARTED && user && (
+							<Button
+								isDisabled={isStopRecordingInProgress}
+								label={
+									isStopRecordingInProgress
+										? "Stopping recording..."
+										: "Stop Recording"
+								}
+								onClick={handleStopRecording}
+							/>
 						)}
 						<Button label="Export" />
 					</div>
 				</div>
 
 				<div className={styles["meeting-details__content"]}>
-					<div className={styles["meeting-details__transcription-panel"]}>
-						<div className={styles["panel-header"]}>
-							<h3 className={styles["panel-header__text"]}>TRANSCRIPT</h3>
-							<div className={styles["panel-header__search"]}>
-								<SearchInput
-									control={control}
-									errors={errors}
-									hasVisuallyHiddenLabel
-									label="Search"
-									name="search"
-									onSearch={handleTranscriptionSearch}
-								/>
-							</div>
-						</div>
-						<div className={styles["transcription-area"]}>
-							<p className={styles["transcription-text"]}>{transcription}</p>
-						</div>
-					</div>
+					<TranscriptionPanel
+						meetingId={meeting.id}
+						meetingStatus={meeting.status}
+					/>
 
 					<div className={styles["meeting-details__right-panel"]}>
 						<div>
@@ -174,7 +202,6 @@ const MeetingDetails: React.FC = () => {
 							</div>
 							<div className={styles["action-items-area"]}>
 								<div className={styles["action-items-text"]}>
-									<span className={styles["action-item-dot"]} />
 									<Markdown
 										rehypePlugins={[
 											[rehypeSanitize, { schema: sanitizeDefaultSchema }],

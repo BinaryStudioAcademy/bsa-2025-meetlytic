@@ -2,7 +2,7 @@ import fs from "node:fs";
 import OpenAI from "openai";
 
 import {
-	ACTION_POINTS_PROMPT,
+	ACTION_ITEMS_PROMPT,
 	SUMMARY_PROMPT,
 } from "~/libs/constants/constants.js";
 import { config } from "~/libs/modules/config/config.js";
@@ -31,8 +31,8 @@ class BaseOpenAI {
 		return response.output_text;
 	}
 
-	public async createActionPoints(prompt: string): Promise<string> {
-		return await this.generateTextResponse(prompt, ACTION_POINTS_PROMPT);
+	public async createActionItems(prompt: string): Promise<string> {
+		return await this.generateTextResponse(prompt, ACTION_ITEMS_PROMPT);
 	}
 
 	public async summarize(prompt: string): Promise<string> {

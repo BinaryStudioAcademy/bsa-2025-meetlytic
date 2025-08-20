@@ -37,6 +37,12 @@ class BaseConfig implements Config {
 					env: "NODE_ENV",
 					format: Object.values(AppEnvironment),
 				},
+				FRONTEND_ORIGIN: {
+					default: null,
+					doc: "Frontend URL",
+					env: "FRONTEND_ORIGIN",
+					format: String,
+				},
 				HOST: {
 					default: null,
 					doc: "Host for server app",

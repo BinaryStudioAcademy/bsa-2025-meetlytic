@@ -1,6 +1,6 @@
 import { type CreatePdfOptions } from "../types/types.js";
 
-function getMeetingHtml(options: CreatePdfOptions): string {
+function getMeetingHtmlTemplate(options: CreatePdfOptions): string {
 	const {
 		actionItems,
 		id,
@@ -39,4 +39,4 @@ function getMeetingHtml(options: CreatePdfOptions): string {
 `;
 }
 
-export { getMeetingHtml };
+export { getMeetingHtmlTemplate };

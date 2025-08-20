@@ -6,7 +6,7 @@ import {
 	MeetingTranscriptionErrorMessage,
 } from "./libs/enums/enums.js";
 import { MeetingTranscriptionError } from "./libs/exceptions/exceptions.js";
-import { getMeetingHtml } from "./libs/templates/get-meeting-html.js";
+import { getMeetingHtmlTemplate } from "./libs/templates/get-meeting-html-template.js";
 import {
 	type CreatePdfOptions,
 	type MeetingTranscriptionGetAllResponseDto,
@@ -66,7 +66,7 @@ class MeetingTranscriptionService
 	}
 
 	public async export(options: CreatePdfOptions): Promise<Buffer> {
-		const html: string = getMeetingHtml(options);
+		const html: string = getMeetingHtmlTemplate(options);
 
 		return await createPdf(html);
 	}

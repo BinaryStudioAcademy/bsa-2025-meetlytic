@@ -1,15 +1,10 @@
 import chrome from "html-pdf-chrome";
 
+import { PDF_PRINT_OPTIONS } from "../constants/constants.js";
+
 async function createPdf(html: string): Promise<Buffer> {
 	const result = await chrome.create(html, {
-		printOptions: {
-			marginBottom: 1,
-			marginLeft: 1,
-			marginRight: 1,
-			marginTop: 1,
-			paperHeight: 11.69,
-			paperWidth: 8.27,
-		},
+		printOptions: PDF_PRINT_OPTIONS,
 	});
 
 	return result.toBuffer();

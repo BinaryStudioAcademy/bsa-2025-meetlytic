@@ -1,13 +1,13 @@
-import { DomEvent } from "~/libs/enums/enums.js";
+import { DOMEvent } from "~/libs/enums/enums.js";
 import { useEffect, useState } from "~/libs/hooks/hooks.js";
 
 const usePrefersReducedMotion = (): boolean => {
-	const [isReduced, setIsReduced] = useState(false);
+	const [isReduced, setIsReduced] = useState<boolean>(false);
+
+	const PREFERS_REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
 	useEffect(() => {
-		const mediaQuery = globalThis.matchMedia(
-			"(prefers-reduced-motion: reduce)",
-		);
+		const mediaQuery = globalThis.matchMedia(PREFERS_REDUCED_MOTION_QUERY);
 
 		const update = (): void => {
 			setIsReduced(mediaQuery.matches);
@@ -15,10 +15,10 @@ const usePrefersReducedMotion = (): boolean => {
 
 		update();
 
-		mediaQuery.addEventListener(DomEvent.CHANGE, update);
+		mediaQuery.addEventListener(DOMEvent.CHANGE, update);
 
 		return (): void => {
-			mediaQuery.removeEventListener(DomEvent.CHANGE, update);
+			mediaQuery.removeEventListener(DOMEvent.CHANGE, update);
 		};
 	}, []);
 

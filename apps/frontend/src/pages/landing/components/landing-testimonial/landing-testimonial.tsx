@@ -88,7 +88,7 @@ const LandingTestimonial: React.FC<Properties> = ({
 											? styles["testimonials__dot--active"]
 											: styles["testimonials__dot"]
 									}
-									isLabelVisuallyHidden
+									hasVisuallyHiddenLabel
 									label={`Show testimonial ${item.authorName}`}
 									onClick={handleDotClickWrapper(itemIndex)}
 								/>

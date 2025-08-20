@@ -52,17 +52,17 @@ const initRings = ({
 		[LandingBgRingType.SMALL]: ringSmall,
 	};
 
-	const imgs = [...root.querySelectorAll<HTMLImageElement>("img[data-ring]")];
+	const images = [...root.querySelectorAll<HTMLImageElement>("img[data-ring]")];
 
-	for (const img of imgs) {
-		const type = img.dataset["ring"] as RingType;
+	for (const image of images) {
+		const type = image.dataset["ring"] as RingType;
 		const ringSize = LandingBgRingSize[type];
 
-		img.style.width = `${String(ringSize)}px`;
-		img.style.height = `${String(ringSize)}px`;
+		image.style.width = `${String(ringSize)}px`;
+		image.style.height = `${String(ringSize)}px`;
 
-		if (!img.src) {
-			img.src = mapSource[type];
+		if (!image.src) {
+			image.src = mapSource[type];
 		}
 
 		let positionX: number;
@@ -136,11 +136,11 @@ const initRings = ({
 			LandingBgPhysics.MAX_SPEED,
 		);
 
-		img.style.transform = `translate3d(${String(positionX)}px, ${String(positionY)}px, 0)`;
-		img.style.opacity = "1";
+		image.style.transform = `translate3d(${String(positionX)}px, ${String(positionY)}px, 0)`;
+		image.style.opacity = "1";
 
 		rings.push({
-			imageElement: img,
+			imageElement: image,
 			positionX,
 			positionY,
 			size: ringSize,

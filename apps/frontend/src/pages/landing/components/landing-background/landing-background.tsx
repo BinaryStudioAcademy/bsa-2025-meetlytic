@@ -41,42 +41,40 @@ const LandingBackground: React.FC = () => {
 			className={styles["landing-background"]}
 			ref={scope}
 		>
-			{Object.values(LandingBgRingType)
-				.filter((enumValue) => typeof enumValue === "string")
-				.flatMap((type) =>
-					Array.from({ length: LandingBgInit.RINGS_PER_SIZE }, (_, index) => {
-						let source: string;
+			{Object.values(LandingBgRingType).flatMap((type) =>
+				Array.from({ length: LandingBgInit.RINGS_PER_SIZE }, (_, index) => {
+					let source: string;
 
-						switch (type) {
-							case LandingBgRingType.LARGE: {
-								source = ringLarge;
-								break;
-							}
-
-							case LandingBgRingType.MIDDLE: {
-								source = ringMiddle;
-								break;
-							}
-
-							default: {
-								source = ringSmall;
-							}
+					switch (type) {
+						case LandingBgRingType.LARGE: {
+							source = ringLarge;
+							break;
 						}
 
-						return (
-							<img
-								alt={`Background ring ${type}`}
-								className={styles["landing__ring"]}
-								data-ring={type}
-								decoding="async"
-								fetchPriority={index === LandingBgNumeric.ZERO ? "high" : "low"}
-								key={`${type}-${String(index)}`}
-								loading={index === LandingBgNumeric.ZERO ? "eager" : "lazy"}
-								src={source}
-							/>
-						);
-					}),
-				)}
+						case LandingBgRingType.MIDDLE: {
+							source = ringMiddle;
+							break;
+						}
+
+						default: {
+							source = ringSmall;
+						}
+					}
+
+					return (
+						<img
+							alt={`Background ring ${type}`}
+							className={styles["landing__ring"]}
+							data-ring={type}
+							decoding="async"
+							fetchPriority={index === LandingBgNumeric.ZERO ? "high" : "low"}
+							key={`${type}-${String(index)}`}
+							loading={index === LandingBgNumeric.ZERO ? "eager" : "lazy"}
+							src={source}
+						/>
+					);
+				}),
+			)}
 		</div>
 	);
 };

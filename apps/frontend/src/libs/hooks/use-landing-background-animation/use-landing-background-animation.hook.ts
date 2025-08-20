@@ -1,4 +1,4 @@
-import { DomEvent } from "~/libs/enums/enums.js";
+import { DOMEvent } from "~/libs/enums/enums.js";
 import {
 	applyTransforms,
 	handleBounds,
@@ -15,20 +15,22 @@ const useLandingAnimation = (
 	rings: RingConfig[],
 	rootReference: { current: HTMLDivElement | null },
 ): void => {
-	const rafReference = useRef<null | number>(null);
+	const requestAnimationFrameIdReference = useRef<null | number>(null);
 	const lastReference = useRef<number>(LandingBgNumeric.ZERO);
 	const stepReference = useRef<((timestamp: number) => void) | null>(null);
 	const dtReference = useRef<number>(LandingBgNumeric.ZERO);
 
 	const startAnimation = (): void => {
-		if (rafReference.current != null) {
+		if (requestAnimationFrameIdReference.current) {
 			return;
 		}
 
 		lastReference.current = performance.now();
-		rafReference.current = requestAnimationFrame((timestamp) => {
-			stepReference.current?.(timestamp);
-		});
+		requestAnimationFrameIdReference.current = requestAnimationFrame(
+			(timestamp) => {
+				stepReference.current?.(timestamp);
+			},
+		);
 	};
 
 	const animationStep = useCallback(
@@ -59,43 +61,51 @@ const useLandingAnimation = (
 			applyTransforms(rings);
 
 			if (stepReference.current) {
-				rafReference.current = requestAnimationFrame((nextTimestamp) => {
-					stepReference.current?.(nextTimestamp);
-				});
+				requestAnimationFrameIdReference.current = requestAnimationFrame(
+					(nextTimestamp) => {
+						stepReference.current?.(nextTimestamp);
+					},
+				);
 			}
 		},
 		[rings, rootReference],
 	);
 
+	const handleStopAnimation = (): void => {
+		if (requestAnimationFrameIdReference.current) {
+			cancelAnimationFrame(requestAnimationFrameIdReference.current);
+			requestAnimationFrameIdReference.current = null;
+		}
+	};
+
 	useEffect(() => {
 		stepReference.current = animationStep;
-
-		const stopAnimation = (): void => {
-			if (rafReference.current != null) {
-				cancelAnimationFrame(rafReference.current);
-				rafReference.current = null;
-			}
-		};
 
 		if (isInView) {
 			startAnimation();
 		} else {
-			stopAnimation();
+			handleStopAnimation();
 		}
 
-		const onVisibility = (): void => {
+		const handleVisibilityChange = (): void => {
 			if (document.hidden) {
-				stopAnimation();
+				handleStopAnimation();
 			} else if (isInView) {
 				startAnimation();
 			}
 		};
 
-		document.addEventListener(DomEvent.VISIBILITY_CHANGE, onVisibility);
+		document.addEventListener(
+			DOMEvent.VISIBILITY_CHANGE,
+			handleVisibilityChange,
+		);
 
 		return (): void => {
-			document.removeEventListener(DomEvent.VISIBILITY_CHANGE, onVisibility);
-			stopAnimation();
+			document.removeEventListener(
+				DOMEvent.VISIBILITY_CHANGE,
+				handleVisibilityChange,
+			);
+			handleStopAnimation();
 		};
 	}, [isInView, animationStep]);
 };

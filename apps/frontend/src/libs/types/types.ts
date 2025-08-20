@@ -1,8 +1,4 @@
 export { type AsyncThunkConfig } from "./async-thunk-config.type.js";
-export {
-	type UseCarouselProperties,
-	type UseCarouselResult,
-} from "./carousel.types.js";
 export { type IconName } from "./icon-name.type.js";
 export { type InViewAnimationOptions } from "./in-view-animation-options.type.js";
 export { type InputPassword } from "./input-password.type.js";

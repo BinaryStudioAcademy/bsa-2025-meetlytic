@@ -3,6 +3,9 @@ export {
 	CONTACT_LINKS,
 	FEATURES,
 	HEADER_LINKS,
+	TESTIMONIALS,
+} from "./libs/constants/constants.js";
+export {
 	LandingBgCollision,
 	LandingBgInit,
 	LandingBgNumeric,
@@ -10,8 +13,7 @@ export {
 	LandingBgRingMinSpeed,
 	LandingBgRingSize,
 	LandingBgRingSpeedScale,
-	TESTIMONIALS,
-} from "./libs/constants/constants.js";
+} from "./libs/enums/enums.js";
 export {
 	type Feature,
 	type LinkGroup,

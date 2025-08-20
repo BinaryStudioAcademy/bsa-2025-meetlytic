@@ -6,10 +6,10 @@ import styles from "./styles.module.css";
 
 type Properties = {
 	className?: string | undefined;
+	hasVisuallyHiddenLabel?: boolean;
 	iconLeft?: React.ReactNode;
 	iconRight?: React.ReactNode;
 	isDisabled?: boolean;
-	isLabelVisuallyHidden?: boolean;
 	label: React.ReactNode;
 	onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
 	size?: ValueOf<typeof ButtonSize>;
@@ -19,10 +19,10 @@ type Properties = {
 
 const Button: React.FC<Properties> = ({
 	className,
+	hasVisuallyHiddenLabel = false,
 	iconLeft,
 	iconRight,
 	isDisabled = false,
-	isLabelVisuallyHidden = false,
 	label,
 	onClick,
 	size = ButtonSize.DEFAULT,
@@ -44,7 +44,7 @@ const Button: React.FC<Properties> = ({
 		{iconLeft}
 		<span
 			className={getValidClassNames(
-				isLabelVisuallyHidden && styles["visually-hidden"],
+				hasVisuallyHiddenLabel && "visually-hidden",
 			)}
 		>
 			{label}

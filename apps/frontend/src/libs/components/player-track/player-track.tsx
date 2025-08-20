@@ -17,15 +17,9 @@ import styles from "./styles.module.css";
 
 type Properties = {
 	audioUrl: string;
-	hasFile?: boolean;
-	loading?: boolean;
 };
 
-const PlayerTrack: React.FC<Properties> = ({
-	audioUrl,
-	hasFile = false,
-	loading = false,
-}: Properties) => {
+const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 	const audioReference = useRef<HTMLAudioElement>(null);
 	const progressReference = useRef<HTMLButtonElement>(null);
 
@@ -121,20 +115,6 @@ const PlayerTrack: React.FC<Properties> = ({
 	);
 
 	const progressWidth = `${String((currentTime / duration) * PERCENT_MULTIPLIER)}%`;
-
-	if (!audioUrl) {
-		let hintMessage: string;
-
-		if (loading) {
-			hintMessage = "Loading audio…";
-		} else if (hasFile) {
-			hintMessage = "Audio not available.";
-		} else {
-			hintMessage = "Audio not attached to this meeting.";
-		}
-
-		return <div className={styles["player__hint"]}>{hintMessage}</div>;
-	}
 
 	return (
 		<div className={styles["root"]}>

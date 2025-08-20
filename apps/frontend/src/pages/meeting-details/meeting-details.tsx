@@ -164,7 +164,7 @@ const MeetingDetails: React.FC = () => {
 					</div>
 				</div>
 				<div className={styles["meeting-details__player"]}>
-					<PlayerTrack audioUrl={"https"} />
+					<PlayerTrack audioUrl={meeting.audioFile?.url ?? ""} />
 				</div>
 			</div>
 		</>

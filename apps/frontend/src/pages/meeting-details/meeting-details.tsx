@@ -101,6 +101,9 @@ const MeetingDetails: React.FC = () => {
 
 				const textarea = document.createElement("textarea");
 				textarea.value = fullUrl;
+				textarea.style.position = "absolute";
+				textarea.style.left = "-9999px";
+				textarea.style.opacity = "0";
 				document.body.append(textarea);
 				textarea.select();
 				// eslint-disable-next-line @typescript-eslint/no-deprecated, sonarjs/deprecation

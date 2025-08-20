@@ -1,6 +1,7 @@
 export { type CreateMeetingOptions } from "./create-meeting-options.type.js";
 export { type CreatePdfOptions } from "./create-pdf-options.type.js";
 export { type DeleteMeetingOptions } from "./delete-meeting-options.type.js";
+export { type ExportMeetingOptions } from "./export-meeting-options.type.js";
 export { type FindAllMeetingOptions } from "./find-all-meeting-options.type.js";
 export { type FindBySignedUrlOptions } from "./find-by-signed-url-options.type.js";
 export { type FindMeetingOptions } from "./find-meeting-options.type.js";

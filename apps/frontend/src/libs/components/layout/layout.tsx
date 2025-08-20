@@ -40,7 +40,9 @@ const Layout: React.FC = () => {
 			</div>
 
 			<main className={styles["layout__main"]}>
-				<RouterOutlet />
+				<div className={styles["main-container"]}>
+					<RouterOutlet />
+				</div>
 			</main>
 
 			<MobileMenu

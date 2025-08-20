@@ -17,8 +17,8 @@
 }
 
 .meeting__image {
+	position: relative;
 	width: 100%;
-	height: auto;
 	aspect-ratio: 16 / 9;
 	object-fit: cover;
 }
@@ -41,6 +41,67 @@
 	font-size: clamp(11px, 1.5vw, 12px);
 	font-weight: 400;
 	color: var(--color-text-2);
+}
+
+.menu__container {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	background-color: var(--color-background-4);
+	border-radius: 50%;
+}
+
+.menu__button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	cursor: pointer;
+	background-color: var(--color-white);
+	border-radius: 50%;
+	transition: background-color 0.3s ease-in-out;
+}
+
+.menu__button:hover {
+	background-color: var(--color-background-2);
+}
+
+.menu__dots-wrapper {
+	display: flex;
+	gap: 3px;
+}
+
+.menu__dot {
+	width: 3px;
+	height: 3px;
+	background-color: var(--color-text-2);
+	border-radius: 50%;
+}
+
+.menu__dropdown {
+	position: absolute;
+	right: 0;
+	min-width: 120px;
+	margin-top: 5px;
+	background-color: var(--color-background-2);
+	border-radius: var(--border-radius-sm);
+	box-shadow: 0 2px 10px var(--color-text-1);
+}
+
+.menu__dropdown-item {
+	width: 100%;
+	padding: 8px 12px;
+	color: var(--color-text-1);
+	text-align: left;
+	cursor: pointer;
+	background-color: var(--color-background-4);
+	border-radius: var(--border-radius-sm);
+	transition: background-color 0.3s ease-in-out;
+}
+
+.menu__dropdown-item:hover {
+	background-color: var(--color-background-2);
 }
 
 @media (width <= 768px) {

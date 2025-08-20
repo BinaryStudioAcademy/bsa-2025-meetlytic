@@ -2,6 +2,7 @@ import puppeteer, { type Browser, type Page } from "puppeteer";
 
 import { USER_AGENT } from "~/libs/constants/constants.js";
 import {
+	KeyboardKey,
 	SocketEvent,
 	SocketMessage,
 	Timeout,
@@ -16,8 +17,6 @@ import {
 	type Logger,
 	type OpenAI,
 } from "~/libs/types/types.js";
-
-import { KeyboardKey } from "../socket-client/enums/enums.js";
 
 type Constructor = {
 	audioRecorder: AudioRecorder;

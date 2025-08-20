@@ -119,7 +119,7 @@ class MeetingsController extends BaseController {
 			},
 		});
 		this.addRoute({
-			handler: (options) => this.export(options as FindMeetingOptions),
+			handler: (options) => this.export(options as ExportMeetingOptions),
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID_PDF,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],

@@ -1,6 +1,6 @@
 import chokidar from "chokidar";
-import { type ChildProcess, spawn } from "node:child_process";
-import { mkdirSync } from "node:fs";
+import { spawn } from "node:child_process";
+import { createWriteStream, mkdirSync } from "node:fs";
 import path from "node:path";
 
 import { SocketEvent } from "~/libs/enums/enums.js";
@@ -11,7 +11,12 @@ import {
 	type OpenAI,
 } from "~/libs/types/types.js";
 
-import { AudioRecorderEvent } from "./libs/enums/enums.js";
+import {
+	AudioFileType,
+	AudioRecorderEvent,
+	FileExtension,
+	WatcherEvent,
+} from "./libs/enums/enums.js";
 import {
 	type AudioRecorder,
 	type AudioRecorderOptions,
@@ -20,8 +25,9 @@ import {
 class BaseAudioRecorder implements AudioRecorder {
 	private chunkDuration: number;
 	private config: BaseConfig;
-	private currentFfmpegProcess: ChildProcess | null = null;
+	private currentFfmpegProcess: null | ReturnType<typeof spawn> = null;
 	private ffmpegPath: string;
+	private fullRecordingStream?: ReturnType<typeof createWriteStream>;
 	private isRecording = false;
 	private logger: Logger;
 	private openAI: OpenAI;
@@ -80,11 +86,15 @@ class BaseAudioRecorder implements AudioRecorder {
 			persistent: true,
 		});
 
-		watcher.on("add", (filePath) => {
+		watcher.on(WatcherEvent.ADD, (filePath) => {
+			if (filePath.includes(AudioFileType.FULL_RECORDING)) {
+				return;
+			}
+
 			void this.transcribeFile(filePath);
 		});
 
-		watcher.on("error", (error) => {
+		watcher.on(WatcherEvent.ERROR, (error) => {
 			this.logger.error(`[WATCHER_ERROR] ${String(error)}`);
 		});
 	}
@@ -104,10 +114,17 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		this.isRecording = true;
 
-		const fileExtension = this.useMp3 ? "mp3" : "wav";
-		const filePath = path.join(
+		const fileExtension = this.useMp3 ? FileExtension.MP3 : FileExtension.WAV;
+
+		const fullRecordingPath = path.join(
 			this.outputDir,
-			`chunk-%Y%m%d-%H%M%S.${fileExtension}`,
+			`${AudioFileType.FULL_RECORDING}.${fileExtension}`,
+		);
+		this.fullRecordingStream = createWriteStream(fullRecordingPath);
+
+		const chunkOutputPattern = path.join(
+			this.outputDir,
+			`${AudioFileType.CHUNK}.${fileExtension}`,
 		);
 
 		const ffmpegArguments = [
@@ -138,12 +155,14 @@ class BaseAudioRecorder implements AudioRecorder {
 			ffmpegArguments.push("-acodec", "pcm_s16le", "-ar", "44100", "-ac", "2");
 		}
 
-		ffmpegArguments.push(filePath);
+		ffmpegArguments.push(chunkOutputPattern);
 
 		this.watchOutputFolder();
 
 		const ffmpeg = spawn(this.ffmpegPath, ffmpegArguments);
 		this.currentFfmpegProcess = ffmpeg;
+
+		ffmpeg.stdout.pipe(this.fullRecordingStream);
 
 		ffmpeg.stderr.on(AudioRecorderEvent.DATA, (data) => {
 			const lines = String(data)
@@ -167,6 +186,8 @@ class BaseAudioRecorder implements AudioRecorder {
 				`[FFMPEG] exited | code=${String(code)} | signal=${String(signal)}`,
 			);
 			this.currentFfmpegProcess = null;
+
+			this.fullRecordingStream?.close();
 		});
 	}
 

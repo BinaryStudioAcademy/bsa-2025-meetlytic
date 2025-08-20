@@ -226,6 +226,9 @@ class BaseZoomBot {
 		this.socketClient.on(
 			SocketEvent.GET_PUBLIC_URL,
 			async (publicUrl: string) => {
+				this.logger.info(
+					`Sending public url for the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
+				);
 				await this.sendPublicUrlToChat(publicUrl);
 			},
 		);
@@ -276,12 +279,18 @@ class BaseZoomBot {
 			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
 		}
 
-		await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
-		await this.clickHelper(ZoomUILabel.CHAT_INPUT);
-		await this.page.keyboard.type(
-			`Hello! I'm the Meetlytic bot.\n Here is the URL for the transcript of this meeting.\n${publicUrl}`,
-		);
-		await this.page.keyboard.press(KeyboardKey.ENTER);
+		try {
+			await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
+			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
+			await this.page.keyboard.type(
+				`Hello! I'm the Meetlytic bot.\n Here is the URL for the transcript of this meeting.\n${publicUrl}`,
+			);
+			await this.page.keyboard.press(KeyboardKey.ENTER);
+		} catch (error) {
+			this.logger.error(
+				`Failed to send meeting public url to the chat ${error instanceof Error ? error.message : String(error)}`,
+			);
+		}
 	}
 
 	public async run(): Promise<void> {

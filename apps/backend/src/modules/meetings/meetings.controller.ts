@@ -118,7 +118,15 @@ class MeetingsController extends BaseController {
 				params: meetingIdValidationSchema,
 			},
 		});
-
+		this.addRoute({
+			handler: (options) => this.export(options as FindMeetingOptions),
+			method: HTTPMethod.GET,
+			path: MeetingsApiPath.$ID_PDF,
+			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+			validation: {
+				params: meetingIdValidationSchema,
+			},
+		});
 		this.addRoute({
 			handler: (options) => this.find(options as FindMeetingOptions),
 			method: HTTPMethod.GET,
@@ -160,12 +168,6 @@ class MeetingsController extends BaseController {
 				),
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID_MEETING_TRANSCRIPTIONS,
-			preHandlers: [checkIfMeetingOwner(this.meetingService)],
-		});
-		this.addRoute({
-			handler: (options) => this.export(options as FindMeetingOptions),
-			method: HTTPMethod.GET,
-			path: MeetingsApiPath.$ID_PDF,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 	}
@@ -232,6 +234,32 @@ class MeetingsController extends BaseController {
 		return { payload: null, status: HTTPCode.NO_CONTENT };
 	}
 
+	/**
+	 * @swagger
+	 * /meetings/{id}/export/pdf:
+	 *   get:
+	 *     summary: Export meeting transcription, summary and action points as PDF
+	 *     tags:
+	 *       - Meetings
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: number
+	 *     responses:
+	 *       200:
+	 *         description: PDF file with meeting transcription, summary and action points
+	 *         content:
+	 *           application/pdf:
+	 *             schema:
+	 *               type: string
+	 *               format: binary
+	 *       404:
+	 *         description: Meeting not found
+	 *       422:
+	 *         description: Invalid meeting ID
+	 */
 	private async export(
 		options: ExportMeetingOptions,
 	): Promise<APIHandlerResponse> {

@@ -49,14 +49,22 @@
 		"EC2Instance": {
 			"Type": "AWS::EC2::Instance",
 			"Properties": {
-				"ImageId": { "Ref": "ImageId" },
-				"InstanceType": { "Ref": "InstanceType" },
+				"ImageId": {
+					"Ref": "ImageId"
+				},
+				"InstanceType": {
+					"Ref": "InstanceType"
+				},
 				"KeyName": "meetlytic-ssh",
-				"SecurityGroupIds": [{ "Ref": "MeetlyticSecurityGroup" }],
+				"SecurityGroupIds": [
+					{
+						"Ref": "MeetlyticSecurityGroup"
+					}
+				],
 				"UserData": {
 					"Fn::Base64": {
 						"Fn::Sub": [
-							"#!/bin/bash\n sudo apt update -y\n sudo apt install -y git\n cd /home/ubuntu\ngit clone --branch main --single-branch https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic.git\nsudo chown -R ubuntu:ubuntu /home/ubuntu/bsa-2025-meetlytic\ncd bsa-2025-meetlytic\nbash ./apps/bot/setup-ec2.sh '${Settings}'",
+							"#!/bin/bash\n sudo apt update -y\n sudo apt install -y git\n cd /home/ubuntu\ngit clone --branch 144-feat-bot-sends-message-to-the-chat --single-branch https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic.git\nsudo chown -R ubuntu:ubuntu /home/ubuntu/bsa-2025-meetlytic\ncd bsa-2025-meetlytic\nbash ./apps/bot/setup-ec2.sh '${Settings}'",
 							{
 								"Settings": {
 									"Ref": "Settings"
@@ -76,7 +84,9 @@
 	},
 	"Outputs": {
 		"InstanceId": {
-			"Value": { "Ref": "EC2Instance" },
+			"Value": {
+				"Ref": "EC2Instance"
+			},
 			"Export": {
 				"Name": {
 					"Fn::Sub": "InstanceId-${AWS::StackName}"

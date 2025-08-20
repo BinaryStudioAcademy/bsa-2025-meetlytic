@@ -4,6 +4,7 @@ const SocketEvent = {
 	DISCONNECT: "disconnect",
 	ERROR: "error",
 	GENERATE_SUMMARY_ACTION_ITEMS: "generateSummaryActionItems",
+	GET_PUBLIC_URL: "getPublicUrl",
 	JOIN_MEETING: "joinRoom",
 	JOIN_ROOM: "joinRoom",
 	LEAVE_ROOM: "leaveRoom",

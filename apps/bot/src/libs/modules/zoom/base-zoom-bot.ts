@@ -222,8 +222,14 @@ class BaseZoomBot {
 				this.socketClient.disconnect();
 			},
 		);
-	}
 
+		this.socketClient.on(
+			SocketEvent.GET_PUBLIC_URL,
+			async (publicUrl: string) => {
+				await this.sendPublicUrlToChat(publicUrl);
+			},
+		);
+	}
 	private async joinMeeting(): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
@@ -253,6 +259,7 @@ class BaseZoomBot {
 		await this.enterMeetingPassword();
 		await this.clickHelper(ZoomUILabel.JOIN);
 	}
+
 	private async leaveMeeting(): Promise<void> {
 		try {
 			await this.clickHelper(ZoomUILabel.LEAVE);
@@ -263,6 +270,18 @@ class BaseZoomBot {
 				`${ZoomBotMessage.FAILED_TO_LEAVE_MEETING} ${error instanceof Error ? error.message : String(error)}`,
 			);
 		}
+	}
+	private async sendPublicUrlToChat(publicUrl: string): Promise<void> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
+		}
+
+		await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
+		await this.clickHelper(ZoomUILabel.CHAT_INPUT);
+		await this.page.keyboard.type(
+			`Hello! I'm the Meetlytic bot.\n Here is the URL for the transcript of this meeting.\n${publicUrl}`,
+		);
+		await this.page.keyboard.press(KeyboardKey.ENTER);
 	}
 
 	public async run(): Promise<void> {
@@ -290,6 +309,10 @@ class BaseZoomBot {
 			this.audioRecorder.start();
 			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 			await delay(Timeout.ONE_SECOND);
+			this.socketClient.emit(
+				SocketEvent.GET_PUBLIC_URL,
+				this.config.ENV.ZOOM.MEETING_ID,
+			);
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessage.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,

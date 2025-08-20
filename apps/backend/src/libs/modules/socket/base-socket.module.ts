@@ -99,6 +99,16 @@ class BaseSocketService implements SocketService {
 				}
 			},
 		);
+
+		socket.on(SocketEvent.GET_PUBLIC_URL, async (meetingId: number) => {
+			this.logger.info(
+				`BOT ${socket.id} requesting public url for the meeting ${String(meetingId)}`,
+			);
+			socket.emit(
+				SocketEvent.GET_PUBLIC_URL,
+				await meetingService.getPublicUrl(meetingId),
+			);
+		});
 	}
 
 	private handleUsersConnection(socket: Socket): void {

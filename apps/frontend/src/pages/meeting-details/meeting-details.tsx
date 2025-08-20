@@ -97,7 +97,16 @@ const MeetingDetails: React.FC = () => {
 					meeting.id,
 				);
 				const host = config.ENV.APP.HOST;
-				void navigator.clipboard.writeText(`${host}${publicUrl}`);
+				const fullUrl = `${host}${publicUrl}`;
+
+				const textarea = document.createElement("textarea");
+				textarea.value = fullUrl;
+				document.body.append(textarea);
+				textarea.select();
+				// eslint-disable-next-line @typescript-eslint/no-deprecated, sonarjs/deprecation
+				document.execCommand("copy");
+				textarea.remove();
+
 				notification.success(NotificationMessage.PUBLIC_LINK_COPIED_SUCCESS);
 			} catch (error: unknown) {
 				notification.error(NotificationMessage.SHARE_LINK_GENERATION_FAILED);

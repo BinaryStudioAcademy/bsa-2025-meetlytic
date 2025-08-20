@@ -36,6 +36,7 @@
 }
 
 .action-button__share {
+	min-width: 32px;
 	color: var(--color-brand);
 	transition: color 0.3s ease-in-out;
 }
@@ -80,6 +81,7 @@
 
 .action-items-text {
 	display: flex;
+	flex-direction: column;
 	gap: 10px;
 	align-items: flex-start;
 	padding: 10px 20px;
@@ -88,14 +90,6 @@
 	color: var(--color-text-1);
 	background-color: var(--color-background-4);
 	border-radius: var(--border-radius-lg);
-}
-
-.action-item-dot {
-	width: 8px;
-	height: 8px;
-	margin-top: 8px;
-	background-color: var(--color-accent-2);
-	border-radius: 50%;
 }
 
 .meeting-details__error,

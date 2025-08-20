@@ -29,6 +29,7 @@ class BaseAudioRecorder implements AudioRecorder {
 	private ffmpegPath: string;
 	private fullRecordingStream?: ReturnType<typeof createWriteStream>;
 	private isRecording = false;
+	private lastFile: null | string = null;
 	private logger: Logger;
 	private openAI: OpenAI;
 	private outputDir: string;
@@ -52,6 +53,13 @@ class BaseAudioRecorder implements AudioRecorder {
 		this.logger = logger;
 		this.openAI = openAI;
 		this.socketClient = socketClient;
+	}
+
+	private async flushLastChunk(): Promise<void> {
+		if (this.lastFile) {
+			await this.transcribeFile(this.lastFile);
+			this.lastFile = null;
+		}
 	}
 
 	private logVolume(line: string): void {
@@ -91,7 +99,11 @@ class BaseAudioRecorder implements AudioRecorder {
 				return;
 			}
 
-			void this.transcribeFile(filePath);
+			if (this.lastFile) {
+				void this.transcribeFile(this.lastFile);
+			}
+
+			this.lastFile = filePath;
 		});
 
 		watcher.on(WatcherEvent.ERROR, (error) => {
@@ -134,9 +146,9 @@ class BaseAudioRecorder implements AudioRecorder {
 			"-use_wallclock_as_timestamps",
 			"1",
 			"-f",
-			"pulse",
+			"avfoundation",
 			"-i",
-			"auto_null.monitor",
+			":1",
 			"-af",
 			"astats=metadata=1:reset=1",
 			"-f",
@@ -152,7 +164,7 @@ class BaseAudioRecorder implements AudioRecorder {
 		if (this.useMp3) {
 			ffmpegArguments.push("-acodec", "libmp3lame", "-b:a", "128k");
 		} else {
-			ffmpegArguments.push("-acodec", "pcm_s16le", "-ar", "44100", "-ac", "2");
+			ffmpegArguments.push("-acodec", "pcm_s16le", "-ar", "16000", "-ac", "1");
 		}
 
 		ffmpegArguments.push(chunkOutputPattern);
@@ -188,6 +200,8 @@ class BaseAudioRecorder implements AudioRecorder {
 			this.currentFfmpegProcess = null;
 
 			this.fullRecordingStream?.close();
+
+			void this.flushLastChunk();
 		});
 	}
 

@@ -185,7 +185,7 @@ class BaseZoomBot {
 			this.logger.info("Emitting GET_PUBLIC_URL event");
 			this.socketClient.emit(
 				SocketEvent.GET_PUBLIC_URL,
-				this.config.ENV.ZOOM.MEETING_ID,
+				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
 		});
 

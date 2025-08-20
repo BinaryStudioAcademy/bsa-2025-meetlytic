@@ -42,6 +42,17 @@ class BaseSocketService implements SocketService {
 			await socket.join(meetingId);
 		});
 
+		socket.on(SocketEvent.GET_PUBLIC_URL, async (meetingId: string) => {
+			this.logger.info(
+				`BOT ${socket.id} requesting public url for the meeting ${String(meetingId)}`,
+			);
+
+			const { publicUrl } = await meetingService.getPublicUrl(
+				Number(meetingId),
+			);
+			socket.emit(SocketEvent.GET_PUBLIC_URL, publicUrl);
+		});
+
 		socket.on(SocketEvent.RECORDING_STOPPED, async (meetingId: string) => {
 			this.logger.info(`Getting full transcript of meeting ${meetingId}`);
 			const { items } = await meetingService.getTranscriptionsByMeetingId(
@@ -99,16 +110,6 @@ class BaseSocketService implements SocketService {
 				}
 			},
 		);
-
-		socket.on(SocketEvent.GET_PUBLIC_URL, async (meetingId: number) => {
-			this.logger.info(
-				`BOT ${socket.id} requesting public url for the meeting ${String(meetingId)}`,
-			);
-			socket.emit(
-				SocketEvent.GET_PUBLIC_URL,
-				await meetingService.getPublicUrl(meetingId),
-			);
-		});
 	}
 
 	private handleUsersConnection(socket: Socket): void {

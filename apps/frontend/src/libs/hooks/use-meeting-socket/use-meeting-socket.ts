@@ -41,6 +41,10 @@ const useMeetingSocket = ({
 		return (): void => {
 			socket.off(SocketEvent.TRANSCRIBE, onTranscriptUpdate);
 			socket.emit(SocketEvent.LEAVE_ROOM, String(meetingId));
+			socket.off(
+				SocketEvent.UPDATE_MEETING_DETAILS,
+				onSummaryActionItemsUpdate,
+			);
 		};
 	}, [
 		meetingId,

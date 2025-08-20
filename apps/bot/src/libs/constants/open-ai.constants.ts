@@ -8,7 +8,7 @@ Guidelines:
 - Incorporate relevant data discussed during the meeting to support analyses, decisions and next steps.
 `;
 
-const ACTION_POINTS_PROMPT = `
+const ACTION_ITEMS_PROMPT = `
 We will share with you a full transcript of a meeting. Generate an action points using this transcript according to the following requirements.
 Generate a list of actionable tasks. Each task should be clearly defined, assigned to a specific person, and have a concrete deadline. The action points should directly reflect the decisions and next steps outlined in the summary, ensuring a clear path forward.
 Guidelines:
@@ -18,4 +18,4 @@ Guidelines:
 - Ensure each action point directly corresponds to a decision or insight from the meeting summary.
 `;
 
-export { ACTION_POINTS_PROMPT, SUMMARY_PROMPT };
+export { ACTION_ITEMS_PROMPT, SUMMARY_PROMPT };

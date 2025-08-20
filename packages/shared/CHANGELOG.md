@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.7.0...shared-v1.7.1) (2025-08-20)
+
+
+### Bug Fixes
+
+* change error code for delete and get meeting ml-222 ([#234](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/234)) ([23e57ad](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/23e57adde62728ad789213b13297c1acd54e82ba))
+
 ## [1.7.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.6.0...shared-v1.7.0) (2025-08-19)
 
 

@@ -206,7 +206,7 @@ const MeetingDetails: React.FC = () => {
 					</div>
 				</div>
 				<div className={styles["meeting-details__player"]}>
-					<PlayerTrack audioUrl={meeting.audioFile?.url ?? ""} />
+					<PlayerTrack audioUrl={meeting.audioFile?.url} />
 				</div>
 			</div>
 		</>

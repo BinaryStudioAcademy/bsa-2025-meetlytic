@@ -110,13 +110,15 @@ class BaseConfig implements Config {
 			"--disable-setuid-sandbox",
 			"--autoplay-policy=no-user-gesture-required",
 			"--use-fake-ui-for-media-stream",
+			"--headless=true",
 		];
 
 		return {
 			args: sharedArguments,
 			defaultViewport: { height: 700, width: 1200 },
 			enableExtensions: true,
-			headless: true,
+			executablePath: "/usr/bin/google-chrome",
+			headless: false,
 		};
 	}
 }

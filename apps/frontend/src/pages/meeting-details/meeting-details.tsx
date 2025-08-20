@@ -142,7 +142,7 @@ const MeetingDetails: React.FC = () => {
 								<Icon className={styles["action-button__share"]} name="share" />
 							</button>
 						)}
-						{meeting.status === MeetingStatus.STARTED && (
+						{meeting.status === MeetingStatus.STARTED && user && (
 							<Button
 								isDisabled={isStopRecordingInProgress}
 								label={

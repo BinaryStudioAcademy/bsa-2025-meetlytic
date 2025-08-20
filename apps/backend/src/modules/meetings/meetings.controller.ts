@@ -236,7 +236,7 @@ class MeetingsController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /meetings/{id}/export/pdf:
+	 * /meetings/{id}/pdf:
 	 *   get:
 	 *     summary: Export meeting transcription, summary and action points as PDF
 	 *     tags:

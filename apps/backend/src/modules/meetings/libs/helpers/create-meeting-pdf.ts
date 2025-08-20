@@ -8,12 +8,12 @@ async function createMeetingPdf(options: CreatePdfOptions): Promise<Buffer> {
 
 	const result = await chrome.create(html, {
 		printOptions: {
-			marginBottom: 0.5,
-			marginLeft: 0.5,
-			marginRight: 0.5,
-			marginTop: 0.5,
-			paperHeight: 11.69, // A4 height in inches
-			paperWidth: 8.27, // A4 width in inches
+			marginBottom: 1,
+			marginLeft: 1,
+			marginRight: 1,
+			marginTop: 1,
+			paperHeight: 11.69,
+			paperWidth: 8.27,
 		},
 	});
 

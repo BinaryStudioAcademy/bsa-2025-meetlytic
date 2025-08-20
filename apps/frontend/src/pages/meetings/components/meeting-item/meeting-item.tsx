@@ -1,7 +1,7 @@
 import PlaceholderAvatar from "~/assets/img/meeting-placeholder.svg";
 import { Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import { configureString, getValidClassNames } from "~/libs/helpers/helpers.js";
+import { configureString } from "~/libs/helpers/helpers.js";
 import { useCallback, useState } from "~/libs/hooks/hooks.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
@@ -74,14 +74,15 @@ const MeetingItem: React.FC<Properties> = ({
 										<span className={styles["menu__dot"]} />
 										<span className={styles["menu__dot"]} />
 									</div>
+									<span className="visually-hidden">Card menu</span>
 								</button>
 								{isMenuOpen && (
-									<div className={getValidClassNames(styles["menu__dropdown"])}>
+									<div className={styles["menu__dropdown"]}>
 										<button
 											className={styles["menu__dropdown-item"]}
 											onClick={handleDeleteClick}
 										>
-											Delete
+											<span>Delete</span>
 										</button>
 									</div>
 								)}

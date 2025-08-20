@@ -11,6 +11,7 @@ import {
 	AppRoute,
 	DataStatus,
 	MeetingErrorMessage,
+	MeetingStatus,
 	NotificationMessage,
 } from "~/libs/enums/enums.js";
 import { formatDate } from "~/libs/helpers/helpers.js";
@@ -19,8 +20,10 @@ import {
 	useAppSelector,
 	useCallback,
 	useEffect,
+	useMeetingSocket,
 	useParams,
 	useSearchParams,
+	useState,
 } from "~/libs/hooks/hooks.js";
 import { config } from "~/libs/modules/config/config.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
@@ -30,10 +33,17 @@ import {
 	meetingDetailsApi,
 	sanitizeDefaultSchema,
 } from "~/modules/meeting-details/meeting-details.js";
+import { actions as meetingActions } from "~/modules/meeting/meeting.js";
+import {
+	type MeetingTranscriptionResponseDto,
+	actions as transcriptionActions,
+} from "~/modules/transcription/transcription.js";
 
 import styles from "./styles.module.css";
 
 const MeetingDetails: React.FC = () => {
+	const [isStopRecordingInProgress, setIsStopRecordingInProgress] =
+		useState<boolean>(false);
 	const dispatch = useAppDispatch();
 	const { id } = useParams<{ id: string }>();
 	const [searchParameters] = useSearchParams();
@@ -43,7 +53,19 @@ const MeetingDetails: React.FC = () => {
 	);
 	const { user } = useAppSelector((state) => state.auth);
 
-	useEffect(() => {
+	const handleStopRecording = useCallback(() => {
+		void dispatch(meetingActions.stopRecording({ id: id as string }));
+		setIsStopRecordingInProgress(true);
+	}, [dispatch, id]);
+
+	const handleTranscriptUpdate = useCallback(
+		(data: MeetingTranscriptionResponseDto) => {
+			dispatch(transcriptionActions.addTranscription(data));
+		},
+		[dispatch],
+	);
+
+	const handleSummaryActionItemsUpdate = useCallback(() => {
 		const sharedToken = searchParameters.get("token");
 		void dispatch(
 			meetingDetailsActions.getMeetingDetailsById({
@@ -51,7 +73,16 @@ const MeetingDetails: React.FC = () => {
 				sharedToken,
 			}),
 		);
-	}, [id, dispatch, searchParameters]);
+	}, [dispatch, id, searchParameters]);
+
+	useMeetingSocket({
+		meetingId: Number(id),
+		meetingStatus: dataStatus,
+		onSummaryActionItemsUpdate: handleSummaryActionItemsUpdate,
+		onTranscriptUpdate: handleTranscriptUpdate,
+	});
+
+	useEffect(handleSummaryActionItemsUpdate, [handleSummaryActionItemsUpdate]);
 
 	const handleShareClick = useCallback(() => {
 		if (!meeting?.id) {
@@ -66,7 +97,19 @@ const MeetingDetails: React.FC = () => {
 					meeting.id,
 				);
 				const host = config.ENV.APP.HOST;
-				void navigator.clipboard.writeText(`${host}${publicUrl}`);
+				const fullUrl = `${host}${publicUrl}`;
+
+				const textarea = document.createElement("textarea");
+				textarea.value = fullUrl;
+				textarea.style.position = "absolute";
+				textarea.style.left = "-9999px";
+				textarea.style.opacity = "0";
+				document.body.append(textarea);
+				textarea.select();
+				// eslint-disable-next-line @typescript-eslint/no-deprecated, sonarjs/deprecation
+				document.execCommand("copy");
+				textarea.remove();
+
 				notification.success(NotificationMessage.PUBLIC_LINK_COPIED_SUCCESS);
 			} catch (error: unknown) {
 				notification.error(NotificationMessage.SHARE_LINK_GENERATION_FAILED);
@@ -109,7 +152,19 @@ const MeetingDetails: React.FC = () => {
 								onClick={handleShareClick}
 							>
 								<Icon className={styles["action-button__share"]} name="share" />
+								<span className="visually-hidden">Share meeting</span>
 							</button>
+						)}
+						{meeting.status === MeetingStatus.STARTED && user && (
+							<Button
+								isDisabled={isStopRecordingInProgress}
+								label={
+									isStopRecordingInProgress
+										? "Stopping recording..."
+										: "Stop Recording"
+								}
+								onClick={handleStopRecording}
+							/>
 						)}
 						<Button label="Export" />
 					</div>
@@ -147,7 +202,6 @@ const MeetingDetails: React.FC = () => {
 							</div>
 							<div className={styles["action-items-area"]}>
 								<div className={styles["action-items-text"]}>
-									<span className={styles["action-item-dot"]} />
 									<Markdown
 										rehypePlugins={[
 											[rehypeSanitize, { schema: sanitizeDefaultSchema }],

@@ -1,7 +1,7 @@
 import { io, type Socket } from "socket.io-client";
 
-import { Timeout } from "~/libs/enums/enums.js";
-
+import { logger } from "../logger/logger.js";
+import { SocketNamespace, Timeout } from "./enums/enums.js";
 import {
 	type ClientToServerEvents,
 	type ServerToClientEvents,
@@ -23,14 +23,21 @@ class BaseSocketClient {
 		this.url = url;
 	}
 
+	private getOrigin = (url: string, namespace: string): string =>
+		`${url}${namespace}`;
+
 	public connect(): void {
 		if (!this.socket) {
-			this.socket = io(this.url, {
+			this.socket = io(this.getOrigin(this.url, SocketNamespace.BOTS), {
 				reconnection: true,
 				reconnectionAttempts: Infinity,
 				reconnectionDelay: Timeout.ONE_SECOND,
 				transports: ["websocket"],
 			});
+
+			logger.info(
+				`Bot is connecting to  ${this.getOrigin(this.url, SocketNamespace.BOTS)}`,
+			);
 		} else if (!this.socket.connected) {
 			this.socket.connect();
 		}

@@ -23,9 +23,9 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 	const audioReference = useRef<HTMLAudioElement>(null);
 	const progressReference = useRef<HTMLButtonElement>(null);
 
-	const [isPlaying, setIsPlaying] = useState(false);
-	const [currentTime, setCurrentTime] = useState(START_TIME);
-	const [duration, setDuration] = useState(START_TIME);
+	const [isPlaying, setIsPlaying] = useState<boolean>(false);
+	const [currentTime, setCurrentTime] = useState<number>(START_TIME);
+	const [duration, setDuration] = useState<number>(START_TIME);
 
 	useEffect(() => {
 		if (!audioUrl) {

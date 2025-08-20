@@ -1,6 +1,6 @@
 import chokidar from "chokidar";
 import { spawn } from "node:child_process";
-import { createWriteStream, mkdirSync } from "node:fs";
+import { mkdirSync } from "node:fs";
 import path from "node:path";
 
 import { SocketEvent } from "~/libs/enums/enums.js";
@@ -27,7 +27,6 @@ class BaseAudioRecorder implements AudioRecorder {
 	private config: BaseConfig;
 	private currentFfmpegProcess: null | ReturnType<typeof spawn> = null;
 	private ffmpegPath: string;
-	private fullRecordingStream?: ReturnType<typeof createWriteStream>;
 	private isRecording = false;
 	private lastFile: null | string = null;
 	private logger: Logger;
@@ -76,6 +75,8 @@ class BaseAudioRecorder implements AudioRecorder {
 			this.logger.info(`[TRANSCRIBE] Processing chunk: ${filePath}`);
 
 			const chunkText = await this.openAI.transcribe(filePath);
+
+			this.logger.info(`[TRANSCRIBE] Transcribed chunk: ${chunkText}`);
 
 			this.socketClient.emit(SocketEvent.TRANSCRIBE, {
 				chunkText,
@@ -128,12 +129,6 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		const fileExtension = this.useMp3 ? FileExtension.MP3 : FileExtension.WAV;
 
-		const fullRecordingPath = path.join(
-			this.outputDir,
-			`${AudioFileType.FULL_RECORDING}.${fileExtension}`,
-		);
-		this.fullRecordingStream = createWriteStream(fullRecordingPath);
-
 		const chunkOutputPattern = path.join(
 			this.outputDir,
 			`${AudioFileType.CHUNK}.${fileExtension}`,
@@ -146,9 +141,9 @@ class BaseAudioRecorder implements AudioRecorder {
 			"-use_wallclock_as_timestamps",
 			"1",
 			"-f",
-			"avfoundation",
+			"pulse",
 			"-i",
-			":1",
+			"auto_null.monitor",
 			"-af",
 			"astats=metadata=1:reset=1",
 			"-f",
@@ -174,8 +169,6 @@ class BaseAudioRecorder implements AudioRecorder {
 		const ffmpeg = spawn(this.ffmpegPath, ffmpegArguments);
 		this.currentFfmpegProcess = ffmpeg;
 
-		ffmpeg.stdout.pipe(this.fullRecordingStream);
-
 		ffmpeg.stderr.on(AudioRecorderEvent.DATA, (data) => {
 			const lines = String(data)
 				.trim()
@@ -198,8 +191,6 @@ class BaseAudioRecorder implements AudioRecorder {
 				`[FFMPEG] exited | code=${String(code)} | signal=${String(signal)}`,
 			);
 			this.currentFfmpegProcess = null;
-
-			this.fullRecordingStream?.close();
 
 			void this.flushLastChunk();
 		});

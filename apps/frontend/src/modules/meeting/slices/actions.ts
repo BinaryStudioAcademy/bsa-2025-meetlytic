@@ -62,4 +62,14 @@ const stopRecording = createAsyncThunk<
 	await meetingApi.stopRecording(id);
 });
 
-export { createMeeting, getAllMeetings, stopRecording };
+const deleteMeeting = createAsyncThunk<number, number, AsyncThunkConfig>(
+	`${sliceName}/delete-meeting`,
+	async (id, { extra }) => {
+		const { meetingApi } = extra;
+		await meetingApi.delete(id);
+
+		return id;
+	},
+);
+
+export { createMeeting, deleteMeeting, getAllMeetings, stopRecording };

@@ -37,6 +37,16 @@ class MeetingApi extends BaseHTTPApi {
 		return await response.json<MeetingResponseDto>();
 	}
 
+	public async delete(id: number): Promise<void> {
+		await this.load(
+			this.getFullEndpoint(MeetingsApiPath.$ID, { id: String(id) }),
+			{
+				hasAuth: true,
+				method: HTTPMethod.DELETE,
+			},
+		);
+	}
+
 	public async getAll(): Promise<MeetingGetAllResponseDto> {
 		const response = await this.load(
 			this.getFullEndpoint(MeetingsApiPath.ROOT, {}),

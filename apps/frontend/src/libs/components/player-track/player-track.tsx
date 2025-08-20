@@ -120,6 +120,9 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 		<div className={styles["root"]}>
 			<button className={styles["button"]} onClick={handleClick}>
 				<Icon className={styles["icon"]} name={isPlaying ? "play" : "pause"} />
+				<span className="visually-hidden">
+					{isPlaying ? "Pause audio" : "Play audio"}
+				</span>
 			</button>
 			<button
 				className={styles["progress"]}
@@ -134,6 +137,7 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 					)}
 					style={{ width: progressWidth }}
 				/>
+				<span className="visually-hidden">Set playback position</span>
 			</button>
 			<div className={styles["time"]}>
 				{formatDate(new Date(currentTime * MILLISECONDS_IN_SECOND), "mm:ss")} /{" "}

@@ -189,7 +189,6 @@ const MeetingDetails: React.FC = () => {
 							</div>
 							<div className={styles["action-items-area"]}>
 								<div className={styles["action-items-text"]}>
-									<span className={styles["action-item-dot"]} />
 									<Markdown
 										rehypePlugins={[
 											[rehypeSanitize, { schema: sanitizeDefaultSchema }],

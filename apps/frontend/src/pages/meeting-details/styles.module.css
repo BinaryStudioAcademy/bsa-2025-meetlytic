@@ -92,12 +92,27 @@
 	border-radius: var(--border-radius-lg);
 }
 
-.action-item-dot {
-	width: 8px;
-	height: 8px;
-	margin-top: 8px;
-	background-color: var(--color-accent-2);
-	border-radius: 50%;
+.summary-text ol,
+.action-items-text ol {
+	list-style: decimal;
+}
+
+.summary-text ul li,
+.action-items-text ul li {
+	margin-left: 10px;
+	list-style: disc;
+}
+
+.summary-text ul li li,
+.action-items-text ul li li {
+	margin-left: 20px;
+	list-style: circle;
+}
+
+.summary-text ul li li li,
+.action-items-text ul li li li {
+	margin-left: 30px;
+	list-style: square;
 }
 
 .meeting-details__error,

@@ -153,8 +153,8 @@ AWS_SECRET_ACCESS_KEY=$(echo "$SETTINGS_JSON" | jq -r '.secretAccessKey')
 ORIGIN=$(echo "$SETTINGS_JSON" | jq -r '.origin')
 TEXT_GENERATION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.textGenerationModel')
 TRANSCRIPTION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.transcriptionModel')
-BUCKET_NAME=$(echo"$SETTINGS_JSON" | jq -r '.bucketName')
-PREFIX_AUDIO=$(echo"$SETTINGS_JSON" | jq -r '.prefixAudio')
+BUCKET_NAME=$(echo "$SETTINGS_JSON" | jq -r '.bucketName')
+PREFIX_AUDIO=$(echo "$SETTINGS_JSON" | jq -r '.prefixAudio')
 
 for var in BOT_NAME MEETING_LINK AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_REGION BUCKET_NAME PREFIX_AUDIO;
 do

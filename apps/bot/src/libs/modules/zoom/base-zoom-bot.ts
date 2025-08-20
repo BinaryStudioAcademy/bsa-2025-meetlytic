@@ -1,11 +1,6 @@
 import puppeteer, { type Browser, type Page } from "puppeteer";
 
-import {
-	DEFAULT_PARTICIPANTS_COUNT,
-	FALLBACK_PARTICIPANTS_COUNT,
-	MINIMUM_PARTICIPANTS_THRESHOLD,
-	USER_AGENT,
-} from "~/libs/constants/constants.js";
+import { USER_AGENT } from "~/libs/constants/constants.js";
 import {
 	KeyboardKey,
 	SocketEvent,
@@ -39,7 +34,6 @@ class BaseZoomBot {
 	private meetingId: null | string = null;
 	private openAI: OpenAI;
 	private page: null | Page = null;
-	private shouldMonitor = true;
 	private socketClient: BaseSocketClient;
 
 	public constructor({
@@ -132,31 +126,6 @@ class BaseZoomBot {
 		return rawPasscode?.replace(/^\d/, "") || "";
 	}
 
-	private async getParticipantsCount(): Promise<number> {
-		if (!this.page) {
-			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
-		}
-
-		try {
-			await this.page.waitForSelector(ZoomUILabel.PARTISIPANTS_COUNT, {
-				timeout: Timeout.TEN_SECONDS,
-			});
-			const count = await this.page.$eval(
-				ZoomUILabel.PARTISIPANTS_COUNT,
-				({ textContent }) =>
-					Number(textContent?.trim() ?? FALLBACK_PARTICIPANTS_COUNT.toString()),
-			);
-
-			return count;
-		} catch (error) {
-			this.logger.error(
-				`${ZoomBotMessage.FAILED_TO_GET_PARTICIPANTS_COUNT} ${error instanceof Error ? error.message : String(error)}`,
-			);
-
-			return DEFAULT_PARTICIPANTS_COUNT;
-		}
-	}
-
 	private getSearchParams(url: string): Record<string, string> {
 		const parsedUrl = new URL(url);
 		const parameters: Record<string, string> = {};
@@ -200,9 +169,18 @@ class BaseZoomBot {
 		}
 	}
 	private initSocket(): void {
+		this.socketClient.connect();
+
 		this.socketClient.on(SocketEvent.CONNECT, () => {
 			this.logger.info(
 				`${SocketMessage.CLIENT_CONNECTED} ${String(this.meetingId)}`,
+			);
+			this.logger.info(
+				`${SocketEvent.JOIN_ROOM} event emitted ${String(this.meetingId)}`,
+			);
+			this.socketClient.emit(
+				SocketEvent.JOIN_ROOM,
+				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
 		});
 
@@ -210,8 +188,42 @@ class BaseZoomBot {
 			this.logger.warn(`${SocketMessage.CLIENT_DISCONNECTED} ${reason}`);
 		});
 
-		this.socketClient.connect();
+		this.socketClient.on(SocketEvent.STOP_RECORDING, async () => {
+			// TODO:
+			// audioRecorder.finalize()
+			// audioRecorder.stopFullMeetingRecording()
+			this.logger.info(
+				`Stopping recording of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
+			);
+			this.audioRecorder.stop();
+			await this.leaveMeeting();
+			this.socketClient.emit(
+				SocketEvent.RECORDING_STOPPED,
+				String(this.config.ENV.ZOOM.MEETING_ID),
+			);
+		});
+
+		this.socketClient.on(
+			SocketEvent.GENERATE_SUMMARY_ACTION_ITEMS,
+			async (transcript: string) => {
+				this.logger.info(
+					`Generating summary/action items of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
+				);
+				const [actionItems, summary] = await Promise.all([
+					this.openAI.createActionItems(transcript),
+					this.openAI.summarize(transcript),
+				]);
+
+				this.socketClient.emit(SocketEvent.SAVE_SUMMARY_ACTION_ITEMS, {
+					actionItems: actionItems,
+					meetingId: String(this.config.ENV.ZOOM.MEETING_ID),
+					summary: summary,
+				});
+				this.socketClient.disconnect();
+			},
+		);
 	}
+
 	private async joinMeeting(): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
@@ -238,12 +250,9 @@ class BaseZoomBot {
 		await this.clickHelper(ZoomUILabel.MUTE_LOGIN);
 		await this.clickHelper(ZoomUILabel.STOP_VIDEO_LOGIN);
 		await this.clickHelper(ZoomUILabel.JOIN);
-
 		await this.enterMeetingPassword();
-
 		await this.clickHelper(ZoomUILabel.JOIN);
 	}
-
 	private async leaveMeeting(): Promise<void> {
 		try {
 			await this.clickHelper(ZoomUILabel.LEAVE);
@@ -253,26 +262,6 @@ class BaseZoomBot {
 			this.logger.error(
 				`${ZoomBotMessage.FAILED_TO_LEAVE_MEETING} ${error instanceof Error ? error.message : String(error)}`,
 			);
-		}
-	}
-
-	private async monitorParticipants(): Promise<void> {
-		if (!this.page) {
-			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
-		}
-
-		while (this.shouldMonitor) {
-			const count = await this.getParticipantsCount();
-
-			if (count <= MINIMUM_PARTICIPANTS_THRESHOLD) {
-				this.logger.info(ZoomBotMessage.ONLY_ONE_PARTICIPANT_DETECTED);
-				this.audioRecorder.stop();
-				this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STOPPED);
-				await this.leaveMeeting();
-				this.shouldMonitor = false;
-			}
-
-			await delay(Timeout.FIFTEEN_SECONDS);
 		}
 	}
 
@@ -297,21 +286,14 @@ class BaseZoomBot {
 			await this.page.screenshot({ path: "goto.png" });
 			await this.handleInitialPopups();
 			await this.joinMeeting();
-			await this.page.waitForSelector(ZoomUILabel.LEAVE, {
-				timeout: Timeout.TEN_SECONDS,
-				visible: true,
-			});
 			this.logger.info(ZoomBotMessage.JOINED_MEETING);
 			this.audioRecorder.start();
 			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
-			await delay(Timeout.FIFTEEN_SECONDS);
-			await this.monitorParticipants();
+			await delay(Timeout.ONE_SECOND);
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessage.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,
 			);
-		} finally {
-			await this.browser?.close();
 		}
 	}
 }

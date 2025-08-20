@@ -1,7 +1,2 @@
-export {
-	DEFAULT_PARTICIPANTS_COUNT,
-	FALLBACK_PARTICIPANTS_COUNT,
-	MINIMUM_PARTICIPANTS_THRESHOLD,
-	USER_AGENT,
-} from "./meeting.constants.js";
-export { ACTION_POINTS_PROMPT, SUMMARY_PROMPT } from "./open-ai.constants.js";
+export { USER_AGENT } from "./meeting.constants.js";
+export { ACTION_ITEMS_PROMPT, SUMMARY_PROMPT } from "./open-ai.constants.js";

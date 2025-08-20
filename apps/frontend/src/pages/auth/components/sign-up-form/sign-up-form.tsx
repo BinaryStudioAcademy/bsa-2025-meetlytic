@@ -8,12 +8,12 @@ import {
 import { useAppForm, useCallback, useState } from "~/libs/hooks/hooks.js";
 import { type InputPassword } from "~/libs/types/types.js";
 import {
+	USER_SIGN_UP_DEFAULT_VALUES,
 	type UserSignUpRequestDto,
 	userSignUpValidationSchema,
 } from "~/modules/users/users.js";
 
 import { AuthLayout } from "../auth-layout/auth-layout.js";
-import { DEFAULT_SIGN_UP_PAYLOAD } from "./libs/constants.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -30,7 +30,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
 	});
 
 	const { control, errors, handleSubmit } = useAppForm<UserSignUpRequestDto>({
-		defaultValues: DEFAULT_SIGN_UP_PAYLOAD,
+		defaultValues: USER_SIGN_UP_DEFAULT_VALUES,
 		validationSchema: userSignUpValidationSchema,
 	});
 

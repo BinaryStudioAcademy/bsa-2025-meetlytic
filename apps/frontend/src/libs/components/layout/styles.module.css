@@ -21,6 +21,11 @@
 	background-color: var(--color-background-2);
 }
 
+.main-container {
+	max-width: 1440px;
+	margin: 0 auto;
+}
+
 @media (width <= 768px) {
 	.layout {
 		grid-template:

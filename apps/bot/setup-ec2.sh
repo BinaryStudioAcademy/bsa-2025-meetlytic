@@ -69,22 +69,6 @@ apt install -y \
 	build-essential
 echo "[+] Core libraries and tools installed."
 
-# --- Install Google Chrome if not present ---
-echo "[i] Checking for Google Chrome..."
-if ! command -v google-chrome &> /dev/null; then
-	echo "[+] Google Chrome not found. Installing..."
-	apt install -y wget gnupg
-	wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-linux-signing-key.gpg
-	echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-key.gpg] http://dl.google.com/linux/chrome/deb/ stable main" \
-		> /etc/apt/sources.list.d/google-chrome.list
-	apt update -y
-	apt install -y google-chrome-stable
-	echo "[+] Google Chrome installed successfully."
-else
-	echo "[✓] Google Chrome already installed."
-fi
-
-
 # ─── PulseAudio ─────────────────────────────────────────────────────────
 # We run PulseAudio as *root* in system-style “per-user” mode so that it
 # survives the session and is ready before the bot (Chromium) starts.

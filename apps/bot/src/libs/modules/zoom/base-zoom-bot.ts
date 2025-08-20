@@ -235,6 +235,8 @@ class BaseZoomBot {
 					`Sending public url for the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 				);
 				await this.sendPublicUrlToChat(publicUrl);
+				this.audioRecorder.start();
+				this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 			},
 		);
 	}
@@ -320,8 +322,6 @@ class BaseZoomBot {
 			await this.handleInitialPopups();
 			await this.joinMeeting();
 			this.logger.info(ZoomBotMessage.JOINED_MEETING);
-			this.audioRecorder.start();
-			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 			await delay(Timeout.ONE_SECOND);
 		} catch (error) {
 			this.logger.error(

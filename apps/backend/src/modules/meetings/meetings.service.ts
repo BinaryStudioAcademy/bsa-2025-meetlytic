@@ -1,6 +1,7 @@
 import { EMPTY_ARRAY_LENGTH } from "~/libs/constants/constants.js";
 import { APIPath } from "~/libs/enums/enums.js";
 import { AuthError } from "~/libs/exceptions/exceptions.js";
+import { extractZoomMeetingId } from "~/libs/helpers/helpers.js";
 import {
 	type CloudFormation,
 	type CreateStack,
@@ -15,7 +16,6 @@ import { type Service } from "~/libs/types/types.js";
 
 import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
-import { extractZoomMeetingId } from "./libs/helpers/helpers.js";
 import {
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,

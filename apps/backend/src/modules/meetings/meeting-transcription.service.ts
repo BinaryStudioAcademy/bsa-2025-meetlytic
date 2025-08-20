@@ -1,3 +1,4 @@
+import { createPdf } from "~/libs/helpers/helpers.js";
 import { type Service } from "~/libs/types/types.js";
 
 import {
@@ -5,7 +6,7 @@ import {
 	MeetingTranscriptionErrorMessage,
 } from "./libs/enums/enums.js";
 import { MeetingTranscriptionError } from "./libs/exceptions/exceptions.js";
-import { createMeetingPdf } from "./libs/helpers/helpers.js";
+import { getMeetingHtml } from "./libs/templates/get-meeting-html.js";
 import {
 	type CreatePdfOptions,
 	type MeetingTranscriptionGetAllResponseDto,
@@ -65,7 +66,9 @@ class MeetingTranscriptionService
 	}
 
 	public async export(options: CreatePdfOptions): Promise<Buffer> {
-		return await createMeetingPdf(options);
+		const html: string = getMeetingHtml(options);
+
+		return await createPdf(html);
 	}
 
 	public async find(id: number): Promise<MeetingTranscriptionResponseDto> {

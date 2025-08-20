@@ -1,5 +1,5 @@
-import { type HTTPCode } from "../../../libs/modules/http/http.js";
 import { type UserErrorMessage } from "../../../modules/users/users.js";
+import { type HTTPCode } from "../../modules/http/http.js";
 import { type ValueOf } from "../../types/types.js";
 import { HTTPError } from "../http-error/http-error.exception.js";
 

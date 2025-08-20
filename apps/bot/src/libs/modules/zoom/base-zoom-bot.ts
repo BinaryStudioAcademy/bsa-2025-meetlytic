@@ -2,6 +2,7 @@ import puppeteer, { type Browser, type Page } from "puppeteer";
 
 import {
 	DEFAULT_PARTICIPANTS_COUNT,
+	FALLBACK_PARTICIPANTS_COUNT,
 	MINIMUM_PARTICIPANTS_THRESHOLD,
 	USER_AGENT,
 } from "~/libs/constants/constants.js";
@@ -10,7 +11,7 @@ import {
 	SocketEvent,
 	SocketMessage,
 	Timeout,
-	ZoomBotMessages,
+	ZoomBotMessage,
 	ZoomUILabel,
 } from "~/libs/enums/enums.js";
 import { delay, extractZoomMeetingId } from "~/libs/helpers/helpers.js";
@@ -61,7 +62,7 @@ class BaseZoomBot {
 		timeout: number = Timeout.FIVE_SECONDS,
 	): Promise<void> {
 		if (!this.page) {
-			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
 		}
 
 		try {
@@ -72,7 +73,7 @@ class BaseZoomBot {
 			await this.page.click(selector);
 		} catch (error) {
 			this.logger.error(
-				`${ZoomBotMessages.FAILED_TO_CLICK_SELECTOR} "${selector}": ${error instanceof Error ? error.message : String(error)}`,
+				`${ZoomBotMessage.FAILED_TO_CLICK_SELECTOR} "${selector}": ${error instanceof Error ? error.message : String(error)}`,
 			);
 		}
 	}
@@ -89,7 +90,7 @@ class BaseZoomBot {
 
 	private async enterMeetingPassword(): Promise<void> {
 		if (!this.page) {
-			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
 		}
 
 		try {
@@ -108,9 +109,9 @@ class BaseZoomBot {
 
 				if (parameters["pwd"]) {
 					password = this.extractPasscode(parameters["pwd"]);
-					this.logger.info(`${ZoomBotMessages.FOUND_PASSCODE} ${password}`);
+					this.logger.info(`${ZoomBotMessage.FOUND_PASSCODE} ${password}`);
 				} else {
-					this.logger.info(ZoomBotMessages.ZOOM_PASSWORD_NOT_FOUND);
+					this.logger.info(ZoomBotMessage.ZOOM_PASSWORD_NOT_FOUND);
 					password = "";
 				}
 			}
@@ -120,7 +121,7 @@ class BaseZoomBot {
 			}
 		} catch (error) {
 			this.logger.error(
-				`${ZoomBotMessages.FAILED_TO_ENTER_PASSWORD} ${error instanceof Error ? error.message : String(error)}`,
+				`${ZoomBotMessage.FAILED_TO_ENTER_PASSWORD} ${error instanceof Error ? error.message : String(error)}`,
 			);
 		}
 	}
@@ -133,7 +134,7 @@ class BaseZoomBot {
 
 	private async getParticipantsCount(): Promise<number> {
 		if (!this.page) {
-			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
 		}
 
 		try {
@@ -142,13 +143,14 @@ class BaseZoomBot {
 			});
 			const count = await this.page.$eval(
 				ZoomUILabel.PARTISIPANTS_COUNT,
-				({ textContent }) => Number(textContent?.trim() ?? "2"),
+				({ textContent }) =>
+					Number(textContent?.trim() ?? FALLBACK_PARTICIPANTS_COUNT.toString()),
 			);
 
 			return count;
 		} catch (error) {
 			this.logger.error(
-				`${ZoomBotMessages.FAILED_TO_GET_PARTICIPANTS_COUNT} ${error instanceof Error ? error.message : String(error)}`,
+				`${ZoomBotMessage.FAILED_TO_GET_PARTICIPANTS_COUNT} ${error instanceof Error ? error.message : String(error)}`,
 			);
 
 			return DEFAULT_PARTICIPANTS_COUNT;
@@ -168,15 +170,15 @@ class BaseZoomBot {
 
 	private async handleInitialPopups(): Promise<void> {
 		if (!this.page) {
-			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
 		}
 
 		try {
 			await this.clickHelper(ZoomUILabel.ACCEPT_COOKIES, Timeout.ONE_SECOND);
-			this.logger.info(ZoomBotMessages.COOKIES_ACCEPTED);
+			this.logger.info(ZoomBotMessage.COOKIES_ACCEPTED);
 		} catch (error) {
 			this.logger.error(
-				`${ZoomBotMessages.FAILED_TO_ACCEPT_COOKIES} ${error instanceof Error ? error.message : String(error)}`,
+				`${ZoomBotMessage.FAILED_TO_ACCEPT_COOKIES} ${error instanceof Error ? error.message : String(error)}`,
 			);
 		}
 
@@ -190,10 +192,10 @@ class BaseZoomBot {
 				const button = document.querySelector(selector) as HTMLButtonElement;
 				button.click();
 			}, ZoomUILabel.ACCEPT_TERMS);
-			this.logger.info(ZoomBotMessages.TERM_AND_CONDITIONS_ACCEPTED);
+			this.logger.info(ZoomBotMessage.TERM_AND_CONDITIONS_ACCEPTED);
 		} catch (error) {
 			this.logger.error(
-				`${ZoomBotMessages.FAILED_TO_ACCEPT_TERMS} ${error instanceof Error ? error.message : String(error)}`,
+				`${ZoomBotMessage.FAILED_TO_ACCEPT_TERMS} ${error instanceof Error ? error.message : String(error)}`,
 			);
 		}
 	}
@@ -212,11 +214,11 @@ class BaseZoomBot {
 	}
 	private async joinMeeting(): Promise<void> {
 		if (!this.page) {
-			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
 		}
 
 		this.logger.info(
-			`"${this.config.ENV.ZOOM.BOT_NAME}" ${ZoomBotMessages.JOINING_MEETING}`,
+			`"${this.config.ENV.ZOOM.BOT_NAME}" ${ZoomBotMessage.JOINING_MEETING}`,
 		);
 		await this.page.waitForSelector(ZoomUILabel.INPUT_NAME, {
 			timeout: Timeout.FIVE_SECONDS,
@@ -230,7 +232,7 @@ class BaseZoomBot {
 				ZoomUILabel.SPINNER,
 			);
 		} catch {
-			this.logger.warn(ZoomBotMessages.SPINNER_NOT_FOUND);
+			this.logger.warn(ZoomBotMessage.SPINNER_NOT_FOUND);
 		}
 
 		await this.clickHelper(ZoomUILabel.MUTE_LOGIN);
@@ -249,23 +251,23 @@ class BaseZoomBot {
 			await this.clickHelper(ZoomUILabel.CONFIRM_LEAVE);
 		} catch (error) {
 			this.logger.error(
-				`${ZoomBotMessages.FAILED_TO_LEAVE_MEETING} ${error instanceof Error ? error.message : String(error)}`,
+				`${ZoomBotMessage.FAILED_TO_LEAVE_MEETING} ${error instanceof Error ? error.message : String(error)}`,
 			);
 		}
 	}
 
 	private async monitorParticipants(): Promise<void> {
 		if (!this.page) {
-			throw new Error(ZoomBotMessages.PAGE_NOT_INITIALIZED);
+			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
 		}
 
 		while (this.shouldMonitor) {
 			const count = await this.getParticipantsCount();
 
 			if (count <= MINIMUM_PARTICIPANTS_THRESHOLD) {
-				this.logger.info(ZoomBotMessages.ONLY_ONE_PARTICIPANT_DETECTED);
+				this.logger.info(ZoomBotMessage.ONLY_ONE_PARTICIPANT_DETECTED);
 				this.audioRecorder.stop();
-				this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STOPPED);
+				this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STOPPED);
 				await this.leaveMeeting();
 				this.shouldMonitor = false;
 			}
@@ -283,12 +285,12 @@ class BaseZoomBot {
 			await this.page.setUserAgent(USER_AGENT);
 
 			this.logger.info(
-				`${ZoomBotMessages.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
+				`${ZoomBotMessage.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
 			);
 			await this.page.goto(
 				this.convertToZoomWebClientUrl(this.config.ENV.ZOOM.MEETING_LINK),
 				{
-					timeout: Timeout.SIXTEEN_SECONDS,
+					timeout: Timeout.SIXTY_SECONDS,
 					waitUntil: "networkidle2",
 				},
 			);
@@ -299,14 +301,14 @@ class BaseZoomBot {
 				timeout: Timeout.TEN_SECONDS,
 				visible: true,
 			});
-			this.logger.info(ZoomBotMessages.JOINED_MEETING);
+			this.logger.info(ZoomBotMessage.JOINED_MEETING);
 			this.audioRecorder.start();
-			this.logger.info(ZoomBotMessages.AUDIO_RECORDING_STARTED);
+			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 			await delay(Timeout.FIFTEEN_SECONDS);
 			await this.monitorParticipants();
 		} catch (error) {
 			this.logger.error(
-				`${ZoomBotMessages.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,
+				`${ZoomBotMessage.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,
 			);
 		} finally {
 			await this.browser?.close();

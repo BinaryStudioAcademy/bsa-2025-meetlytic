@@ -140,6 +140,7 @@ const MeetingDetails: React.FC = () => {
 								onClick={handleShareClick}
 							>
 								<Icon className={styles["action-button__share"]} name="share" />
+								<span className="visually-hidden">Share meeting</span>
 							</button>
 						)}
 						{meeting.status === MeetingStatus.STARTED && user && (

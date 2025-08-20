@@ -1,4 +1,4 @@
-const ZoomBotMessages = {
+const ZoomBotMessage = {
 	AUDIO_RECORDING_STARTED: "Audio recording started.",
 	AUDIO_RECORDING_STOPPED: "Audio recording stopped.",
 	COOKIES_ACCEPTED: "Cookies accepted.",
@@ -23,4 +23,4 @@ const ZoomBotMessages = {
 		"No passcode found in link, joining meeting without password",
 } as const;
 
-export { ZoomBotMessages };
+export { ZoomBotMessage };

@@ -182,6 +182,11 @@ class BaseZoomBot {
 				SocketEvent.JOIN_ROOM,
 				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
+			this.logger.info("Emitting GET_PUBLIC_URL event");
+			this.socketClient.emit(
+				SocketEvent.GET_PUBLIC_URL,
+				this.config.ENV.ZOOM.MEETING_ID,
+			);
 		});
 
 		this.socketClient.on(SocketEvent.DISCONNECT, (reason: string) => {
@@ -315,11 +320,6 @@ class BaseZoomBot {
 			await this.handleInitialPopups();
 			await this.joinMeeting();
 			this.logger.info(ZoomBotMessage.JOINED_MEETING);
-			this.logger.info("Emitting GET_PUBLIC_URL event");
-			this.socketClient.emit(
-				SocketEvent.GET_PUBLIC_URL,
-				this.config.ENV.ZOOM.MEETING_ID,
-			);
 			this.audioRecorder.start();
 			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 			await delay(Timeout.ONE_SECOND);

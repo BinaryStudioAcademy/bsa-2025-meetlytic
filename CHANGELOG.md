@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.11.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.10.0...v1.11.0) (2025-08-20)
+
+
+### Features
+
+* **frontend:** limite width of main container ml-245 ([#248](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/248)) ([9e8e0a5](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/9e8e0a55524844ea902e6449f7714a7ad2aad903))
+
+
+### Bug Fixes
+
+* change error code for delete and get meeting ml-222 ([#234](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/234)) ([23e57ad](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/23e57adde62728ad789213b13297c1acd54e82ba))
+
 ## [1.10.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.9.0...v1.10.0) (2025-08-19)
 
 

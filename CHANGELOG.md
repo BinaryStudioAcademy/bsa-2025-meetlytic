@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.11.0...v1.11.1) (2025-08-20)
+
+
+### Bug Fixes
+
+* copy public meeting link ml-244 ([#252](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/252)) ([13f3906](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/13f390618d0448c4d99dc58fe9846dca98b496b7))
+
 ## [1.11.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.10.0...v1.11.0) (2025-08-20)
 
 

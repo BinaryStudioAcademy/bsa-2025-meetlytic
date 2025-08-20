@@ -313,10 +313,6 @@ class BaseZoomBot {
 
 			await this.handleInitialPopups();
 			await this.joinMeeting();
-			await this.page.waitForSelector(ZoomUILabel.LEAVE, {
-				timeout: Timeout.TEN_SECONDS,
-				visible: true,
-			});
 			this.logger.info(ZoomBotMessage.JOINED_MEETING);
 			this.audioRecorder.start();
 

@@ -1,9 +1,11 @@
 const NOT_FOUND = -1;
 const NEXT_INDEX_OFFSET = 1;
 const MEETING_ID_REGEX = /^\d{9,11}$/;
+const JOIN_SHORT_SEGMENT = "j";
+const JOIN_FULL_SEGMENT = "join";
 
 const isJoinSegment = (segment: string): boolean => {
-	return segment === "j" || segment === "join";
+	return segment === JOIN_SHORT_SEGMENT || segment === JOIN_FULL_SEGMENT;
 };
 
 const isValidMeetingId = (id: string | undefined): id is string => {

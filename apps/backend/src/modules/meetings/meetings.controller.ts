@@ -73,9 +73,6 @@ import { type MeetingService } from "./meetings.service.js";
  *           nullable: true
  *     MeetingUpdateRequest:
  *       type: object
- *       required:
- *         - host
- *         - status
  *       properties:
  *         host:
  *           type: string
@@ -86,6 +83,10 @@ import { type MeetingService } from "./meetings.service.js";
  *           enum:
  *             - started
  *             - ended
+ *         summary:
+ *           type: string
+ *         actionItems:
+ *           type: string
  */
 class MeetingsController extends BaseController {
 	private meetingService: MeetingService;
@@ -141,7 +142,6 @@ class MeetingsController extends BaseController {
 			handler: (options) => this.findAll(options as FindAllMeetingOptions),
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.ROOT,
-			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 		this.addRoute({
 			handler: (options) => this.getPublicUrl(options as GetPublicUrlOptions),
@@ -490,8 +490,6 @@ class MeetingsController extends BaseController {
 	 *         description: Request to stop recording accepted
 	 *       404:
 	 *         description: Meeting not found
-	 *       500:
-	 *         description: Failed to delete stack
 	 */
 
 	private async stopRecording(

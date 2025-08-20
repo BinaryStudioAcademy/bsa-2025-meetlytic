@@ -156,10 +156,14 @@ TRANSCRIPTION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.transcriptionModel')
 BUCKET_NAME=$(echo"$SETTINGS_JSON" | jq -r '.bucketName')
 PREFIX_AUDIO=$(echo"$SETTINGS_JSON" | jq -r '.prefixAudio')
 
-if [ -z "$BOT_NAME" ] || [ -z "$MEETING_LINK" ]; then
-echo "Error: Missing required settings in JSON."
-exit 1
-fi
+for var in BOT_NAME MEETING_LINK AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_REGION BUCKET_NAME PREFIX_AUDIO;
+do
+	eval val=\$$var
+	if [ -z "$val" ] || [ "$val" = "null" ]; then
+	echo "Error: Missing or null value for $var"
+	exit 1
+	fi
+done
 
 echo "[+] Writing environment variables..."
 cat <<EOF > .env

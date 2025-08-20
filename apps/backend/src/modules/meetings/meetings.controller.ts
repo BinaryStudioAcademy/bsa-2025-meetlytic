@@ -6,7 +6,6 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode, HTTPMethod } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import { type UserResponseDto } from "~/modules/users/users.js";
 
 import { MeetingsApiPath } from "./libs/enums/enums.js";
 import {
@@ -189,7 +188,7 @@ class MeetingsController extends BaseController {
 	): Promise<APIHandlerResponse> {
 		const created = await this.meetingService.create({
 			...options.body,
-			ownerId: (options.user as UserResponseDto).id,
+			ownerId: options.user.id,
 		});
 
 		return { payload: created, status: HTTPCode.CREATED };
@@ -281,7 +280,7 @@ class MeetingsController extends BaseController {
 		options: FindAllMeetingOptions,
 	): Promise<APIHandlerResponse> {
 		const meetings = await this.meetingService.findAll({
-			ownerId: (options.user as UserResponseDto).id,
+			ownerId: options.user.id,
 		});
 
 		return { payload: meetings, status: HTTPCode.OK };

@@ -199,9 +199,7 @@ class UserController extends BaseController {
 	): Promise<APIHandlerResponse> {
 		const { user } = options;
 
-		const detailsId = await this.userService.getOrCreateDetailsId(
-			(user as UserResponseDto).id,
-		);
+		const detailsId = await this.userService.getOrCreateDetailsId(user.id);
 
 		if (!detailsId) {
 			throw new HTTPError({
@@ -210,7 +208,7 @@ class UserController extends BaseController {
 			});
 		}
 
-		await this.userAvatarService.deleteAvatar((user as UserResponseDto).id);
+		await this.userAvatarService.deleteAvatar(user.id);
 
 		return {
 			payload: {
@@ -267,9 +265,7 @@ class UserController extends BaseController {
 	}: APIHandlerOptions<{
 		user: UserResponseDto;
 	}>): Promise<APIHandlerResponse> {
-		const fullUser = await this.userService.findProfileByEmail(
-			(user as UserResponseDto).email,
-		);
+		const fullUser = await this.userService.findProfileByEmail(user.email);
 
 		return {
 			payload: fullUser,
@@ -360,10 +356,7 @@ class UserController extends BaseController {
 		body: UserUpdateResponseDto;
 		user: UserResponseDto;
 	}>): Promise<APIHandlerResponse> {
-		const updatedUser = await this.userService.update(
-			(user as UserResponseDto).id,
-			body,
-		);
+		const updatedUser = await this.userService.update(user.id, body);
 
 		return {
 			payload: updatedUser,

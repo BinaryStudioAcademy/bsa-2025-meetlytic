@@ -5,7 +5,7 @@ type APIHandlerOptions<
 	params: T["params"];
 	query: T["query"];
 	request: T["request"];
-	user?: T["user"];
+	user: T["user"];
 };
 
 type DefaultApiHandlerOptions = {

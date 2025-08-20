@@ -19,7 +19,6 @@ import {
 	useAppSelector,
 	useCallback,
 	useEffect,
-	useFileUrl,
 	useParams,
 	useSearchParams,
 } from "~/libs/hooks/hooks.js";
@@ -43,8 +42,6 @@ const MeetingDetails: React.FC = () => {
 		(state) => state.meetingDetails,
 	);
 	const { user } = useAppSelector((state) => state.auth);
-	const audioFileId = meeting?.audioFileId ?? null;
-	const { loading: audioLoading, url: audioUrl } = useFileUrl(audioFileId);
 
 	useEffect(() => {
 		const sharedToken = searchParameters.get("token");
@@ -167,11 +164,7 @@ const MeetingDetails: React.FC = () => {
 					</div>
 				</div>
 				<div className={styles["meeting-details__player"]}>
-					<PlayerTrack
-						audioUrl={audioUrl}
-						hasFile={Boolean(audioFileId)}
-						loading={audioLoading}
-					/>
+					<PlayerTrack audioUrl={"https"} />
 				</div>
 			</div>
 		</>

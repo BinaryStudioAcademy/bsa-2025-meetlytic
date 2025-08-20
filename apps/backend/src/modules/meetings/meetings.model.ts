@@ -13,10 +13,13 @@ import {
 	type MeetingStatus,
 	MeetingTranscriptionAttribute,
 } from "./libs/enums/enums.js";
+import { type FilePublicDto } from "./libs/types/types.js";
 import { MeetingTranscriptionModel } from "./meeting-transcription.model.js";
 
 class MeetingModel extends AbstractModel {
 	public actionItems!: null | string;
+
+	public audioFile!: FilePublicDto | null;
 
 	public audioFileId!: null | number;
 

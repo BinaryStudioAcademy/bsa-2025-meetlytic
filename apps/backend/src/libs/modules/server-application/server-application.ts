@@ -3,7 +3,6 @@ import { database } from "~/libs/modules/database/database.js";
 import { logger } from "~/libs/modules/logger/logger.js";
 import { socketService } from "~/libs/modules/socket/socket.js";
 import { authController } from "~/modules/auth/auth.js";
-import { fileController } from "~/modules/files/files.js";
 import { meetingsController } from "~/modules/meetings/meetings.js";
 import { userController } from "~/modules/users/users.js";
 
@@ -16,7 +15,6 @@ const apiV1 = new BaseServerApplicationApi(
 	...authController.routes,
 	...userController.routes,
 	...meetingsController.routes,
-	...fileController.routes,
 );
 const serverApplication = new BaseServerApplication({
 	apis: [apiV1],

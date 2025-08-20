@@ -314,6 +314,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		const meeting = MeetingEntity.initialize({
 			actionItems: meetingEntity.toDetailedObject().actionItems,
+			audioFile: meetingEntity.toDetailedObject().audioFile,
 			audioFileId: meetingEntity.toDetailedObject().audioFileId,
 			createdAt: meetingEntity.toObject().createdAt,
 			host: payload.host,

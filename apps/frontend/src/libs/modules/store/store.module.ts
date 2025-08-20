@@ -15,7 +15,6 @@ import {
 	authApi,
 	reducer as authReducer,
 } from "~/modules/auth/auth.js";
-import { fileApi, reducer as filesReducer } from "~/modules/file/file.js";
 import {
 	meetingDetailsApi,
 	reducer as meetingDetailsReducer,
@@ -32,7 +31,6 @@ import { userApi, reducer as userReducer } from "~/modules/users/users.js";
 
 type ExtraArguments = {
 	authApi: typeof authApi;
-	fileApi: typeof fileApi;
 	meetingApi: typeof meetingApi;
 	meetingDetailsApi: typeof meetingDetailsApi;
 	storage: typeof storage;
@@ -42,7 +40,6 @@ type ExtraArguments = {
 
 type RootReducer = {
 	auth: ReturnType<typeof authReducer>;
-	file: ReturnType<typeof filesReducer>;
 	meeting: ReturnType<typeof meetingReducer>;
 	meetingDetails: ReturnType<typeof meetingDetailsReducer>;
 	transcription: ReturnType<typeof transcriptionReducer>;
@@ -51,7 +48,6 @@ type RootReducer = {
 
 const rootReducer = combineReducers({
 	auth: authReducer,
-	file: filesReducer,
 	meeting: meetingReducer,
 	meetingDetails: meetingDetailsReducer,
 	transcription: transcriptionReducer,
@@ -95,7 +91,6 @@ class Store {
 	public get extraArguments(): ExtraArguments {
 		return {
 			authApi,
-			fileApi,
 			meetingApi,
 			meetingDetailsApi,
 			storage,

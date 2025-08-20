@@ -38,7 +38,15 @@ class MeetingRepository implements Repository<MeetingEntity> {
 	}
 
 	public async find(id: number): Promise<MeetingEntity | null> {
-		const meeting = await this.meetingModel.query().findById(id);
+		const meeting = await this.meetingModel
+			.query()
+			.findById(id)
+			.withGraphFetched("audioFile(selectBasic)")
+			.modifiers({
+				selectBasic(builder) {
+					builder.select("id", "url", "contentType");
+				},
+			});
 
 		return meeting ? MeetingEntity.initialize(meeting) : null;
 	}

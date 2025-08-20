@@ -53,13 +53,11 @@ export {
 export { AuthApiPath, AuthStatusMessage } from "./modules/auth/auth.js";
 export {
 	type FileGetAllResponseDto,
+	type FilePublicDto,
 	type FileRequestDto,
 	type FileResponseDto,
 	type FileUpdateRequestDto,
-	FileApiPath,
-	fileCreateValidationSchema,
 	FileErrorMessage,
-	fileUpdateValidationSchema,
 } from "./modules/files/files.js";
 export {
 	type MeetingAttachAudioRequestDto,

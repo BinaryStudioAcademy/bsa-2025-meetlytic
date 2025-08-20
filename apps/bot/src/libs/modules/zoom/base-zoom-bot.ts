@@ -210,12 +210,14 @@ class BaseZoomBot {
 				this.logger.info(
 					`Generating summary/action items of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 				);
-				const summaryActinItemsPromises = [
+				const summaryActionItemsPromises = [
 					this.openAI.createActionItems(transcript),
 					this.openAI.summarize(transcript),
 				];
-				const summaryActinItems = await Promise.all(summaryActinItemsPromises);
-				const [actionItems, summary] = summaryActinItems;
+				const summaryActionItems = await Promise.all(
+					summaryActionItemsPromises,
+				);
+				const [actionItems, summary] = summaryActionItems;
 
 				this.socketClient.emit(SocketEvent.SAVE_SUMMARY_ACTION_ITEMS, {
 					actionItems: actionItems as string,

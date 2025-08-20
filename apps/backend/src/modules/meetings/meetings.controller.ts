@@ -9,10 +9,10 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserResponseDto } from "~/modules/users/users.js";
 
 import { MeetingsApiPath } from "./libs/enums/enums.js";
+import { type ExportMeetingOptions } from "./libs/types/export-meeting-options.type.js";
 import {
 	type CreateMeetingOptions,
 	type DeleteMeetingOptions,
-	type ExportMeetingOptions,
 	type FindAllMeetingOptions,
 	type FindBySignedUrlOptions,
 	type FindMeetingOptions,

@@ -56,7 +56,7 @@
 				"UserData": {
 					"Fn::Base64": {
 						"Fn::Sub": [
-							"#!/bin/bash\n sudo apt update -y\n sudo apt install -y git\n cd /home/ubuntu\ngit clone --branch 232-fix-audio-chunking-logic-to-avoid-missing-words --single-branch https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic.git\nsudo chown -R ubuntu:ubuntu /home/ubuntu/bsa-2025-meetlytic\ncd bsa-2025-meetlytic\nbash ./apps/bot/setup-ec2.sh '${Settings}'",
+							"#!/bin/bash\n sudo apt update -y\n sudo apt install -y git\n cd /home/ubuntu\ngit clone --branch main --single-branch https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic.git\nsudo chown -R ubuntu:ubuntu /home/ubuntu/bsa-2025-meetlytic\ncd bsa-2025-meetlytic\nbash ./apps/bot/setup-ec2.sh '${Settings}'",
 							{
 								"Settings": {
 									"Ref": "Settings"

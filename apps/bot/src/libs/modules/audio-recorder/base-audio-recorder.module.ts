@@ -1,4 +1,5 @@
-import { spawn } from "node:child_process";
+import chokidar from "chokidar";
+import { type ChildProcess, spawn } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 
@@ -19,13 +20,14 @@ import {
 class BaseAudioRecorder implements AudioRecorder {
 	private chunkDuration: number;
 	private config: BaseConfig;
+	private currentFfmpegProcess: ChildProcess | null = null;
 	private ffmpegPath: string;
 	private isRecording = false;
 	private logger: Logger;
 	private openAI: OpenAI;
 	private outputDir: string;
 	private socketClient: BaseSocketClient;
-	private useMp3 = false;
+	private useMp3 = true;
 	private VOLUME_RE = /mean[_ ]volume:\s*(-?\d+(?:\.\d+)?)\s*dB/i;
 
 	public constructor({
@@ -46,12 +48,6 @@ class BaseAudioRecorder implements AudioRecorder {
 		this.socketClient = socketClient;
 	}
 
-	private logChunkStart(filePath: string, type: string): void {
-		this.logger.info(
-			`[+] New chunk - ${filePath} | type=${type.toUpperCase()} | duration=${String(this.chunkDuration)}s`,
-		);
-	}
-
 	private logVolume(line: string): void {
 		const message = this.VOLUME_RE.exec(line);
 		const ONE = 1;
@@ -61,16 +57,57 @@ class BaseAudioRecorder implements AudioRecorder {
 		}
 	}
 
-	private recordNextChunk(): void {
-		if (!this.isRecording) {
+	private async transcribeFile(filePath: string): Promise<void> {
+		try {
+			this.logger.info(`[TRANSCRIBE] Processing chunk: ${filePath}`);
+
+			const chunkText = await this.openAI.transcribe(filePath);
+
+			this.socketClient.emit(SocketEvent.TRANSCRIBE, {
+				chunkText,
+				meetingId: this.config.ENV.ZOOM.MEETING_ID,
+			});
+
+			this.logger.info(`[TRANSCRIBE] Sent transcription for: ${filePath}`);
+		} catch (error: unknown) {
+			this.logger.error(`[TRANSCRIBE_ERROR] ${String(error)}`);
+		}
+	}
+
+	private watchOutputFolder(): void {
+		const watcher = chokidar.watch(this.outputDir, {
+			ignoreInitial: true,
+			persistent: true,
+		});
+
+		watcher.on("add", (filePath) => {
+			void this.transcribeFile(filePath);
+		});
+
+		watcher.on("error", (error) => {
+			this.logger.error(`[WATCHER_ERROR] ${String(error)}`);
+		});
+	}
+
+	public start(): void {
+		if (this.isRecording) {
+			this.logger.warn("[+] Already recording: ignoring start()");
+
 			return;
 		}
 
-		const timestamp = Date.now().toString();
+		mkdirSync(this.outputDir, { recursive: true });
+
+		this.logger.info(
+			`[+] Start recording | dir=${this.outputDir} | chunk=${String(this.chunkDuration)}s | format=${this.useMp3 ? "MP3" : "WAV"}`,
+		);
+
+		this.isRecording = true;
+
 		const fileExtension = this.useMp3 ? "mp3" : "wav";
 		const filePath = path.join(
 			this.outputDir,
-			`chunk-${timestamp}.${fileExtension}`,
+			`chunk-%Y%m%d-%H%M%S.${fileExtension}`,
 		);
 
 		const ffmpegArguments = [
@@ -83,23 +120,30 @@ class BaseAudioRecorder implements AudioRecorder {
 			"pulse",
 			"-i",
 			"auto_null.monitor",
-			"-t",
-			String(this.chunkDuration),
 			"-af",
 			"astats=metadata=1:reset=1",
+			"-f",
+			"segment",
+			"-segment_time",
+			String(this.chunkDuration),
+			"-reset_timestamps",
+			"1",
+			"-strftime",
+			"1",
 		];
 
 		if (this.useMp3) {
 			ffmpegArguments.push("-acodec", "libmp3lame", "-b:a", "128k");
 		} else {
-			ffmpegArguments.push("-acodec", "pcm_s16le", "-ar", "16000", "-ac", "1");
+			ffmpegArguments.push("-acodec", "pcm_s16le", "-ar", "44100", "-ac", "2");
 		}
 
 		ffmpegArguments.push(filePath);
 
-		this.logChunkStart(filePath, fileExtension);
+		this.watchOutputFolder();
 
 		const ffmpeg = spawn(this.ffmpegPath, ffmpegArguments);
+		this.currentFfmpegProcess = ffmpeg;
 
 		ffmpeg.stderr.on(AudioRecorderEvent.DATA, (data) => {
 			const lines = String(data)
@@ -120,49 +164,17 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		ffmpeg.on(AudioRecorderEvent.EXIT, (code, signal) => {
 			this.logger.info(
-				`[+] Chunk done | path=${filePath} | code=${String(code)}  signal=${String(signal)}`,
+				`[FFMPEG] exited | code=${String(code)} | signal=${String(signal)}`,
 			);
-
-			if (this.isRecording) {
-				this.recordNextChunk();
-			}
-
-			void this.transcribeAndSend(filePath);
+			this.currentFfmpegProcess = null;
 		});
-	}
-
-	private transcribeAndSend = async (filePath: string): Promise<void> => {
-		try {
-			const chunkText = await this.openAI.transcribe(filePath);
-
-			this.socketClient.emit(SocketEvent.TRANSCRIBE, {
-				chunkText,
-				meetingId: this.config.ENV.ZOOM.MEETING_ID,
-			});
-		} catch (error: unknown) {
-			this.logger.error(`[OPENAI][TRANSCRIBE_ERROR] ${String(error)}`);
-		}
-	};
-	public start(): void {
-		if (this.isRecording) {
-			this.logger.warn("[+] Already recording: ignoring start()");
-
-			return;
-		}
-
-		mkdirSync(this.outputDir, { recursive: true });
-
-		this.logger.info(
-			`[+] Start recording | dir=${this.outputDir}  |  chunk=${String(this.chunkDuration)}s  |  format=${this.useMp3 ? "MP3" : "WAV"}`,
-		);
-
-		this.isRecording = true;
-		this.recordNextChunk();
 	}
 
 	public stop(): void {
 		this.logger.info("[-] Recording stopped by caller");
 		this.isRecording = false;
+		this.logger.info("[-] Sending SIGINT to FFmpeg process");
+		this.currentFfmpegProcess?.kill("SIGINT");
 	}
 }
 

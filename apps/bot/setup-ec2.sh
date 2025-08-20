@@ -131,10 +131,6 @@ mkdir -p /home/ubuntu/audio
 sudo chown -R ubuntu:ubuntu /home/ubuntu/audio
 echo "[+] /home/ubuntu/audio prepared."
 
-
-node cpu-monitor.js
-
-
 # Generate .env with runtime configuration (meeting IDs, etc.)
 echo "[+] Parsing settings JSON..."
 SETTINGS_JSON="$1"

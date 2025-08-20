@@ -128,20 +128,6 @@ class BaseZoomBot {
 		return rawPasscode?.replace(/^\d/, "") || "";
 	}
 
-	private getMeetingId(): null | string {
-		const SECOND_ITEM_INDEX = 1;
-
-		const url = new URL(this.config.ENV.ZOOM.MEETING_LINK);
-		const meetingIdRegex = /\/(?:wc\/join|j)\/(\d+)/;
-		const regexMatchArray = meetingIdRegex.exec(url.pathname);
-
-		if (regexMatchArray?.[SECOND_ITEM_INDEX]) {
-			return regexMatchArray[SECOND_ITEM_INDEX];
-		}
-
-		return null;
-	}
-
 	private getSearchParams(url: string): Record<string, string> {
 		const parsedUrl = new URL(url);
 		const parameters: Record<string, string> = {};
@@ -205,13 +191,22 @@ class BaseZoomBot {
 		});
 
 		this.socketClient.on(SocketEvent.STOP_RECORDING, async () => {
-			// TODO:
-			// audioRecorder.finalize()
-			// audioRecorder.stopFullMeetingRecording()
+			const meetingId = String(this.config.ENV.ZOOM.MEETING_ID);
+
 			this.logger.info(
 				`Stopping recording of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 			);
 			this.audioRecorder.stop();
+			await this.audioRecorder.stopFullMeetingRecording();
+
+			const audioPrefix = this.config.ENV.S3.PREFIX_AUDIO;
+			const prefix = `${audioPrefix}/${meetingId}`;
+			const contentType = ContentType.AUDIO;
+			await this.audioRecorder.finalize({
+				contentType,
+				meetingId,
+				prefix,
+			});
 			await this.leaveMeeting();
 			this.socketClient.emit(
 				SocketEvent.RECORDING_STOPPED,
@@ -282,7 +277,6 @@ class BaseZoomBot {
 	}
 
 	public async run(): Promise<void> {
-		const meetingId = this.getMeetingId();
 		this.initSocket();
 
 		try {
@@ -306,37 +300,15 @@ class BaseZoomBot {
 			await this.joinMeeting();
 			this.logger.info(ZoomBotMessage.JOINED_MEETING);
 			this.audioRecorder.start();
-
-			if (meetingId) {
-				this.audioRecorder.startFullMeetingRecording(meetingId);
-			}
-
+			this.audioRecorder.startFullMeetingRecording(
+				String(this.config.ENV.ZOOM.MEETING_ID),
+			);
 			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 			await delay(Timeout.ONE_SECOND);
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessage.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,
 			);
-		} finally {
-			try {
-				this.audioRecorder.stop();
-				await this.audioRecorder.stopFullMeetingRecording();
-
-				if (meetingId) {
-					const audioPrefix = this.config.ENV.S3.PREFIX_AUDIO;
-					const prefix = `${audioPrefix}/${meetingId}`;
-					const contentType = ContentType.AUDIO;
-					await this.audioRecorder.finalize({
-						contentType,
-						meetingId,
-						prefix,
-					});
-				}
-			} catch (error) {
-				this.logger.error(
-					`${ZoomBotMessage.FAILED_TO_FINALIZE_AUDIO_RECORDING} ${error instanceof Error ? error.message : String(error)}`,
-				);
-			}
 		}
 	}
 }

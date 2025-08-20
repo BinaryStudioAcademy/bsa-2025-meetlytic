@@ -7,6 +7,7 @@ import {
 import { MeetingTranscriptionError } from "./libs/exceptions/exceptions.js";
 import { createMeetingPdf } from "./libs/helpers/helpers.js";
 import {
+	type CreatePdfOptions,
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,
 	type MeetingTranscriptionResponseDto,
@@ -63,8 +64,8 @@ class MeetingTranscriptionService
 		return isTranscriptionDeleted;
 	}
 
-	public async export(meetingId: string): Promise<Buffer> {
-		return await createMeetingPdf(meetingId);
+	public async export(options: CreatePdfOptions): Promise<Buffer> {
+		return await createMeetingPdf(options);
 	}
 
 	public async find(id: number): Promise<MeetingTranscriptionResponseDto> {

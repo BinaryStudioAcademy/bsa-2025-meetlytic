@@ -9,10 +9,10 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserResponseDto } from "~/modules/users/users.js";
 
 import { MeetingsApiPath } from "./libs/enums/enums.js";
-import { createMeetingPdf } from "./libs/helpers/create-meeting-pdf.js";
 import {
 	type CreateMeetingOptions,
 	type DeleteMeetingOptions,
+	type ExportMeetingOptions,
 	type FindAllMeetingOptions,
 	type FindBySignedUrlOptions,
 	type FindMeetingOptions,
@@ -232,15 +232,15 @@ class MeetingsController extends BaseController {
 		return { payload: null, status: HTTPCode.NO_CONTENT };
 	}
 
-	private async export(options: {
-		params: { id: string };
-	}): Promise<APIHandlerResponse> {
-		const meetingId = options.params.id;
-		const pdfBuffer = await createMeetingPdf(meetingId);
+	private async export(
+		options: ExportMeetingOptions,
+	): Promise<APIHandlerResponse> {
+		const id = Number(options.params.id);
+		const pdfBuffer = await this.meetingService.export(id);
 
 		return {
 			headers: {
-				"Content-Disposition": `attachment; filename="meeting-${meetingId}.pdf"`,
+				"Content-Disposition": `attachment; filename="meeting-${id.toString()}.pdf"`,
 				"Content-Type": "application/pdf",
 			},
 			payload: Buffer.from(pdfBuffer),

@@ -1,9 +1,10 @@
 import chrome from "html-pdf-chrome";
 
 import { getMeetingHtml } from "../templates/get-meeting-html.js";
+import { type CreatePdfOptions } from "../types/types.js";
 
-async function createMeetingPdf(meetingId: string): Promise<Buffer> {
-	const html = getMeetingHtml(meetingId);
+async function createMeetingPdf(options: CreatePdfOptions): Promise<Buffer> {
+	const html = getMeetingHtml(options);
 
 	const result = await chrome.create(html, {
 		printOptions: {

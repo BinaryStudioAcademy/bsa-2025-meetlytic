@@ -1,6 +1,10 @@
 {
 	"extends": "../../tsconfig.json",
-	"include": ["**/*.ts", "**/*.js"],
+	"include": [
+		"**/*.ts",
+		"**/*.js",
+		"../../apps/backend/src/modules/meetings/libs/types/create-pdf-options.type.ts"
+	],
 	"exclude": ["node_modules", "build"],
 	"compilerOptions": {
 		"baseUrl": "."

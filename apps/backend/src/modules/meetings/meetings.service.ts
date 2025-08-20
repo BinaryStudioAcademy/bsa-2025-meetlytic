@@ -187,8 +187,22 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return meeting.toDetailedObject();
 	}
 
-	public async export(meetingId: string): Promise<Buffer> {
-		return await this.meetingTranscriptionService.export(meetingId);
+	public async export(id: number): Promise<Buffer> {
+		const meetingTranscriptionResponseDto: MeetingTranscriptionGetAllResponseDto =
+			await this.meetingTranscriptionService.getByMeetingId(id);
+		const transcription = meetingTranscriptionResponseDto.items;
+		const meetingDetails: MeetingDetailedResponseDto = await this.find(id);
+		const summary = meetingDetails.summary ?? "";
+		const actionItems = meetingDetails.actionItems ?? "";
+		const meetingId = meetingDetails.meetingId;
+
+		return await this.meetingTranscriptionService.export({
+			actionItems,
+			id,
+			meetingId,
+			summary,
+			transcription,
+		});
 	}
 
 	public async find(id: number): Promise<MeetingDetailedResponseDto> {

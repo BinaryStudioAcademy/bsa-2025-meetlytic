@@ -22,8 +22,11 @@ const FIRST_FILE_INDEX = 0;
 const UserAvatarUploader: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const fileInputReference = useRef<HTMLInputElement>(null);
-	const { isLoading, url: avatarUrl } = useAppSelector(
-		(state) => state.users.avatar,
+	const avatarUrl = useAppSelector(
+		(state) => state.users.user?.details?.avatarFile?.url,
+	);
+	const isLoading = useAppSelector(
+		(state) => state.users.requests.avatar.isLoading,
 	);
 
 	useEffect(() => {

@@ -4,32 +4,33 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import { type UserWithDetailsDto, type ValueOf } from "~/libs/types/types.js";
 import { logout } from "~/modules/auth/slices/actions.js";
 
-import { getProfile, updateProfile } from "./actions.js";
+import { type AvatarFileDto } from "../libs/types/types.js";
 import {
 	deleteAvatar,
 	fetchAvatar,
+	getProfile,
+	updateProfile,
 	uploadAvatar,
-} from "./user-avatar.thunks.js";
+} from "./actions.js";
+
+type Requests = {
+	avatar: {
+		error: null | string;
+		isLoading: boolean;
+	};
+};
 
 type State = {
-	avatar: UserAvatarState;
 	dataStatus: ValueOf<typeof DataStatus>;
+	requests: Requests;
 	user: null | UserWithDetailsDto;
 };
 
-type UserAvatarState = {
-	error: null | string;
-	isLoading: boolean;
-	url: null | string;
-};
-
 const initialState: State = {
-	avatar: {
-		error: null,
-		isLoading: false,
-		url: null,
-	},
 	dataStatus: DataStatus.IDLE,
+	requests: {
+		avatar: { error: null, isLoading: false },
+	},
 	user: null,
 };
 
@@ -64,49 +65,66 @@ const { actions, reducer } = createSlice({
 		});
 
 		builder.addCase(uploadAvatar.pending, (state) => {
-			state.avatar.isLoading = true;
-			state.avatar.error = null;
+			state.requests.avatar.isLoading = true;
+			state.requests.avatar.error = null;
 		});
-		builder.addCase(uploadAvatar.fulfilled, (state, action) => {
-			state.avatar.isLoading = false;
-			state.avatar.url = action.payload;
+		builder.addCase(uploadAvatar.fulfilled, (state, { payload }) => {
+			state.requests.avatar.isLoading = false;
+
+			if (state.user) {
+				state.user.details ??= {};
+				state.user.details.avatarFile = payload;
+			}
 		});
-		builder.addCase(uploadAvatar.rejected, (state, action) => {
-			state.avatar.isLoading = false;
-			state.avatar.error = action.payload as string;
+		builder.addCase(uploadAvatar.rejected, (state, { payload }) => {
+			state.requests.avatar.isLoading = false;
+			state.requests.avatar.error = payload as string;
 		});
 
 		builder.addCase(deleteAvatar.pending, (state) => {
-			state.avatar.isLoading = true;
-			state.avatar.error = null;
+			state.requests.avatar.isLoading = true;
+			state.requests.avatar.error = null;
 		});
 		builder.addCase(deleteAvatar.fulfilled, (state) => {
-			state.avatar.isLoading = false;
-			state.avatar.url = null;
+			state.requests.avatar.isLoading = false;
+
+			if (state.user?.details) {
+				state.user.details.avatarFile = null;
+			}
 		});
-		builder.addCase(deleteAvatar.rejected, (state, action) => {
-			state.avatar.isLoading = false;
-			state.avatar.error = action.payload as string;
+		builder.addCase(deleteAvatar.rejected, (state, { payload }) => {
+			state.requests.avatar.isLoading = false;
+			state.requests.avatar.error = payload as string;
 		});
 
 		builder.addCase(fetchAvatar.pending, (state) => {
-			state.avatar.isLoading = true;
-			state.avatar.error = null;
+			state.requests.avatar.isLoading = true;
+			state.requests.avatar.error = null;
 		});
-		builder.addCase(fetchAvatar.fulfilled, (state, action) => {
-			state.avatar.isLoading = false;
-			state.avatar.url = action.payload;
+		builder.addCase(fetchAvatar.fulfilled, (state, { payload }) => {
+			state.requests.avatar.isLoading = false;
+
+			if (state.user) {
+				state.user.details ??= {};
+				state.user.details.avatarFile = payload;
+			}
 		});
-		builder.addCase(fetchAvatar.rejected, (state, action) => {
-			state.avatar.isLoading = false;
-			state.avatar.error = action.payload as string;
+		builder.addCase(fetchAvatar.rejected, (state, { payload }) => {
+			state.requests.avatar.isLoading = false;
+			state.requests.avatar.error = payload as string;
 		});
 	},
 	initialState,
 	name: sliceName,
 	reducers: {
-		setAvatarUrl: (state, action: PayloadAction<null | string>) => {
-			state.avatar.url = action.payload;
+		setAvatarFile: (
+			state,
+			{ payload }: PayloadAction<AvatarFileDto | null>,
+		) => {
+			if (state.user) {
+				state.user.details ??= {};
+				state.user.details.avatarFile = payload;
+			}
 		},
 		setUser: (state, action: PayloadAction<UserWithDetailsDto>) => {
 			state.user = action.payload;

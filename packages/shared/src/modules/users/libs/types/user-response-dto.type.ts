@@ -1,9 +1,8 @@
+import { type AvatarFileDto } from "./user-avatar.dto.type.js";
+
 type UserResponseDto = {
 	details?: null | {
-		avatarFile?: null | {
-			key: string;
-			url: string;
-		};
+		avatarFile?: AvatarFileDto | null;
 		id: number;
 	};
 	email: string;

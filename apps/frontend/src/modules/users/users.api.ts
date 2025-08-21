@@ -35,7 +35,7 @@ class UsersApi extends BaseHTTPApi {
 		}
 	}
 
-	public async getAvatarUrl(): Promise<null | string> {
+	public async getAvatar(): Promise<null | { key: string; url: string }> {
 		const response = await this.load(
 			this.getFullEndpoint(UsersApiPath.ME, {}),
 			{
@@ -47,7 +47,7 @@ class UsersApi extends BaseHTTPApi {
 
 		const user = await response.json<UserWithDetailsDto>();
 
-		return user.details?.avatarFile?.url ?? null;
+		return user.details?.avatarFile ?? null;
 	}
 
 	public async getCurrent(): Promise<UserWithDetailsDto> {
@@ -79,7 +79,7 @@ class UsersApi extends BaseHTTPApi {
 		return await response.json<UserWithDetailsDto>();
 	}
 
-	public async uploadAvatar(file: File): Promise<string> {
+	public async uploadAvatar(file: File): Promise<{ key: string; url: string }> {
 		const formData = new FormData();
 		formData.append("file", file);
 
@@ -92,9 +92,9 @@ class UsersApi extends BaseHTTPApi {
 			},
 		);
 
-		const data = await response.json<AvatarUploadResponseDto>();
+		const { data } = await response.json<AvatarUploadResponseDto>();
 
-		return data.data.url;
+		return data;
 	}
 }
 

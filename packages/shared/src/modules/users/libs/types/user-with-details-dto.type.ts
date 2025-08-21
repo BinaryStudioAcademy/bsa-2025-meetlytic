@@ -1,8 +1,8 @@
-import { type FileDto } from "./file-dto.type.js";
+import { type AvatarFileDto } from "./user-avatar.dto.type.js";
 
 type UserWithDetailsDto = {
 	details?: {
-		avatarFile?: FileDto;
+		avatarFile?: AvatarFileDto | null;
 	};
 	email: string;
 	firstName: string;

@@ -1,9 +1,10 @@
-import { getProfile, updateProfile } from "./actions.js";
 import {
 	deleteAvatar,
 	fetchAvatar,
+	getProfile,
+	updateProfile,
 	uploadAvatar,
-} from "./user-avatar.thunks.js";
+} from "./actions.js";
 import { actions } from "./users.slice.js";
 
 const allActions = {

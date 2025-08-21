@@ -39,7 +39,9 @@ const Header: React.FC<Properties> = ({
 		navigate(AppRoute.PROFILE);
 	}, [navigate]);
 
-	const avatarUrl = useAppSelector((state) => state.users.avatar.url);
+	const avatarUrl = useAppSelector(
+		(state) => state.users.user?.details?.avatarFile?.url,
+	);
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {

@@ -19,7 +19,9 @@ const Meetings: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const { dataStatus, meetings } = useAppSelector((state) => state.meeting);
 	const userEmail = useAppSelector((state) => state.auth.user?.email);
-	const avatarUrl = useAppSelector((state) => state.users.avatar.url);
+	const avatarUrl = useAppSelector(
+		(state) => state.users.user?.details?.avatarFile?.url,
+	);
 
 	useEffect(() => {
 		void dispatch(meetingActions.getAllMeetings());

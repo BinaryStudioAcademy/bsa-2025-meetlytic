@@ -1,8 +1,11 @@
+import { PDFDownloadLink } from "@react-pdf/renderer";
+
 import {
 	Button,
 	Icon,
 	Loader,
 	Markdown,
+	MeetingPdf,
 	Navigate,
 	PlayerTrack,
 	TranscriptionPanel,
@@ -93,6 +96,8 @@ const MeetingDetails: React.FC = () => {
 		void shareMeetingPublicUrl(meeting.id);
 	}, [meeting]);
 
+	const { transcriptions } = useAppSelector((state) => state.transcription);
+
 	if (!id || dataStatus === DataStatus.REJECTED) {
 		return <Navigate replace to={AppRoute.NOT_FOUND} />;
 	}
@@ -108,6 +113,17 @@ const MeetingDetails: React.FC = () => {
 			</div>
 		);
 	}
+
+	const meetingProperties = {
+		actionItems: meeting.actionItems ?? "",
+		createdAt: meeting.createdAt,
+		id: meeting.id,
+		summary: meeting.summary ?? "",
+	};
+
+	const cleanTranscription = transcriptions.items.map((item) => ({
+		chunkText: String(item.chunkText),
+	}));
 
 	return (
 		<>
@@ -138,7 +154,20 @@ const MeetingDetails: React.FC = () => {
 								onClick={handleStopRecording}
 							/>
 						)}
-						<Button label="Export" />
+
+						<PDFDownloadLink
+							document={
+								<MeetingPdf
+									meeting={meetingProperties}
+									transcription={cleanTranscription}
+								/>
+							}
+							fileName={`meeting-${meeting.id.toString()}.pdf`}
+						>
+							{({ loading }) => (
+								<Button label={loading ? "Generating PDF..." : "Export"} />
+							)}
+						</PDFDownloadLink>
 					</div>
 				</div>
 

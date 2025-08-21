@@ -66,6 +66,7 @@ const MeetingDetails: React.FC = () => {
 
 	const handleSummaryActionItemsUpdate = useCallback(() => {
 		const sharedToken = searchParameters.get("token");
+
 		void dispatch(
 			meetingDetailsActions.getMeetingDetailsById({
 				id: Number(id),
@@ -95,7 +96,16 @@ const MeetingDetails: React.FC = () => {
 				const { publicUrl } = await meetingDetailsApi.getPublicShareUrl(
 					meeting.id,
 				);
-				void navigator.clipboard.writeText(publicUrl);
+				const textarea = document.createElement("textarea");
+				textarea.value = publicUrl;
+				textarea.style.position = "absolute";
+				textarea.style.left = "-9999px";
+				textarea.style.opacity = "0";
+				document.body.append(textarea);
+				textarea.select();
+				// eslint-disable-next-line @typescript-eslint/no-deprecated, sonarjs/deprecation
+				document.execCommand("copy");
+				textarea.remove();
 				notification.success(NotificationMessage.PUBLIC_LINK_COPIED_SUCCESS);
 			} catch (error: unknown) {
 				notification.error(NotificationMessage.SHARE_LINK_GENERATION_FAILED);
@@ -203,7 +213,7 @@ const MeetingDetails: React.FC = () => {
 					</div>
 				</div>
 				<div className={styles["meeting-details__player"]}>
-					<PlayerTrack audioUrl="https://audio-samples.github.io/samples/mp3/wavenet_unconditional/voxceleb2/sample-5.mp3" />
+					<PlayerTrack audioUrl={meeting.audioFile?.url} />
 				</div>
 			</div>
 		</>

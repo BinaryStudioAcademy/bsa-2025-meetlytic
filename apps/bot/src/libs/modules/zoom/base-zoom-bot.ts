@@ -18,6 +18,8 @@ import {
 	type OpenAI,
 } from "~/libs/types/types.js";
 
+import { ContentType } from "./libs/enums/enums.js";
+
 type Constructor = {
 	audioRecorder: AudioRecorder;
 	config: BaseConfig;
@@ -194,13 +196,22 @@ class BaseZoomBot {
 		});
 
 		this.socketClient.on(SocketEvent.STOP_RECORDING, async () => {
-			// TODO:
-			// audioRecorder.finalize()
-			// audioRecorder.stopFullMeetingRecording()
+			const meetingId = String(this.config.ENV.ZOOM.MEETING_ID);
+
 			this.logger.info(
 				`Stopping recording of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 			);
 			this.audioRecorder.stop();
+			await this.audioRecorder.stopFullMeetingRecording();
+
+			const audioPrefix = this.config.ENV.S3.PREFIX_AUDIO;
+			const prefix = `${audioPrefix}/${meetingId}`;
+			const contentType = ContentType.AUDIO;
+			await this.audioRecorder.finalize({
+				contentType,
+				meetingId,
+				prefix,
+			});
 			await this.leaveMeeting();
 			this.socketClient.emit(
 				SocketEvent.RECORDING_STOPPED,

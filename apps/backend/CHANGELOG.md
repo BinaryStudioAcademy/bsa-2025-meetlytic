@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.10.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.9.1...backend-v1.10.0) (2025-08-21)
+
+
+### Features
+
+* add meeting card menu ml-211 ([#235](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/235)) ([8ef3a17](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/8ef3a17eb6c11edceaa7c6ef30df09b629762c4e))
+* record full meeting audio ml-132 ([#171](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/171)) ([547d87c](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/547d87cbabcc11fd421dcfc3aedb046d70fdd405))
+
+## [1.9.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.9.0...backend-v1.9.1) (2025-08-20)
+
+
+### Bug Fixes
+
+* change error code for delete and get meeting ml-222 ([#234](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/234)) ([23e57ad](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/23e57adde62728ad789213b13297c1acd54e82ba))
+
 ## [1.9.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.8.0...backend-v1.9.0) (2025-08-19)
 
 

@@ -7,6 +7,8 @@ export { type GetPublicUrlOptions } from "./get-public-url-options.type.js";
 export { type StopRecordingOptions } from "./stop-recording-options.type.js";
 export { type UpdateMeetingOptions } from "./update-meeting-options.type.js";
 export {
+	type FilePublicDto,
+	type MeetingAttachAudioRequestDto,
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,

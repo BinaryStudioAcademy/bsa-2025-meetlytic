@@ -1,9 +1,10 @@
-import { Avatar } from "~/libs/components/components.js";
-import { AvatarSize } from "~/libs/enums/enums.js";
+import { Avatar, Loader } from "~/libs/components/components.js";
+import { AvatarSize, DataStatus } from "~/libs/enums/enums.js";
 import { formatDate } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppSelector,
+	useCallback,
 	useEffect,
 } from "~/libs/hooks/hooks.js";
 import { actions as meetingActions } from "~/modules/meeting/meeting.js";
@@ -14,12 +15,23 @@ import styles from "./styles.module.css";
 
 const Meetings: React.FC = () => {
 	const dispatch = useAppDispatch();
-	const meetings = useAppSelector((state) => state.meeting.meetings);
+	const { dataStatus, meetings } = useAppSelector((state) => state.meeting);
 	const userEmail = useAppSelector((state) => state.auth.user?.email);
 
 	useEffect(() => {
 		void dispatch(meetingActions.getAllMeetings());
 	}, [dispatch]);
+
+	const handleDeleteMeeting = useCallback(
+		(id: number) => {
+			void dispatch(meetingActions.deleteMeeting(id));
+		},
+		[dispatch],
+	);
+
+	if (dataStatus === DataStatus.PENDING) {
+		return <Loader hasOverlay isLoading />;
+	}
 
 	return (
 		<>
@@ -53,6 +65,7 @@ const Meetings: React.FC = () => {
 								)}
 								id={meeting.id}
 								key={meeting.id}
+								onDelete={handleDeleteMeeting}
 								title={`Meeting #${String(meeting.id)}`}
 							/>
 						);

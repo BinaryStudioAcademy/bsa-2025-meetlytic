@@ -1,5 +1,7 @@
 const SocketEvent = {
+	AUDIO_SAVE: "audioSave",
 	CONNECT: "connect",
+	CONNECT_ERROR: "connect_error",
 	CONNECTION: "connection",
 	DISCONNECT: "disconnect",
 	ERROR: "error",

@@ -150,6 +150,20 @@ class BaseConfig implements Config {
 					format: String,
 				},
 			},
+			S3: {
+				BUCKET_NAME: {
+					default: null,
+					doc: "S3 Bucket Name",
+					env: "S3_BUCKET_NAME",
+					format: String,
+				},
+				PREFIX_AUDIO: {
+					default: null,
+					doc: "Prefix for audio files in S3",
+					env: "S3_PREFIX_AUDIO",
+					format: String,
+				},
+			},
 			SHARED_TOKEN: {
 				ALGORITHM: {
 					default: null,

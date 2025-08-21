@@ -1,4 +1,6 @@
 const SocketMessage = {
+	AUDIO_SAVE_ERROR: "Error with audio save:",
+	AUDIO_SAVE_RECEIVED: "Received audio save from bot:",
 	CLIENT_CONNECTED: "Client connected:",
 	CLIENT_DISCONNECTED: "Client disconnected:",
 	CLIENT_ERROR: "Client error:",

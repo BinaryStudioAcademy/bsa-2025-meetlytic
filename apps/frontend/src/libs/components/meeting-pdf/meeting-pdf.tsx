@@ -1,5 +1,4 @@
-import { Document, Page, Text, View } from "@react-pdf/renderer";
-
+import { Document, Page, Text, View } from "~/libs/components/components.js";
 import { formatDate } from "~/libs/helpers/helpers.js";
 import { type MeetingPdfProperties } from "~/libs/types/types.js";
 

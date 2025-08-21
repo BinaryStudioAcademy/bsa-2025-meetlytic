@@ -1,5 +1,3 @@
-import { PDFDownloadLink } from "@react-pdf/renderer";
-
 import {
 	Button,
 	Icon,
@@ -7,6 +5,7 @@ import {
 	Markdown,
 	MeetingPdf,
 	Navigate,
+	PDFDownloadLink,
 	PlayerTrack,
 	TranscriptionPanel,
 } from "~/libs/components/components.js";

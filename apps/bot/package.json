@@ -15,6 +15,7 @@
 	"dependencies": {
 		"@aws-sdk/client-s3": "3.864.0",
 		"@meetlytic/shared": "*",
+		"chokidar": "4.0.3",
 		"convict": "6.2.4",
 		"dotenv": "17.1.0",
 		"openai": "5.11.0",

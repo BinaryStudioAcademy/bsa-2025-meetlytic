@@ -3,7 +3,9 @@ import {
 	Icon,
 	Loader,
 	Markdown,
+	MeetingPdf,
 	Navigate,
+	PDFDownloadLink,
 	PlayerTrack,
 	TranscriptionPanel,
 } from "~/libs/components/components.js";
@@ -27,6 +29,7 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
 import { rehypeSanitize, remarkGfm } from "~/libs/plugins/plugins.js";
+import { type MeetingPdfProperties } from "~/libs/types/types.js";
 import {
 	actions as meetingDetailsActions,
 	sanitizeDefaultSchema,
@@ -93,6 +96,8 @@ const MeetingDetails: React.FC = () => {
 		void shareMeetingPublicUrl(meeting.id);
 	}, [meeting]);
 
+	const { transcriptions } = useAppSelector((state) => state.transcription);
+
 	if (!id || dataStatus === DataStatus.REJECTED) {
 		return <Navigate replace to={AppRoute.NOT_FOUND} />;
 	}
@@ -108,6 +113,20 @@ const MeetingDetails: React.FC = () => {
 			</div>
 		);
 	}
+
+	const transcription = transcriptions.items.map((item) => {
+		return {
+			chunkText: item.chunkText,
+		};
+	});
+
+	const meetingPdfProperties: MeetingPdfProperties = {
+		actionItems: meeting.actionItems ?? "",
+		createdAt: meeting.createdAt,
+		id: meeting.id,
+		summary: meeting.summary ?? "",
+		transcription,
+	};
 
 	return (
 		<>
@@ -138,7 +157,15 @@ const MeetingDetails: React.FC = () => {
 								onClick={handleStopRecording}
 							/>
 						)}
-						<Button label="Export" />
+
+						<PDFDownloadLink
+							document={<MeetingPdf {...meetingPdfProperties} />}
+							fileName={`meeting-${meeting.id.toString()}.pdf`}
+						>
+							{({ loading }) => (
+								<Button label={loading ? "Generating PDF..." : "Export"} />
+							)}
+						</PDFDownloadLink>
 					</div>
 				</div>
 

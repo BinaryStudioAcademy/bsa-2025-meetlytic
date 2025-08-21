@@ -11,10 +11,19 @@ type EnvironmentSchema = {
 		FFMPEG_PATH: string;
 		OUTPUT_DIRECTORY: string;
 	};
+	AWS: {
+		ACCESS_KEY_ID: string;
+		REGION: string;
+		SECRET_ACCESS_KEY: string;
+	};
 	OPEN_AI: {
 		KEY: string;
 		TEXT_GENERATION_MODEL: string;
 		TRANSCRIPTION_MODEL: string;
+	};
+	S3: {
+		BUCKET_NAME: string;
+		PREFIX_AUDIO: string;
 	};
 	ZOOM: {
 		BOT_NAME: string;

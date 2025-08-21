@@ -6,6 +6,8 @@ export {
 	MeetingTranscriptionErrorMessage,
 } from "./libs/enums/enums.js";
 export {
+	type MeetingAttachAudioRequestDto,
+	type MeetingAudioSaveDto,
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
 	type MeetingDetailsRequestDto,

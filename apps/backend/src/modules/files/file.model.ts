@@ -1,8 +1,13 @@
-import { AbstractModel } from "~/libs/modules/database/database.js";
-import { DatabaseTableName } from "~/libs/modules/database/libs/enums/enums.js";
+import {
+	AbstractModel,
+	DatabaseTableName,
+} from "~/libs/modules/database/database.js";
+import { type ValueOf } from "~/libs/types/types.js";
+
+import { type ContentType } from "./libs/enums/enums.js";
 
 class FileModel extends AbstractModel {
-	public contentType!: string;
+	public contentType!: ValueOf<typeof ContentType>;
 	public key!: string;
 	public url!: string;
 

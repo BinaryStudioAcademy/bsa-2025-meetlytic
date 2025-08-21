@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.14.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.13.0...v1.14.0) (2025-08-21)
+
+
+### Features
+
+* add the ability to receive transcriptions publicly ml-244 ([#267](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/267)) ([459f96d](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/459f96d02dc2e543eada0e3825dadff8fb4d677b))
+
+
+### Bug Fixes
+
+* bot unable to select the leave button ml-265 ([#269](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/269)) ([7e5b98f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/7e5b98f64e520a5ed138068abfbb5b57cb097db1))
+
 ## [1.13.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.12.0...v1.13.0) (2025-08-21)
 
 

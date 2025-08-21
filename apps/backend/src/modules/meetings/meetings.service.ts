@@ -293,6 +293,21 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return await this.meetingTranscriptionService.getByMeetingId(id);
 	}
 
+	public async getTranscriptionsBySignedUrl(
+		meetingId: number | string,
+		token: string,
+	): Promise<MeetingTranscriptionGetAllResponseDto> {
+		const numericMeetingId = Number(meetingId);
+
+		const { payload } = await this.sharedJwt.verify(token);
+
+		if (numericMeetingId !== payload.meetingId) {
+			throw new AuthError();
+		}
+
+		return await this.getTranscriptionsByMeetingId(numericMeetingId);
+	}
+
 	public async saveChunk({
 		chunkText,
 		meetingId,

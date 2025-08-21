@@ -2,7 +2,6 @@ import ringLarge from "~/assets/img/landing/background/bg-ring-large.svg";
 import ringMiddle from "~/assets/img/landing/background/bg-ring-middle.svg";
 import ringSmall from "~/assets/img/landing/background/bg-ring-small.svg";
 import { LandingBgRingType } from "~/libs/enums/enums.js";
-import { initRings } from "~/libs/helpers/helpers.js";
 import {
 	useEffect,
 	useInView,
@@ -15,6 +14,7 @@ import {
 	LandingBgNumeric,
 	type RingConfig,
 } from "~/modules/landing/landing.js";
+import { initRings } from "~/modules/landing/libs/helpers/helpers.js";
 
 import styles from "./styles.module.css";
 
@@ -41,7 +41,7 @@ const LandingBackground: React.FC = () => {
 			className={styles["landing-background"]}
 			ref={scope}
 		>
-			{Object.values(LandingBgRingType).flatMap((type) =>
+			{Object.values(LandingBgRingType).map((type) =>
 				Array.from({ length: LandingBgInit.RINGS_PER_SIZE }, (_, index) => {
 					let source: string;
 

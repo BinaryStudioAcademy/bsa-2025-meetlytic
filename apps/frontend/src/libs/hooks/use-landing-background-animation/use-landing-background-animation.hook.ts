@@ -1,14 +1,14 @@
 import { DOMEvent } from "~/libs/enums/enums.js";
-import {
-	applyTransforms,
-	handleBounds,
-	handleCollisions,
-} from "~/libs/helpers/helpers.js";
 import { useCallback, useEffect, useRef } from "~/libs/hooks/hooks.js";
 import {
 	LandingBgNumeric,
 	type RingConfig,
 } from "~/modules/landing/landing.js";
+import {
+	applyTransforms,
+	handleBounds,
+	handleCollisions,
+} from "~/modules/landing/libs/helpers/helpers.js";
 
 const useLandingAnimation = (
 	isInView: boolean,

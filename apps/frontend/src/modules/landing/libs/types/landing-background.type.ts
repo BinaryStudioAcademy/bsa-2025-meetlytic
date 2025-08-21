@@ -1,4 +1,5 @@
 import { type LandingBgRingType } from "~/libs/enums/enums.js";
+import { type ValueOf } from "~/libs/types/types.js";
 
 type RingConfig = {
 	imageElement: HTMLImageElement;
@@ -10,6 +11,6 @@ type RingConfig = {
 	velocityY: number;
 };
 
-type RingType = (typeof LandingBgRingType)[keyof typeof LandingBgRingType];
+type RingType = ValueOf<typeof LandingBgRingType>;
 
 export { type RingConfig, type RingType };

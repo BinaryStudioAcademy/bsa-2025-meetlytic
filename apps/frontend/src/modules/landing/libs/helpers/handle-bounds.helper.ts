@@ -4,6 +4,20 @@ import {
 	type RingConfig,
 } from "~/modules/landing/landing.js";
 
+const getBoundaryValues = (
+	containerDimension: number,
+	ringSize: number,
+): { max: number; min: number } => {
+	const marginValue = ringSize * LandingBgPhysics.MARGIN;
+	const oneMinusMargin =
+		ringSize * (LandingBgNumeric.ONE - LandingBgPhysics.MARGIN);
+
+	const min = -marginValue;
+	const max = containerDimension - oneMinusMargin;
+
+	return { max, min };
+};
+
 const handleBounds = ({
 	containerHeight,
 	containerWidth,
@@ -19,14 +33,10 @@ const handleBounds = ({
 		ring.positionX += ring.velocityX * deltaTime;
 		ring.positionY += ring.velocityY * deltaTime;
 
-		const minX = -ring.size * LandingBgPhysics.MARGIN;
-		const maxX =
-			containerWidth -
-			ring.size * (LandingBgNumeric.ONE - LandingBgPhysics.MARGIN);
-		const minY = -ring.size * LandingBgPhysics.MARGIN;
-		const maxY =
-			containerHeight -
-			ring.size * (LandingBgNumeric.ONE - LandingBgPhysics.MARGIN);
+		const [{ max: maxX, min: minX }, { max: maxY, min: minY }] = [
+			getBoundaryValues(containerWidth, ring.size),
+			getBoundaryValues(containerHeight, ring.size),
+		];
 
 		if (ring.positionX < minX) {
 			ring.positionX = minX;

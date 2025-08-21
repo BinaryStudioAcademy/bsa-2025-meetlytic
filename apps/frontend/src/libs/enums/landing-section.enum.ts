@@ -1,5 +1,7 @@
+import { ContactInfo } from "./enums.js";
+
 const LandingSection = {
-	EMAIL: "mailto:user@example.com",
+	EMAIL: ContactInfo.EMAIL,
 	FEATURES: "#features",
 	HOME: "#home",
 } as const;

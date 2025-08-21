@@ -11,6 +11,8 @@
 	position: absolute;
 	pointer-events: none;
 	user-select: none;
+	opacity: 0;
 	backface-visibility: hidden;
+	transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 	will-change: transform;
 }

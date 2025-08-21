@@ -6,6 +6,7 @@ export { Breakpoint } from "./breakpoint.enum.js";
 export { ButtonSize } from "./button-size.enum.js";
 export { ButtonVariant } from "./button-variant.enum.js";
 export { CarouselConfig } from "./carousel-config.enum.js";
+export { ContactInfo } from "./contact-info.enum.js";
 export { DataStatus } from "./data-status.enum.js";
 export { DOMEvent } from "./dom-event.enum.js";
 export { FeatureAnimation } from "./feature-animation.enum.js";

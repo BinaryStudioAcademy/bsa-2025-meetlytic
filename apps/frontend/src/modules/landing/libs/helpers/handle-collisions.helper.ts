@@ -7,6 +7,20 @@ import {
 
 import { clamp, getRingPairs } from "./helpers.js";
 
+const getRingCenter = (ring: RingConfig): { x: number; y: number } => {
+	const halfSize = ring.size / LandingBgNumeric.HALF;
+
+	return {
+		x: ring.positionX + halfSize,
+		y: ring.positionY + halfSize,
+	};
+};
+
+const applyDamping = (ring: RingConfig): void => {
+	ring.velocityX *= LandingBgPhysics.DAMPING;
+	ring.velocityY *= LandingBgPhysics.DAMPING;
+};
+
 const handleCollisions = (rings: RingConfig[]): void => {
 	const pairs = getRingPairs(rings);
 
@@ -16,13 +30,11 @@ const handleCollisions = (rings: RingConfig[]): void => {
 		let ringBPositionX = ringB.positionX;
 		let ringBPositionY = ringB.positionY;
 
-		const ringACenterX = ringAPositionX + ringA.size / LandingBgNumeric.HALF;
-		const ringACenterY = ringAPositionY + ringA.size / LandingBgNumeric.HALF;
-		const ringBCenterX = ringBPositionX + ringB.size / LandingBgNumeric.HALF;
-		const ringBCenterY = ringBPositionY + ringB.size / LandingBgNumeric.HALF;
+		const centerA = getRingCenter(ringA);
+		const centerB = getRingCenter(ringB);
 
-		const centerDeltaX = ringBCenterX - ringACenterX;
-		const centerDeltaY = ringBCenterY - ringACenterY;
+		const centerDeltaX = centerB.x - centerA.x;
+		const centerDeltaY = centerB.y - centerA.y;
 		const centerDistance = Math.hypot(centerDeltaX, centerDeltaY);
 		const minCenterDistance = (ringA.size + ringB.size) / LandingBgNumeric.HALF;
 
@@ -51,19 +63,18 @@ const handleCollisions = (rings: RingConfig[]): void => {
 			const ringBVelocityAlongNormal =
 				ringB.velocityX * normalX + ringB.velocityY * normalY;
 
-			ringA.velocityX +=
-				(ringBVelocityAlongNormal - ringAVelocityAlongNormal) * normalX;
-			ringA.velocityY +=
-				(ringBVelocityAlongNormal - ringAVelocityAlongNormal) * normalY;
-			ringB.velocityX +=
-				(ringAVelocityAlongNormal - ringBVelocityAlongNormal) * normalX;
-			ringB.velocityY +=
-				(ringAVelocityAlongNormal - ringBVelocityAlongNormal) * normalY;
+			const velocityExchangeA =
+				ringBVelocityAlongNormal - ringAVelocityAlongNormal;
+			const velocityExchangeB =
+				ringAVelocityAlongNormal - ringBVelocityAlongNormal;
 
-			ringA.velocityX *= LandingBgPhysics.DAMPING;
-			ringA.velocityY *= LandingBgPhysics.DAMPING;
-			ringB.velocityX *= LandingBgPhysics.DAMPING;
-			ringB.velocityY *= LandingBgPhysics.DAMPING;
+			ringA.velocityX += velocityExchangeA * normalX;
+			ringA.velocityY += velocityExchangeA * normalY;
+			ringB.velocityX += velocityExchangeB * normalX;
+			ringB.velocityY += velocityExchangeB * normalY;
+
+			applyDamping(ringA);
+			applyDamping(ringB);
 		}
 
 		ringA.positionX = ringAPositionX;

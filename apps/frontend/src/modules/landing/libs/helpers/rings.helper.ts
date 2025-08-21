@@ -72,11 +72,16 @@ const initRings = ({
 			const randomSide = Math.floor(
 				getSafeRandomValue() * LandingBgNumeric.SIDES_COUNT,
 			);
-			const minPositionX = -ringSize * LandingBgPhysics.MARGIN;
+
+			const ringMargin = ringSize * LandingBgPhysics.MARGIN;
+			const ringOffset =
+				ringSize * (LandingBgNumeric.ONE + LandingBgPhysics.MARGIN);
+
+			const minPositionX = -ringMargin;
 			const maxPositionX =
 				containerWidth -
 				ringSize * (LandingBgNumeric.ONE - LandingBgPhysics.MARGIN);
-			const minPositionY = -ringSize * LandingBgPhysics.MARGIN;
+			const minPositionY = -ringMargin;
 			const maxPositionY =
 				containerHeight -
 				ringSize * (LandingBgNumeric.ONE - LandingBgPhysics.MARGIN);
@@ -84,27 +89,25 @@ const initRings = ({
 			switch (randomSide) {
 				case LandingBgSide.BOTTOM: {
 					positionX = getRandomInRange(minPositionX, maxPositionX);
-					positionY = containerHeight + ringSize * LandingBgPhysics.MARGIN;
+					positionY = containerHeight + ringMargin;
 					break;
 				}
 
 				case LandingBgSide.LEFT: {
-					positionX =
-						-ringSize * (LandingBgNumeric.ONE + LandingBgPhysics.MARGIN);
+					positionX = -ringOffset;
 					positionY = getRandomInRange(minPositionY, maxPositionY);
 					break;
 				}
 
 				case LandingBgSide.RIGHT: {
-					positionX = containerWidth + ringSize * LandingBgPhysics.MARGIN;
+					positionX = containerWidth + ringMargin;
 					positionY = getRandomInRange(minPositionY, maxPositionY);
 					break;
 				}
 
 				default: {
 					positionX = getRandomInRange(minPositionX, maxPositionX);
-					positionY =
-						-ringSize * (LandingBgNumeric.ONE + LandingBgPhysics.MARGIN);
+					positionY = -ringOffset;
 					break;
 				}
 			}

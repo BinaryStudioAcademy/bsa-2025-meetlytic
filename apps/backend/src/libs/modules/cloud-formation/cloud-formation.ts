@@ -7,9 +7,11 @@ const {
 	ACCESS_KEY_ID: accessKeyId,
 	AMI_ID: imageId,
 	INSTANCE_TYPE: instanceType,
-	REGION,
+	REGION: region,
 	SECRET_ACCESS_KEY: secretAccessKey,
 } = config.ENV.AWS;
+
+const { BUCKET_NAME: bucketName, PREFIX_AUDIO: prefixAudio } = config.ENV.S3;
 
 const { ORIGIN: origin } = config.ENV.APP;
 
@@ -26,12 +28,16 @@ const cloudFormation = new BaseCloudFormation({
 	imageId,
 	instanceType,
 	logger,
-	region: REGION,
-
+	region,
 	settings: {
+		accessKeyId,
 		botName,
+		bucketName,
 		openAIKey,
 		origin,
+		prefixAudio,
+		region,
+		secretAccessKey,
 		textGenerationModel,
 		transcriptionModel,
 	},

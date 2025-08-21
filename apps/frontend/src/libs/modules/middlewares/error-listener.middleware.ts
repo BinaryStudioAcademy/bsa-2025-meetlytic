@@ -15,14 +15,19 @@ const errorListenerMiddleware = createListenerMiddleware<
 
 errorListenerMiddleware.startListening({
 	effect: async (action, listenerApi) => {
-		const { message, status } = action.payload as RejectPayload;
+		const payload = action.payload as RejectPayload | undefined;
 
-		if (status === HTTPCode.UNAUTHORIZED) {
-			notification.error(message ?? "Session expired. Please log in again.");
+		if (payload?.status === HTTPCode.UNAUTHORIZED) {
+			notification.error(
+				payload.message ?? "Session expired. Please log in again.",
+			);
 			await listenerApi.dispatch(authActions.logout());
 		}
 
-		notification.error(message ?? "Something went wrong");
+		const errorMessage =
+			payload?.message ?? action.error.message ?? "Something went wrong";
+
+		notification.error(errorMessage);
 	},
 	predicate: isRejected,
 });

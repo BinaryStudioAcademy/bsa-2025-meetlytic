@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.9.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.8.0...shared-v1.9.0) (2025-08-21)
+
+
+### Features
+
+* add the ability to receive transcriptions publicly ml-244 ([#267](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/267)) ([459f96d](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/459f96d02dc2e543eada0e3825dadff8fb4d677b))
+
+## [1.8.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.7.1...shared-v1.8.0) (2025-08-21)
+
+
+### Features
+
+* add meeting card menu ml-211 ([#235](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/235)) ([8ef3a17](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/8ef3a17eb6c11edceaa7c6ef30df09b629762c4e))
+* record full meeting audio ml-132 ([#171](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/171)) ([547d87c](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/547d87cbabcc11fd421dcfc3aedb046d70fdd405))
+
 ## [1.7.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.7.0...shared-v1.7.1) (2025-08-20)
 
 

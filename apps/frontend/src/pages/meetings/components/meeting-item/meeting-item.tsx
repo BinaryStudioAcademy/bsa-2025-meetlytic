@@ -1,7 +1,10 @@
 import PlaceholderAvatar from "~/assets/img/meeting-placeholder.svg";
-import { Link } from "~/libs/components/components.js";
+import { Icon, Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import { configureString } from "~/libs/helpers/helpers.js";
+import {
+	configureString,
+	shareMeetingPublicUrl,
+} from "~/libs/helpers/helpers.js";
 import { useCallback, useState } from "~/libs/hooks/hooks.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
@@ -53,6 +56,17 @@ const MeetingItem: React.FC<Properties> = ({
 		setIsMenuOpen(false);
 	}, []);
 
+	const handleShareClick = useCallback<
+		React.MouseEventHandler<HTMLButtonElement>
+	>(
+		(event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			void shareMeetingPublicUrl(id);
+		},
+		[id],
+	);
+
 	return (
 		<>
 			<Link to={to as ValueOf<typeof AppRoute>}>
@@ -65,6 +79,18 @@ const MeetingItem: React.FC<Properties> = ({
 						<img alt="meeting" src={src ?? PlaceholderAvatar} />
 						{isHovered && (
 							<div className={styles["menu__container"]}>
+								<button
+									aria-label="Copy meeting share link"
+									className={styles["meeting__share"]}
+									onClick={handleShareClick}
+									title="Copy share link"
+									type="button"
+								>
+									<Icon
+										className={styles["meeting__share-icon"]}
+										name="copyLink"
+									/>
+								</button>
 								<button
 									className={styles["menu__button"]}
 									onClick={handleMenuToggle}

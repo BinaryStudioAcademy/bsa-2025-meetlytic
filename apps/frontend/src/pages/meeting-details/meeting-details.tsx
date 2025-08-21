@@ -3,7 +3,9 @@ import {
 	Icon,
 	Loader,
 	Markdown,
+	MeetingPdf,
 	Navigate,
+	PDFDownloadLink,
 	PlayerTrack,
 	TranscriptionPanel,
 } from "~/libs/components/components.js";
@@ -14,7 +16,7 @@ import {
 	MeetingStatus,
 	NotificationMessage,
 } from "~/libs/enums/enums.js";
-import { formatDate } from "~/libs/helpers/helpers.js";
+import { formatDate, shareMeetingPublicUrl } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -25,12 +27,11 @@ import {
 	useSearchParams,
 	useState,
 } from "~/libs/hooks/hooks.js";
-import { config } from "~/libs/modules/config/config.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
 import { rehypeSanitize, remarkGfm } from "~/libs/plugins/plugins.js";
+import { type MeetingPdfProperties } from "~/libs/types/types.js";
 import {
 	actions as meetingDetailsActions,
-	meetingDetailsApi,
 	sanitizeDefaultSchema,
 } from "~/modules/meeting-details/meeting-details.js";
 import { actions as meetingActions } from "~/modules/meeting/meeting.js";
@@ -67,6 +68,7 @@ const MeetingDetails: React.FC = () => {
 
 	const handleSummaryActionItemsUpdate = useCallback(() => {
 		const sharedToken = searchParameters.get("token");
+
 		void dispatch(
 			meetingDetailsActions.getMeetingDetailsById({
 				id: Number(id),
@@ -91,35 +93,10 @@ const MeetingDetails: React.FC = () => {
 			return;
 		}
 
-		const shareMeeting = async (): Promise<void> => {
-			try {
-				const { publicUrl } = await meetingDetailsApi.getPublicShareUrl(
-					meeting.id,
-				);
-				const host = config.ENV.APP.HOST;
-				const fullUrl = `${host}${publicUrl}`;
-
-				const textarea = document.createElement("textarea");
-				textarea.value = fullUrl;
-				textarea.style.position = "absolute";
-				textarea.style.left = "-9999px";
-				textarea.style.opacity = "0";
-				document.body.append(textarea);
-				textarea.select();
-				// eslint-disable-next-line @typescript-eslint/no-deprecated, sonarjs/deprecation
-				document.execCommand("copy");
-				textarea.remove();
-
-				notification.success(NotificationMessage.PUBLIC_LINK_COPIED_SUCCESS);
-			} catch (error: unknown) {
-				notification.error(NotificationMessage.SHARE_LINK_GENERATION_FAILED);
-
-				throw error;
-			}
-		};
-
-		void shareMeeting();
+		void shareMeetingPublicUrl(meeting.id);
 	}, [meeting]);
+
+	const { transcriptions } = useAppSelector((state) => state.transcription);
 
 	if (!id || dataStatus === DataStatus.REJECTED) {
 		return <Navigate replace to={AppRoute.NOT_FOUND} />;
@@ -136,6 +113,20 @@ const MeetingDetails: React.FC = () => {
 			</div>
 		);
 	}
+
+	const transcription = transcriptions.items.map((item) => {
+		return {
+			chunkText: item.chunkText,
+		};
+	});
+
+	const meetingPdfProperties: MeetingPdfProperties = {
+		actionItems: meeting.actionItems ?? "",
+		createdAt: meeting.createdAt,
+		id: meeting.id,
+		summary: meeting.summary ?? "",
+		transcription,
+	};
 
 	return (
 		<>
@@ -166,7 +157,15 @@ const MeetingDetails: React.FC = () => {
 								onClick={handleStopRecording}
 							/>
 						)}
-						<Button label="Export" />
+
+						<PDFDownloadLink
+							document={<MeetingPdf {...meetingPdfProperties} />}
+							fileName={`meeting-${meeting.id.toString()}.pdf`}
+						>
+							{({ loading }) => (
+								<Button label={loading ? "Generating PDF..." : "Export"} />
+							)}
+						</PDFDownloadLink>
 					</div>
 				</div>
 
@@ -217,7 +216,7 @@ const MeetingDetails: React.FC = () => {
 					</div>
 				</div>
 				<div className={styles["meeting-details__player"]}>
-					<PlayerTrack audioUrl="https://audio-samples.github.io/samples/mp3/wavenet_unconditional/voxceleb2/sample-5.mp3" />
+					<PlayerTrack audioUrl={meeting.audioFile?.url} />
 				</div>
 			</div>
 		</>

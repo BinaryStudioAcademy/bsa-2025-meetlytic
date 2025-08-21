@@ -10,7 +10,16 @@ class MeetingRepository implements Repository<MeetingEntity> {
 	public constructor(meetingModel: typeof MeetingModel) {
 		this.meetingModel = meetingModel;
 	}
+	public async attachAudioFile(
+		id: number,
+		fileId: number,
+	): Promise<MeetingEntity | null> {
+		const updated = await this.meetingModel
+			.query()
+			.patchAndFetchById(id, { audioFileId: fileId });
 
+		return MeetingEntity.initialize(updated);
+	}
 	public async create(entity: MeetingEntity): Promise<MeetingEntity> {
 		const payload = entity.toNewObject();
 		const meeting = await this.meetingModel
@@ -29,7 +38,15 @@ class MeetingRepository implements Repository<MeetingEntity> {
 	}
 
 	public async find(id: number): Promise<MeetingEntity | null> {
-		const meeting = await this.meetingModel.query().findById(id);
+		const meeting = await this.meetingModel
+			.query()
+			.findById(id)
+			.withGraphFetched("audioFile(selectBasic)")
+			.modifiers({
+				selectBasic(builder) {
+					builder.select("id", "url", "contentType");
+				},
+			});
 
 		return meeting ? MeetingEntity.initialize(meeting) : null;
 	}

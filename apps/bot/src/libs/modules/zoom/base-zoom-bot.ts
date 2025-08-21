@@ -326,7 +326,7 @@ class BaseZoomBot {
 			await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
 			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
 			await this.page.keyboard.type(
-				`Hello! I'm the Meetlytic bot.\n Here is the URL for the transcript of this meeting.\n${publicUrl}`,
+				`Hello! This meeting is being recorded by Meetlytic AI Bot. To check the meeting transcription you can follow the link: ${publicUrl}`,
 			);
 			await this.page.keyboard.press(KeyboardKey.ENTER);
 		} catch (error) {

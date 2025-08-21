@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.10.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.9.0...frontend-v1.10.0) (2025-08-21)
+
+
+### Features
+
+* add share button to meeting cards and move logic to helper ml-208 ([#255](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/255)) ([fa1ea44](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/fa1ea44376f0d843a7a6ec350f6c8e469ce5c7fe))
+* mobile responsive for meetings details and transcription ml-156 ([#259](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/259)) ([81886d5](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/81886d56e6d2ea4fee2d20848fb4e8b925c87df1))
+
+
+### Bug Fixes
+
+* invalid or expired token check ml-174 ([#254](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/254)) ([b3bf7c9](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/b3bf7c9e6f229147a5a06e509a4937fa4d93d034))
+
 ## [1.9.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.8.1...frontend-v1.9.0) (2025-08-21)
 
 

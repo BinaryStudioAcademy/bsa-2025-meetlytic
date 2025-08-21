@@ -201,9 +201,8 @@ class MeetingService implements Service<MeetingResponseDto> {
 	}
 
 	public async exportToPDF(id: number): Promise<Buffer> {
-		const meetingTranscriptionResponseDto: MeetingTranscriptionGetAllResponseDto =
+		const { items: transcription } =
 			await this.meetingTranscriptionService.getByMeetingId(id);
-		const transcription = meetingTranscriptionResponseDto.items;
 		const meetingDetails: MeetingDetailedResponseDto = await this.find(id);
 		const summary = meetingDetails.summary ?? "";
 		const actionItems = meetingDetails.actionItems ?? "";

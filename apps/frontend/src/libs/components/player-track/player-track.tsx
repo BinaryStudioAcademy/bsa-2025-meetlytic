@@ -16,14 +16,22 @@ import { Icon } from "../icon/icon.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	audioUrl: string;
+	audioUrl?: null | string | undefined;
 };
 
 const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 	const audioReference = useRef<HTMLAudioElement>(null);
 	const progressReference = useRef<HTMLButtonElement>(null);
 
+	const [isPlaying, setIsPlaying] = useState<boolean>(false);
+	const [currentTime, setCurrentTime] = useState<number>(START_TIME);
+	const [duration, setDuration] = useState<number>(START_TIME);
+
 	useEffect(() => {
+		if (!audioUrl) {
+			return;
+		}
+
 		const audio = audioReference.current;
 
 		if (!audio) {
@@ -54,11 +62,7 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 			);
 			audio.removeEventListener(AudioEvent.ENDED, handleEnded);
 		};
-	}, []);
-
-	const [isPlaying, setIsPlaying] = useState(false);
-	const [currentTime, setCurrentTime] = useState(START_TIME);
-	const [duration, setDuration] = useState(START_TIME);
+	}, [audioUrl]);
 
 	const handleTogglePlayback = useCallback(async (): Promise<void> => {
 		if (!audioReference.current) {
@@ -113,6 +117,10 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 		},
 		[handleSeek],
 	);
+
+	if (!audioUrl) {
+		return null;
+	}
 
 	const progressWidth = `${String((currentTime / duration) * PERCENT_MULTIPLIER)}%`;
 

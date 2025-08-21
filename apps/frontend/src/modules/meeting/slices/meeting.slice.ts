@@ -4,7 +4,7 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 import { type MeetingResponseDto } from "~/modules/meeting/meeting.js";
 
-import { createMeeting, getAllMeetings } from "./actions.js";
+import { createMeeting, deleteMeeting, getAllMeetings } from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
@@ -36,6 +36,18 @@ const { actions, name, reducer } = createSlice({
 			state.meetings = action.payload.items;
 		});
 		builder.addCase(getAllMeetings.rejected, (state) => {
+			state.dataStatus = DataStatus.REJECTED;
+		});
+		builder.addCase(deleteMeeting.pending, (state) => {
+			state.dataStatus = DataStatus.PENDING;
+		});
+		builder.addCase(deleteMeeting.fulfilled, (state, action) => {
+			state.dataStatus = DataStatus.FULFILLED;
+			state.meetings = state.meetings.filter(
+				(meeting) => meeting.id !== action.payload,
+			);
+		});
+		builder.addCase(deleteMeeting.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
 		});
 	},

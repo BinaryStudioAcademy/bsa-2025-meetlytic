@@ -33,6 +33,24 @@ class TranscriptionApi extends BaseHTTPApi {
 
 		return await response.json<MeetingTranscriptionGetAllResponseDto>();
 	}
+
+	public async getTranscriptionsBySignedUrl(
+		meetingId: string,
+		token: string,
+	): Promise<MeetingTranscriptionGetAllResponseDto> {
+		const url = `${this.getFullEndpoint(
+			MeetingsApiPath.$ID_MEETING_TRANSCRIPTIONS_PUBLIC,
+			{ id: meetingId },
+		)}?token=${encodeURIComponent(token)}`;
+
+		const response = await this.load(url, {
+			contentType: ContentType.JSON,
+			hasAuth: false,
+			method: HTTPMethod.GET,
+		});
+
+		return await response.json<MeetingTranscriptionGetAllResponseDto>();
+	}
 }
 
 export { TranscriptionApi };

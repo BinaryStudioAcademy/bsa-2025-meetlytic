@@ -18,12 +18,13 @@ const ProtectedRoute: React.FC<Properties> = ({
 	const token = localStorage.getItem(StorageKey.TOKEN);
 	const { dataStatus } = useAppSelector((state) => state.auth);
 
-	if (
+	const shouldRedirect =
 		!token ||
 		((dataStatus === DataStatus.FULFILLED ||
 			dataStatus === DataStatus.REJECTED) &&
-			!isAuthenticated)
-	) {
+			!isAuthenticated);
+
+	if (shouldRedirect) {
 		return (
 			<Navigate replace state={{ from: location.pathname }} to={redirectTo} />
 		);

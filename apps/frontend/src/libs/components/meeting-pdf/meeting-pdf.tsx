@@ -1,13 +1,9 @@
-import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import { Document, Page, Text, View } from "@react-pdf/renderer";
 
+import { formatDate } from "~/libs/helpers/helpers.js";
 import { type MeetingPdfProperties } from "~/libs/types/types.js";
 
-const styles = StyleSheet.create({
-	page: { padding: 30 },
-	section: { marginBottom: 20 },
-	text: { fontSize: 12, lineHeight: 1.5 },
-	title: { fontSize: 18, marginBottom: 10 },
-});
+import { styles } from "./meeting-pdf.styles.js";
 
 const MeetingPdf = (
 	meetingProperties: MeetingPdfProperties,
@@ -26,7 +22,7 @@ const MeetingPdf = (
 				<View style={styles.section}>
 					<Text style={styles.title}>Meeting #{id}</Text>
 					<Text style={styles.text}>
-						Date: {new Date(createdAt).toLocaleString()}
+						Date: {formatDate(new Date(createdAt), "D MMMM hA")}
 					</Text>
 				</View>
 				<View style={styles.section}>

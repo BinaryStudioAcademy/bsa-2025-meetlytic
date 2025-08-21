@@ -7,7 +7,10 @@ import {
 	type MeetingTranscriptionResponseDto,
 } from "~/modules/transcription/transcription.js";
 
-import { getTranscriptionsByMeetingId } from "./actions.js";
+import {
+	getTranscriptionsByMeetingId,
+	getTranscriptionsBySignedUrl,
+} from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
@@ -29,6 +32,17 @@ const { actions, name, reducer } = createSlice({
 			state.transcriptions = action.payload;
 		});
 		builder.addCase(getTranscriptionsByMeetingId.rejected, (state) => {
+			state.dataStatus = DataStatus.REJECTED;
+			state.transcriptions = { items: [] };
+		});
+		builder.addCase(getTranscriptionsBySignedUrl.pending, (state) => {
+			state.dataStatus = DataStatus.PENDING;
+		});
+		builder.addCase(getTranscriptionsBySignedUrl.fulfilled, (state, action) => {
+			state.dataStatus = DataStatus.FULFILLED;
+			state.transcriptions = action.payload;
+		});
+		builder.addCase(getTranscriptionsBySignedUrl.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
 			state.transcriptions = { items: [] };
 		});

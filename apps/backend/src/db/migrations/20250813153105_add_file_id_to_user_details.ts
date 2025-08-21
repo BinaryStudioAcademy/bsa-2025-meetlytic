@@ -1,9 +1,6 @@
 import { type Knex } from "knex";
 
-const TableName = {
-	FILES: "files",
-	USER_DETAILS: "user_details",
-} as const;
+import { DatabaseTableName } from "~/libs/modules/database/libs/enums/enums.js";
 
 const ColumnName = {
 	AVATAR_FILE_ID: "avatar_file_id",
@@ -19,15 +16,15 @@ const ColumnName = {
 const DELETE_SET_NULL = "SET NULL";
 
 async function down(knex: Knex): Promise<void> {
-	await knex.schema.alterTable(TableName.USER_DETAILS, (table) => {
+	await knex.schema.alterTable(DatabaseTableName.USER_DETAILS, (table) => {
 		table.dropColumn(ColumnName.AVATAR_FILE_ID);
 	});
 
-	await knex.schema.dropTableIfExists(TableName.FILES);
+	await knex.schema.dropTableIfExists(DatabaseTableName.FILES);
 }
 
 async function up(knex: Knex): Promise<void> {
-	await knex.schema.createTable(TableName.FILES, (table) => {
+	await knex.schema.createTable(DatabaseTableName.FILES, (table) => {
 		table.increments(ColumnName.ID).primary();
 		table.string(ColumnName.CONTENT_TYPE).notNullable();
 		table.string(ColumnName.KEY).notNullable();
@@ -42,13 +39,13 @@ async function up(knex: Knex): Promise<void> {
 			.notNullable();
 	});
 
-	await knex.schema.alterTable(TableName.USER_DETAILS, (table) => {
+	await knex.schema.alterTable(DatabaseTableName.USER_DETAILS, (table) => {
 		table
 			.integer(ColumnName.AVATAR_FILE_ID)
 			.unsigned()
 			.nullable()
 			.references(ColumnName.ID)
-			.inTable(TableName.FILES)
+			.inTable(DatabaseTableName.FILES)
 			.onDelete(DELETE_SET_NULL);
 		table.index(ColumnName.AVATAR_FILE_ID);
 	});

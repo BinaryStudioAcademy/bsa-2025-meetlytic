@@ -22,6 +22,7 @@ import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
 import { extractZoomMeetingId } from "./libs/helpers/helpers.js";
 import {
+	type MeetingAttachAudioRequestDto,
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
 	type MeetingGetAllResponseDto,
@@ -80,6 +81,41 @@ class MeetingService implements Service<MeetingResponseDto> {
 		}
 
 		return meeting.toObject();
+	}
+
+	public async attachAudioFile(
+		id: number,
+		payload: MeetingAttachAudioRequestDto,
+	): Promise<MeetingResponseDto> {
+		const meeting = await this.meetingRepository.find(id);
+
+		if (!meeting) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.MEETING_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		if (meeting.toObject().audioFileId) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.AUDIO_FILE_ALREADY_ATTACHED,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
+		const updated = await this.meetingRepository.attachAudioFile(
+			id,
+			payload.fileId,
+		);
+
+		if (!updated) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.UPDATE_FAILED,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
+		return updated.toClientObject();
 	}
 
 	public async create(
@@ -294,6 +330,8 @@ class MeetingService implements Service<MeetingResponseDto> {
 		const meeting = MeetingEntity.initialize({
 			actionItems:
 				payload.actionItems ?? meetingEntity.toDetailedObject().actionItems,
+			audioFile: meetingEntity.toDetailedObject().audioFile,
+			audioFileId: meetingEntity.toDetailedObject().audioFileId,
 			createdAt: meetingEntity.toObject().createdAt,
 			host: payload.host ?? meetingEntity.toObject().host,
 			id,

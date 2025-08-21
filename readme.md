@@ -50,11 +50,29 @@ erDiagram
       text meeting_password
       text summary
       text action_items
+      int audio_file_id FK
+      dateTime created_at
+      dateTime updated_at
+   }
+   files {
+      int id PK
+      text key UK
+      text url
+      text content_type
+      dateTime created_at
+      dateTime updated_at
+   }
+   meeting_transcriptions {
+      int id PK
+      int meeting_id FK
+      text chunk_text
       dateTime created_at
       dateTime updated_at
    }
    users ||--|| user_details: user_id
    users ||--o{ meetings: owner_id
+   meetings }o--|| files: audio_file_id
+   meetings ||--o{ meeting_transcriptions: meeting_id
 ```
 
 ## 5. Architecture

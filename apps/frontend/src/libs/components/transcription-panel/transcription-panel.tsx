@@ -6,6 +6,7 @@ import {
 	useCallback,
 	useEffect,
 	useRef,
+	useSearchParams,
 } from "~/libs/hooks/hooks.js";
 import { actions as transcriptionActions } from "~/modules/transcription/transcription.js";
 
@@ -26,6 +27,8 @@ const TranscriptionPanel: React.FC<Properties> = ({
 	const { dataStatus, transcriptions } = useAppSelector(
 		({ transcription }) => transcription,
 	);
+	const [searchParameters] = useSearchParams();
+	const token = searchParameters.get("token");
 
 	useEffect(() => {
 		const containerBottom = containerReference.current;
@@ -38,8 +41,21 @@ const TranscriptionPanel: React.FC<Properties> = ({
 	}, []);
 
 	useEffect(() => {
-		void dispatch(transcriptionActions.getTranscriptionsByMeetingId(meetingId));
-	}, [dispatch, meetingId]);
+		if (meetingId) {
+			if (token) {
+				void dispatch(
+					transcriptionActions.getTranscriptionsBySignedUrl({
+						meetingId: String(meetingId),
+						token,
+					}),
+				);
+			} else {
+				void dispatch(
+					transcriptionActions.getTranscriptionsByMeetingId(meetingId),
+				);
+			}
+		}
+	}, [dispatch, meetingId, token]);
 
 	const handleSearch = useCallback(() => {
 		// TODO: implement handleSearch logic

@@ -160,6 +160,12 @@ class MeetingsController extends BaseController {
 			path: MeetingsApiPath.$ID_MEETING_TRANSCRIPTIONS,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
+		this.addRoute({
+			handler: (options) =>
+				this.getTranscriptionsBySignedUrl(options as FindBySignedUrlOptions),
+			method: HTTPMethod.GET,
+			path: MeetingsApiPath.$ID_MEETING_TRANSCRIPTIONS_PUBLIC,
+		});
 	}
 
 	/**
@@ -416,6 +422,18 @@ class MeetingsController extends BaseController {
 		const meetingId = options.params.id;
 		const transcriptions =
 			await this.meetingService.getTranscriptionsByMeetingId(Number(meetingId));
+
+		return { payload: transcriptions, status: HTTPCode.OK };
+	}
+
+	private async getTranscriptionsBySignedUrl(
+		options: FindBySignedUrlOptions,
+	): Promise<APIHandlerResponse> {
+		const meetingId = options.params.id;
+		const token = options.query.token;
+
+		const transcriptions =
+			await this.meetingService.getTranscriptionsBySignedUrl(meetingId, token);
 
 		return { payload: transcriptions, status: HTTPCode.OK };
 	}

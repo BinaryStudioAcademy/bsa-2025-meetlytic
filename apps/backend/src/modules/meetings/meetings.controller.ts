@@ -1,4 +1,4 @@
-import { APIPath } from "~/libs/enums/enums.js";
+import { APIPath, ContentType } from "~/libs/enums/enums.js";
 import { checkIfMeetingOwner } from "~/libs/hooks/hooks.js";
 import {
 	type APIHandlerResponse,
@@ -269,7 +269,7 @@ class MeetingsController extends BaseController {
 		return {
 			headers: {
 				"Content-Disposition": `attachment; filename="meeting-${id.toString()}.pdf"`,
-				"Content-Type": "application/pdf",
+				"Content-Type": ContentType.PDF,
 			},
 			payload: Buffer.from(pdfBuffer),
 			status: HTTPCode.OK,

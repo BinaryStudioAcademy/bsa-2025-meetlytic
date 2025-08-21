@@ -1,13 +1,8 @@
 import { type CreatePdfOptions } from "../types/types.js";
 
 function getMeetingHtmlTemplate(options: CreatePdfOptions): string {
-	const {
-		actionItems,
-		id,
-		meetingId,
-		summary,
-		transcription,
-	}: CreatePdfOptions = options;
+	const { actionItems, meetingId, summary, transcription }: CreatePdfOptions =
+		options;
 
 	const transcriptionHtml = transcription
 		.map((chunk) => `<p>${chunk.chunkText}</p>`)
@@ -18,10 +13,10 @@ function getMeetingHtmlTemplate(options: CreatePdfOptions): string {
 	<html>
 		<head>
 			<metacharset="utf-8"/>
-			<title>MeetingPDF</title>
+			<title>Meeting #{${meetingId}}</title>
 		</head>
 	<body>
-		<h3>MeetingID: ${meetingId} (id: ${id.toString()})</h3>
+		<h3>Meeting details</h3>
 		<h3>Summary</h3>
 		<p>
 			${summary}

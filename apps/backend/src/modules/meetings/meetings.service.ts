@@ -211,7 +211,6 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 		return await this.meetingTranscriptionService.export({
 			actionItems,
-			id,
 			meetingId,
 			summary,
 			transcription,

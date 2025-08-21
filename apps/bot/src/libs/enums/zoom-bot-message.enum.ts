@@ -13,6 +13,7 @@ const ZoomBotMessage = {
 	FOUND_PASSCODE: "Passcode extracted from link:",
 	JOINED_MEETING: "Joined Zoom meeting successfully",
 	JOINING_MEETING: "is joining the meeting...",
+	LEFT_MEETING: "Bot has left the meeting.",
 	NAVIGATION_TO_ZOOM: "Navigating to Zoom meeting:",
 	ONLY_ONE_PARTICIPANT_DETECTED: "Only 1 participant detected. Leaving...",
 	PAGE_NOT_INITIALIZED: "Page not initialized.",

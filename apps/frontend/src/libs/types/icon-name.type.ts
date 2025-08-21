@@ -2,6 +2,7 @@ type IconName =
 	| "arrowRight"
 	| "burgerMenu"
 	| "closeIcon"
+	| "copyLink"
 	| "hidePassword"
 	| "logout"
 	| "meetings"

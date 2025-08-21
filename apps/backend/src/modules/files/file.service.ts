@@ -1,79 +1,96 @@
-import { type FileRepository } from "./file.repository.js";
+import { type UserDetailsModel } from "~/modules/users/user-details.model.js";
+
+import {
+	type CreateFileParameters,
+	type FileRepository,
+} from "./file.repository.js";
 import { type File } from "./libs/types/types.js";
 
 type Constructor = {
 	fileRepository: FileRepository;
+	userDetailsModel: typeof UserDetailsModel;
 };
 
 class FileService {
 	private fileRepository: FileRepository;
+	private userDetailsModel: typeof UserDetailsModel;
 
-	public constructor({ fileRepository }: Constructor) {
+	public constructor({ fileRepository, userDetailsModel }: Constructor) {
 		this.fileRepository = fileRepository;
+		this.userDetailsModel = userDetailsModel;
 	}
 
-	public findById(id: number): Promise<File | null> {
-		return this.fileRepository.findById(id);
+	private async getAvatarFileId(userDetailsId: number): Promise<null | number> {
+		const userDetails = await this.userDetailsModel
+			.query()
+			.findById(userDetailsId)
+			.select("avatarFileId")
+			.first();
+
+		return userDetails?.avatarFileId ?? null;
 	}
 
-	public async findByUserDetailsId(
+	public async findAvatarByUserDetailsId(
 		userDetailsId: number,
 	): Promise<File | null> {
-		const file = await this.fileRepository.findByUserDetailsId(userDetailsId);
+		const fileId = await this.getAvatarFileId(userDetailsId);
 
-		return file;
+		return fileId ? await this.fileRepository.findById(fileId) : null;
+	}
+
+	public async findById(id: number): Promise<File | null> {
+		return await this.fileRepository.findById(id);
 	}
 
 	public async getAvatarKeyForDeletion(
 		userDetailsId: number,
 	): Promise<null | string> {
-		const avatarFile =
-			await this.fileRepository.findByUserDetailsId(userDetailsId);
+		const file = await this.findAvatarByUserDetailsId(userDetailsId);
 
-		return avatarFile?.key || null;
+		return file?.key ?? null;
 	}
 
 	public async removeAvatarRecord(userDetailsId: number): Promise<boolean> {
-		const avatarFile =
-			await this.fileRepository.findByUserDetailsId(userDetailsId);
+		const fileId = await this.getAvatarFileId(userDetailsId);
 
-		if (!avatarFile) {
+		if (!fileId) {
 			return false;
 		}
 
-		await this.fileRepository.delete(avatarFile.id);
-		await this.fileRepository.unsetFileId(userDetailsId);
+		await this.fileRepository.delete(fileId);
+		await this.userDetailsModel
+			.query()
+			.patch({ avatarFileId: null })
+			.where("id", userDetailsId);
 
 		return true;
 	}
 
-	public async replaceAvatarRecord(parameters: {
-		contentType: string;
-		key: string;
-		url: string;
-		userDetailsId: number;
-	}): Promise<File> {
-		const { contentType, key, url, userDetailsId } = parameters;
+	public async replaceAvatarRecord(
+		parameters: CreateFileParameters & { userDetailsId: number },
+	): Promise<File> {
+		const { userDetailsId, ...fileData } = parameters;
 
-		const avatarFile =
-			await this.fileRepository.findByUserDetailsId(userDetailsId);
+		const userDetails = await this.userDetailsModel
+			.query()
+			.findById(userDetailsId)
+			.select("avatarFileId")
+			.first();
 
-		if (avatarFile) {
-			const updated = await this.fileRepository.update(avatarFile.id, {
-				contentType,
-				key,
-				url,
-			});
-
-			return updated;
+		if (userDetails?.avatarFileId) {
+			return await this.fileRepository.update(
+				userDetails.avatarFileId,
+				fileData,
+			);
 		}
 
-		return await this.fileRepository.create({
-			contentType,
-			key,
-			url,
-			userDetailsId,
-		});
+		const avatarFile = await this.fileRepository.create(fileData);
+		await this.userDetailsModel
+			.query()
+			.patch({ avatarFileId: avatarFile.id })
+			.where("id", userDetailsId);
+
+		return avatarFile;
 	}
 }
 

@@ -14,11 +14,13 @@ import { UserService } from "./user.service.js";
 
 const fileRepository = new FileRepository({
 	fileModel: FileModel,
-	userDetailsModel: UserDetailsModel,
 });
 const userRepository = new UserRepository(UserModel);
 const userDetailsRepository = new UserDetailsRepository(UserDetailsModel);
-const fileService = new FileService({ fileRepository });
+const fileService = new FileService({
+	fileRepository,
+	userDetailsModel: UserDetailsModel,
+});
 
 const userService = new UserService(
 	userRepository,

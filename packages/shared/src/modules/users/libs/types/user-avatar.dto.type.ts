@@ -5,7 +5,7 @@ type AvatarFileDto = {
 
 type AvatarUploadResponseDto = {
 	data: AvatarFileDto;
-	success: boolean;
+	isSuccess: boolean;
 };
 
 export { type AvatarFileDto, type AvatarUploadResponseDto };

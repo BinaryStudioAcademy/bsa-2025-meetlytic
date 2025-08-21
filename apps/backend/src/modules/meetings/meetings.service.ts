@@ -200,7 +200,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return meeting.toDetailedObject();
 	}
 
-	public async export(id: number): Promise<Buffer> {
+	public async exportToPDF(id: number): Promise<Buffer> {
 		const meetingTranscriptionResponseDto: MeetingTranscriptionGetAllResponseDto =
 			await this.meetingTranscriptionService.getByMeetingId(id);
 		const transcription = meetingTranscriptionResponseDto.items;
@@ -209,7 +209,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		const actionItems = meetingDetails.actionItems ?? "";
 		const meetingId = meetingDetails.meetingId;
 
-		return await this.meetingTranscriptionService.export({
+		return await this.meetingTranscriptionService.exportToPDF({
 			actionItems,
 			meetingId,
 			summary,

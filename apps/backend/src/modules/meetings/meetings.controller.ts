@@ -120,7 +120,7 @@ class MeetingsController extends BaseController {
 			},
 		});
 		this.addRoute({
-			handler: (options) => this.export(options as ExportMeetingOptions),
+			handler: (options) => this.exportToPDF(options as ExportMeetingOptions),
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID_PDF,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
@@ -260,11 +260,11 @@ class MeetingsController extends BaseController {
 	 *       422:
 	 *         description: Invalid meeting ID
 	 */
-	private async export(
+	private async exportToPDF(
 		options: ExportMeetingOptions,
 	): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
-		const pdfBuffer = await this.meetingService.export(id);
+		const pdfBuffer = await this.meetingService.exportToPDF(id);
 
 		return {
 			headers: {

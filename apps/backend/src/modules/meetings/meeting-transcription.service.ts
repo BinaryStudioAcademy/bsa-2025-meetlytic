@@ -65,7 +65,7 @@ class MeetingTranscriptionService
 		return isTranscriptionDeleted;
 	}
 
-	public async export(options: CreatePdfOptions): Promise<Buffer> {
+	public async exportToPDF(options: CreatePdfOptions): Promise<Buffer> {
 		const html: string = getMeetingHtmlTemplate(options);
 
 		return await createPdf(html);

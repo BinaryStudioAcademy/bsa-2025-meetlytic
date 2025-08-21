@@ -41,19 +41,21 @@ const TranscriptionPanel: React.FC<Properties> = ({
 	}, []);
 
 	useEffect(() => {
-		if (meetingId) {
-			if (token) {
-				void dispatch(
-					transcriptionActions.getTranscriptionsBySignedUrl({
-						meetingId: String(meetingId),
-						token,
-					}),
-				);
-			} else {
-				void dispatch(
-					transcriptionActions.getTranscriptionsByMeetingId(meetingId),
-				);
-			}
+		if (!meetingId) {
+			return;
+		}
+
+		if (token) {
+			void dispatch(
+				transcriptionActions.getTranscriptionsBySignedUrl({
+					meetingId: String(meetingId),
+					token,
+				}),
+			);
+		} else {
+			void dispatch(
+				transcriptionActions.getTranscriptionsByMeetingId(meetingId),
+			);
 		}
 	}, [dispatch, meetingId, token]);
 

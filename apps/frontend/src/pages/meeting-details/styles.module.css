@@ -3,6 +3,7 @@
 	flex-direction: column;
 	gap: 20px;
 	height: 100%;
+	padding-bottom: 50px;
 }
 
 .meeting-details__header {
@@ -159,12 +160,6 @@
 		position: relative;
 		flex-direction: column;
 		gap: 12px;
-		padding-left: 60px;
-	}
-
-	.action-button__share {
-		position: absolute;
-		top: 47px;
-		left: 8px;
+		align-items: center;
 	}
 }

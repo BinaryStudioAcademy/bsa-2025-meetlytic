@@ -207,11 +207,10 @@ class MeetingService implements Service<MeetingResponseDto> {
 		const meetingDetails: MeetingDetailedResponseDto = await this.find(id);
 		const summary = meetingDetails.summary ?? "";
 		const actionItems = meetingDetails.actionItems ?? "";
-		const meetingId = meetingDetails.meetingId;
 
 		return await this.meetingTranscriptionService.exportToPDF({
 			actionItems,
-			meetingId,
+			id,
 			summary,
 			transcription,
 		});

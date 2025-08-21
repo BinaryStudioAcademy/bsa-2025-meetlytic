@@ -267,6 +267,7 @@ class BaseZoomBot {
 	private async leaveMeeting(): Promise<void> {
 		try {
 			await this.clickHelper(ZoomUILabel.LEAVE);
+			await this.clickHelper(ZoomUILabel.LEAVE);
 			await delay(Timeout.FIVE_SECONDS);
 			await this.clickHelper(ZoomUILabel.CONFIRM_LEAVE);
 		} catch (error) {

@@ -34,9 +34,7 @@ const initialState: State = {
 	user: null,
 };
 
-const sliceName = "users";
-
-const { actions, reducer } = createSlice({
+const { actions, name, reducer } = createSlice({
 	extraReducers: (builder) => {
 		builder.addCase(getProfile.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
@@ -115,7 +113,7 @@ const { actions, reducer } = createSlice({
 		});
 	},
 	initialState,
-	name: sliceName,
+	name: "users",
 	reducers: {
 		setAvatarFile: (
 			state,
@@ -132,4 +130,4 @@ const { actions, reducer } = createSlice({
 	},
 });
 
-export { actions, reducer, sliceName };
+export { actions, name, reducer };

@@ -10,7 +10,7 @@ import {
 } from "~/modules/users/users.js";
 
 import { type AvatarFileDto } from "../libs/types/types.js";
-import { sliceName } from "./users.slice.js";
+import { name as sliceName } from "./users.slice.js";
 
 const getProfile = createAsyncThunk<
 	UserWithDetailsDto,

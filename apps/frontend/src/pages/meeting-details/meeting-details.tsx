@@ -14,7 +14,7 @@ import {
 	MeetingStatus,
 	NotificationMessage,
 } from "~/libs/enums/enums.js";
-import { formatDate } from "~/libs/helpers/helpers.js";
+import { formatDate, shareMeetingPublicUrl } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -29,7 +29,6 @@ import { notification } from "~/libs/modules/notifications/notifications.js";
 import { rehypeSanitize, remarkGfm } from "~/libs/plugins/plugins.js";
 import {
 	actions as meetingDetailsActions,
-	meetingDetailsApi,
 	sanitizeDefaultSchema,
 } from "~/modules/meeting-details/meeting-details.js";
 import { actions as meetingActions } from "~/modules/meeting/meeting.js";
@@ -91,30 +90,7 @@ const MeetingDetails: React.FC = () => {
 			return;
 		}
 
-		const shareMeeting = async (): Promise<void> => {
-			try {
-				const { publicUrl } = await meetingDetailsApi.getPublicShareUrl(
-					meeting.id,
-				);
-				const textarea = document.createElement("textarea");
-				textarea.value = publicUrl;
-				textarea.style.position = "absolute";
-				textarea.style.left = "-9999px";
-				textarea.style.opacity = "0";
-				document.body.append(textarea);
-				textarea.select();
-				// eslint-disable-next-line @typescript-eslint/no-deprecated, sonarjs/deprecation
-				document.execCommand("copy");
-				textarea.remove();
-				notification.success(NotificationMessage.PUBLIC_LINK_COPIED_SUCCESS);
-			} catch (error: unknown) {
-				notification.error(NotificationMessage.SHARE_LINK_GENERATION_FAILED);
-
-				throw error;
-			}
-		};
-
-		void shareMeeting();
+		void shareMeetingPublicUrl(meeting.id);
 	}, [meeting]);
 
 	if (!id || dataStatus === DataStatus.REJECTED) {

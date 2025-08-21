@@ -12,6 +12,7 @@ export { LogoSize } from "./logo-size.enum.js";
 export { LogoTheme } from "./logo-theme.enum.js";
 export { LogoType } from "./logo-type.enum.js";
 export { NotificationMessage } from "./notification-massage.enum.js";
+export { PlaceholderColors } from "./placeholder-colors.enum.js";
 export { SearchDebounceDelay } from "./search-debounce-delay.enum.js";
 export {
 	APIPath,

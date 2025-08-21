@@ -1,4 +1,3 @@
-import PlaceholderAvatar from "~/assets/img/meeting-placeholder.svg";
 import { Icon, Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
@@ -7,6 +6,7 @@ import {
 } from "~/libs/helpers/helpers.js";
 import { useCallback, useState } from "~/libs/hooks/hooks.js";
 import { type ValueOf } from "~/libs/types/types.js";
+import { generatePlaceholderSvg } from "~/modules/meeting/libs/helpers/helpers.js";
 
 import styles from "./styles.module.css";
 
@@ -30,6 +30,7 @@ const MeetingItem: React.FC<Properties> = ({
 	const to = configureString(AppRoute.MEETINGS_$ID, {
 		id: String(id),
 	});
+	const placeholderSource = generatePlaceholderSvg(id);
 
 	const handleMenuToggle = useCallback((event: React.MouseEvent) => {
 		event.preventDefault();
@@ -76,7 +77,11 @@ const MeetingItem: React.FC<Properties> = ({
 					onMouseLeave={handleMouseLeave}
 				>
 					<div className={styles["meeting__image"]}>
-						<img alt="meeting" src={src ?? PlaceholderAvatar} />
+						<img
+							alt="meeting"
+							className={styles["meeting__image-placeholder"]}
+							src={src ?? placeholderSource}
+						/>
 						{isHovered && (
 							<div className={styles["menu__container"]}>
 								<button

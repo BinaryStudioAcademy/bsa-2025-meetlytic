@@ -30,6 +30,7 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
 import { rehypeSanitize, remarkGfm } from "~/libs/plugins/plugins.js";
+import { type MeetingPdfProperties } from "~/libs/types/types.js";
 import {
 	actions as meetingDetailsActions,
 	sanitizeDefaultSchema,
@@ -114,16 +115,17 @@ const MeetingDetails: React.FC = () => {
 		);
 	}
 
-	const meetingProperties = {
+	const transcription = transcriptions.items.map((item) => ({
+		chunkText: String(item.chunkText),
+	}));
+
+	const meetingPdfProperties: MeetingPdfProperties = {
 		actionItems: meeting.actionItems ?? "",
 		createdAt: meeting.createdAt,
 		id: meeting.id,
 		summary: meeting.summary ?? "",
+		transcription: transcription,
 	};
-
-	const cleanTranscription = transcriptions.items.map((item) => ({
-		chunkText: String(item.chunkText),
-	}));
 
 	return (
 		<>
@@ -156,12 +158,7 @@ const MeetingDetails: React.FC = () => {
 						)}
 
 						<PDFDownloadLink
-							document={
-								<MeetingPdf
-									meeting={meetingProperties}
-									transcription={cleanTranscription}
-								/>
-							}
+							document={<MeetingPdf {...meetingPdfProperties} />}
 							fileName={`meeting-${meeting.id.toString()}.pdf`}
 						>
 							{({ loading }) => (

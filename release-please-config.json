@@ -8,6 +8,9 @@
 		"apps/backend": {
 			"release-type": "node"
 		},
+		"apps/bot": {
+			"release-type": "node"
+		},
 		"apps/frontend": {
 			"release-type": "node"
 		},

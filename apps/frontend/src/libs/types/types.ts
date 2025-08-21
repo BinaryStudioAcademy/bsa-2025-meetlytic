@@ -3,6 +3,7 @@ export { type IconName } from "./icon-name.type.js";
 export { type InViewAnimationOptions } from "./in-view-animation-options.type.js";
 export { type InputPassword } from "./input-password.type.js";
 export { type NavigationItem } from "./navigation-item.type.js";
+export { type RejectPayload } from "./reject-payload.type.js";
 export {
 	type ServerErrorDetail,
 	type ServerErrorResponse,

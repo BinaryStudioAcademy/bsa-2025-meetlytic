@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+import { HTTPError } from "~/libs/modules/http/http.js";
 import { type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
 	type MeetingCreateRequestDto,
@@ -13,20 +14,42 @@ const createMeeting = createAsyncThunk<
 	MeetingResponseDto,
 	{ data: MeetingCreateRequestDto },
 	AsyncThunkConfig
->(`${sliceName}/create-meeting`, async ({ data }, { extra }) => {
-	const { meetingApi } = extra;
+>(
+	`${sliceName}/create-meeting`,
+	async ({ data }, { extra, rejectWithValue }) => {
+		try {
+			const { meetingApi } = extra;
 
-	return await meetingApi.create(data);
-});
+			return await meetingApi.create(data);
+		} catch (error) {
+			if (error instanceof HTTPError) {
+				return rejectWithValue({
+					message: error.message,
+					status: error.status,
+				});
+			}
+
+			return rejectWithValue({ message: "Something went wrong" });
+		}
+	},
+);
 
 const getAllMeetings = createAsyncThunk<
 	MeetingGetAllResponseDto,
 	undefined,
 	AsyncThunkConfig
->(`${sliceName}/get-all-meetings`, async (_, { extra }) => {
-	const { meetingApi } = extra;
+>(`${sliceName}/get-all-meetings`, async (_, { extra, rejectWithValue }) => {
+	try {
+		const { meetingApi } = extra;
 
-	return await meetingApi.getAll();
+		return await meetingApi.getAll();
+	} catch (error) {
+		if (error instanceof HTTPError) {
+			return rejectWithValue({ message: error.message, status: error.status });
+		}
+
+		return rejectWithValue({ message: "Something went wrong" });
+	}
 });
 
 const stopRecording = createAsyncThunk<
@@ -39,4 +62,14 @@ const stopRecording = createAsyncThunk<
 	await meetingApi.stopRecording(id);
 });
 
-export { createMeeting, getAllMeetings, stopRecording };
+const deleteMeeting = createAsyncThunk<number, number, AsyncThunkConfig>(
+	`${sliceName}/delete-meeting`,
+	async (id, { extra }) => {
+		const { meetingApi } = extra;
+		await meetingApi.delete(id);
+
+		return id;
+	},
+);
+
+export { createMeeting, deleteMeeting, getAllMeetings, stopRecording };

@@ -1,7 +1,3 @@
-const SocketNamespace = {
-	CHAT: "/chat",
-	ROOT: "",
-	TRANSCRIBE: "/transcribe",
-} as const;
+const SocketNamespace = { BOTS: "/bots", MAIN: "/", USERS: "/users" } as const;
 
 export { SocketNamespace };

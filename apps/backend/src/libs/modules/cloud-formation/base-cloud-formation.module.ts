@@ -30,6 +30,7 @@ type Constructor = {
 		secretAccessKey: string;
 	};
 	imageId: string;
+	instanceType: string;
 	logger: Logger;
 	region: string;
 	settings: Settings;
@@ -38,18 +39,21 @@ type Constructor = {
 class BaseCloudFormation implements CloudFormation {
 	private client: CloudFormationClient;
 	private imageId: string;
+	private instanceType: string;
 	private logger: Logger;
 	private settings: Settings;
 
 	public constructor({
 		credentials,
 		imageId,
+		instanceType,
 		logger,
 		region,
 		settings,
 	}: Constructor) {
 		this.logger = logger;
 		this.imageId = imageId;
+		this.instanceType = instanceType;
 		this.client = new CloudFormationClient({
 			credentials,
 			region,
@@ -92,6 +96,10 @@ class BaseCloudFormation implements CloudFormation {
 				Capabilities: [Capability.NAMED_IAM],
 				Parameters: [
 					{ ParameterKey: ParameterKey.IMAGE_ID, ParameterValue: this.imageId },
+					{
+						ParameterKey: ParameterKey.INSTANCE_TYPE,
+						ParameterValue: this.instanceType,
+					},
 					{
 						ParameterKey: ParameterKey.SETTINGS,
 						ParameterValue: JSON.stringify({

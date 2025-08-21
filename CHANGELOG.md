@@ -1,5 +1,56 @@
 # Changelog
 
+## [1.12.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.11.1...v1.12.0) (2025-08-21)
+
+
+### Features
+
+* add meeting card menu ml-211 ([#235](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/235)) ([8ef3a17](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/8ef3a17eb6c11edceaa7c6ef30df09b629762c4e))
+* record full meeting audio ml-132 ([#171](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/171)) ([547d87c](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/547d87cbabcc11fd421dcfc3aedb046d70fdd405))
+
+## [1.11.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.11.0...v1.11.1) (2025-08-20)
+
+
+### Bug Fixes
+
+* copy public meeting link ml-244 ([#252](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/252)) ([13f3906](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/13f390618d0448c4d99dc58fe9846dca98b496b7))
+
+## [1.11.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.10.0...v1.11.0) (2025-08-20)
+
+
+### Features
+
+* **frontend:** limite width of main container ml-245 ([#248](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/248)) ([9e8e0a5](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/9e8e0a55524844ea902e6449f7714a7ad2aad903))
+
+
+### Bug Fixes
+
+* change error code for delete and get meeting ml-222 ([#234](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/234)) ([23e57ad](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/23e57adde62728ad789213b13297c1acd54e82ba))
+
+## [1.10.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.9.0...v1.10.0) (2025-08-19)
+
+
+### Features
+
+* add a possibility to specify instance type from env file ml-236 ([#239](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/239)) ([4f8c690](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/4f8c690ee04eb5c419258fda7fc9f3b88ba90197))
+
+## [1.9.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.8.0...v1.9.0) (2025-08-19)
+
+
+### Features
+
+* add meeting details screen ml-131 ([#191](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/191)) ([1dccbb7](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/1dccbb7f3b4ca85da0533931f54d51d83d5ac604))
+* implement mobile responsiveness for meetings page ml-154 ([#210](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/210)) ([57f6c33](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/57f6c336ca044fd954a6ff1bdbfaf64baa2bef6c))
+* send transcription to frontend real time ml-180 ([#214](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/214)) ([5fc5ee5](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/5fc5ee53cd0d840b3376a5686c8919881de3ffd1))
+
+
+### Bug Fixes
+
+* allow reconnection zoom meeting ml-230 ([#233](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/233)) ([b724890](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/b724890abda6e9703860a3345e7eb9052220edcd))
+* creating duplicate meeting after cloudFormation error ml-175 ([#224](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/224)) ([ed351ab](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/ed351abfa93a24651c7eec5982e9831cfa7da4c7))
+* no internet toast notification ml-173 ([#204](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/204)) ([f57f463](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/f57f463a8a517dee2cf162025aba90f95edd0c2e))
+* profile page cycle of invalid credentials ml-192 ([#227](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/227)) ([8850011](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/8850011d04650a5dac1ab4a53837c29c7e8079cb))
+
 ## [1.8.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.7.0...v1.8.0) (2025-08-15)
 
 

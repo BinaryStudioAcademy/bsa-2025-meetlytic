@@ -21,6 +21,7 @@ import {
 } from "./libs/types/types.js";
 import {
 	meetingCreateValidationSchema,
+	meetingIdValidationSchema,
 	meetingUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 import { type MeetingService } from "./meetings.service.js";
@@ -71,9 +72,6 @@ import { type MeetingService } from "./meetings.service.js";
  *           nullable: true
  *     MeetingUpdateRequest:
  *       type: object
- *       required:
- *         - host
- *         - status
  *       properties:
  *         host:
  *           type: string
@@ -84,6 +82,10 @@ import { type MeetingService } from "./meetings.service.js";
  *           enum:
  *             - started
  *             - ended
+ *         summary:
+ *           type: string
+ *         actionItems:
+ *           type: string
  */
 class MeetingsController extends BaseController {
 	private meetingService: MeetingService;
@@ -112,6 +114,9 @@ class MeetingsController extends BaseController {
 			method: HTTPMethod.DELETE,
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+			validation: {
+				params: meetingIdValidationSchema,
+			},
 		});
 
 		this.addRoute({
@@ -119,13 +124,15 @@ class MeetingsController extends BaseController {
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+			validation: {
+				params: meetingIdValidationSchema,
+			},
 		});
 
 		this.addRoute({
 			handler: (options) => this.findAll(options as FindAllMeetingOptions),
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.ROOT,
-			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 		});
 		this.addRoute({
 			handler: (options) => this.getPublicUrl(options as GetPublicUrlOptions),
@@ -206,6 +213,8 @@ class MeetingsController extends BaseController {
 	 *         description: Meeting deleted
 	 *       404:
 	 *         description: Meeting not found
+	 *       422:
+	 *         description: Invalid meeting ID
 	 */
 	private async delete(
 		options: DeleteMeetingOptions,
@@ -238,6 +247,8 @@ class MeetingsController extends BaseController {
 	 *               $ref: "#/components/schemas/Meeting"
 	 *       404:
 	 *         description: Meeting not found
+	 *       422:
+	 *         description: Invalid meeting ID
 	 */
 	private async find(options: FindMeetingOptions): Promise<APIHandlerResponse> {
 		const id = Number(options.params.id);
@@ -428,8 +439,6 @@ class MeetingsController extends BaseController {
 	 *         description: Request to stop recording accepted
 	 *       404:
 	 *         description: Meeting not found
-	 *       500:
-	 *         description: Failed to delete stack
 	 */
 
 	private async stopRecording(

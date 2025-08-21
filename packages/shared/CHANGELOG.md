@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.8.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.7.1...shared-v1.8.0) (2025-08-21)
+
+
+### Features
+
+* add meeting card menu ml-211 ([#235](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/235)) ([8ef3a17](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/8ef3a17eb6c11edceaa7c6ef30df09b629762c4e))
+* record full meeting audio ml-132 ([#171](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/171)) ([547d87c](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/547d87cbabcc11fd421dcfc3aedb046d70fdd405))
+
+## [1.7.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.7.0...shared-v1.7.1) (2025-08-20)
+
+
+### Bug Fixes
+
+* change error code for delete and get meeting ml-222 ([#234](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/234)) ([23e57ad](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/23e57adde62728ad789213b13297c1acd54e82ba))
+
+## [1.7.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.6.0...shared-v1.7.0) (2025-08-19)
+
+
+### Features
+
+* add meeting details screen ml-131 ([#191](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/191)) ([1dccbb7](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/1dccbb7f3b4ca85da0533931f54d51d83d5ac604))
+* send transcription to frontend real time ml-180 ([#214](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/214)) ([5fc5ee5](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/5fc5ee53cd0d840b3376a5686c8919881de3ffd1))
+
+
+### Bug Fixes
+
+* allow reconnection zoom meeting ml-230 ([#233](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/233)) ([b724890](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/b724890abda6e9703860a3345e7eb9052220edcd))
+* creating duplicate meeting after cloudFormation error ml-175 ([#224](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/224)) ([ed351ab](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/ed351abfa93a24651c7eec5982e9831cfa7da4c7))
+* no internet toast notification ml-173 ([#204](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/204)) ([f57f463](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/f57f463a8a517dee2cf162025aba90f95edd0c2e))
+
 ## [1.6.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.5.0...shared-v1.6.0) (2025-08-15)
 
 

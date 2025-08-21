@@ -6,12 +6,15 @@ export {
 	MeetingTranscriptionErrorMessage,
 } from "./libs/enums/enums.js";
 export {
+	type MeetingAttachAudioRequestDto,
+	type MeetingAudioSaveDto,
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
 	type MeetingDetailsRequestDto,
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingSummaryActionItemsResponseDto,
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,
 	type MeetingTranscriptionResponseDto,
@@ -20,6 +23,7 @@ export {
 } from "./libs/types/types.js";
 export {
 	meetingCreate as meetingCreateValidationSchema,
+	meetingId as meetingIdValidationSchema,
 	meetingUpdate as meetingUpdateValidationSchema,
 	searchInputValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";

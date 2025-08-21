@@ -2,18 +2,32 @@ import { type Server as HttpServer } from "node:http";
 import { type Socket, Server as SocketServer } from "socket.io";
 
 import { HTTPMethod } from "~/libs/modules/http/http.js";
+import { fileService } from "~/modules/files/files.js";
 import { meetingService } from "~/modules/meetings/meetings.js";
 
 import { type Logger } from "../logger/logger.js";
 import {
 	AllowedOrigin,
+	ContentType,
 	SocketEvent,
 	SocketMessage,
+	SocketNamespace,
 } from "./libs/enums/enums.js";
 import {
+	type MeetingAudioSaveDto,
+	type MeetingSummaryActionItemsResponseDto,
 	type MeetingTranscriptionRequestDto,
+	type ServerToClientEvents,
 	type SocketService,
+	type ValueOf,
 } from "./libs/types/types.js";
+
+type EmitParameters<K extends keyof ServerToClientEvents> = {
+	event: K;
+	namespace?: ValueOf<typeof SocketNamespace>;
+	parameters?: Parameters<ServerToClientEvents[K]>;
+	room: string;
+};
 
 class BaseSocketService implements SocketService {
 	private io!: SocketServer;
@@ -23,55 +37,82 @@ class BaseSocketService implements SocketService {
 		this.logger = logger;
 	}
 
-	private handleClientConnection(socket: Socket): void {
-		this.logger.info(`${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
+	private handleBotsConnection(socket: Socket): void {
+		this.logger.info(`BOT ${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
 
-		this.handleJoinMeeting(socket);
-		this.handleTranscription(socket);
-		this.handleError(socket);
-	}
-
-	private handleError(socket: Socket): void {
-		socket.on(SocketEvent.ERROR, (error) => {
-			this.logger.error(`${SocketMessage.CLIENT_ERROR} ${String(error)}`);
-		});
-	}
-
-	private handleJoinMeeting(socket: Socket): void {
-		socket.on(SocketEvent.JOIN_MEETING, async (meetingId: string) => {
+		socket.on(SocketEvent.AUDIO_SAVE, async (payload: MeetingAudioSaveDto) => {
 			try {
-				await socket.join(meetingId);
-				this.logger.info(`Socket ${socket.id} joined room ${meetingId}`);
+				this.logger.info(SocketMessage.AUDIO_SAVE_RECEIVED);
+
+				const createdFile = await fileService.create({
+					contentType: ContentType.AUDIO,
+					key: payload.key,
+					url: payload.url,
+				});
+
+				await meetingService.attachAudioFile(payload.meetingId, {
+					fileId: createdFile.id,
+				});
+
+				this.logger.info(SocketMessage.AUDIO_SAVE_RECEIVED);
 			} catch (error) {
-				this.logger.error(`Failed to join room ${meetingId}: ${String(error)}`);
+				this.logger.error(`${SocketMessage.AUDIO_SAVE_ERROR} ${String(error)}`);
 			}
 		});
 
-		socket.on(SocketEvent.LEAVE_MEETING, async (meetingId: string) => {
-			try {
-				await socket.leave(meetingId);
-				this.logger.info(`Socket ${socket.id} left room ${meetingId}`);
-			} catch (error) {
-				this.logger.error(
-					`Failed to leave room ${meetingId} for socket ${socket.id}: ${String(error)}`,
+		socket.on(SocketEvent.JOIN_ROOM, async (meetingId: string) => {
+			this.logger.info(`Client ${socket.id} joining room: ${meetingId}`);
+			await socket.join(meetingId);
+		});
+
+		socket.on(SocketEvent.RECORDING_STOPPED, async (meetingId: string) => {
+			this.logger.info(`Getting full transcript of meeting ${meetingId}`);
+			const { items } = await meetingService.getTranscriptionsByMeetingId(
+				Number(meetingId),
+			);
+
+			let transcript = "";
+
+			for (const chunk of items) {
+				transcript += chunk.chunkText;
+			}
+
+			socket.emit(SocketEvent.GENERATE_SUMMARY_ACTION_ITEMS, transcript);
+		});
+
+		socket.on(
+			SocketEvent.SAVE_SUMMARY_ACTION_ITEMS,
+			async (payload: MeetingSummaryActionItemsResponseDto) => {
+				const { meetingId, ...summaryActionItems } = payload;
+				this.logger.info(
+					`Updating summary/action items of the meeting ${meetingId}`,
 				);
-			}
-		});
-	}
+				await meetingService.update(Number(meetingId), summaryActionItems);
+				this.logger.info(`Ending meeting ${meetingId}`);
+				await meetingService.endMeeting(Number(meetingId));
+				this.emitTo({
+					event: SocketEvent.UPDATE_MEETING_DETAILS,
+					namespace: SocketNamespace.USERS,
+					parameters: [payload],
+					room: String(payload.meetingId),
+				});
+			},
+		);
 
-	private handleTranscription(socket: Socket): void {
 		socket.on(
 			SocketEvent.TRANSCRIBE,
 			async (payload: MeetingTranscriptionRequestDto) => {
 				try {
 					this.logger.info(SocketMessage.SOCKET_EVENT_RECEIVED);
-
 					const transcription = await meetingService.saveChunk(payload);
 
 					if (payload.meetingId) {
-						this.io
-							.to(String(payload.meetingId))
-							.emit(SocketEvent.TRANSCRIBE, transcription);
+						this.emitTo({
+							event: SocketEvent.TRANSCRIBE,
+							namespace: SocketNamespace.USERS,
+							parameters: [transcription],
+							room: String(payload.meetingId),
+						});
 					}
 				} catch (error) {
 					this.logger.error(
@@ -82,6 +123,47 @@ class BaseSocketService implements SocketService {
 		);
 	}
 
+	private handleUsersConnection(socket: Socket): void {
+		this.logger.info(`USER ${SocketMessage.CLIENT_CONNECTED} ${socket.id}`);
+
+		socket.on(SocketEvent.JOIN_ROOM, async (meetingId: string) => {
+			try {
+				await socket.join(meetingId);
+				this.logger.info(`Socket ${socket.id} joined room ${meetingId}`);
+			} catch (error) {
+				this.logger.error(`Failed to join room ${meetingId}: ${String(error)}`);
+			}
+		});
+
+		socket.on(SocketEvent.LEAVE_ROOM, async (meetingId: string) => {
+			try {
+				await socket.leave(meetingId);
+				this.logger.info(`Socket ${socket.id} left room ${meetingId}`);
+			} catch (error) {
+				this.logger.error(
+					`Failed to leave room ${meetingId} for socket ${socket.id}: ${String(error)}`,
+				);
+			}
+		});
+
+		socket.on(SocketEvent.ERROR, (error) => {
+			this.logger.error(`${SocketMessage.CLIENT_ERROR} ${String(error)}`);
+		});
+	}
+
+	public emitTo<K extends keyof ServerToClientEvents>(
+		options: EmitParameters<K>,
+	): void {
+		const { event, namespace = "/", parameters = [], room } = options;
+		this.logger.info(
+			`Emmiting event: ${event} to namespace: ${namespace} room: ${room}`,
+		);
+		this.io
+			.of(namespace)
+			.to(room)
+			.emit(event, ...parameters);
+	}
+
 	public initialize(server: HttpServer): void {
 		this.io = new SocketServer(server, {
 			cors: {
@@ -89,8 +171,13 @@ class BaseSocketService implements SocketService {
 				origin: AllowedOrigin.ALL,
 			},
 		});
-
-		this.io.on(SocketEvent.CONNECTION, this.handleClientConnection.bind(this));
+		this.io
+			.of(SocketNamespace.BOTS)
+			.on(SocketEvent.CONNECTION, this.handleBotsConnection.bind(this));
+		this.io
+			.of(SocketNamespace.USERS)
+			.on(SocketEvent.CONNECTION, this.handleUsersConnection.bind(this));
+		this.logger.info("Socket.IO server initialized");
 	}
 }
 

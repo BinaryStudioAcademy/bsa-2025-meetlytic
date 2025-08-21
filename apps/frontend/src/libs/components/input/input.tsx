@@ -19,6 +19,7 @@ type Properties<T extends FieldValues> = {
 	errors: FieldErrors<T>;
 	hasVisuallyHiddenLabel?: boolean;
 	iconClassName?: string | undefined;
+	iconLabel?: string;
 	iconName?: IconName;
 	iconPosition?: "left" | "right";
 	label: string;
@@ -36,6 +37,7 @@ const Input = <T extends FieldValues>({
 	errors,
 	hasVisuallyHiddenLabel = false,
 	iconClassName,
+	iconLabel,
 	iconName,
 	iconPosition = "left",
 	label,
@@ -83,6 +85,7 @@ const Input = <T extends FieldValues>({
 						{isClickableIcon ? (
 							<button onClick={onClickIcon} type="button">
 								{icon}
+								<span className="visually-hidden">{iconLabel}</span>
 							</button>
 						) : (
 							icon

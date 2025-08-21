@@ -1,9 +1,12 @@
+export { type MeetingAttachAudioRequestDto } from "./meeting-attach-audio-request-dto.type.js";
+export { type MeetingAudioSaveDto } from "./meeting-audio-save-dto.type.js";
 export { type MeetingCreateRequestDto } from "./meeting-create-request-dto.type.js";
 export { type MeetingDetailedResponseDto } from "./meeting-detailed-response-dto.type.js";
 export { type MeetingDetailsRequestDto } from "./meeting-details-request-dto.type.js";
 export { type MeetingGetAllResponseDto } from "./meeting-get-all-response-dto.type.js";
 export { type MeetingGetPublicUrlResponseDto } from "./meeting-get-public-url-response-dto.type.js";
 export { type MeetingResponseDto } from "./meeting-response-dto.type.js";
+export { type MeetingSummaryActionItemsResponseDto } from "./meeting-summary-action-items-response-dto.js";
 export {
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,

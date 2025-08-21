@@ -1,4 +1,5 @@
 export {
+	EMPTY_ARRAY_LENGTH,
 	MILLISECONDS_IN_SECOND,
 	PERCENT_MULTIPLIER,
 	START_TIME,
@@ -8,12 +9,14 @@ export {
 	AppEnvironment,
 	ContentType,
 	ExceptionMessage,
+	Extension,
 	KeyboardKey,
 	ServerErrorType,
 	SortOrder,
 } from "./libs/enums/enums.js";
 export {
 	AuthError,
+	FileError,
 	HTTPError,
 	MeetingError,
 	MeetingTranscriptionError,
@@ -49,12 +52,23 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthStatusMessage } from "./modules/auth/auth.js";
 export {
+	type FileGetAllResponseDto,
+	type FilePublicDto,
+	type FileRequestDto,
+	type FileResponseDto,
+	type FileUpdateRequestDto,
+	FileErrorMessage,
+} from "./modules/files/files.js";
+export {
+	type MeetingAttachAudioRequestDto,
+	type MeetingAudioSaveDto,
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
 	type MeetingDetailsRequestDto,
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingSummaryActionItemsResponseDto,
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,
 	type MeetingTranscriptionResponseDto,
@@ -63,6 +77,7 @@ export {
 	meetingCreateValidationSchema,
 	MeetingErrorMessage,
 	MeetingHost,
+	meetingIdValidationSchema,
 	MeetingsApiPath,
 	MeetingStatus,
 	MeetingTranscriptionErrorMessage,

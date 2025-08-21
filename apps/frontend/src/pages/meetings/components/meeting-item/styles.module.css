@@ -45,12 +45,15 @@
 
 .menu__container {
 	position: absolute;
-	top: 8px;
-	right: 8px;
-	background-color: var(--color-background-4);
-	border-radius: 50%;
+	top: 9px;
+	right: 9px;
+	z-index: var(--z-index-high);
+	display: flex;
+	gap: 9px;
+	align-items: center;
 }
 
+.meeting__share,
 .menu__button {
 	display: flex;
 	align-items: center;
@@ -58,13 +61,22 @@
 	width: 36px;
 	height: 36px;
 	cursor: pointer;
-	background-color: var(--color-white);
+	background: var(--color-background-4);
+	border: none;
 	border-radius: 50%;
-	transition: background-color 0.3s ease-in-out;
 }
 
-.menu__button:hover {
-	background-color: var(--color-background-2);
+.meeting__share:hover,
+.meeting__share:focus,
+.menu__button:hover,
+.menu__button:focus {
+	background: var(--color-background-2);
+	box-shadow: 0 2px 10px rgb(0 0 0 / 10%);
+}
+
+.meeting__share-icon {
+	width: 20px;
+	height: 10px;
 }
 
 .menu__dots-wrapper {
@@ -81,6 +93,7 @@
 
 .menu__dropdown {
 	position: absolute;
+	top: 38px;
 	right: 0;
 	min-width: 120px;
 	margin-top: 5px;
@@ -97,14 +110,14 @@
 	cursor: pointer;
 	background-color: var(--color-background-4);
 	border-radius: var(--border-radius-sm);
-	transition: background-color 0.3s ease-in-out;
+	transition: background-color 0.2s ease-in-out;
 }
 
 .menu__dropdown-item:hover {
 	background-color: var(--color-background-2);
 }
 
-@media (width <= 768px) {
+@media (width <=768px) {
 	.meeting {
 		max-width: 320px;
 		padding: 16px;

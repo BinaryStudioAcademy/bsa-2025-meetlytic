@@ -4,17 +4,13 @@ import { type MeetingPdfProperties } from "~/libs/types/types.js";
 
 import { styles } from "./meeting-pdf.styles.js";
 
-const MeetingPdf = (
-	meetingProperties: MeetingPdfProperties,
-): React.ReactElement => {
-	const {
-		actionItems,
-		createdAt,
-		id,
-		summary,
-		transcription,
-	}: MeetingPdfProperties = meetingProperties;
-
+const MeetingPdf = ({
+	actionItems,
+	createdAt,
+	id,
+	summary,
+	transcription,
+}: MeetingPdfProperties): React.ReactElement => {
 	return (
 		<Document>
 			<Page size="A4" style={styles.page}>

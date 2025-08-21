@@ -115,7 +115,7 @@ const MeetingDetails: React.FC = () => {
 	}
 
 	const transcription = transcriptions.items.map((item) => ({
-		chunkText: String(item.chunkText),
+		chunkText: item.chunkText,
 	}));
 
 	const meetingPdfProperties: MeetingPdfProperties = {

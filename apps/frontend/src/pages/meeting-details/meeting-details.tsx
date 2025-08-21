@@ -114,16 +114,18 @@ const MeetingDetails: React.FC = () => {
 		);
 	}
 
-	const transcription = transcriptions.items.map((item) => ({
-		chunkText: item.chunkText,
-	}));
+	const transcription = transcriptions.items.map((item) => {
+		return {
+			chunkText: item.chunkText,
+		};
+	});
 
 	const meetingPdfProperties: MeetingPdfProperties = {
 		actionItems: meeting.actionItems ?? "",
 		createdAt: meeting.createdAt,
 		id: meeting.id,
 		summary: meeting.summary ?? "",
-		transcription: transcription,
+		transcription,
 	};
 
 	return (

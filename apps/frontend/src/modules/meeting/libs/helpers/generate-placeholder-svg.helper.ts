@@ -24,7 +24,9 @@ const PLACEHOLDER_SETTINGS = {
 	},
 	SVG_SETTINGS: {
 		FULL_PERCENTAGE: 100,
+		HEIGHT: 200,
 		RADIUS_FACTOR: 2,
+		WIDTH: 327,
 	},
 };
 
@@ -112,33 +114,27 @@ const generatePlaceholderSvg = (id: number): string => {
 	const svgShapes = circles
 		.map((circle) =>
 			circle.isFilled
-				? `<circle cx="${String(circle.centerX)}%" cy="${String(circle.centerY)}%" r="${String(
-						circle.radius,
-					)}%" fill="white" fill-opacity="${String(PLACEHOLDER_SETTINGS.CIRCLE_STYLES.OPACITY_FILLED)}" />`
-				: `<circle cx="${String(circle.centerX)}%" cy="${String(circle.centerY)}%" r="${String(
-						circle.radius,
-					)}%" stroke="white" stroke-width="${String(
+				? `<circle cx="${String(circle.centerX)}%" cy="${String(circle.centerY)}%" r="${String(circle.radius)}%" fill="white" fill-opacity="${String(
+						PLACEHOLDER_SETTINGS.CIRCLE_STYLES.OPACITY_FILLED,
+					)}" />`
+				: `<circle cx="${String(circle.centerX)}%" cy="${String(circle.centerY)}%" r="${String(circle.radius)}%" stroke="white" stroke-width="${String(
 						PLACEHOLDER_SETTINGS.CIRCLE_STYLES.STROKE_WIDTH,
 					)}" stroke-opacity="${String(PLACEHOLDER_SETTINGS.CIRCLE_STYLES.OPACITY_STROKED)}" fill="none" />`,
 		)
 		.join("");
 
 	const svgContent = `
-<svg
-	viewBox="0 0 ${String(PLACEHOLDER_SETTINGS.SVG_SETTINGS.FULL_PERCENTAGE)} ${String(PLACEHOLDER_SETTINGS.SVG_SETTINGS.FULL_PERCENTAGE)}"
-	xmlns="http://www.w3.org/2000/svg"
->
-	<defs>
-		<linearGradient id="gradient${String(id)}" x1="0%" y1="0%" x2="100%" y2="100%">
-			<stop offset="${String(PLACEHOLDER_SETTINGS.GRADIENT_SETTINGS.START_OFFSET)}%" style="stop-color:${color1};stop-opacity:1" />
-			<stop offset="${String(PLACEHOLDER_SETTINGS.GRADIENT_SETTINGS.END_OFFSET)}%" style="stop-color:${color2};stop-opacity:1" />
-		</linearGradient>
-	</defs>
-	<rect width="100%" height="100%" fill="url(#gradient${String(id)})" />
-	${svgShapes}
-</svg>`
-		.trim()
-		.replaceAll(/ {2,}/g, " ");
+	<svg width="${String(PLACEHOLDER_SETTINGS.SVG_SETTINGS.WIDTH)}px" height="${String(PLACEHOLDER_SETTINGS.SVG_SETTINGS.HEIGHT)}px" xmlns="http://www.w3.org/2000/svg">
+		<defs>
+			<linearGradient id="gradient${String(id)}" x1="0%" y1="0%" x2="100%" y2="100%">
+				<stop offset="${String(PLACEHOLDER_SETTINGS.GRADIENT_SETTINGS.START_OFFSET)}%" style="stop-color:${color1};stop-opacity:1" />
+				<stop offset="${String(PLACEHOLDER_SETTINGS.GRADIENT_SETTINGS.END_OFFSET)}%" style="stop-color:${color2};stop-opacity:1" />
+			</linearGradient>
+		</defs>
+		<rect width="100%" height="100%" fill="url(#gradient${String(id)})" />
+		${svgShapes}
+	</svg>
+`;
 
 	return `data:image/svg+xml;base64,${btoa(svgContent)}`;
 };

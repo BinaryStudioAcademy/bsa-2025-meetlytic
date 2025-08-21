@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.1.0...bot-v1.1.1) (2025-08-21)
+
+
+### Bug Fixes
+
+* fix audio chunking logic to avoid missing words ml-232 ([#251](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/251)) ([324789b](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/324789b633127ed0c99db70b786c4fa0b11949f9))
+
 ## [1.1.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.0.0...bot-v1.1.0) (2025-08-21)
 
 

@@ -5,8 +5,8 @@ import {
 } from "~/libs/types/types.js";
 
 type ClientToServerEvents = {
-	getPublicUrl: (meetingId: string) => void;
 	audioSave: (data: MeetingAudioSaveDto) => void;
+	getPublicUrl: (meetingId: string) => void;
 	joinRoom: (meetingId: string) => void;
 	recordingStopped: (meetingId: string) => void;
 	saveSummaryActionItems: (data: MeetingSummaryActionItemsResponseDto) => void;

@@ -1,7 +1,7 @@
 import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
-import { type FileService } from "~/modules/files/file.service.js";
+import { type FileService } from "~/modules/files/files.service.js";
 
 import { UserErrorMessage } from "./libs/enums/enums.js";
 import { UserError } from "./libs/exceptions/exceptions.js";
@@ -98,9 +98,9 @@ class UserService implements Service {
 		const avatarFileId = details.getAvatarFileId();
 
 		if (avatarFileId != null) {
-			const file = await this.fileService.findById(avatarFileId);
+			const file = await this.fileService.find(avatarFileId);
 
-			if (file && file.url) {
+			if (file.url) {
 				avatarFile = { key: file.key, url: file.url };
 			}
 		}

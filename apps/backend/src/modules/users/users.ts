@@ -2,8 +2,8 @@ import { s3Instance } from "~/libs/modules/aws/s3.js";
 import { logger } from "~/libs/modules/logger/logger.js";
 
 import { FileModel } from "../files/file.model.js";
-import { FileRepository } from "../files/file.repository.js";
-import { FileService } from "../files/file.service.js";
+import { FileRepository } from "../files/files.repository.js";
+import { FileService } from "../files/files.service.js";
 import { UserAvatarService } from "./user-avatar.service.js";
 import { UserDetailsModel } from "./user-details.model.js";
 import { UserDetailsRepository } from "./user-details.repository.js";
@@ -12,9 +12,7 @@ import { UserModel } from "./user.model.js";
 import { UserRepository } from "./user.repository.js";
 import { UserService } from "./user.service.js";
 
-const fileRepository = new FileRepository({
-	fileModel: FileModel,
-});
+const fileRepository = new FileRepository(FileModel);
 const userRepository = new UserRepository(UserModel);
 const userDetailsRepository = new UserDetailsRepository(UserDetailsModel);
 const fileService = new FileService({

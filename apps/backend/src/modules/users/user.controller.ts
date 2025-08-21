@@ -6,7 +6,7 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode, HTTPError, HTTPMethod } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import { type FileService } from "~/modules/files/file.service.js";
+import { type FileService } from "~/modules/files/files.service.js";
 import { type UserAvatarService } from "~/modules/users/user-avatar.service.js";
 import { type UserService } from "~/modules/users/user.service.js";
 

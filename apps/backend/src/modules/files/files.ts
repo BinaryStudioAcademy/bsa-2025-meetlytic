@@ -1,8 +1,13 @@
+import { UserDetailsModel } from "~/modules/users/user-details.model.js";
+
 import { FileModel } from "./file.model.js";
 import { FileRepository } from "./files.repository.js";
 import { FileService } from "./files.service.js";
 
 const fileRepository = new FileRepository(FileModel);
-const fileService = new FileService({ fileRepository });
+const fileService = new FileService({
+	fileRepository,
+	userDetailsModel: UserDetailsModel,
+});
 
 export { fileService };

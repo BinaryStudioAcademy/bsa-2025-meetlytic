@@ -1,5 +1,7 @@
 import { type BaseS3 } from "~/libs/modules/aws/base-s3.module.js";
-import { type FileService } from "~/modules/files/file.service.js";
+import { type ValueOf } from "~/libs/types/types.js";
+import { type FileService } from "~/modules/files/files.service.js";
+import { type ContentType } from "~/modules/files/libs/enums/enums.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
 import {
@@ -75,7 +77,7 @@ class UserAvatarService {
 			});
 
 			const fileRecord = await this.fileService.replaceAvatarRecord({
-				contentType: mimetype,
+				contentType: mimetype as ValueOf<typeof ContentType>,
 				key: savedKey,
 				url,
 				userDetailsId: detailsId,

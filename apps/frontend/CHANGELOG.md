@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.10.0...frontend-v1.11.0) (2025-08-21)
+
+
+### Features
+
+* add the ability to receive transcriptions publicly ml-244 ([#267](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/267)) ([459f96d](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/459f96d02dc2e543eada0e3825dadff8fb4d677b))
+
 ## [1.10.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.9.0...frontend-v1.10.0) (2025-08-21)
 
 

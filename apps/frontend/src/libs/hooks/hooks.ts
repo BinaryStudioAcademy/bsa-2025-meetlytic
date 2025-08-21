@@ -10,7 +10,6 @@ export { useMediaQuery } from "./use-media-query/use-media-query.hook.js";
 export { useMeetingSocket } from "./use-meeting-socket/use-meeting-socket.js";
 export { usePrefersReducedMotion } from "./use-prefers-reduced-motion.ts/use-prefers-reduced-motion.hook.js";
 export { useProgress } from "./use-progress/use-progress.js";
-export { useScrollToHash } from "./use-scroll-to-hash/use-scroll-to-hash.hook.js";
 export { useInView } from "motion/react";
 export { useCallback, useEffect, useMemo, useRef, useState } from "react";
 export { useController as useFormController } from "react-hook-form";

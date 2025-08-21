@@ -65,6 +65,7 @@ const MeetingDetails: React.FC = () => {
 
 	const handleSummaryActionItemsUpdate = useCallback(() => {
 		const sharedToken = searchParameters.get("token");
+
 		void dispatch(
 			meetingDetailsActions.getMeetingDetailsById({
 				id: Number(id),
@@ -188,7 +189,7 @@ const MeetingDetails: React.FC = () => {
 					</div>
 				</div>
 				<div className={styles["meeting-details__player"]}>
-					<PlayerTrack audioUrl="https://audio-samples.github.io/samples/mp3/wavenet_unconditional/voxceleb2/sample-5.mp3" />
+					<PlayerTrack audioUrl={meeting.audioFile?.url} />
 				</div>
 			</div>
 		</>

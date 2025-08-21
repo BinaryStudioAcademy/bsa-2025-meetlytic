@@ -1,4 +1,4 @@
-import { type MeetingTranscriptionRequestDto } from "~/libs/types/types.js";
+import { type MeetingTranscriptionRequestDto } from "./types.js";
 
 type ServerToClientEvents = {
 	connect: () => void;

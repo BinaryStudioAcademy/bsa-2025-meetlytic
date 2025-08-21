@@ -9,12 +9,14 @@ export {
 	AppEnvironment,
 	ContentType,
 	ExceptionMessage,
+	Extension,
 	KeyboardKey,
 	ServerErrorType,
 	SortOrder,
 } from "./libs/enums/enums.js";
 export {
 	AuthError,
+	FileError,
 	HTTPError,
 	MeetingError,
 	MeetingTranscriptionError,
@@ -50,6 +52,16 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthStatusMessage } from "./modules/auth/auth.js";
 export {
+	type FileGetAllResponseDto,
+	type FilePublicDto,
+	type FileRequestDto,
+	type FileResponseDto,
+	type FileUpdateRequestDto,
+	FileErrorMessage,
+} from "./modules/files/files.js";
+export {
+	type MeetingAttachAudioRequestDto,
+	type MeetingAudioSaveDto,
 	type MeetingCreateRequestDto,
 	type MeetingDetailedResponseDto,
 	type MeetingDetailsRequestDto,

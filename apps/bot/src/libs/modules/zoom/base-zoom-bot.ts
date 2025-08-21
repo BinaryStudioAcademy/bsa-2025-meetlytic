@@ -18,6 +18,8 @@ import {
 	type OpenAI,
 } from "~/libs/types/types.js";
 
+import { ContentType } from "./libs/enums/enums.js";
+
 type Constructor = {
 	audioRecorder: AudioRecorder;
 	config: BaseConfig;
@@ -189,13 +191,22 @@ class BaseZoomBot {
 		});
 
 		this.socketClient.on(SocketEvent.STOP_RECORDING, async () => {
-			// TODO:
-			// audioRecorder.finalize()
-			// audioRecorder.stopFullMeetingRecording()
+			const meetingId = String(this.config.ENV.ZOOM.MEETING_ID);
+
 			this.logger.info(
 				`Stopping recording of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 			);
 			this.audioRecorder.stop();
+			await this.audioRecorder.stopFullMeetingRecording();
+
+			const audioPrefix = this.config.ENV.S3.PREFIX_AUDIO;
+			const prefix = `${audioPrefix}/${meetingId}`;
+			const contentType = ContentType.AUDIO;
+			await this.audioRecorder.finalize({
+				contentType,
+				meetingId,
+				prefix,
+			});
 			await this.leaveMeeting();
 			this.socketClient.emit(
 				SocketEvent.RECORDING_STOPPED,
@@ -276,6 +287,7 @@ class BaseZoomBot {
 			this.logger.info(
 				`${ZoomBotMessage.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
 			);
+
 			await this.page.goto(
 				this.convertToZoomWebClientUrl(this.config.ENV.ZOOM.MEETING_LINK),
 				{
@@ -283,11 +295,14 @@ class BaseZoomBot {
 					waitUntil: "networkidle2",
 				},
 			);
-			await this.page.screenshot({ path: "goto.png" });
+
 			await this.handleInitialPopups();
 			await this.joinMeeting();
 			this.logger.info(ZoomBotMessage.JOINED_MEETING);
 			this.audioRecorder.start();
+			this.audioRecorder.startFullMeetingRecording(
+				String(this.config.ENV.ZOOM.MEETING_ID),
+			);
 			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 			await delay(Timeout.ONE_SECOND);
 		} catch (error) {

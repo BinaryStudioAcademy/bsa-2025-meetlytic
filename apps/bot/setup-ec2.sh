@@ -142,19 +142,28 @@ exit 1
 fi
 
 # Use jq to parse JSON into bash variables
+AWS_ACCESS_KEY_ID=$(echo "$SETTINGS_JSON" | jq -r '.accessKeyId')
 BOT_NAME=$(echo "$SETTINGS_JSON" | jq -r '.botName')
 MEETING_ID=$(echo "$SETTINGS_JSON" | jq -r '.id')
 MEETING_LINK=$(echo "$SETTINGS_JSON" | jq -r '.meetingLink')
 MEETING_PASSWORD=$(echo "$SETTINGS_JSON" | jq -r '.meetingPassword')
 OPEN_AI_KEY=$(echo "$SETTINGS_JSON" | jq -r '.openAIKey')
+AWS_REGION=$(echo "$SETTINGS_JSON" | jq -r '.region')
+AWS_SECRET_ACCESS_KEY=$(echo "$SETTINGS_JSON" | jq -r '.secretAccessKey')
 ORIGIN=$(echo "$SETTINGS_JSON" | jq -r '.origin')
 TEXT_GENERATION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.textGenerationModel')
 TRANSCRIPTION_MODEL=$(echo "$SETTINGS_JSON" | jq -r '.transcriptionModel')
+BUCKET_NAME=$(echo "$SETTINGS_JSON" | jq -r '.bucketName')
+PREFIX_AUDIO=$(echo "$SETTINGS_JSON" | jq -r '.prefixAudio')
 
-if [ -z "$BOT_NAME" ] || [ -z "$MEETING_LINK" ]; then
-echo "Error: Missing required settings in JSON."
-exit 1
-fi
+for var in BOT_NAME MEETING_LINK AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_REGION BUCKET_NAME PREFIX_AUDIO;
+do
+	eval val=\$$var
+	if [ -z "$val" ] || [ "$val" = "null" ]; then
+	echo "Error: Missing or null value for $var"
+	exit 1
+	fi
+done
 
 echo "[+] Writing environment variables..."
 cat <<EOF > .env
@@ -177,10 +186,20 @@ OPEN_AI_KEY=$OPEN_AI_KEY
 TEXT_GENERATION_MODEL=$TEXT_GENERATION_MODEL
 TRANSCRIPTION_MODEL=$TRANSCRIPTION_MODEL
 
-# AUDIO - RECORDER
+# AUDIO_RECORDER
 CHUNK_DURATION=10
 FFMPEG_PATH=/usr/bin/ffmpeg
 OUTPUT_DIRECTORY=/home/ubuntu/audio
+
+# AWS
+AWS_REGION="$AWS_REGION"
+AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
+AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
+
+# S3
+S3_BUCKET_NAME="$BUCKET_NAME"
+S3_PREFIX_AUDIO="$PREFIX_AUDIO"
+
 EOF
 
 echo "[+] .env file created."

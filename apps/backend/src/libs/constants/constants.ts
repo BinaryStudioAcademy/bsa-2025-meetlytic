@@ -1,9 +1,9 @@
 export { MEMORY_UNIT_SIZE } from "../constants/memory-bytes.constants.js";
 export {
 	DEFAULT_ALLOWED_IMAGE_MIME_TYPES,
-	DEFAULT_MAX_FILE_SIZE,
 	FILENAME_FALLBACK,
 	FILENAME_SANITIZE_REGEX,
+	MAX_FILE_SIZE_MB,
 } from "./file-upload.constants.js";
 export {
 	DELETE_SUCCESS_THRESHOLD,

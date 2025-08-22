@@ -1,3 +1,4 @@
+export { DefaultMaxFileSize } from "./default-max-file-size.enum.js";
 export { FastifyHook } from "./fastify-hook.enum.js";
 export {
 	APIPath,

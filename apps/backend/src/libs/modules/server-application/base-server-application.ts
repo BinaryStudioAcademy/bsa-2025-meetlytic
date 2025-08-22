@@ -13,10 +13,9 @@ import { fileURLToPath } from "node:url";
 
 import {
 	DEFAULT_ALLOWED_IMAGE_MIME_TYPES,
-	DEFAULT_MAX_FILE_SIZE,
 	WHITE_ROUTES,
 } from "~/libs/constants/constants.js";
-import { ServerErrorType } from "~/libs/enums/enums.js";
+import { DefaultMaxFileSize, ServerErrorType } from "~/libs/enums/enums.js";
 import { type ValidationError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Database } from "~/libs/modules/database/database.js";
@@ -148,8 +147,8 @@ class BaseServerApplication implements ServerApplication {
 		await this.app.register(uploadPlugin, {
 			allowedMimeTypes: [...DEFAULT_ALLOWED_IMAGE_MIME_TYPES],
 			fieldName: "file",
-			maxFiles: DEFAULT_MAX_FILE_SIZE.MAX_FILES,
-			maxFileSize: DEFAULT_MAX_FILE_SIZE.MAX_FILE_SIZE_BYTES,
+			maxFiles: DefaultMaxFileSize.MAX_FILES,
+			maxFileSize: DefaultMaxFileSize.MAX_FILE_SIZE_BYTES,
 		});
 		this.logger.info(
 			`multipart parser: ${String(this.app.hasContentTypeParser("multipart"))}`,

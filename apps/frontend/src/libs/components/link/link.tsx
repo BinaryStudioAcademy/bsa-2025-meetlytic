@@ -19,7 +19,7 @@ const Link: React.FC<Properties> = ({
 
 	const commonProperties = {
 		children,
-		className: className,
+		className,
 		to,
 	};
 

@@ -257,7 +257,6 @@ class BaseZoomBot {
 							waitUntil: "networkidle2",
 						},
 					);
-					await this.page.screenshot({ path: "goto.png" });
 					await this.handleInitialPopups();
 					await this.joinMeeting();
 					this.logger.info(ZoomBotMessage.JOINED_MEETING);
@@ -266,6 +265,9 @@ class BaseZoomBot {
 					);
 					await this.sendPublicUrlToChat(publicUrl);
 					this.audioRecorder.start();
+					this.audioRecorder.startFullMeetingRecording(
+						String(this.config.ENV.ZOOM.MEETING_ID),
+					);
 					this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 					await delay(Timeout.ONE_SECOND);
 				} catch (error) {

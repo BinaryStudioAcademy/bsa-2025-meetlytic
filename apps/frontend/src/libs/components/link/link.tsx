@@ -1,4 +1,4 @@
-import { HashLink, Link as RouterLink } from "~/libs/components/components.js";
+import { HashLink, NavLink } from "~/libs/components/components.js";
 import { type AppRoute, type LandingSection } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
@@ -26,7 +26,7 @@ const Link: React.FC<Properties> = ({
 	return isHash ? (
 		<HashLink {...commonProperties} smooth={isSmooth} />
 	) : (
-		<RouterLink {...commonProperties} />
+		<NavLink {...commonProperties} />
 	);
 };
 

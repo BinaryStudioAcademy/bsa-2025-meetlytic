@@ -1,3 +1,4 @@
+import { PLACEHOLDER_IMAGES } from "~/assets/img/meetings/placeholders/placeholders.js";
 import { Icon, Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
@@ -6,7 +7,6 @@ import {
 } from "~/libs/helpers/helpers.js";
 import { useCallback, useState } from "~/libs/hooks/hooks.js";
 import { type ValueOf } from "~/libs/types/types.js";
-import { generatePlaceholderSvg } from "~/modules/meeting/libs/helpers/helpers.js";
 
 import styles from "./styles.module.css";
 
@@ -30,7 +30,7 @@ const MeetingItem: React.FC<Properties> = ({
 	const to = configureString(AppRoute.MEETINGS_$ID, {
 		id: String(id),
 	});
-	const placeholderSource = generatePlaceholderSvg(id);
+	const placeholderSource = PLACEHOLDER_IMAGES[id % PLACEHOLDER_IMAGES.length];
 
 	const handleMenuToggle = useCallback((event: React.MouseEvent) => {
 		event.preventDefault();

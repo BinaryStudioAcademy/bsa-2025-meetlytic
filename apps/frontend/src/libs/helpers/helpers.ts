@@ -1,4 +1,3 @@
-export { createSeededRandom } from "./create-seeded-random.helper.js";
 export { debounce } from "./debounce.helper.js";
 export { extractErrorMessage } from "./extract-error-message.helper.js";
 export { getValidClassNames } from "./get-valid-class-names.helper.js";

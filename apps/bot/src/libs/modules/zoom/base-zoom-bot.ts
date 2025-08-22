@@ -326,7 +326,11 @@ class BaseZoomBot {
 
 		try {
 			await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
+			await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
+			await delay(Timeout.FIVE_SECONDS);
 			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
+			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
+			await delay(Timeout.FIVE_SECONDS);
 			await this.page.keyboard.type(
 				`Hello! This meeting is being recorded by Meetlytic AI Bot. To check the meeting transcription you can follow the link: ${publicUrl}`,
 			);

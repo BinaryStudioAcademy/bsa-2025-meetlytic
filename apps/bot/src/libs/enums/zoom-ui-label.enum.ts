@@ -2,7 +2,7 @@ const ZoomUILabel = {
 	ACCEPT_COOKIES: "#onetrust-accept-btn-handler",
 	ACCEPT_TERMS: "#wc_agree1",
 	CHAT_BUTTON: "button[aria-label='open the chat panel']",
-	CHAT_INPUT: "p[data-placeholder='Type message here ...']",
+	CHAT_INPUT: "div[aria-placeholder='Type message here ...']",
 	CONFIRM_LEAVE: "button.leave-meeting-options__btn--danger",
 	GET_PARTICIPANTS_COUNT: ".footer-button__number-counter span",
 	INPUT_NAME: "#input-for-name",

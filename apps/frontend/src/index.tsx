@@ -5,7 +5,6 @@ import "~/assets/css/styles.css";
 import {
 	App,
 	Layout,
-	Link,
 	ProtectedRoute,
 	PublicLayout,
 	RouterProvider,
@@ -15,6 +14,7 @@ import {
 import { AppRoute } from "~/libs/enums/enums.js";
 import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
+import { Landing } from "~/pages/landing/landing.js";
 import { NotFoundPage } from "~/pages/not-found/not-found.js";
 import { Profile } from "~/pages/profile/profile.jsx";
 
@@ -70,18 +70,7 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 						],
 						element: <PublicLayout />,
 					},
-					{
-						element: (
-							// TODO: add LandingPage component
-							<div>
-								Landing Page
-								<div>
-									<Link to={AppRoute.SIGN_IN}>Sign In</Link>
-								</div>
-							</div>
-						),
-						path: AppRoute.ROOT,
-					},
+					{ element: <Landing />, path: AppRoute.ROOT },
 					{
 						element: <NotFoundPage />,
 						path: AppRoute.NOT_FOUND,

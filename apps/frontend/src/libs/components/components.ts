@@ -29,7 +29,6 @@ export {
 	Text,
 	View,
 } from "@react-pdf/renderer";
-export { memo } from "react";
 export { default as Markdown } from "react-markdown";
 export { Provider as StoreProvider } from "react-redux";
 export { Navigate, NavLink, Outlet as RouterOutlet } from "react-router-dom";

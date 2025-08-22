@@ -1,6 +1,6 @@
-import React from "react";
+import React, { memo } from "react";
 
-import { memo, TypingIndicator } from "~/libs/components/components.js";
+import { TypingIndicator } from "~/libs/components/components.js";
 import { IndicatorVariant } from "~/libs/components/typing-indicator/typing-indicator.js";
 
 type Properties = {

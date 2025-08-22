@@ -1,4 +1,4 @@
-import { HashLink } from "~/libs/components/components.js";
+import { HashLink, Link as RouterLink } from "~/libs/components/components.js";
 import { type AppRoute, type LandingSection } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
@@ -15,10 +15,18 @@ const Link: React.FC<Properties> = ({
 	isSmooth = true,
 	to,
 }: Properties) => {
-	return (
-		<HashLink className={className} smooth={isSmooth} to={to}>
-			{children}
-		</HashLink>
+	const isHash: boolean = typeof to === "string" && to.includes("#");
+
+	const commonProperties = {
+		children,
+		className: className,
+		to,
+	};
+
+	return isHash ? (
+		<HashLink {...commonProperties} smooth={isSmooth} />
+	) : (
+		<RouterLink {...commonProperties} />
 	);
 };
 

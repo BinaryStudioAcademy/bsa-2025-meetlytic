@@ -16,7 +16,8 @@
 				"t3.2xlarge",
 				"t2.micro",
 				"t2.small",
-				"t2.medium"
+				"t2.medium",
+				"t4g.xlarge"
 			],
 			"Description": "EC2 instance type"
 		},

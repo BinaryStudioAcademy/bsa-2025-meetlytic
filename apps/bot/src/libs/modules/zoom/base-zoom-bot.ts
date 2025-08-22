@@ -307,10 +307,12 @@ class BaseZoomBot {
 	}
 
 	private async leaveMeeting(): Promise<void> {
+		await this.clickHelper(ZoomUILabel.LEAVE);
+		await this.clickHelper(ZoomUILabel.LEAVE);
+
 		try {
-			await this.clickHelper(ZoomUILabel.LEAVE);
-			await delay(Timeout.FIVE_SECONDS);
 			await this.clickHelper(ZoomUILabel.CONFIRM_LEAVE);
+			this.logger.info(ZoomBotMessage.LEFT_MEETING);
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessage.FAILED_TO_LEAVE_MEETING} ${error instanceof Error ? error.message : String(error)}`,

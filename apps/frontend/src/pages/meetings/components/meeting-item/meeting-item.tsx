@@ -1,4 +1,3 @@
-import { PLACEHOLDER_IMAGES } from "~/assets/img/meetings/placeholders/placeholders.js";
 import { Icon, Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
@@ -7,6 +6,7 @@ import {
 } from "~/libs/helpers/helpers.js";
 import { useCallback, useState } from "~/libs/hooks/hooks.js";
 import { type ValueOf } from "~/libs/types/types.js";
+import { PLACEHOLDER_IMAGES } from "~/modules/meeting/meeting.js";
 
 import styles from "./styles.module.css";
 

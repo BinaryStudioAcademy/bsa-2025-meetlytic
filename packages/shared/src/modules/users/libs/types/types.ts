@@ -2,6 +2,7 @@ export { type AuthResponseDto } from "./auth-response-dto.type.js";
 export {
 	type AvatarFileDto,
 	type AvatarUploadResponseDto,
+	type DeleteAvatarResult,
 } from "./user-avatar.dto.type.js";
 export { type UserGetAllItemResponseDto } from "./user-get-all-item-response-dto.type.js";
 export { type UserGetAllResponseDto } from "./user-get-all-response-dto.type.js";

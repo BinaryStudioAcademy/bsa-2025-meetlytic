@@ -1,5 +1,9 @@
 import { type BaseS3 } from "~/libs/modules/aws/base-s3.module.js";
-import { type ValueOf } from "~/libs/types/types.js";
+import {
+	type AvatarFileDto,
+	type DeleteAvatarResult,
+	type ValueOf,
+} from "~/libs/types/types.js";
 import { type FileService } from "~/modules/files/files.service.js";
 import { type ContentType } from "~/modules/files/libs/enums/enums.js";
 import { type UserService } from "~/modules/users/user.service.js";
@@ -25,9 +29,7 @@ class UserAvatarService {
 		this.s3 = s3;
 	}
 
-	public async deleteAvatar(
-		userId: number,
-	): Promise<{ isDeleted: boolean; message: string }> {
+	public async deleteAvatar(userId: number): Promise<DeleteAvatarResult> {
 		const detailsId = await this.userService.getOrCreateDetailsId(userId);
 
 		if (!detailsId) {
@@ -55,7 +57,7 @@ class UserAvatarService {
 
 	public async uploadAvatar(
 		options: UploadAvatarOptions,
-	): Promise<{ key: string; url: string }> {
+	): Promise<AvatarFileDto> {
 		const { buffer, filename, mimetype, userId } = options;
 
 		const detailsId = await this.userService.getOrCreateDetailsId(userId);

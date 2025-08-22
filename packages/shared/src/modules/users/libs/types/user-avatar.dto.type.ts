@@ -8,4 +8,13 @@ type AvatarUploadResponseDto = {
 	isSuccess: boolean;
 };
 
-export { type AvatarFileDto, type AvatarUploadResponseDto };
+type DeleteAvatarResult = {
+	isDeleted: boolean;
+	message: string;
+};
+
+export {
+	type AvatarFileDto,
+	type AvatarUploadResponseDto,
+	type DeleteAvatarResult,
+};

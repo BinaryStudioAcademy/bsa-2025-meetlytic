@@ -9,14 +9,11 @@
 	background-color: var(--color-background-4);
 	border-radius: var(--border-radius-lg);
 	box-shadow: 0 0 0 0 rgb(0 0 0 / 0%);
-	transition:
-		transform 0.2s ease-in-out,
-		box-shadow 0.2s ease-in-out;
+	transition: box-shadow 0.5s ease-in-out;
 }
 
 .meeting:hover {
-	box-shadow: 0 10px 20px rgb(0 0 0 / 10%);
-	transform: scale(1.02);
+	box-shadow: 0 0 0 2px var(--color-brand);
 }
 
 .meeting__image {

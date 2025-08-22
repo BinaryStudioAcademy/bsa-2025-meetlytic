@@ -5,6 +5,7 @@ import fp from "fastify-plugin";
 import {
 	FILENAME_FALLBACK,
 	FILENAME_SANITIZE_REGEX,
+	MEMORY_UNIT_SIZE,
 } from "~/libs/constants/constants.js";
 import { UploadError } from "~/libs/exceptions/exceptions.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
@@ -13,8 +14,6 @@ import {
 	type UploadedFile,
 	type UploadPluginOptions,
 } from "./libs/types/types.js";
-
-const MEMORY_UNIT_SIZE = 1024;
 
 const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 	fastify,

@@ -1,3 +1,4 @@
+export { MEMORY_UNIT_SIZE } from "../constants/memory-bytes.constants.js";
 export {
 	DEFAULT_ALLOWED_IMAGE_MIME_TYPES,
 	DEFAULT_MAX_FILE_SIZE,

@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.15.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.14.0...v1.15.0) (2025-08-22)
+
+
+### Features
+
+* export meeting transcription on front ml-145 ([#271](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/271)) ([74919e8](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/74919e8725d7bac625a02e595d87effa737e1db2))
+
+
+### Bug Fixes
+
+* error message deleting meeting ml-258 ([#260](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/260)) ([787a718](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/787a718137b44b2540d3269421bd900736a7f1d8))
+
+## [1.14.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.13.0...v1.14.0) (2025-08-21)
+
+
+### Features
+
+* add the ability to receive transcriptions publicly ml-244 ([#267](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/267)) ([459f96d](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/459f96d02dc2e543eada0e3825dadff8fb4d677b))
+
+
+### Bug Fixes
+
+* bot unable to select the leave button ml-265 ([#269](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/269)) ([7e5b98f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/7e5b98f64e520a5ed138068abfbb5b57cb097db1))
+
+## [1.13.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.12.0...v1.13.0) (2025-08-21)
+
+
+### Features
+
+* add share button to meeting cards and move logic to helper ml-208 ([#255](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/255)) ([fa1ea44](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/fa1ea44376f0d843a7a6ec350f6c8e469ce5c7fe))
+* mobile responsive for meetings details and transcription ml-156 ([#259](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/259)) ([81886d5](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/81886d56e6d2ea4fee2d20848fb4e8b925c87df1))
+
+
+### Bug Fixes
+
+* fix audio chunking logic to avoid missing words ml-232 ([#251](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/251)) ([324789b](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/324789b633127ed0c99db70b786c4fa0b11949f9))
+* invalid or expired token check ml-174 ([#254](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/254)) ([b3bf7c9](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/b3bf7c9e6f229147a5a06e509a4937fa4d93d034))
+
 ## [1.12.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.11.1...v1.12.0) (2025-08-21)
 
 

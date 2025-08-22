@@ -8,12 +8,13 @@ import {
 } from "~/libs/constants/constants.js";
 import { UploadError } from "~/libs/exceptions/exceptions.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
-import { bytesToMegabytes } from "~/libs/utils/utilities.js";
 
 import {
 	type UploadedFile,
 	type UploadPluginOptions,
 } from "./libs/types/types.js";
+
+const MEMORY_UNIT_SIZE = 1024;
 
 const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 	fastify,
@@ -57,10 +58,13 @@ const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 			}
 
 			const buffer = await file.toBuffer();
+			const maxFileSizeInMB = Math.floor(
+				maxFileSize / (MEMORY_UNIT_SIZE * MEMORY_UNIT_SIZE),
+			);
 
 			if (buffer.length > maxFileSize) {
 				throw new UploadError({
-					message: `File too large. Max ${bytesToMegabytes(maxFileSize)} MB`,
+					message: `File too large. Max ${String(maxFileSizeInMB)} MB`,
 					status: HTTPCode.PAYLOAD_TOO_LARGE,
 				});
 			}

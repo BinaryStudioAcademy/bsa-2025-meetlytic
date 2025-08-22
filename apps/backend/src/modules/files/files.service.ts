@@ -1,5 +1,5 @@
 import { HTTPCode } from "~/libs/modules/http/http.js";
-import { type Service } from "~/libs/types/types.js";
+import { type AvatarFileDto, type Service } from "~/libs/types/types.js";
 import { type UserDetailsModel } from "~/modules/users/user-details.model.js";
 
 import { FileEntity } from "./files.entity.js";
@@ -127,8 +127,8 @@ class FileService implements Service<FileResponseDto> {
 
 	public async replaceAvatarRecord(parameters: {
 		contentType: FileRequestDto["contentType"];
-		key: string;
-		url: string;
+		key: AvatarFileDto["key"];
+		url: AvatarFileDto["url"];
 		userDetailsId: number;
 	}): Promise<FileResponseDto> {
 		const { userDetailsId, ...fileData } = parameters;

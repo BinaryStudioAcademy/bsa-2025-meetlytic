@@ -22,3 +22,4 @@ export {
 	type RingType,
 	type Testimonial,
 } from "./libs/types/types.js";
+export { getSafeRandomValue } from "~/modules/landing/libs/helpers/helpers.js";

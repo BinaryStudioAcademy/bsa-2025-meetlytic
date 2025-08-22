@@ -8,12 +8,12 @@ const getBoundaryValues = (
 	containerDimension: number,
 	ringSize: number,
 ): { max: number; min: number } => {
-	const marginValue = ringSize * LandingBgPhysics.MARGIN;
-	const oneMinusMargin =
+	const ringMargin = ringSize * LandingBgPhysics.MARGIN;
+	const ringSizeWithoutMargin =
 		ringSize * (LandingBgNumeric.ONE - LandingBgPhysics.MARGIN);
 
-	const min = -marginValue;
-	const max = containerDimension - oneMinusMargin;
+	const min = -ringMargin;
+	const max = containerDimension - ringSizeWithoutMargin;
 
 	return { max, min };
 };

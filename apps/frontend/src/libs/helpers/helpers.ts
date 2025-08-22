@@ -1,3 +1,4 @@
+export { clamp } from "./clamp.helper.js";
 export { debounce } from "./debounce.helper.js";
 export { extractErrorMessage } from "./extract-error-message.helper.js";
 export { getRandomInRange } from "./get-random-in-range.helper.js";

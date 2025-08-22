@@ -4,10 +4,10 @@ import {
 } from "~/modules/landing/landing.js";
 
 const getRingPairs = (rings: RingConfig[]): Array<[RingConfig, RingConfig]> =>
-	rings.flatMap((ringA, index) =>
+	rings.flatMap((outerRing, index) =>
 		rings
 			.slice(index + LandingBgNumeric.ONE)
-			.map((ringB) => [ringA, ringB] as [RingConfig, RingConfig]),
+			.map((innerRing) => [outerRing, innerRing] as [RingConfig, RingConfig]),
 	);
 
 export { getRingPairs };

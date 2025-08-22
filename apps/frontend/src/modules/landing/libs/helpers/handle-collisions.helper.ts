@@ -8,11 +8,11 @@ import {
 import { clamp, getRingPairs } from "./helpers.js";
 
 const getRingCenter = (ring: RingConfig): { x: number; y: number } => {
-	const halfSize = ring.size / LandingBgNumeric.HALF;
+	const ringRadiusDivisor = ring.size / LandingBgNumeric.TWO;
 
 	return {
-		x: ring.positionX + halfSize,
-		y: ring.positionY + halfSize,
+		x: ring.positionX + ringRadiusDivisor,
+		y: ring.positionY + ringRadiusDivisor,
 	};
 };
 
@@ -24,63 +24,64 @@ const applyDamping = (ring: RingConfig): void => {
 const handleCollisions = (rings: RingConfig[]): void => {
 	const pairs = getRingPairs(rings);
 
-	for (const [ringA, ringB] of pairs) {
-		let ringAPositionX = ringA.positionX;
-		let ringAPositionY = ringA.positionY;
-		let ringBPositionX = ringB.positionX;
-		let ringBPositionY = ringB.positionY;
+	for (const [firstRing, secondRing] of pairs) {
+		let firstRingPositionX = firstRing.positionX;
+		let firstRingPositionY = firstRing.positionY;
+		let secondRingPositionX = secondRing.positionX;
+		let secondRingPositionY = secondRing.positionY;
 
-		const centerA = getRingCenter(ringA);
-		const centerB = getRingCenter(ringB);
+		const firstRingCenter = getRingCenter(firstRing);
+		const secondRingCenter = getRingCenter(secondRing);
 
-		const centerDeltaX = centerB.x - centerA.x;
-		const centerDeltaY = centerB.y - centerA.y;
+		const centerDeltaX = secondRingCenter.x - firstRingCenter.x;
+		const centerDeltaY = secondRingCenter.y - firstRingCenter.y;
 		const centerDistance = Math.hypot(centerDeltaX, centerDeltaY);
-		const minCenterDistance = (ringA.size + ringB.size) / LandingBgNumeric.HALF;
+		const minCenterDistance =
+			(firstRing.size + secondRing.size) / LandingBgNumeric.TWO;
 
 		if (centerDistance < minCenterDistance) {
 			const normalX = centerDeltaX / (centerDistance || LandingBgNumeric.ONE);
 			const normalY = centerDeltaY / (centerDistance || LandingBgNumeric.ONE);
 
 			const maxOverlap =
-				Math.min(ringA.size, ringB.size) *
+				Math.min(firstRing.size, secondRing.size) *
 				LandingBgCollision.MAX_OVERLAP_FRACTION;
 			const overlap = Math.min(
 				minCenterDistance - centerDistance + LandingBgCollision.OVERLAP_EPSILON,
 				maxOverlap,
 			);
 
-			const offsetX = (normalX * overlap) / LandingBgNumeric.HALF;
-			const offsetY = (normalY * overlap) / LandingBgNumeric.HALF;
+			const offsetX = (normalX * overlap) / LandingBgNumeric.TWO;
+			const offsetY = (normalY * overlap) / LandingBgNumeric.TWO;
 
-			ringAPositionX -= offsetX;
-			ringAPositionY -= offsetY;
-			ringBPositionX += offsetX;
-			ringBPositionY += offsetY;
+			firstRingPositionX -= offsetX;
+			firstRingPositionY -= offsetY;
+			secondRingPositionX += offsetX;
+			secondRingPositionY += offsetY;
 
-			const ringAVelocityAlongNormal =
-				ringA.velocityX * normalX + ringA.velocityY * normalY;
-			const ringBVelocityAlongNormal =
-				ringB.velocityX * normalX + ringB.velocityY * normalY;
+			const firstRingVelocityAlongNormal =
+				firstRing.velocityX * normalX + firstRing.velocityY * normalY;
+			const secondRingVelocityAlongNormal =
+				secondRing.velocityX * normalX + secondRing.velocityY * normalY;
 
 			const velocityExchangeA =
-				ringBVelocityAlongNormal - ringAVelocityAlongNormal;
+				secondRingVelocityAlongNormal - firstRingVelocityAlongNormal;
 			const velocityExchangeB =
-				ringAVelocityAlongNormal - ringBVelocityAlongNormal;
+				firstRingVelocityAlongNormal - secondRingVelocityAlongNormal;
 
-			ringA.velocityX += velocityExchangeA * normalX;
-			ringA.velocityY += velocityExchangeA * normalY;
-			ringB.velocityX += velocityExchangeB * normalX;
-			ringB.velocityY += velocityExchangeB * normalY;
+			firstRing.velocityX += velocityExchangeA * normalX;
+			firstRing.velocityY += velocityExchangeA * normalY;
+			secondRing.velocityX += velocityExchangeB * normalX;
+			secondRing.velocityY += velocityExchangeB * normalY;
 
-			applyDamping(ringA);
-			applyDamping(ringB);
+			applyDamping(firstRing);
+			applyDamping(secondRing);
 		}
 
-		ringA.positionX = ringAPositionX;
-		ringA.positionY = ringAPositionY;
-		ringB.positionX = ringBPositionX;
-		ringB.positionY = ringBPositionY;
+		firstRing.positionX = firstRingPositionX;
+		firstRing.positionY = firstRingPositionY;
+		secondRing.positionX = secondRingPositionX;
+		secondRing.positionY = secondRingPositionY;
 	}
 
 	for (const ring of rings) {

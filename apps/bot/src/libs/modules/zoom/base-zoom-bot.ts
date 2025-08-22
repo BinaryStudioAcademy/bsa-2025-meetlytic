@@ -184,7 +184,7 @@ class BaseZoomBot {
 				SocketEvent.JOIN_ROOM,
 				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
-			this.logger.info("Emitting GET_PUBLIC_URL event");
+			this.logger.info(ZoomBotMessage.GETTING_PUBLIC_URL);
 			this.socketClient.emit(
 				SocketEvent.GET_PUBLIC_URL,
 				String(this.config.ENV.ZOOM.MEETING_ID),
@@ -199,7 +199,7 @@ class BaseZoomBot {
 			const meetingId = String(this.config.ENV.ZOOM.MEETING_ID);
 
 			this.logger.info(
-				`Stopping recording of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
+				`${ZoomBotMessage.STOPPING_RECORDING} ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 			);
 			this.audioRecorder.stop();
 			await this.audioRecorder.stopFullMeetingRecording();
@@ -223,7 +223,7 @@ class BaseZoomBot {
 			SocketEvent.GENERATE_SUMMARY_ACTION_ITEMS,
 			async (transcript: string) => {
 				this.logger.info(
-					`Generating summary/action items of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
+					`${ZoomBotMessage.GENERATING_SUMMARY_ACTION_ITEMS} ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 				);
 				const [actionItems, summary] = await Promise.all([
 					this.openAI.createActionItems(transcript),
@@ -261,7 +261,7 @@ class BaseZoomBot {
 					await this.joinMeeting();
 					this.logger.info(ZoomBotMessage.JOINED_MEETING);
 					this.logger.info(
-						`Sending public url for the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
+						`${ZoomBotMessage.SENDING_PUBLIC_URL} ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 					);
 					await this.sendPublicUrlToChat(publicUrl);
 					this.audioRecorder.start();
@@ -334,12 +334,12 @@ class BaseZoomBot {
 			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
 			await delay(Timeout.FIVE_SECONDS);
 			await this.page.keyboard.type(
-				`Hello! This meeting is being recorded by Meetlytic AI Bot. To check the meeting transcription you can follow the link: ${publicUrl}`,
+				`${ZoomBotMessage.BOT_CHAT_MESSAGE} ${publicUrl}`,
 			);
 			await this.page.keyboard.press(KeyboardKey.ENTER);
 		} catch (error) {
 			this.logger.error(
-				`Failed to send meeting public url to the chat ${error instanceof Error ? error.message : String(error)}`,
+				`${ZoomBotMessage.FAILED_TO_SEND_MESSAGE_TO_CHAT} ${error instanceof Error ? error.message : String(error)}`,
 			);
 		}
 	}

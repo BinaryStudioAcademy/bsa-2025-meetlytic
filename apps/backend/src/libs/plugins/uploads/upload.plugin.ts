@@ -1,5 +1,5 @@
 import multipart from "@fastify/multipart";
-import { type FastifyPluginCallback, type FastifyRequest } from "fastify";
+import { type FastifyPluginCallback } from "fastify";
 import fp from "fastify-plugin";
 
 import {
@@ -10,22 +10,15 @@ import {
 import { UploadError } from "~/libs/exceptions/exceptions.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 
-import {
-	type UploadedFile,
-	type UploadPluginOptions,
-} from "./libs/types/types.js";
+import { UploadErrorMessage } from "../../enums/enums.js";
+import { type UploadPluginOptions } from "./libs/types/types.js";
 
 const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 	fastify,
 	options,
 	done,
 ) => {
-	const {
-		allowedMimeTypes,
-		fieldName = "file",
-		maxFiles,
-		maxFileSize,
-	} = options;
+	const { allowedMimeTypes, maxFiles, maxFileSize } = options;
 
 	fastify.register(multipart, {
 		limits: { files: maxFiles, fileSize: maxFileSize },
@@ -33,57 +26,52 @@ const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 
 	fastify.decorateRequest("uploadedFile", null);
 
-	fastify.decorateRequest(
-		"getFileOrThrow",
-		async function (
-			this: FastifyRequest,
-			localOptions?: { fieldName?: string },
-		): Promise<UploadedFile> {
-			const expectedFieldName = localOptions?.fieldName ?? fieldName;
-			const file = await this.file({ limits: { fileSize: maxFileSize } });
+	fastify.addHook("preValidation", async (request) => {
+		if (!request.isMultipart()) {
+			return;
+		}
 
-			if (!file) {
-				throw new UploadError({
-					message: `Missing file field "${expectedFieldName}"`,
-					status: HTTPCode.BAD_REQUEST,
-				});
-			}
+		const file = await request.file({ limits: { fileSize: maxFileSize } });
 
-			if (!allowedMimeTypes.includes(file.mimetype)) {
-				throw new UploadError({
-					message: `Invalid file type "${file.mimetype}". Allowed: ${allowedMimeTypes.join(", ")}`,
-					status: HTTPCode.BAD_REQUEST,
-				});
-			}
+		if (!file) {
+			request.uploadedFile = null;
 
-			const buffer = await file.toBuffer();
-			const maxFileSizeInMB = Math.floor(
-				maxFileSize / (MEMORY_UNIT_SIZE * MEMORY_UNIT_SIZE),
-			);
+			return;
+		}
 
-			if (buffer.length > maxFileSize) {
-				throw new UploadError({
-					message: `File too large. Max ${String(maxFileSizeInMB)} MB`,
-					status: HTTPCode.PAYLOAD_TOO_LARGE,
-				});
-			}
+		if (!allowedMimeTypes.includes(file.mimetype)) {
+			throw new UploadError({
+				message: UploadErrorMessage.INVALID_FILE_TYPE(
+					file.mimetype,
+					allowedMimeTypes,
+				),
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
 
-			const originalFilename = file.filename || FILENAME_FALLBACK;
-			const safeName = originalFilename.replace(FILENAME_SANITIZE_REGEX, "_");
+		const buffer = await file.toBuffer();
+		const maxFileSizeInMB = Math.floor(
+			maxFileSize / (MEMORY_UNIT_SIZE * MEMORY_UNIT_SIZE),
+		);
 
-			const uploaded: UploadedFile = {
-				buffer,
-				file,
-				filename: safeName,
-				mimetype: file.mimetype,
-				size: buffer.length,
-			};
+		if (buffer.length > maxFileSize) {
+			throw new UploadError({
+				message: UploadErrorMessage.FILE_TOO_LARGE(maxFileSizeInMB),
+				status: HTTPCode.PAYLOAD_TOO_LARGE,
+			});
+		}
 
-			this.uploadedFile = uploaded;
+		const original = file.filename || FILENAME_FALLBACK;
+		const safeName = original.replace(FILENAME_SANITIZE_REGEX, "_");
 
-			return uploaded;
-		},
-	);
+		request.uploadedFile = {
+			buffer,
+			file,
+			filename: safeName,
+			mimetype: file.mimetype,
+			size: buffer.length,
+		};
+	});
 
 	done();
 };

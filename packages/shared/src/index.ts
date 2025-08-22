@@ -61,6 +61,7 @@ export {
 	type FileResponseDto,
 	type FileUpdateRequestDto,
 	FileErrorMessage,
+	UploadErrorMessage,
 } from "./modules/files/files.js";
 export {
 	type MeetingAttachAudioRequestDto,

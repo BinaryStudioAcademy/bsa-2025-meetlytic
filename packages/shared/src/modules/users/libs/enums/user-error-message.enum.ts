@@ -4,6 +4,7 @@ const UserErrorMessage = {
 		"This email address is already associated with another account.",
 	USER_NOT_FOUND: "We couldn't find an account with this email address.",
 	USER_NOT_PROVIDED: "User not provided",
+	USER_REQUIRED: "User is required",
 } as const;
 
 export { UserErrorMessage };

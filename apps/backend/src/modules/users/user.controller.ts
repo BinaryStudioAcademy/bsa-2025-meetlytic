@@ -1,4 +1,4 @@
-import { APIPath } from "~/libs/enums/enums.js";
+import { APIPath, FileErrorMessage } from "~/libs/enums/enums.js";
 import {
 	type APIHandlerOptions,
 	type APIHandlerResponse,
@@ -299,16 +299,35 @@ class UserController extends BaseController {
 	 *       500:
 	 *         description: Server error
 	 */
-	private async uploadAvatar(
-		options: UploadAvatarHandlerOptions,
-	): Promise<APIHandlerResponse> {
-		const { request } = options;
+	private async uploadAvatar({
+		request,
+	}: UploadAvatarHandlerOptions): Promise<APIHandlerResponse> {
+		if (!request.isMultipart()) {
+			throw new HTTPError({
+				message: "Content-Type must be multipart/form-data",
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
 
-		const user = request.user as UserResponseDto;
+		const file = request.uploadedFile;
 
-		const uploadedFile = await request.getFileOrThrow();
+		if (!file) {
+			throw new HTTPError({
+				message: FileErrorMessage.REQUIRED,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
 
-		const { buffer, filename, mimetype } = uploadedFile;
+		const user = request.user;
+
+		if (!user) {
+			throw new HTTPError({
+				message: UserErrorMessage.USER_REQUIRED,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
+		const { buffer, filename, mimetype } = file;
 
 		const { key, url } = await this.userAvatarService.uploadAvatar({
 			buffer,

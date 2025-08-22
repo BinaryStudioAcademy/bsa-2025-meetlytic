@@ -7,7 +7,6 @@ import { logout } from "~/modules/auth/slices/actions.js";
 import { type AvatarFileDto } from "../libs/types/types.js";
 import {
 	deleteAvatar,
-	fetchAvatar,
 	getProfile,
 	updateProfile,
 	uploadAvatar,
@@ -63,53 +62,32 @@ const { actions, name, reducer } = createSlice({
 		});
 
 		builder.addCase(uploadAvatar.pending, (state) => {
-			state.requests.avatar.isLoading = true;
-			state.requests.avatar.error = null;
+			state.dataStatus = DataStatus.PENDING;
 		});
 		builder.addCase(uploadAvatar.fulfilled, (state, { payload }) => {
-			state.requests.avatar.isLoading = false;
+			state.dataStatus = DataStatus.FULFILLED;
 
 			if (state.user) {
 				state.user.details ??= {};
 				state.user.details.avatarFile = payload;
 			}
 		});
-		builder.addCase(uploadAvatar.rejected, (state, { payload }) => {
-			state.requests.avatar.isLoading = false;
-			state.requests.avatar.error = payload as string;
+		builder.addCase(uploadAvatar.rejected, (state) => {
+			state.dataStatus = DataStatus.REJECTED;
 		});
 
 		builder.addCase(deleteAvatar.pending, (state) => {
-			state.requests.avatar.isLoading = true;
-			state.requests.avatar.error = null;
+			state.dataStatus = DataStatus.PENDING;
 		});
 		builder.addCase(deleteAvatar.fulfilled, (state) => {
-			state.requests.avatar.isLoading = false;
+			state.dataStatus = DataStatus.FULFILLED;
 
 			if (state.user?.details) {
 				state.user.details.avatarFile = null;
 			}
 		});
-		builder.addCase(deleteAvatar.rejected, (state, { payload }) => {
-			state.requests.avatar.isLoading = false;
-			state.requests.avatar.error = payload as string;
-		});
-
-		builder.addCase(fetchAvatar.pending, (state) => {
-			state.requests.avatar.isLoading = true;
-			state.requests.avatar.error = null;
-		});
-		builder.addCase(fetchAvatar.fulfilled, (state, { payload }) => {
-			state.requests.avatar.isLoading = false;
-
-			if (state.user) {
-				state.user.details ??= {};
-				state.user.details.avatarFile = payload;
-			}
-		});
-		builder.addCase(fetchAvatar.rejected, (state, { payload }) => {
-			state.requests.avatar.isLoading = false;
-			state.requests.avatar.error = payload as string;
+		builder.addCase(deleteAvatar.rejected, (state) => {
+			state.dataStatus = DataStatus.REJECTED;
 		});
 	},
 	initialState,

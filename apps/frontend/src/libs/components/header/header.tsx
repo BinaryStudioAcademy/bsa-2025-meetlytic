@@ -45,7 +45,7 @@ const Header: React.FC<Properties> = ({
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		void dispatch(userActions.fetchAvatar());
+		void dispatch(userActions.getProfile());
 	}, [dispatch]);
 
 	return (

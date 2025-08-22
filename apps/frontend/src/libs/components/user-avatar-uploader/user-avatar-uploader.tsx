@@ -4,12 +4,12 @@ import {
 	AvatarType,
 	ButtonSize,
 	ButtonVariant,
+	DataStatus,
 } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
 	useCallback,
-	useEffect,
 	useRef,
 } from "~/libs/hooks/hooks.js";
 import { actions as userActions } from "~/modules/users/users.js";
@@ -26,12 +26,8 @@ const UserAvatarUploader: React.FC = () => {
 		(state) => state.users.user?.details?.avatarFile?.url,
 	);
 	const isLoading = useAppSelector(
-		(state) => state.users.requests.avatar.isLoading,
+		(state) => state.users.dataStatus === DataStatus.PENDING,
 	);
-
-	useEffect(() => {
-		void dispatch(userActions.fetchAvatar());
-	}, [dispatch]);
 
 	const handleUploadClick = useCallback((): void => {
 		fileInputReference.current?.click();

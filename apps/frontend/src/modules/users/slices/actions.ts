@@ -97,25 +97,4 @@ const deleteAvatar = createAsyncThunk<undefined, undefined, AsyncThunkConfig>(
 	},
 );
 
-const fetchAvatar = createAsyncThunk<
-	AvatarFileDto | null,
-	undefined,
-	AsyncThunkConfig
->(`${sliceName}/fetch-avatar`, async (_, { extra, rejectWithValue }) => {
-	try {
-		const { userApi } = extra;
-
-		return await userApi.getAvatar();
-	} catch (error) {
-		if (error instanceof HTTPError) {
-			return rejectWithValue({
-				message: error.message,
-				status: error.status,
-			});
-		}
-
-		return rejectWithValue({ message: "Something went wrong" });
-	}
-});
-
-export { deleteAvatar, fetchAvatar, getProfile, updateProfile, uploadAvatar };
+export { deleteAvatar, getProfile, updateProfile, uploadAvatar };

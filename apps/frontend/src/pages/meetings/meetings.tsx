@@ -9,7 +9,6 @@ import {
 	useEffect,
 } from "~/libs/hooks/hooks.js";
 import { actions as meetingActions } from "~/modules/meeting/meeting.js";
-import { actions as userActions } from "~/modules/users/users.js";
 
 import { MeetingCreationModal } from "./components/meeting-creation-modal/meeting-creation-modal.js";
 import { MeetingItem } from "./components/meeting-item/meeting-item.js";
@@ -25,7 +24,6 @@ const Meetings: React.FC = () => {
 
 	useEffect(() => {
 		void dispatch(meetingActions.getAllMeetings());
-		void dispatch(userActions.fetchAvatar());
 	}, [dispatch]);
 
 	const handleDeleteMeeting = useCallback(

@@ -7,6 +7,7 @@ import {
 	useCallback,
 	useEffect,
 } from "~/libs/hooks/hooks.js";
+import { actions as meetingDetailsActions } from "~/modules/meeting-details/meeting-details.js";
 import { actions as meetingActions } from "~/modules/meeting/meeting.js";
 
 import { MeetingCreationModal } from "./components/meeting-creation-modal/meeting-creation-modal.js";
@@ -25,6 +26,7 @@ const Meetings: React.FC = () => {
 	const handleDeleteMeeting = useCallback(
 		(id: number) => {
 			void dispatch(meetingActions.deleteMeeting(id));
+			dispatch(meetingDetailsActions.clearMeetingDetails());
 		},
 		[dispatch],
 	);

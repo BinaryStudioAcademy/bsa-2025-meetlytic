@@ -49,6 +49,10 @@ const MeetingDetails: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [searchParameters] = useSearchParams();
 
+	useEffect(() => {
+		dispatch(meetingDetailsActions.clearMeetingDetails());
+	}, [dispatch, id]);
+
 	const { dataStatus, meeting } = useAppSelector(
 		(state) => state.meetingDetails,
 	);

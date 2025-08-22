@@ -20,6 +20,7 @@ export {
 	HTTPError,
 	MeetingError,
 	MeetingTranscriptionError,
+	S3Error,
 	UploadError,
 	UserError,
 	ValidationError,
@@ -52,6 +53,7 @@ export {
 	type ValueOf,
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthStatusMessage } from "./modules/auth/auth.js";
+export { S3ErrorMessage } from "./modules/aws/aws.js";
 export {
 	type FileGetAllResponseDto,
 	type FilePublicDto,

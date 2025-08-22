@@ -133,7 +133,7 @@ const MeetingDetails: React.FC = () => {
 			<div className={styles["meeting-details"]}>
 				<div className={styles["meeting-details__header"]}>
 					<h1 className={styles["meeting-details__title"]}>
-						Meeting #{meeting.id} |{" "}
+						{meeting.meetingTitle || `Meeting #${String(meeting.id)}`} |{" "}
 						{formatDate(new Date(meeting.createdAt), "D MMMM hA")}
 					</h1>
 					<div className={styles["meeting-details__actions"]}>

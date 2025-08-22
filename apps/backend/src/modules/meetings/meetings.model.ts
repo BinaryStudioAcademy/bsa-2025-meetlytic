@@ -31,6 +31,8 @@ class MeetingModel extends AbstractModel {
 
 	public meetingPassword!: null | string;
 
+	public meetingTitle!: null | string;
+
 	public ownerId!: number;
 
 	public status!: ValueOf<typeof MeetingStatus>;

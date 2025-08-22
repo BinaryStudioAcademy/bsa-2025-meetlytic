@@ -64,6 +64,16 @@ const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 						placeholder="Meeting password (optional)"
 						type="text"
 					/>
+					<Input
+						className={styles["meeting-form__input"]}
+						control={control}
+						errors={errors}
+						hasVisuallyHiddenLabel
+						label="Meeting title"
+						name="meetingTitle"
+						placeholder="Meeting title (optional)"
+						type="text"
+					/>
 				</div>
 				<div className={styles["meeting-form__actions"]}>
 					<Button

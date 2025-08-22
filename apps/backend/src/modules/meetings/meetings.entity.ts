@@ -22,6 +22,8 @@ class MeetingEntity implements Entity {
 
 	private meetingPassword: null | string;
 
+	private meetingTitle: null | string;
+
 	private ownerId: number;
 
 	private status!: ValueOf<typeof MeetingStatus>;
@@ -38,6 +40,7 @@ class MeetingEntity implements Entity {
 		instanceId,
 		meetingId,
 		meetingPassword,
+		meetingTitle,
 		ownerId,
 		status,
 		summary,
@@ -51,6 +54,7 @@ class MeetingEntity implements Entity {
 		instanceId: null | string;
 		meetingId: string;
 		meetingPassword: null | string;
+		meetingTitle: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 		summary: null | string;
@@ -64,6 +68,7 @@ class MeetingEntity implements Entity {
 		this.instanceId = instanceId;
 		this.meetingId = meetingId;
 		this.meetingPassword = meetingPassword;
+		this.meetingTitle = meetingTitle;
 		this.ownerId = ownerId;
 		this.status = status;
 		this.summary = summary;
@@ -79,6 +84,7 @@ class MeetingEntity implements Entity {
 		instanceId,
 		meetingId,
 		meetingPassword,
+		meetingTitle,
 		ownerId,
 		status,
 		summary,
@@ -92,6 +98,7 @@ class MeetingEntity implements Entity {
 		instanceId: null | string;
 		meetingId: string;
 		meetingPassword: null | string;
+		meetingTitle: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 		summary: null | string;
@@ -106,6 +113,7 @@ class MeetingEntity implements Entity {
 			instanceId,
 			meetingId,
 			meetingPassword,
+			meetingTitle,
 			ownerId,
 			status,
 			summary,
@@ -117,12 +125,14 @@ class MeetingEntity implements Entity {
 		instanceId,
 		meetingId,
 		meetingPassword,
+		meetingTitle,
 		ownerId,
 	}: {
 		host: ValueOf<typeof MeetingHost>;
 		instanceId: null | string;
 		meetingId: string;
 		meetingPassword: null | string;
+		meetingTitle: null | string;
 		ownerId: number;
 	}): MeetingEntity {
 		return new MeetingEntity({
@@ -135,6 +145,7 @@ class MeetingEntity implements Entity {
 			instanceId,
 			meetingId,
 			meetingPassword,
+			meetingTitle,
 			ownerId,
 			status: MeetingStatus.STARTED,
 			summary: null,
@@ -149,6 +160,7 @@ class MeetingEntity implements Entity {
 		id: number;
 		meetingId: string;
 		meetingPassword: null | string;
+		meetingTitle: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 	} {
@@ -160,6 +172,7 @@ class MeetingEntity implements Entity {
 			id: this.id as number,
 			meetingId: this.meetingId,
 			meetingPassword: this.meetingPassword,
+			meetingTitle: this.meetingTitle,
 			ownerId: this.ownerId,
 			status: this.status,
 		};
@@ -174,6 +187,7 @@ class MeetingEntity implements Entity {
 		id: number;
 		meetingId: string;
 		meetingPassword: null | string;
+		meetingTitle: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 		summary: null | string;
@@ -187,6 +201,7 @@ class MeetingEntity implements Entity {
 			id: this.id as number,
 			meetingId: this.meetingId,
 			meetingPassword: this.meetingPassword,
+			meetingTitle: this.meetingTitle,
 			ownerId: this.ownerId,
 			status: this.status,
 			summary: this.summary as string,
@@ -198,6 +213,7 @@ class MeetingEntity implements Entity {
 		instanceId: null | string;
 		meetingId: string;
 		meetingPassword: null | string;
+		meetingTitle: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 	} {
@@ -206,6 +222,7 @@ class MeetingEntity implements Entity {
 			instanceId: this.instanceId,
 			meetingId: this.meetingId,
 			meetingPassword: this.meetingPassword,
+			meetingTitle: this.meetingTitle,
 			ownerId: this.ownerId,
 			status: this.status,
 		};
@@ -219,6 +236,7 @@ class MeetingEntity implements Entity {
 		instanceId: null | string;
 		meetingId: string;
 		meetingPassword: null | string;
+		meetingTitle: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 	} {
@@ -230,6 +248,7 @@ class MeetingEntity implements Entity {
 			instanceId: this.instanceId,
 			meetingId: this.meetingId,
 			meetingPassword: this.meetingPassword,
+			meetingTitle: this.meetingTitle,
 			ownerId: this.ownerId,
 			status: this.status,
 		};

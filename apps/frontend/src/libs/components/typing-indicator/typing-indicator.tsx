@@ -1,10 +1,10 @@
-import { getValidClassNames } from "~/libs/helpers/get-valid-class-names.helper.js";
+import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
-import { IndicatorVariant } from "./libs/enums/indicator-variant.enum.js";
+import { IndicatorVariant } from "./libs/enums/enums.js";
 import styles from "./typing-indicator.module.css";
 
-const SIZE_OF_DOT = 4;
+const DOT_INDICATOR_DEFAULT_SIZE = 4;
 
 type Properties = {
 	color?: string;
@@ -14,7 +14,7 @@ type Properties = {
 
 const TypingIndicator: React.FC<Properties> = ({
 	color = "currentColor",
-	size = SIZE_OF_DOT,
+	size = DOT_INDICATOR_DEFAULT_SIZE,
 	variant = IndicatorVariant.DOT,
 }: Properties) => {
 	const style = { backgroundColor: color, height: size, width: size };
@@ -26,9 +26,9 @@ const TypingIndicator: React.FC<Properties> = ({
 				styles[variant],
 			)}
 		>
-			<span style={style}></span>
-			<span style={style}></span>
-			<span style={style}></span>
+			<span className={styles["typing-indicator__item"]} style={style}></span>
+			<span className={styles["typing-indicator__item"]} style={style}></span>
+			<span className={styles["typing-indicator__item"]} style={style}></span>
 		</span>
 	);
 };

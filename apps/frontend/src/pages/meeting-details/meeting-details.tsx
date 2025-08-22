@@ -51,6 +51,7 @@ const MeetingDetails: React.FC = () => {
 
 	useEffect(() => {
 		dispatch(meetingDetailsActions.clearMeetingDetails());
+		dispatch(transcriptionActions.clearTranscription());
 	}, [dispatch, id]);
 
 	const { dataStatus, meeting } = useAppSelector(

@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.13.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.12.0...frontend-v1.13.0) (2025-08-22)
+
+
+### Features
+
+* add bg for meeting cards ml-207 ([#276](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/276)) ([03651b6](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/03651b694a64857ba598b7d6fe35abc86b4c6d13))
+
+
+### Bug Fixes
+
+* notification during failed sign in ml-85 ([#273](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/273)) ([97e51e5](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/97e51e57aba85edf0b504ac373c2f9ffd02d2b3c))
+
 ## [1.12.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.11.0...frontend-v1.12.0) (2025-08-22)
 
 

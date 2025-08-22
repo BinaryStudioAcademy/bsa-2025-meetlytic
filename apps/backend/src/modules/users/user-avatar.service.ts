@@ -30,7 +30,7 @@ class UserAvatarService {
 	}
 
 	public async deleteAvatar(userId: number): Promise<DeleteAvatarResult> {
-		const detailsId = await this.userService.getOrCreateDetailsId(userId);
+		const detailsId = await this.userService.getDetailsId(userId);
 
 		if (!detailsId) {
 			throw new Error(UserErrorMessage.DETAILS_NOT_FOUND);
@@ -60,7 +60,7 @@ class UserAvatarService {
 	): Promise<AvatarFileDto> {
 		const { buffer, filename, mimetype, userId } = options;
 
-		const detailsId = await this.userService.getOrCreateDetailsId(userId);
+		const detailsId = await this.userService.getDetailsId(userId);
 
 		if (!detailsId) {
 			throw new Error(UserErrorMessage.DETAILS_NOT_FOUND);

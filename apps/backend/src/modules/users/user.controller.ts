@@ -199,7 +199,7 @@ class UserController extends BaseController {
 	): Promise<APIHandlerResponse> {
 		const { user } = options;
 
-		const detailsId = await this.userService.getOrCreateDetailsId(user.id);
+		const detailsId = await this.userService.getDetailsId(user.id);
 
 		if (!detailsId) {
 			throw new HTTPError({

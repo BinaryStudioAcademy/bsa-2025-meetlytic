@@ -123,19 +123,17 @@ class UserService implements Service {
 		return credentials ?? null;
 	}
 
-	public async getOrCreateDetailsId(userId: number): Promise<number> {
-		const existingEntity =
-			await this.userDetailsRepository.findByUserId(userId);
+	public async getDetailsId(userId: number): Promise<number> {
+		const details = await this.userDetailsRepository.findByUserId(userId);
 
-		if (existingEntity) {
-			return existingEntity.toObject().id;
+		if (!details) {
+			throw new UserError({
+				message: UserErrorMessage.DETAILS_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
 		}
 
-		const created = await this.userDetailsRepository.create(
-			UserDetailsEntity.initializeNew({ firstName: "", lastName: "", userId }),
-		);
-
-		return created.toObject().id;
+		return details.toObject().id;
 	}
 
 	public async update(

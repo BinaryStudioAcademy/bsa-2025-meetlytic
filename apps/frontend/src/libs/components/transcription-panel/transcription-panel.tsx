@@ -26,7 +26,7 @@ const TranscriptionPanel: React.FC<Properties> = ({
 	meetingId,
 	meetingStatus,
 }: Properties) => {
-	const { addChunk, isTyping, typedText } = useTypingQueue();
+	const { isTyping, onAddChunk, typedText } = useTypingQueue();
 	const containerReference = useAutoScroll<HTMLDivElement>([typedText]);
 	const { dataStatus, transcriptions } = useAppSelector(
 		({ transcription }) => transcription,
@@ -34,11 +34,11 @@ const TranscriptionPanel: React.FC<Properties> = ({
 	const [searchParameters] = useSearchParams();
 	const token = searchParameters.get("token");
 
-	const onTranscriptUpdate = useCallback(
+	const handleTranscriptUpdate = useCallback(
 		(newChunk: MeetingTranscriptionResponseDto) => {
-			addChunk(newChunk);
+			onAddChunk(newChunk);
 		},
-		[addChunk],
+		[onAddChunk],
 	);
 
 	useFetchTranscriptions({
@@ -47,7 +47,7 @@ const TranscriptionPanel: React.FC<Properties> = ({
 	});
 
 	useMeetingSocket<MeetingTranscriptionResponseDto>({
-		callback: onTranscriptUpdate,
+		callback: handleTranscriptUpdate,
 		event: SocketEvent.TRANSCRIBE,
 		meetingId,
 		meetingStatus,

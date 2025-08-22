@@ -3,8 +3,8 @@ import { useCallback, useRef, useState } from "~/libs/hooks/hooks.js";
 import { type MeetingTranscriptionResponseDto } from "~/modules/transcription/transcription.js";
 
 type UseTypingQueueReturn = {
-	addChunk: (chunk: MeetingTranscriptionResponseDto) => void;
 	isTyping: boolean;
+	onAddChunk: (chunk: MeetingTranscriptionResponseDto) => void;
 	typedText: string;
 };
 
@@ -52,7 +52,7 @@ const useTypingQueue = (typingSpeed = TYPING_SPEED): UseTypingQueueReturn => {
 		typeNextChar();
 	}, [typingSpeed]);
 
-	const addChunk = useCallback(
+	const onAddChunk = useCallback(
 		(chunk: MeetingTranscriptionResponseDto) => {
 			if (!chunk.chunkText) {
 				return;
@@ -67,7 +67,7 @@ const useTypingQueue = (typingSpeed = TYPING_SPEED): UseTypingQueueReturn => {
 		[processQueue],
 	);
 
-	return { addChunk, isTyping, typedText };
+	return { isTyping, onAddChunk, typedText };
 };
 
 export { useTypingQueue };

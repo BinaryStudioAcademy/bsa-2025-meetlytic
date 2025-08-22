@@ -1,0 +1,120 @@
+.landing-footer {
+	position: relative;
+	z-index: var(--z-index-medium);
+	background-color: var(--color-background-dark);
+}
+
+.landing-footer__inner {
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	column-gap: 220px;
+	align-items: start;
+	max-width: 1440px;
+	padding: 54px var(--container-gutter-lg);
+	margin: 0 auto;
+}
+
+.landing-footer__brand {
+	display: flex;
+	align-items: center;
+}
+
+.landing-footer__columns {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	column-gap: 80px;
+	max-width: 560px;
+	transform: translateY(15px);
+}
+
+.landing-footer__title {
+	margin: 0 0 16px;
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--color-text-light);
+	text-transform: uppercase;
+}
+
+.landing-footer__list {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.landing-footer__link {
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px;
+	color: var(--color-text-2);
+	text-decoration: none;
+	transition: color 0.2s ease-in-out;
+}
+
+.landing-footer__link:hover,
+.landing-footer__link:focus-visible {
+	color: var(--color-brand);
+	outline: none;
+}
+
+.landing-footer__bottom {
+	padding: 85px 10px 55px;
+	text-align: center;
+}
+
+.landing-footer__copyright {
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--color-text-2);
+}
+
+@media (width <=1200px) {
+	.landing-footer__inner {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media (width <=1024px) {
+	.landing-footer__columns {
+		column-gap: 40px;
+	}
+
+	.landing-footer__inner {
+		column-gap: 50px;
+		padding: 40px var(--container-gutter-md);
+	}
+
+	.landing-footer__bottom {
+		padding: 30px 10px 20px;
+	}
+}
+
+@media (width <=768px) {
+	.landing-footer__inner {
+		grid-template-columns: 1fr;
+		row-gap: 32px;
+		justify-items: center;
+		padding: 35px var(--container-gutter-sm);
+		text-align: center;
+	}
+
+	.landing-footer__brand {
+		justify-content: center;
+	}
+
+	.landing-footer__columns {
+		grid-template-columns: 1fr 1fr;
+		column-gap: 80px;
+		transform: none;
+	}
+
+	.landing-footer__title {
+		margin-bottom: 12px;
+		font-size: 14px;
+	}
+}
+
+@media (width <=576px) {
+	.landing-footer__copyright {
+		font-size: 12px;
+	}
+}

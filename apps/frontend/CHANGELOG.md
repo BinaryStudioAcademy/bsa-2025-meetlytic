@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.14.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.13.0...frontend-v1.14.0) (2025-08-22)
+
+
+### Features
+
+* add landing page structure, components and assets ml-59 ([#164](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/164)) ([9c420d2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/9c420d2fabb8821cc5a5b7bd31e9f43345d6a222))
+
+## [1.13.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.12.0...frontend-v1.13.0) (2025-08-22)
+
+
+### Features
+
+* add bg for meeting cards ml-207 ([#276](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/276)) ([03651b6](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/03651b694a64857ba598b7d6fe35abc86b4c6d13))
+
+
+### Bug Fixes
+
+* notification during failed sign in ml-85 ([#273](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/273)) ([97e51e5](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/97e51e57aba85edf0b504ac373c2f9ffd02d2b3c))
+
+## [1.12.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.11.0...frontend-v1.12.0) (2025-08-22)
+
+
+### Features
+
+* export meeting transcription on front ml-145 ([#271](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/271)) ([74919e8](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/74919e8725d7bac625a02e595d87effa737e1db2))
+
+
+### Bug Fixes
+
+* error message deleting meeting ml-258 ([#260](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/260)) ([787a718](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/787a718137b44b2540d3269421bd900736a7f1d8))
+
 ## [1.11.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.10.0...frontend-v1.11.0) (2025-08-21)
 
 

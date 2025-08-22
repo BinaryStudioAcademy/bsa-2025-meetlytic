@@ -1,6 +1,6 @@
 import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
-import { type Service } from "~/libs/types/types.js";
+import { type AvatarFileDto, type Service } from "~/libs/types/types.js";
 import { type FileService } from "~/modules/files/files.service.js";
 
 import { UserErrorMessage } from "./libs/enums/enums.js";
@@ -94,7 +94,7 @@ class UserService implements Service {
 			return null;
 		}
 
-		let avatarFile: null | { key: string; url: string } = null;
+		let avatarFile: AvatarFileDto | null = null;
 		const avatarFileId = details.getAvatarFileId();
 
 		if (avatarFileId != null) {

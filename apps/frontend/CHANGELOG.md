@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.12.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.11.0...frontend-v1.12.0) (2025-08-22)
+
+
+### Features
+
+* export meeting transcription on front ml-145 ([#271](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/271)) ([74919e8](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/74919e8725d7bac625a02e595d87effa737e1db2))
+
+
+### Bug Fixes
+
+* error message deleting meeting ml-258 ([#260](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/260)) ([787a718](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/787a718137b44b2540d3269421bd900736a7f1d8))
+
 ## [1.11.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.10.0...frontend-v1.11.0) (2025-08-21)
 
 

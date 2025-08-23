@@ -1,5 +1,5 @@
 import { Loader, SearchBar } from "~/libs/components/components.js";
-import { DataStatus, SocketEvent } from "~/libs/enums/enums.js";
+import { DataStatus, MeetingStatus, SocketEvent } from "~/libs/enums/enums.js";
 import {
 	useAppSelector,
 	useAutoScroll,
@@ -31,6 +31,7 @@ const TranscriptionPanel: React.FC<Properties> = ({
 	const { dataStatus, transcriptions } = useAppSelector(
 		({ transcription }) => transcription,
 	);
+
 	const [searchParameters] = useSearchParams();
 	const token = searchParameters.get("token");
 
@@ -75,7 +76,9 @@ const TranscriptionPanel: React.FC<Properties> = ({
 				<div className={styles["transcription-area"]} ref={containerReference}>
 					<p className={styles["transcription-text"]}>
 						{staticTranscript}
-						<LiveTranscription isTyping={isTyping} typedText={typedText} />
+						{meetingStatus === MeetingStatus.STARTED && (
+							<LiveTranscription isTyping={isTyping} typedText={typedText} />
+						)}
 					</p>
 				</div>
 			) : (

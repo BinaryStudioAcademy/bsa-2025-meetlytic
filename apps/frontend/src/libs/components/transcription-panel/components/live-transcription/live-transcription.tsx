@@ -13,11 +13,7 @@ const LiveTranscription: React.FC<Properties> = ({
 	return (
 		<>
 			{typedText}
-			{!isTyping && (
-				<>
-					<TypingIndicator variant={IndicatorVariant.DOT} />
-				</>
-			)}
+			{!isTyping && <TypingIndicator variant={IndicatorVariant.DOT} />}
 		</>
 	);
 };

@@ -3,25 +3,28 @@ import {
 	SocketEvent,
 	SocketNamespace,
 } from "~/libs/enums/enums.js";
-import { useEffect } from "~/libs/hooks/hooks.js";
+import { useAppSelector, useEffect } from "~/libs/hooks/hooks.js";
 import { socketClient } from "~/libs/modules/socket/socket.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
 type UseMeetingSocketParameters<T> = {
 	callback: (data: T) => void;
 	event: ValueOf<typeof SocketEvent>;
-	meetingId: number;
-	meetingStatus: string;
 	namespace?: ValueOf<typeof SocketNamespace>;
 };
 
 const useMeetingSocket = <T>({
 	callback,
 	event,
-	meetingId,
-	meetingStatus,
 	namespace = SocketNamespace.USERS,
 }: UseMeetingSocketParameters<T>): void => {
+	const meeting = useAppSelector(
+		({ meetingDetails }) => meetingDetails.meeting,
+	);
+
+	const meetingId = meeting?.id;
+	const meetingStatus = meeting?.status;
+
 	useEffect(() => {
 		if (!meetingId || meetingStatus === MeetingStatus.ENDED) {
 			return;

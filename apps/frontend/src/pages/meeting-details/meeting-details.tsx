@@ -71,8 +71,6 @@ const MeetingDetails: React.FC = () => {
 	useMeetingSocket<MeetingSummaryActionItemsResponseDto>({
 		callback: handleSummaryActionItemsUpdate,
 		event: SocketEvent.UPDATE_MEETING_DETAILS,
-		meetingId: Number(id),
-		meetingStatus: dataStatus,
 	});
 
 	useEffect(handleSummaryActionItemsUpdate, [handleSummaryActionItemsUpdate]);
@@ -161,10 +159,7 @@ const MeetingDetails: React.FC = () => {
 				</div>
 
 				<div className={styles["meeting-details__content"]}>
-					<TranscriptionPanel
-						meetingId={meeting.id}
-						meetingStatus={meeting.status}
-					/>
+					<TranscriptionPanel />
 
 					<div className={styles["meeting-details__right-panel"]}>
 						<div>

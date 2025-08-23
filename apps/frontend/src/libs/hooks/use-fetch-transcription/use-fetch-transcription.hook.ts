@@ -1,16 +1,16 @@
-import { useAppDispatch, useEffect } from "~/libs/hooks/hooks.js";
+import {
+	useAppDispatch,
+	useAppSelector,
+	useEffect,
+	useSearchParams,
+} from "~/libs/hooks/hooks.js";
 import { actions as transcriptionActions } from "~/modules/transcription/transcription.js";
 
-type UseFetchTranscriptionsParameters = {
-	meetingId: number;
-	token?: null | string;
-};
-
-const useFetchTranscriptions = ({
-	meetingId,
-	token,
-}: UseFetchTranscriptionsParameters): void => {
+const useFetchTranscriptions = (): void => {
 	const dispatch = useAppDispatch();
+	const meetingId = useAppSelector((state) => state.meetingDetails.meeting?.id);
+	const [searchParameters] = useSearchParams();
+	const token = searchParameters.get("token");
 
 	useEffect(() => {
 		if (!meetingId) {

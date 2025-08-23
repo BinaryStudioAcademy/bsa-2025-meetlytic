@@ -245,11 +245,6 @@ class BaseZoomBot {
 				this.logger.info(
 					`${ZoomBotMessage.SENDING_PUBLIC_URL} ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 				);
-				this.audioRecorder.start();
-				this.audioRecorder.startFullMeetingRecording(
-					String(this.config.ENV.ZOOM.MEETING_ID),
-				);
-				this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 				await this.sendPublicUrlToChat(publicUrl);
 			},
 		);
@@ -340,6 +335,11 @@ class BaseZoomBot {
 			await this.joinMeeting();
 			this.logger.info(ZoomBotMessage.JOINED_MEETING);
 			this.initSocket();
+			this.audioRecorder.start();
+			this.audioRecorder.startFullMeetingRecording(
+				String(this.config.ENV.ZOOM.MEETING_ID),
+			);
+			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessage.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,

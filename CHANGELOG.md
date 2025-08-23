@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.16.0...v1.17.0) (2025-08-22)
+
+
+### Features
+
+* add landing page structure, components and assets ml-59 ([#164](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/164)) ([9c420d2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/9c420d2fabb8821cc5a5b7bd31e9f43345d6a222))
+
 ## [1.16.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.15.0...v1.16.0) (2025-08-22)
 
 

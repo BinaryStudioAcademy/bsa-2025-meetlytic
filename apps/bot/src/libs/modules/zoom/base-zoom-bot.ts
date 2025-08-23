@@ -344,8 +344,36 @@ class BaseZoomBot {
 		}
 	}
 
-	public run(): void {
-		this.initSocket();
+	public async run(): Promise<void> {
+		try {
+			this.browser = await puppeteer.launch(this.config.getLaunchOptions());
+			this.page = await this.browser.newPage();
+			await this.page.setUserAgent(USER_AGENT);
+
+			this.logger.info(
+				`${ZoomBotMessage.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
+			);
+			await this.page.goto(
+				this.convertToZoomWebClientUrl(this.config.ENV.ZOOM.MEETING_LINK),
+				{
+					timeout: Timeout.SIXTY_SECONDS,
+					waitUntil: "networkidle2",
+				},
+			);
+			await this.handleInitialPopups();
+			await this.joinMeeting();
+			this.logger.info(ZoomBotMessage.JOINED_MEETING);
+			this.initSocket();
+			this.audioRecorder.start();
+			this.audioRecorder.startFullMeetingRecording(
+				String(this.config.ENV.ZOOM.MEETING_ID),
+			);
+			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
+		} catch (error) {
+			this.logger.error(
+				`${ZoomBotMessage.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,
+			);
+		}
 	}
 }
 

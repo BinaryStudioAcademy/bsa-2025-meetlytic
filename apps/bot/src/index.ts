@@ -1,10 +1,10 @@
 import { config } from "~/libs/modules/config/config.js";
 import { zoomBot } from "~/libs/modules/zoom/zoom-bot.js";
 
-const init = (): void => {
+const init = async (): Promise<void> => {
 	if (config.ENV.ZOOM.MEETING_LINK) {
-		zoomBot.run();
+		await zoomBot.run();
 	}
 };
 
-init();
+await init();

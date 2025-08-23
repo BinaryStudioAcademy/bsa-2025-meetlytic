@@ -26,9 +26,9 @@ const TypingIndicator: React.FC<Properties> = ({
 				styles[variant],
 			)}
 		>
-			<span className={styles["typing-indicator__item"]} style={style}></span>
-			<span className={styles["typing-indicator__item"]} style={style}></span>
-			<span className={styles["typing-indicator__item"]} style={style}></span>
+			<span className={styles["typing-indicator__item"]} style={style} />
+			<span className={styles["typing-indicator__item"]} style={style} />
+			<span className={styles["typing-indicator__item"]} style={style} />
 		</span>
 	);
 };

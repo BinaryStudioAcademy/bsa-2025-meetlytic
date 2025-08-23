@@ -17,7 +17,7 @@ import styles from "./transcription-panel.module.css";
 const EMPTY_TRANSCRIPT_CHUNKS = 0;
 
 const TranscriptionPanel: React.FC = () => {
-	const { isTyping, onAddChunk, typedText } = useTypingQueue();
+	const { handleAddChunk, isTyping, typedText } = useTypingQueue();
 	const { dataStatus, transcriptions } = useAppSelector(
 		({ transcription }) => transcription,
 	);
@@ -30,7 +30,7 @@ const TranscriptionPanel: React.FC = () => {
 	useFetchTranscriptions();
 
 	useMeetingSocket<MeetingTranscriptionResponseDto>({
-		callback: onAddChunk,
+		callback: handleAddChunk,
 		event: SocketEvent.TRANSCRIBE,
 	});
 

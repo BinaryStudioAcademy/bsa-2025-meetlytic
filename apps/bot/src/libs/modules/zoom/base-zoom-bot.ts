@@ -189,11 +189,6 @@ class BaseZoomBot {
 				SocketEvent.GET_PUBLIC_URL,
 				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
-			this.audioRecorder.start();
-			this.audioRecorder.startFullMeetingRecording(
-				String(this.config.ENV.ZOOM.MEETING_ID),
-			);
-			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 		});
 
 		this.socketClient.on(SocketEvent.DISCONNECT, (reason: string) => {
@@ -250,6 +245,11 @@ class BaseZoomBot {
 				this.logger.info(
 					`${ZoomBotMessage.SENDING_PUBLIC_URL} ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 				);
+				this.audioRecorder.start();
+				this.audioRecorder.startFullMeetingRecording(
+					String(this.config.ENV.ZOOM.MEETING_ID),
+				);
+				this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 				await this.sendPublicUrlToChat(publicUrl);
 			},
 		);

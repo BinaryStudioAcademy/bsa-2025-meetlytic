@@ -7,7 +7,6 @@ import {
 	useFetchTranscriptions,
 	useMeetingSocket,
 	useMemo,
-	useSearchParams,
 	useTypingQueue,
 } from "~/libs/hooks/hooks.js";
 import { type MeetingTranscriptionResponseDto } from "~/modules/transcription/transcription.js";
@@ -15,36 +14,24 @@ import { type MeetingTranscriptionResponseDto } from "~/modules/transcription/tr
 import { LiveTranscription } from "./components/live-transcription/live-transcription.js";
 import styles from "./transcription-panel.module.css";
 
-type Properties = {
-	meetingId: number;
-	meetingStatus: string;
-};
-
 const EMPTY_TRANSCRIPT_CHUNKS = 0;
 
-const TranscriptionPanel: React.FC<Properties> = ({
-	meetingId,
-	meetingStatus,
-}: Properties) => {
+const TranscriptionPanel: React.FC = () => {
 	const { isTyping, onAddChunk, typedText } = useTypingQueue();
-	const containerReference = useAutoScroll<HTMLDivElement>([typedText]);
 	const { dataStatus, transcriptions } = useAppSelector(
 		({ transcription }) => transcription,
 	);
-
-	const [searchParameters] = useSearchParams();
-	const token = searchParameters.get("token");
-
-	useFetchTranscriptions({
-		meetingId,
-		token,
-	});
+	const meeting = useAppSelector(
+		({ meetingDetails }) => meetingDetails.meeting,
+	);
+	const containerReference = useAutoScroll<HTMLDivElement>(
+		meeting?.status === MeetingStatus.STARTED ? [typedText] : [],
+	);
+	useFetchTranscriptions();
 
 	useMeetingSocket<MeetingTranscriptionResponseDto>({
 		callback: onAddChunk,
 		event: SocketEvent.TRANSCRIBE,
-		meetingId,
-		meetingStatus,
 	});
 
 	const handleSearch = useCallback(() => {
@@ -69,7 +56,7 @@ const TranscriptionPanel: React.FC<Properties> = ({
 				<div className={styles["transcription-area"]} ref={containerReference}>
 					<p className={styles["transcription-text"]}>
 						{staticTranscript}
-						{meetingStatus === MeetingStatus.STARTED && (
+						{meeting?.status === MeetingStatus.STARTED && (
 							<LiveTranscription isTyping={isTyping} typedText={typedText} />
 						)}
 					</p>

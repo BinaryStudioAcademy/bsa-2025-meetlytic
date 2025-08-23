@@ -15,6 +15,7 @@ import {
 	MeetingErrorMessage,
 	MeetingStatus,
 	NotificationMessage,
+	SocketEvent,
 } from "~/libs/enums/enums.js";
 import { formatDate, shareMeetingPublicUrl } from "~/libs/helpers/helpers.js";
 import {
@@ -32,13 +33,10 @@ import { rehypeSanitize, remarkGfm } from "~/libs/plugins/plugins.js";
 import { type MeetingPdfProperties } from "~/libs/types/types.js";
 import {
 	actions as meetingDetailsActions,
+	type MeetingSummaryActionItemsResponseDto,
 	sanitizeDefaultSchema,
 } from "~/modules/meeting-details/meeting-details.js";
 import { actions as meetingActions } from "~/modules/meeting/meeting.js";
-import {
-	type MeetingTranscriptionResponseDto,
-	actions as transcriptionActions,
-} from "~/modules/transcription/transcription.js";
 
 import styles from "./styles.module.css";
 
@@ -59,13 +57,6 @@ const MeetingDetails: React.FC = () => {
 		setIsStopRecordingInProgress(true);
 	}, [dispatch, id]);
 
-	const handleTranscriptUpdate = useCallback(
-		(data: MeetingTranscriptionResponseDto) => {
-			dispatch(transcriptionActions.addTranscription(data));
-		},
-		[dispatch],
-	);
-
 	const handleSummaryActionItemsUpdate = useCallback(() => {
 		const sharedToken = searchParameters.get("token");
 
@@ -77,11 +68,9 @@ const MeetingDetails: React.FC = () => {
 		);
 	}, [dispatch, id, searchParameters]);
 
-	useMeetingSocket({
-		meetingId: Number(id),
-		meetingStatus: dataStatus,
-		onSummaryActionItemsUpdate: handleSummaryActionItemsUpdate,
-		onTranscriptUpdate: handleTranscriptUpdate,
+	useMeetingSocket<MeetingSummaryActionItemsResponseDto>({
+		callback: handleSummaryActionItemsUpdate,
+		event: SocketEvent.UPDATE_MEETING_DETAILS,
 	});
 
 	useEffect(handleSummaryActionItemsUpdate, [handleSummaryActionItemsUpdate]);
@@ -170,10 +159,7 @@ const MeetingDetails: React.FC = () => {
 				</div>
 
 				<div className={styles["meeting-details__content"]}>
-					<TranscriptionPanel
-						meetingId={meeting.id}
-						meetingStatus={meeting.status}
-					/>
+					<TranscriptionPanel />
 
 					<div className={styles["meeting-details__right-panel"]}>
 						<div>

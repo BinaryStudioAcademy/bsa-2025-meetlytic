@@ -9,7 +9,7 @@ import {
 	ZoomBotMessage,
 	ZoomUILabel,
 } from "~/libs/enums/enums.js";
-import { extractZoomMeetingId } from "~/libs/helpers/helpers.js";
+import { delay, extractZoomMeetingId } from "~/libs/helpers/helpers.js";
 import { type BaseSocketClient } from "~/libs/modules/socket-client/socket-client.js";
 import {
 	type AudioRecorder,
@@ -300,8 +300,10 @@ class BaseZoomBot {
 		try {
 			await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
 			await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
+			await delay(Timeout.FIVE_SECONDS);
 			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
 			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
+			await delay(Timeout.FIVE_SECONDS);
 			await this.page.keyboard.type(
 				`${ZoomBotMessage.BOT_CHAT_MESSAGE} ${publicUrl}`,
 			);

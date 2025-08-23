@@ -21,6 +21,7 @@ export { SearchInput } from "./search-input/search-input.js";
 export { Sidebar } from "./sidebar/sidebar.js";
 export { ToastProvider } from "./toast-provider/toast-provider.js";
 export { TranscriptionPanel } from "./transcription-panel/transcription-panel.js";
+export { TypingIndicator } from "./typing-indicator/typing-indicator.js";
 export {
 	Document,
 	Page,
@@ -31,3 +32,4 @@ export {
 export { default as Markdown } from "react-markdown";
 export { Provider as StoreProvider } from "react-redux";
 export { Navigate, NavLink, Outlet as RouterOutlet } from "react-router-dom";
+export { HashLink } from "react-router-hash-link";

@@ -242,39 +242,15 @@ class BaseZoomBot {
 		this.socketClient.on(
 			SocketEvent.GET_PUBLIC_URL,
 			async (publicUrl: string) => {
-				try {
-					this.browser = await puppeteer.launch(this.config.getLaunchOptions());
-					this.page = await this.browser.newPage();
-					await this.page.setUserAgent(USER_AGENT);
-
-					this.logger.info(
-						`${ZoomBotMessage.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
-					);
-					await this.page.goto(
-						this.convertToZoomWebClientUrl(this.config.ENV.ZOOM.MEETING_LINK),
-						{
-							timeout: Timeout.SIXTY_SECONDS,
-							waitUntil: "networkidle2",
-						},
-					);
-					await this.handleInitialPopups();
-					await this.joinMeeting();
-					this.logger.info(ZoomBotMessage.JOINED_MEETING);
-					this.logger.info(
-						`${ZoomBotMessage.SENDING_PUBLIC_URL} ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
-					);
-					await this.sendPublicUrlToChat(publicUrl);
-					this.audioRecorder.start();
-					this.audioRecorder.startFullMeetingRecording(
-						String(this.config.ENV.ZOOM.MEETING_ID),
-					);
-					this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
-					await delay(Timeout.ONE_SECOND);
-				} catch (error) {
-					this.logger.error(
-						`${ZoomBotMessage.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,
-					);
-				}
+				this.logger.info(
+					`${ZoomBotMessage.SENDING_PUBLIC_URL} ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
+				);
+				this.audioRecorder.start();
+				this.audioRecorder.startFullMeetingRecording(
+					String(this.config.ENV.ZOOM.MEETING_ID),
+				);
+				this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
+				await this.sendPublicUrlToChat(publicUrl);
 			},
 		);
 	}
@@ -364,11 +340,6 @@ class BaseZoomBot {
 			await this.joinMeeting();
 			this.logger.info(ZoomBotMessage.JOINED_MEETING);
 			this.initSocket();
-			this.audioRecorder.start();
-			this.audioRecorder.startFullMeetingRecording(
-				String(this.config.ENV.ZOOM.MEETING_ID),
-			);
-			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessage.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,

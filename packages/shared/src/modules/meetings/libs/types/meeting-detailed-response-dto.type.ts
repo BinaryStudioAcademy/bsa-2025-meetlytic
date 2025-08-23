@@ -10,10 +10,10 @@ type MeetingDetailedResponseDto = {
 	host: ValueOf<typeof MeetingHost>;
 	id: number;
 	meetingId: string;
-	meetingTitle: null | string;
 	ownerId: number;
 	status: ValueOf<typeof MeetingStatus>;
 	summary: null | string;
+	title: null | string;
 };
 
 export { type MeetingDetailedResponseDto };

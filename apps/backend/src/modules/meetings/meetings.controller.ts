@@ -53,7 +53,7 @@ import { type MeetingService } from "./meetings.service.js";
  *           type: string
  *         meetingPassword:
  *           type: string
- *         meetingTitle:
+ *         title:
  *           type: string
  *       required:
  *         - id

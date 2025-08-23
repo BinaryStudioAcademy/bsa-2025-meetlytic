@@ -22,13 +22,13 @@ class MeetingEntity implements Entity {
 
 	private meetingPassword: null | string;
 
-	private meetingTitle: null | string;
-
 	private ownerId: number;
 
 	private status!: ValueOf<typeof MeetingStatus>;
 
 	private summary: null | string;
+
+	private title: null | string;
 
 	private constructor({
 		actionItems,
@@ -40,10 +40,10 @@ class MeetingEntity implements Entity {
 		instanceId,
 		meetingId,
 		meetingPassword,
-		meetingTitle,
 		ownerId,
 		status,
 		summary,
+		title,
 	}: {
 		actionItems: null | string;
 		audioFile: FilePublicDto | null;
@@ -54,10 +54,10 @@ class MeetingEntity implements Entity {
 		instanceId: null | string;
 		meetingId: string;
 		meetingPassword: null | string;
-		meetingTitle: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 		summary: null | string;
+		title: null | string;
 	}) {
 		this.actionItems = actionItems;
 		this.audioFile = audioFile;
@@ -68,10 +68,10 @@ class MeetingEntity implements Entity {
 		this.instanceId = instanceId;
 		this.meetingId = meetingId;
 		this.meetingPassword = meetingPassword;
-		this.meetingTitle = meetingTitle;
 		this.ownerId = ownerId;
 		this.status = status;
 		this.summary = summary;
+		this.title = title;
 	}
 
 	public static initialize({
@@ -84,10 +84,10 @@ class MeetingEntity implements Entity {
 		instanceId,
 		meetingId,
 		meetingPassword,
-		meetingTitle,
 		ownerId,
 		status,
 		summary,
+		title,
 	}: {
 		actionItems: null | string;
 		audioFile: FilePublicDto | null;
@@ -98,10 +98,10 @@ class MeetingEntity implements Entity {
 		instanceId: null | string;
 		meetingId: string;
 		meetingPassword: null | string;
-		meetingTitle: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 		summary: null | string;
+		title: null | string;
 	}): MeetingEntity {
 		return new MeetingEntity({
 			actionItems,
@@ -113,10 +113,10 @@ class MeetingEntity implements Entity {
 			instanceId,
 			meetingId,
 			meetingPassword,
-			meetingTitle,
 			ownerId,
 			status,
 			summary,
+			title,
 		});
 	}
 
@@ -125,15 +125,15 @@ class MeetingEntity implements Entity {
 		instanceId,
 		meetingId,
 		meetingPassword,
-		meetingTitle,
 		ownerId,
+		title,
 	}: {
 		host: ValueOf<typeof MeetingHost>;
 		instanceId: null | string;
 		meetingId: string;
 		meetingPassword: null | string;
-		meetingTitle: null | string;
 		ownerId: number;
+		title: null | string;
 	}): MeetingEntity {
 		return new MeetingEntity({
 			actionItems: null,
@@ -145,10 +145,10 @@ class MeetingEntity implements Entity {
 			instanceId,
 			meetingId,
 			meetingPassword,
-			meetingTitle,
 			ownerId,
 			status: MeetingStatus.STARTED,
 			summary: null,
+			title,
 		});
 	}
 
@@ -160,9 +160,9 @@ class MeetingEntity implements Entity {
 		id: number;
 		meetingId: string;
 		meetingPassword: null | string;
-		meetingTitle: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
+		title: null | string;
 	} {
 		return {
 			audioFile: this.audioFile,
@@ -172,9 +172,9 @@ class MeetingEntity implements Entity {
 			id: this.id as number,
 			meetingId: this.meetingId,
 			meetingPassword: this.meetingPassword,
-			meetingTitle: this.meetingTitle,
 			ownerId: this.ownerId,
 			status: this.status,
+			title: this.title,
 		};
 	}
 
@@ -187,10 +187,10 @@ class MeetingEntity implements Entity {
 		id: number;
 		meetingId: string;
 		meetingPassword: null | string;
-		meetingTitle: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 		summary: null | string;
+		title: null | string;
 	} {
 		return {
 			actionItems: this.actionItems as string,
@@ -201,10 +201,10 @@ class MeetingEntity implements Entity {
 			id: this.id as number,
 			meetingId: this.meetingId,
 			meetingPassword: this.meetingPassword,
-			meetingTitle: this.meetingTitle,
 			ownerId: this.ownerId,
 			status: this.status,
 			summary: this.summary as string,
+			title: this.title,
 		};
 	}
 
@@ -213,18 +213,18 @@ class MeetingEntity implements Entity {
 		instanceId: null | string;
 		meetingId: string;
 		meetingPassword: null | string;
-		meetingTitle: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
+		title: null | string;
 	} {
 		return {
 			host: this.host,
 			instanceId: this.instanceId,
 			meetingId: this.meetingId,
 			meetingPassword: this.meetingPassword,
-			meetingTitle: this.meetingTitle,
 			ownerId: this.ownerId,
 			status: this.status,
+			title: this.title,
 		};
 	}
 
@@ -236,9 +236,9 @@ class MeetingEntity implements Entity {
 		instanceId: null | string;
 		meetingId: string;
 		meetingPassword: null | string;
-		meetingTitle: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
+		title: null | string;
 	} {
 		return {
 			audioFileId: this.audioFileId,
@@ -248,9 +248,9 @@ class MeetingEntity implements Entity {
 			instanceId: this.instanceId,
 			meetingId: this.meetingId,
 			meetingPassword: this.meetingPassword,
-			meetingTitle: this.meetingTitle,
 			ownerId: this.ownerId,
 			status: this.status,
+			title: this.title,
 		};
 	}
 }

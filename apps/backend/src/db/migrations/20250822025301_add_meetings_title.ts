@@ -5,18 +5,18 @@ const TableName = {
 } as const;
 
 const ColumnName = {
-	MEETING_TITLE: "meeting_title",
+	TITLE: "title",
 } as const;
 
 async function down(knex: Knex): Promise<void> {
 	await knex.schema.alterTable(TableName.MEETINGS, (table) => {
-		table.dropColumn(ColumnName.MEETING_TITLE);
+		table.dropColumn(ColumnName.TITLE);
 	});
 }
 
 async function up(knex: Knex): Promise<void> {
 	await knex.schema.alterTable(TableName.MEETINGS, (table) => {
-		table.text(ColumnName.MEETING_TITLE);
+		table.text(ColumnName.TITLE);
 	});
 }
 

@@ -31,13 +31,13 @@ class MeetingModel extends AbstractModel {
 
 	public meetingPassword!: null | string;
 
-	public meetingTitle!: null | string;
-
 	public ownerId!: number;
 
 	public status!: ValueOf<typeof MeetingStatus>;
 
 	public summary!: null | string;
+
+	public title!: null | string;
 
 	public static get relationMappings(): RelationMappings {
 		return {

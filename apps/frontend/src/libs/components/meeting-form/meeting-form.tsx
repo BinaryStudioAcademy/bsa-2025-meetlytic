@@ -70,7 +70,7 @@ const MeetingForm: React.FC<Properties> = ({ onClose }: Properties) => {
 						errors={errors}
 						hasVisuallyHiddenLabel
 						label="Meeting title"
-						name="meetingTitle"
+						name="title"
 						placeholder="Meeting title (optional)"
 						type="text"
 					/>

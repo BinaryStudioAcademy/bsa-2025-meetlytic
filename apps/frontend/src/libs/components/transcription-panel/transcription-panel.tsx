@@ -35,20 +35,13 @@ const TranscriptionPanel: React.FC<Properties> = ({
 	const [searchParameters] = useSearchParams();
 	const token = searchParameters.get("token");
 
-	const handleTranscriptUpdate = useCallback(
-		(newChunk: MeetingTranscriptionResponseDto) => {
-			onAddChunk(newChunk);
-		},
-		[onAddChunk],
-	);
-
 	useFetchTranscriptions({
 		meetingId,
 		token,
 	});
 
 	useMeetingSocket<MeetingTranscriptionResponseDto>({
-		callback: handleTranscriptUpdate,
+		callback: onAddChunk,
 		event: SocketEvent.TRANSCRIBE,
 		meetingId,
 		meetingStatus,

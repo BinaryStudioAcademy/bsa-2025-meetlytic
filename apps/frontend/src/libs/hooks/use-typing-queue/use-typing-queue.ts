@@ -13,9 +13,10 @@ const useTypingQueue = (typingSpeed = TYPING_SPEED): UseTypingQueueReturn => {
 	const [typedText, setTypedText] = useState<string>("");
 	const queueReference = useRef<MeetingTranscriptionResponseDto[]>([]);
 	const [isTyping, setIsTyping] = useState<boolean>(false);
+	const isTypingReference = useRef<boolean>(false);
 
 	const processQueue = useCallback(() => {
-		if (isTyping) {
+		if (isTypingReference.current) {
 			return;
 		}
 
@@ -26,6 +27,7 @@ const useTypingQueue = (typingSpeed = TYPING_SPEED): UseTypingQueueReturn => {
 		}
 
 		const text = next.chunkText;
+		isTypingReference.current = true;
 		setIsTyping(true);
 		let index = 0;
 
@@ -39,7 +41,8 @@ const useTypingQueue = (typingSpeed = TYPING_SPEED): UseTypingQueueReturn => {
 			});
 			index++;
 
-			if (index >= text.length) {
+			if (index > text.length) {
+				isTypingReference.current = false;
 				setIsTyping(false);
 				processQueue();
 
@@ -60,9 +63,7 @@ const useTypingQueue = (typingSpeed = TYPING_SPEED): UseTypingQueueReturn => {
 
 			queueReference.current.push(chunk);
 
-			if (!isTyping) {
-				processQueue();
-			}
+			processQueue();
 		},
 		[processQueue],
 	);

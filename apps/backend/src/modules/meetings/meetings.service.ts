@@ -66,13 +66,11 @@ class MeetingService implements Service<MeetingResponseDto> {
 	private async createInstance(
 		payload: Omit<CreateStack, "template">,
 	): Promise<MeetingResponseDto> {
-		const instanceId = await this.cloudFormation.create({
+		void this.cloudFormation.create({
 			...payload,
 			template: JSON.stringify(template),
 		});
-		const meeting = await this.meetingRepository.update(payload.id, {
-			instanceId,
-		});
+		const meeting = await this.meetingRepository.find(payload.id);
 
 		if (!meeting) {
 			throw new MeetingError({

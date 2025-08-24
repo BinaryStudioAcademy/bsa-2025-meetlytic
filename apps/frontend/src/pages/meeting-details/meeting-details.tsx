@@ -37,6 +37,7 @@ import {
 	sanitizeDefaultSchema,
 } from "~/modules/meeting-details/meeting-details.js";
 import { actions as meetingActions } from "~/modules/meeting/meeting.js";
+import { actions as transcriptionActions } from "~/modules/transcription/transcription.js";
 
 import styles from "./styles.module.css";
 
@@ -47,8 +48,11 @@ const MeetingDetails: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [searchParameters] = useSearchParams();
 
-	useEffect(() => {
-		dispatch(meetingDetailsActions.clearMeetingDetails());
+	useEffect((): (() => void) => {
+		return () => {
+			dispatch(meetingDetailsActions.clearMeetingDetails());
+			dispatch(transcriptionActions.clearTranscription());
+		};
 	}, [dispatch, id]);
 
 	const { dataStatus, meeting } = useAppSelector(

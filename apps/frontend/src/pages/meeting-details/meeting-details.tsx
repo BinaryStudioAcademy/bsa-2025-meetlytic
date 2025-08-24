@@ -120,10 +120,14 @@ const MeetingDetails: React.FC = () => {
 	const meetingPdfProperties: MeetingPdfProperties = {
 		actionItems: meeting.actionItems ?? "",
 		createdAt: meeting.createdAt,
-		id: meeting.id,
 		summary: meeting.summary ?? "",
+		title: meeting.title ?? `Meeting #${String(meeting.id)}`,
 		transcription,
 	};
+
+	const pdfFileName = meeting.title
+		? `meeting-${meeting.title.replaceAll(/[^a-zA-Z0-9-]/g, "_").toLowerCase()}.pdf`
+		: `meeting-${meeting.id.toString()}.pdf`;
 
 	return (
 		<>
@@ -157,7 +161,7 @@ const MeetingDetails: React.FC = () => {
 
 						<PDFDownloadLink
 							document={<MeetingPdf {...meetingPdfProperties} />}
-							fileName={`meeting-${meeting.id.toString()}.pdf`}
+							fileName={pdfFileName}
 						>
 							{({ loading }) => (
 								<Button label={loading ? "Generating PDF..." : "Export"} />

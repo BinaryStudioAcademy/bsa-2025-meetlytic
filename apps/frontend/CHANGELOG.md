@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.15.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.14.0...frontend-v1.15.0) (2025-08-24)
+
+
+### Features
+
+* feat seamless transcript updates with typing animation ml-243 ([#278](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/278)) ([125ab98](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/125ab98d7397a3bcf53c42a0a3f8a5f7ce79e9f5))
+
+
+### Bug Fixes
+
+* time formatting on meeting card ml-284 ([#291](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/291)) ([2de1486](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/2de1486765a6f50085b3268fd330f5d4e32b9689))
+
 ## [1.14.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.13.0...frontend-v1.14.0) (2025-08-22)
 
 

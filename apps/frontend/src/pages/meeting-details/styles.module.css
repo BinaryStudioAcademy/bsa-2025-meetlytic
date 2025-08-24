@@ -50,22 +50,38 @@
 .meeting-details__content {
 	display: grid;
 	grid-template-columns: 2fr 1.5fr;
+	grid-template-rows: auto 1fr;
 	gap: 25px;
 }
 
-.meeting-details__right-panel {
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
+.summary {
+	grid-column: 2 / 2;
+	grid-row: 1;
 }
 
-.summary-area {
+.summary.meeting-ended {
+	grid-column: 1 / 2;
+	grid-row: 1;
+}
+.action-items.meeting-ended {
+	grid-column: 2 / 3;
+	grid-row: 1;
+}
+
+.action-items {
+	grid-column: 2 / 2;
+	grid-row: 2;
+}
+
+.summary-area,
+.action-items-area {
 	padding: 20px;
 	background-color: var(--color-background-3);
 	border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
 }
 
-.summary-text {
+.summary-text,
+.action-items-text {
 	padding: 10px 20px;
 	font-size: 14px;
 	color: var(--color-text-1);
@@ -74,11 +90,8 @@
 }
 
 .action-items-area {
-	padding: 20px;
 	margin: 0;
 	list-style: none;
-	background-color: var(--color-background-3);
-	border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
 }
 
 .action-items-text {
@@ -86,12 +99,7 @@
 	flex-direction: column;
 	gap: 10px;
 	align-items: flex-start;
-	padding: 10px 20px;
-	margin-bottom: 10px;
-	font-size: 14px;
-	color: var(--color-text-1);
-	background-color: var(--color-background-4);
-	border-radius: var(--border-radius-lg);
+	/* margin-bottom: 10px;  */
 }
 
 .meeting-details__error,
@@ -114,7 +122,6 @@
 
 @media (width <=1024px) {
 	.meeting-details__content {
-		display: grid;
 		grid-template-columns: 1fr;
 		gap: 16px;
 	}

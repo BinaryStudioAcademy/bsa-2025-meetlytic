@@ -13,6 +13,7 @@ import { type MeetingTranscriptionResponseDto } from "~/modules/transcription/tr
 
 import { LiveTranscription } from "./components/live-transcription/live-transcription.js";
 import styles from "./transcription-panel.module.css";
+import { getValidClassNames } from "~/libs/helpers/get-valid-class-names.helper.js";
 
 const EMPTY_TRANSCRIPT_CHUNKS = 0;
 
@@ -44,8 +45,15 @@ const TranscriptionPanel: React.FC = () => {
 			.join(" ");
 	}, [transcriptions.items]);
 
+	const isMeetingEnded = meeting?.status === MeetingStatus.ENDED;
+
 	return (
-		<div className={styles["meeting-details__transcription-panel"]}>
+		<div
+			className={getValidClassNames(
+				styles["meeting-details__transcription-panel"],
+				isMeetingEnded && styles["meeting-ended"],
+			)}
+		>
 			<div className={styles["panel-header"]}>
 				<div className={styles["panel-header__text"]}>TRANSCRIPT</div>
 				<SearchBar onSearch={handleSearch} />

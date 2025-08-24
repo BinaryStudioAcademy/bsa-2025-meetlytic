@@ -1,8 +1,14 @@
 .meeting-details__transcription-panel {
+	grid-column: 1 / 2;
+	grid-row: 1 / 3;
 	display: flex;
 	flex-direction: column;
 	background-color: var(--color-background-3);
 	border-radius: var(--border-radius-lg);
+}
+.meeting-details__transcription-panel.meeting-ended {
+	grid-column: 1 / 3;
+	grid-row: 3;
 }
 
 .panel-header {
@@ -23,9 +29,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
-	max-height: calc(100vh - 300px);
 	padding: 20px;
-	overflow-y: auto;
 	background-color: var(--color-background-3);
 	border-radius: var(--border-radius-lg);
 }

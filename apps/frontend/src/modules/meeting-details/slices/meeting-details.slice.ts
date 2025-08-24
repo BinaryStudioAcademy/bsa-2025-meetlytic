@@ -33,7 +33,12 @@ const { actions, name, reducer } = createSlice({
 	},
 	initialState,
 	name: "meetingDetails",
-	reducers: {},
+	reducers: {
+		clearMeetingDetails: (state) => {
+			state.meeting = null;
+			state.dataStatus = DataStatus.IDLE;
+		},
+	},
 });
 
 export { actions, name, reducer };

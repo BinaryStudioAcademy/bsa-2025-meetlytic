@@ -18,8 +18,8 @@
 .layout__main {
 	grid-area: main;
 	padding: 30px 40px;
-	background-color: var(--color-background-2);
 	overflow-y: scroll;
+	background-color: var(--color-background-2);
 }
 
 .main-container {

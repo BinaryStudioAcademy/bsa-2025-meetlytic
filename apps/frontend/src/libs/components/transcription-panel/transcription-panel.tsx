@@ -1,5 +1,6 @@
 import { Loader, SearchBar } from "~/libs/components/components.js";
 import { DataStatus, MeetingStatus, SocketEvent } from "~/libs/enums/enums.js";
+import { getValidClassNames } from "~/libs/helpers/get-valid-class-names.helper.js";
 import {
 	useAppSelector,
 	useAutoScroll,
@@ -13,7 +14,6 @@ import { type MeetingTranscriptionResponseDto } from "~/modules/transcription/tr
 
 import { LiveTranscription } from "./components/live-transcription/live-transcription.js";
 import styles from "./transcription-panel.module.css";
-import { getValidClassNames } from "~/libs/helpers/get-valid-class-names.helper.js";
 
 const EMPTY_TRANSCRIPT_CHUNKS = 0;
 

@@ -7,7 +7,9 @@ import {
 	useCallback,
 	useEffect,
 } from "~/libs/hooks/hooks.js";
+import { actions as meetingDetailsActions } from "~/modules/meeting-details/meeting-details.js";
 import { actions as meetingActions } from "~/modules/meeting/meeting.js";
+import { actions as transcriptionActions } from "~/modules/transcription/transcription.js";
 
 import { MeetingCreationModal } from "./components/meeting-creation-modal/meeting-creation-modal.js";
 import { MeetingItem } from "./components/meeting-item/meeting-item.js";
@@ -25,6 +27,8 @@ const Meetings: React.FC = () => {
 	const handleDeleteMeeting = useCallback(
 		(id: number) => {
 			void dispatch(meetingActions.deleteMeeting(id));
+			dispatch(meetingDetailsActions.clearMeetingDetails());
+			dispatch(transcriptionActions.clearTranscription());
 		},
 		[dispatch],
 	);
@@ -61,7 +65,7 @@ const Meetings: React.FC = () => {
 							<MeetingItem
 								date={formatDate(
 									new Date(meeting.createdAt),
-									"MMM D, YYYY, h:m A",
+									"MMM D, YYYY, h:mm A",
 								)}
 								id={meeting.id}
 								key={meeting.id}

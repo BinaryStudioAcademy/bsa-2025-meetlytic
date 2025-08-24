@@ -65,7 +65,7 @@ const Meetings: React.FC = () => {
 							<MeetingItem
 								date={formatDate(
 									new Date(meeting.createdAt),
-									"MMM D, YYYY, h:m A",
+									"MMM D, YYYY, h:mm A",
 								)}
 								id={meeting.id}
 								key={meeting.id}

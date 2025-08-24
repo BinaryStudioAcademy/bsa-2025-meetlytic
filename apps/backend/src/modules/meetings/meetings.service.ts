@@ -68,19 +68,13 @@ class MeetingService implements Service<MeetingResponseDto> {
 
 	private checkZoomLink = async (link: string): Promise<boolean> => {
 		try {
-			console.log("[ZoomLink][link]:", link);
-			console.log("[ZoomLink][link]:", convertToZoomWebClientUrl(link));
 			const response = await fetch(convertToZoomWebClientUrl(link));
-
-			console.log("[ZoomLink][status]:", response.status, response.statusText);
 
 			if (!response.ok) {
 				return false;
 			}
 
 			const html = await response.text();
-
-			console.log("[ZoomLink][html-snippet]:", html.slice(0, 200));
 
 			return isZoomLinkValid(html);
 		} catch {

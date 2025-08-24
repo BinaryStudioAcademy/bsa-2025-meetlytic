@@ -38,7 +38,8 @@ const meetingCreate = z
 				message: MeetingValidationMessage.MEETING_TITLE_MAXIMUM_LENGTH,
 			})
 			.nullable()
-			.optional(),
+			.optional()
+			.transform((title) => (title === "" ? null : title)),
 	})
 	.required();
 

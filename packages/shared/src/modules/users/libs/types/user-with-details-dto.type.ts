@@ -1,4 +1,4 @@
-import { type AvatarFileDto } from "./user-avatar.dto.type.js";
+import { type AvatarFileDto } from "./user-avatar-dto.type.js";
 
 type UserWithDetailsDto = {
 	details?: {

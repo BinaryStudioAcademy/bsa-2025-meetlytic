@@ -304,12 +304,12 @@ class UserController extends BaseController {
 	}: UploadAvatarHandlerOptions): Promise<APIHandlerResponse> {
 		if (!request.isMultipart()) {
 			throw new HTTPError({
-				message: "Content-Type must be multipart/form-data",
+				message: FileErrorMessage.CONTENT_TYPE,
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}
 
-		const file = request.uploadedFile;
+		const { uploadedFile: file } = request;
 
 		if (!file) {
 			throw new HTTPError({
@@ -318,7 +318,7 @@ class UserController extends BaseController {
 			});
 		}
 
-		const user = request.user;
+		const { user } = request;
 
 		if (!user) {
 			throw new HTTPError({

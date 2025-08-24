@@ -1,7 +1,15 @@
+import { NotificationMessage } from "~/libs/enums/enums.js";
+
+import { isNetworkError } from "./helpers.js";
+
 const extractErrorMessage = (
 	error: unknown,
 	fallbackMessage = "Something went wrong",
 ): string => {
+	if (isNetworkError(error)) {
+		return NotificationMessage.NO_INTERNET;
+	}
+
 	if (typeof error === "object" && error !== null) {
 		const errorMessage = (error as { message?: unknown }).message;
 

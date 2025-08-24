@@ -97,7 +97,7 @@ class UserService implements Service {
 		let avatarFile: AvatarFileDto | null = null;
 		const avatarFileId = details.getAvatarFileId();
 
-		if (avatarFileId != null) {
+		if (avatarFileId) {
 			const file = await this.fileService.find(avatarFileId);
 
 			if (file.url) {

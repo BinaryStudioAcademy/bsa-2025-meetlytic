@@ -212,7 +212,7 @@ class UserController extends BaseController {
 
 		return {
 			payload: {
-				isSuccess: true,
+				isSuccessful: true,
 				message: UserAvatarErrorMessage.AVATAR_DELETED_SUCCESSFULLY,
 			},
 			status: HTTPCode.OK,

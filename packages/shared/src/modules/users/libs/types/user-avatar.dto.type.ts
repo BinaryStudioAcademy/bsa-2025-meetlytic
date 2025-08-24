@@ -5,7 +5,7 @@ type AvatarFileDto = {
 
 type AvatarUploadResponseDto = {
 	data: AvatarFileDto;
-	isSuccess: boolean;
+	isSuccessful: boolean;
 };
 
 type DeleteAvatarResult = {

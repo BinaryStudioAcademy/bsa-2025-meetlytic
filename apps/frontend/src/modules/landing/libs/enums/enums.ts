@@ -19,7 +19,7 @@ const LandingBgRingSpeedScale = {
 const LandingBgPhysics = {
 	DAMPING: 0.985,
 	MARGIN: 0.2,
-	MAX_SPEED: 220,
+	MAX_SPEED: 120,
 	SPEED_MULTIPLIER: 2,
 } as const;
 
@@ -29,14 +29,16 @@ const LandingBgCollision = {
 } as const;
 
 const LandingBgInit = {
-	INITIAL_SPEED_HALF: 10,
-	INITIAL_SPEED_RANGE: 20,
+	INITIAL_SPEED_HALF: 4,
+	INITIAL_SPEED_RANGE: 8,
 	INITIAL_VIEW_AMOUNT: 0,
+	MOBILE_RING_SIZE_DIVISOR: 3,
 	RINGS_PER_SIZE: 3,
 } as const;
 
 const LandingBgNumeric = {
 	HALF: 2,
+	MOBILE_BREAKPOINT: 768,
 	MS_IN_SECOND: 1000,
 	ONE: 1,
 	SIDES_COUNT: 4,

@@ -112,7 +112,7 @@ const MeetingDetails: React.FC = () => {
 	}
 
 	const transcription = transcriptions.items
-		.map((item) => item.chunkText)
+		.map((item) => `• ${item.chunkText}`)
 		.join("\n");
 
 	const meetingPdfProperties: MeetingPdfProperties = {

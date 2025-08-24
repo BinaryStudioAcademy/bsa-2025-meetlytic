@@ -2,6 +2,10 @@ import { EMPTY_ARRAY_LENGTH } from "~/libs/constants/constants.js";
 import { APIPath } from "~/libs/enums/enums.js";
 import { AuthError } from "~/libs/exceptions/exceptions.js";
 import {
+	convertToZoomWebClientUrl,
+	isZoomLinkValid,
+} from "~/libs/helpers/helpers.js";
+import {
 	type CloudFormation,
 	type CreateStack,
 } from "~/libs/modules/cloud-formation/cloud-formation.js";
@@ -61,6 +65,28 @@ class MeetingService implements Service<MeetingResponseDto> {
 		this.meetingTranscriptionService = meetingTranscriptionService;
 		this.sharedJwt = sharedJwt;
 	}
+
+	private checkZoomLink = async (link: string): Promise<boolean> => {
+		try {
+			console.log("[ZoomLink][link]:", link);
+			console.log("[ZoomLink][link]:", convertToZoomWebClientUrl(link));
+			const response = await fetch(convertToZoomWebClientUrl(link));
+
+			console.log("[ZoomLink][status]:", response.status, response.statusText);
+
+			if (!response.ok) {
+				return false;
+			}
+
+			const html = await response.text();
+
+			console.log("[ZoomLink][html-snippet]:", html.slice(0, 200));
+
+			return isZoomLinkValid(html);
+		} catch {
+			return false;
+		}
+	};
 
 	private async createInstance(
 		payload: Omit<CreateStack, "template">,
@@ -127,6 +153,15 @@ class MeetingService implements Service<MeetingResponseDto> {
 		if (!meetingId) {
 			throw new MeetingError({
 				message: MeetingErrorMessage.INVALID_MEETING_LINK,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
+		const validLink = await this.checkZoomLink(meetingLink);
+
+		if (!validLink) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.NO_MEETING_FOR_LINK,
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}

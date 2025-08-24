@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.18.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.17.0...v1.18.0) (2025-08-24)
+
+
+### Features
+
+* feat seamless transcript updates with typing animation ml-243 ([#278](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/278)) ([125ab98](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/125ab98d7397a3bcf53c42a0a3f8a5f7ce79e9f5))
+
+
+### Bug Fixes
+
+* time formatting on meeting card ml-284 ([#291](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/291)) ([2de1486](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/2de1486765a6f50085b3268fd330f5d4e32b9689))
+
+## [1.17.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.16.0...v1.17.0) (2025-08-22)
+
+
+### Features
+
+* add landing page structure, components and assets ml-59 ([#164](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/164)) ([9c420d2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/9c420d2fabb8821cc5a5b7bd31e9f43345d6a222))
+
 ## [1.16.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.15.0...v1.16.0) (2025-08-22)
 
 

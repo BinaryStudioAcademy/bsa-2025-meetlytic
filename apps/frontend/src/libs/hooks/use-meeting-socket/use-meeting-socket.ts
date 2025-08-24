@@ -3,55 +3,47 @@ import {
 	SocketEvent,
 	SocketNamespace,
 } from "~/libs/enums/enums.js";
-import { useEffect } from "~/libs/hooks/hooks.js";
+import { useAppSelector, useEffect } from "~/libs/hooks/hooks.js";
 import { socketClient } from "~/libs/modules/socket/socket.js";
-import { type MeetingSummaryActionItemsResponseDto } from "~/modules/meeting-details/meeting-details.js";
-import { type MeetingTranscriptionResponseDto } from "~/modules/transcription/transcription.js";
+import { type ValueOf } from "~/libs/types/types.js";
 
-type MeetingSocketParameters = {
-	meetingId: number;
-	meetingStatus: string;
-	onSummaryActionItemsUpdate: (
-		data: MeetingSummaryActionItemsResponseDto,
-	) => void;
-	onTranscriptUpdate: (data: MeetingTranscriptionResponseDto) => void;
+type UseMeetingSocketParameters<T> = {
+	callback: (data: T) => void;
+	event: ValueOf<typeof SocketEvent>;
+	namespace?: ValueOf<typeof SocketNamespace>;
 };
 
-const useMeetingSocket = ({
-	meetingId,
-	meetingStatus,
-	onSummaryActionItemsUpdate,
-	onTranscriptUpdate,
-}: MeetingSocketParameters): void => {
+const useMeetingSocket = <T>({
+	callback,
+	event,
+	namespace = SocketNamespace.USERS,
+}: UseMeetingSocketParameters<T>): void => {
+	const meeting = useAppSelector(
+		({ meetingDetails }) => meetingDetails.meeting,
+	);
+
+	const meetingId = meeting?.id;
+	const meetingStatus = meeting?.status;
+
 	useEffect(() => {
 		if (!meetingId || meetingStatus === MeetingStatus.ENDED) {
 			return;
 		}
 
-		const socket = socketClient.getInstance(SocketNamespace.USERS);
+		const socket = socketClient.getInstance(namespace);
 
 		if (!socket.connected) {
 			socket.connect();
 		}
 
-		socket.on(SocketEvent.UPDATE_MEETING_DETAILS, onSummaryActionItemsUpdate);
-		socket.on(SocketEvent.TRANSCRIBE, onTranscriptUpdate);
+		socket.on(event, callback);
 		socket.emit(SocketEvent.JOIN_ROOM, String(meetingId));
 
 		return (): void => {
-			socket.off(SocketEvent.TRANSCRIBE, onTranscriptUpdate);
 			socket.emit(SocketEvent.LEAVE_ROOM, String(meetingId));
-			socket.off(
-				SocketEvent.UPDATE_MEETING_DETAILS,
-				onSummaryActionItemsUpdate,
-			);
+			socket.off(event, callback);
 		};
-	}, [
-		meetingId,
-		meetingStatus,
-		onTranscriptUpdate,
-		onSummaryActionItemsUpdate,
-	]);
+	}, [meetingId, meetingStatus, callback]);
 };
 
 export { useMeetingSocket };

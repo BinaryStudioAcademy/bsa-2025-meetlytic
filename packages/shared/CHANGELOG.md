@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.9.0...shared-v1.9.1) (2025-08-24)
+
+
+### Bug Fixes
+
+* time formatting on meeting card ml-284 ([#291](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/291)) ([2de1486](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/2de1486765a6f50085b3268fd330f5d4e32b9689))
+
 ## [1.9.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.8.0...shared-v1.9.0) (2025-08-21)
 
 

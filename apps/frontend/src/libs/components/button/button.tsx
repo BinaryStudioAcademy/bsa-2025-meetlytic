@@ -6,10 +6,11 @@ import styles from "./styles.module.css";
 
 type Properties = {
 	className?: string | undefined;
+	hasVisuallyHiddenLabel?: boolean;
 	iconLeft?: React.ReactNode;
 	iconRight?: React.ReactNode;
 	isDisabled?: boolean;
-	label: string;
+	label: React.ReactNode;
 	onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
 	size?: ValueOf<typeof ButtonSize>;
 	type?: "button" | "submit";
@@ -18,6 +19,7 @@ type Properties = {
 
 const Button: React.FC<Properties> = ({
 	className,
+	hasVisuallyHiddenLabel = false,
 	iconLeft,
 	iconRight,
 	isDisabled = false,
@@ -40,7 +42,13 @@ const Button: React.FC<Properties> = ({
 		type={type}
 	>
 		{iconLeft}
-		<span>{label}</span>
+		<span
+			className={getValidClassNames(
+				hasVisuallyHiddenLabel && "visually-hidden",
+			)}
+		>
+			{label}
+		</span>
 		{iconRight}
 	</button>
 );

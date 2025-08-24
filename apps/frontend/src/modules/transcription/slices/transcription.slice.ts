@@ -56,6 +56,10 @@ const { actions, name, reducer } = createSlice({
 		) => {
 			state.transcriptions.items.push(payload);
 		},
+		clearTranscription: (state) => {
+			state.transcriptions = { items: [] };
+			state.dataStatus = DataStatus.IDLE;
+		},
 	},
 });
 

@@ -30,7 +30,7 @@ const signIn = createAsyncThunk<
 			NotificationMessage.SIGN_IN_FAILED,
 		);
 
-		return rejectWithValue(message);
+		return rejectWithValue({ message });
 	}
 });
 

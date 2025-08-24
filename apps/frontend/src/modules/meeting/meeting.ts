@@ -17,4 +17,5 @@ export {
 	type MeetingResponseDto,
 } from "./libs/types/types.js";
 export { meetingCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
+export { PLACEHOLDER_IMAGES } from "./placeholders.js";
 export { actions, reducer } from "./slices/meeting.js";

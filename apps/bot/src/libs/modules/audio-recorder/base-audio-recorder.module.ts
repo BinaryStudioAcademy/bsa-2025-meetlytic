@@ -233,6 +233,12 @@ class BaseAudioRecorder implements AudioRecorder {
 		const ffmpeg = spawn(this.ffmpegPath, ffmpegArguments);
 		this.currentFfmpegProcess = ffmpeg;
 
+		ffmpeg.on(AudioRecorderEvent.ERROR, (error) => {
+			this.logger.error(
+				`[FFMPEG_SPAWN_ERROR] Failed to start ffmpeg: ${error.message}`,
+			);
+		});
+
 		ffmpeg.stderr.on(AudioRecorderEvent.DATA, (data) => {
 			const lines = String(data)
 				.trim()
@@ -305,6 +311,11 @@ class BaseAudioRecorder implements AudioRecorder {
 		this.logger.info(`[full] start -> ${this.fullPath}`);
 
 		this.fullRecordingProccess = spawn(this.ffmpegPath, ffmpegArguments);
+		this.fullRecordingProccess.on(AudioRecorderEvent.ERROR, (error) => {
+			this.logger.error(
+				`[Full][FFMPEG_SPAWN_ERROR] Failed to start ffmpeg: ${error.message}`,
+			);
+		});
 
 		this.fullRecordingProccess.stderr.on(AudioRecorderEvent.DATA, (data) => {
 			const lines = String(data).split("\n");

@@ -274,9 +274,8 @@ class BaseZoomBot {
 
 		await this.clickHelper(ZoomUILabel.MUTE_LOGIN);
 		await this.clickHelper(ZoomUILabel.STOP_VIDEO_LOGIN);
-		await this.clickHelper(ZoomUILabel.JOIN, Timeout.FIFTEEN_SECONDS);
 		await this.enterMeetingPassword();
-		await this.clickHelper(ZoomUILabel.JOIN, Timeout.TEN_SECONDS);
+		await this.clickHelper(ZoomUILabel.JOIN, Timeout.FIFTEEN_SECONDS);
 	}
 
 	private async leaveMeeting(): Promise<void> {

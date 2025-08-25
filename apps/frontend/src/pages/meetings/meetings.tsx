@@ -1,3 +1,4 @@
+import PlaceholderAvatar from "~/assets/img/icons/placeholder-avatar.svg";
 import { Avatar, Loader } from "~/libs/components/components.js";
 import { AvatarSize, DataStatus } from "~/libs/enums/enums.js";
 import { formatDate } from "~/libs/helpers/helpers.js";
@@ -19,6 +20,9 @@ const Meetings: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const { dataStatus, meetings } = useAppSelector((state) => state.meeting);
 	const userEmail = useAppSelector((state) => state.auth.user?.email);
+	const avatarUrl = useAppSelector(
+		(state) => state.users.user?.details?.avatarFile?.url,
+	);
 
 	useEffect(() => {
 		void dispatch(meetingActions.getAllMeetings());
@@ -43,10 +47,16 @@ const Meetings: React.FC = () => {
 				<div className={styles["meetings__header"]}>
 					<div className={styles["meetings__avatar-wrapper"]}>
 						<div className={styles["mobile"]}>
-							<Avatar size={AvatarSize.MEDIUM} />
+							<Avatar
+								size={AvatarSize.MEDIUM}
+								src={avatarUrl ?? PlaceholderAvatar}
+							/>
 						</div>
 						<div className={styles["desktop"]}>
-							<Avatar size={AvatarSize.LARGE} />
+							<Avatar
+								size={AvatarSize.LARGE}
+								src={avatarUrl ?? PlaceholderAvatar}
+							/>
 						</div>
 						<div className={styles["meetings__header-text"]}>
 							<h5 className={styles["meetings__header-name"]}>

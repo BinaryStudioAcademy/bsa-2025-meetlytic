@@ -1,6 +1,7 @@
 import { encrypt } from "~/libs/modules/encrypt/encrypt.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
-import { type Service } from "~/libs/types/types.js";
+import { type AvatarFileDto, type Service } from "~/libs/types/types.js";
+import { type FileService } from "~/modules/files/files.service.js";
 
 import { UserErrorMessage } from "./libs/enums/enums.js";
 import { UserError } from "./libs/exceptions/exceptions.js";
@@ -18,15 +19,18 @@ import { UserEntity } from "./user.entity.js";
 import { type UserRepository } from "./user.repository.js";
 
 class UserService implements Service {
+	private fileService: FileService;
 	private userDetailsRepository: UserDetailsRepository;
 	private userRepository: UserRepository;
 
 	public constructor(
 		userRepository: UserRepository,
 		userDetailsRepository: UserDetailsRepository,
+		fileService: FileService,
 	) {
 		this.userRepository = userRepository;
 		this.userDetailsRepository = userDetailsRepository;
+		this.fileService = fileService;
 	}
 
 	public async create(payload: UserSignUpRequestDto): Promise<UserResponseDto> {
@@ -90,7 +94,22 @@ class UserService implements Service {
 			return null;
 		}
 
+		let avatarFile: AvatarFileDto | null = null;
+		const avatarFileId = details.getAvatarFileId();
+
+		if (avatarFileId) {
+			const file = await this.fileService.find(avatarFileId);
+
+			if (file.url) {
+				avatarFile = { key: file.key, url: file.url };
+			}
+		}
+
 		return {
+			details: {
+				...details.toObject(),
+				avatarFile,
+			},
 			email: user.toObject().email,
 			firstName: details.toObject().firstName,
 			id: user.toObject().id,
@@ -102,6 +121,19 @@ class UserService implements Service {
 		const credentials = await this.userRepository.getCredentials(id);
 
 		return credentials ?? null;
+	}
+
+	public async getDetailsId(userId: number): Promise<number> {
+		const details = await this.userDetailsRepository.findByUserId(userId);
+
+		if (!details) {
+			throw new UserError({
+				message: UserErrorMessage.DETAILS_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return details.toObject().id;
 	}
 
 	public async update(
@@ -157,6 +189,13 @@ class UserService implements Service {
 			id: updatedUser.toObject().id,
 			lastName: updatedDetails.toObject().lastName,
 		};
+	}
+
+	public async updateUserDetailsFileId(
+		detailsId: number,
+		avatarFileId: number,
+	): Promise<void> {
+		await this.userDetailsRepository.updateFileId(detailsId, avatarFileId);
 	}
 }
 

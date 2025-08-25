@@ -1,10 +1,14 @@
 export {
+	UserAvatarErrorMessage,
 	UserErrorMessage,
 	UsersApiPath,
 	UserValidationRule,
 } from "./libs/enums/enums.js";
 export {
 	type AuthResponseDto,
+	type AvatarFileDto,
+	type AvatarUploadResponseDto,
+	type DeleteAvatarResult,
 	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
 	type UserResponseDto,

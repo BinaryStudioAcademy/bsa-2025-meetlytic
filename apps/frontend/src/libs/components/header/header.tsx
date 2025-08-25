@@ -1,3 +1,4 @@
+import PlaceholderAvatar from "~/assets/img/icons/placeholder-avatar.svg";
 import { Avatar, Button, Icon, Logo } from "~/libs/components/components.js";
 import {
 	AppRoute,
@@ -10,10 +11,13 @@ import {
 	LogoType,
 } from "~/libs/enums/enums.js";
 import {
+	useAppDispatch,
 	useAppSelector,
 	useCallback,
+	useEffect,
 	useNavigate,
 } from "~/libs/hooks/hooks.js";
+import { actions as userActions } from "~/modules/users/users.js";
 
 import styles from "./styles.module.css";
 
@@ -34,6 +38,15 @@ const Header: React.FC<Properties> = ({
 	const handleProfileClick = useCallback((): void => {
 		navigate(AppRoute.PROFILE);
 	}, [navigate]);
+
+	const avatarUrl = useAppSelector(
+		(state) => state.users.user?.details?.avatarFile?.url,
+	);
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		void dispatch(userActions.getProfile());
+	}, [dispatch]);
 
 	return (
 		<header className={styles["header"]}>
@@ -71,10 +84,18 @@ const Header: React.FC<Properties> = ({
 							onClick={handleProfileClick}
 						>
 							<div className={styles["mobile"]}>
-								<Avatar size={AvatarSize.MOBILE} type={AvatarType.MAIN} />
+								<Avatar
+									size={AvatarSize.MOBILE}
+									src={avatarUrl ?? PlaceholderAvatar}
+									type={AvatarType.MAIN}
+								/>
 							</div>
 							<div className={styles["desktop"]}>
-								<Avatar size={AvatarSize.SMALL} type={AvatarType.MAIN} />
+								<Avatar
+									size={AvatarSize.SMALL}
+									src={avatarUrl ?? PlaceholderAvatar}
+									type={AvatarType.MAIN}
+								/>
 							</div>
 						</button>
 

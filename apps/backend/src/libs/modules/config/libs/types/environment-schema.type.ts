@@ -14,6 +14,7 @@ type EnvironmentSchema = {
 		AMI_ID: string;
 		INSTANCE_TYPE: string;
 		REGION: string;
+		S3_BUCKET_NAME: string;
 		SECRET_ACCESS_KEY: string;
 	};
 	BOT: {

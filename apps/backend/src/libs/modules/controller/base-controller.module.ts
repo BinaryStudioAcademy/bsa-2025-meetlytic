@@ -43,6 +43,7 @@ class BaseController implements Controller {
 			body,
 			params,
 			query,
+			request,
 			user,
 		};
 	}
@@ -55,7 +56,7 @@ class BaseController implements Controller {
 			...options,
 			handler: (request, reply) => this.mapHandler(handler, request, reply),
 			path: fullPath,
-			preHandlers: preHandlers,
+			preHandlers: preHandlers ?? [],
 		});
 	}
 }

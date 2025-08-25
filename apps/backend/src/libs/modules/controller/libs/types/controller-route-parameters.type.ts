@@ -9,7 +9,7 @@ type ControllerRouteParameters = {
 	handler: APIHandler;
 	method: ValueOf<typeof HTTPMethod>;
 	path: string;
-	preHandlers?: preHandlerHookHandler | preHandlerHookHandler[] | undefined;
+	preHandlers?: preHandlerHookHandler[];
 	validation?: {
 		body?: ValidationSchema;
 		headers?: ValidationSchema;

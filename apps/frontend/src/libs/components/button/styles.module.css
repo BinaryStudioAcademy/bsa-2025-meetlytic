@@ -30,6 +30,12 @@
 	border: 1px solid var(--color-brand);
 }
 
+.button-outlined-red {
+	color: var(--color-accent-1);
+	background-color: transparent;
+	border: 1px solid var(--color-accent-1);
+}
+
 .button-small {
 	gap: 4px;
 	min-width: 123px;

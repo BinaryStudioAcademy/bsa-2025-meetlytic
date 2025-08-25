@@ -1,0 +1,19 @@
+.container {
+	display: flex;
+	gap: 16px;
+	align-items: center;
+}
+
+.hidden-input {
+	display: none;
+}
+
+.buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.hidden {
+	display: none;
+}

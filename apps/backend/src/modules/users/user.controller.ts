@@ -1,18 +1,32 @@
-import { APIPath } from "~/libs/enums/enums.js";
+import { APIPath, FileErrorMessage } from "~/libs/enums/enums.js";
 import {
 	type APIHandlerOptions,
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
-import { HTTPCode, HTTPMethod } from "~/libs/modules/http/http.js";
+import { HTTPCode, HTTPError, HTTPMethod } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type FileService } from "~/modules/files/files.service.js";
+import { type UserAvatarService } from "~/modules/users/user-avatar.service.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
-import { UsersApiPath } from "./libs/enums/enums.js";
 import {
+	UserAvatarErrorMessage,
+	UserErrorMessage,
+	UsersApiPath,
+} from "./libs/enums/enums.js";
+import {
+	type UploadAvatarHandlerOptions,
 	type UserResponseDto,
 	type UserUpdateResponseDto,
 } from "./libs/types/types.js";
+
+type Deps = {
+	fileService: FileService;
+	logger: Logger;
+	userAvatarService: UserAvatarService;
+	userService: UserService;
+};
 
 /**
  * @swagger
@@ -22,7 +36,8 @@ import {
  *       type: object
  *       properties:
  *         id:
- *           type: number
+ *           type: integer
+ *           format: int32
  *         firstName:
  *           type: string
  *           nullable: true
@@ -30,28 +45,64 @@ import {
  *           type: string
  *           nullable: true
  *         userId:
- *           type: number
+ *           type: integer
+ *           format: int32
  *       required:
  *         - id
  *         - userId
+ *
  *     User:
  *       type: object
  *       properties:
  *         id:
- *           type: number
+ *           type: integer
+ *           format: int32
+ *           minimum: 1
  *         email:
  *           type: string
  *           format: email
  *       required:
  *         - id
  *         - email
+ *
+ *     AvatarUploadResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           example: true
+ *         data:
+ *           type: object
+ *           properties:
+ *             key:
+ *               type: string
+ *             url:
+ *               type: string
+ *       required:
+ *         - success
+ *         - data
+ *
+ *     AvatarDeleteResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           example: true
+ *         message:
+ *           type: string
+ *           example: Avatar deleted successfully
+ *       required:
+ *         - success
+ *         - message
+ *
  *     UserWithDetails:
  *       allOf:
- *         - $ref: "#/components/schemas/User"
+ *         - $ref: '#/components/schemas/User'
  *         - type: object
  *           properties:
  *             details:
- *               $ref: "#/components/schemas/UserDetails"
+ *               $ref: '#/components/schemas/UserDetails'
+ *
  *     UserUpdateRequest:
  *       type: object
  *       properties:
@@ -62,19 +113,47 @@ import {
  *           type: string
  *         lastName:
  *           type: string
+ *       required:
+ *         - email
  */
-class UserController extends BaseController {
-	private userService: UserService;
 
-	public constructor(logger: Logger, userService: UserService) {
+class UserController extends BaseController {
+	private readonly fileService: FileService;
+	private readonly userAvatarService: UserAvatarService;
+	private readonly userService: UserService;
+
+	public constructor({
+		fileService,
+		logger,
+		userAvatarService,
+		userService,
+	}: Deps) {
 		super(logger, APIPath.USERS);
 
 		this.userService = userService;
+		this.userAvatarService = userAvatarService;
+		this.fileService = fileService;
 
 		this.addRoute({
 			handler: () => this.findAll(),
 			method: HTTPMethod.GET,
 			path: UsersApiPath.ROOT,
+		});
+
+		this.addRoute({
+			handler: (options) =>
+				this.uploadAvatar(options as UploadAvatarHandlerOptions),
+			method: HTTPMethod.POST,
+			path: UsersApiPath.AVATAR,
+		});
+
+		this.addRoute({
+			handler: (options) =>
+				this.deleteAvatar(
+					options as APIHandlerOptions<{ user: UserResponseDto }>,
+				),
+			method: HTTPMethod.DELETE,
+			path: UsersApiPath.AVATAR,
 		});
 
 		this.addRoute({
@@ -101,6 +180,47 @@ class UserController extends BaseController {
 
 	/**
 	 * @swagger
+	 * /users/avatar:
+	 *   delete:
+	 *     tags: [Users]
+	 *     summary: Delete user avatar
+	 *     security:
+	 *       - bearerAuth: []
+	 *     responses:
+	 *       200:
+	 *         description: Avatar deleted
+	 *       404:
+	 *         description: Not found
+	 *       500:
+	 *         description: Server error
+	 */
+	private async deleteAvatar(
+		options: APIHandlerOptions<{ user: UserResponseDto }>,
+	): Promise<APIHandlerResponse> {
+		const { user } = options;
+
+		const detailsId = await this.userService.getDetailsId(user.id);
+
+		if (!detailsId) {
+			throw new HTTPError({
+				message: UserErrorMessage.DETAILS_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		await this.userAvatarService.deleteAvatar(user.id);
+
+		return {
+			payload: {
+				isSuccessful: true,
+				message: UserAvatarErrorMessage.AVATAR_DELETED_SUCCESSFULLY,
+			},
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
 	 * /users:
 	 *   get:
 	 *     summary: Get all users
@@ -114,7 +234,7 @@ class UserController extends BaseController {
 	 *             schema:
 	 *               type: array
 	 *               items:
-	 *                 $ref: "#/components/schemas/User"
+	 *                 $ref: '#/components/schemas/User'
 	 */
 	private async findAll(): Promise<APIHandlerResponse> {
 		return {
@@ -136,7 +256,7 @@ class UserController extends BaseController {
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: "#/components/schemas/UserWithDetails"
+	 *               $ref: '#/components/schemas/UserWithDetails'
 	 *       401:
 	 *         description: Unauthorized
 	 */
@@ -145,13 +265,80 @@ class UserController extends BaseController {
 	}: APIHandlerOptions<{
 		user: UserResponseDto;
 	}>): Promise<APIHandlerResponse> {
-		const fullUser = await this.userService.findProfileByEmail(
-			(user as UserResponseDto).email,
-		);
+		const fullUser = await this.userService.findProfileByEmail(user.email);
 
 		return {
 			payload: fullUser,
 			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /users/avatar:
+	 *   post:
+	 *     tags: [Users]
+	 *     summary: Upload user avatar
+	 *     security:
+	 *       - bearerAuth: []
+	 *     requestBody:
+	 *       content:
+	 *         multipart/form-data:
+	 *           schema:
+	 *             type: object
+	 *             properties:
+	 *               file:
+	 *                 type: string
+	 *                 format: binary
+	 *                 description: Avatar file
+	 *     responses:
+	 *       201:
+	 *         description: Avatar uploaded
+	 *       400:
+	 *         description: Bad request
+	 *       500:
+	 *         description: Server error
+	 */
+	private async uploadAvatar({
+		request,
+	}: UploadAvatarHandlerOptions): Promise<APIHandlerResponse> {
+		if (!request.isMultipart()) {
+			throw new HTTPError({
+				message: FileErrorMessage.CONTENT_TYPE,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
+		const { uploadedFile: file } = request;
+
+		if (!file) {
+			throw new HTTPError({
+				message: FileErrorMessage.REQUIRED,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
+		const { user } = request;
+
+		if (!user) {
+			throw new HTTPError({
+				message: UserErrorMessage.USER_REQUIRED,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
+		const { buffer, filename, mimetype } = file;
+
+		const { key, url } = await this.userAvatarService.uploadAvatar({
+			buffer,
+			filename,
+			mimetype,
+			userId: user.id,
+		});
+
+		return {
+			payload: { data: { key, url }, success: true },
+			status: HTTPCode.CREATED,
 		};
 	}
 
@@ -167,14 +354,14 @@ class UserController extends BaseController {
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             $ref: "#/components/schemas/UserUpdateRequest"
+	 *             $ref: '#/components/schemas/UserUpdateRequest'
 	 *     responses:
 	 *       200:
 	 *         description: Updated user data
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: "#/components/schemas/UserWithDetails"
+	 *               $ref: '#/components/schemas/UserWithDetails'
 	 *       400:
 	 *         description: Bad request
 	 *       422:
@@ -188,10 +375,7 @@ class UserController extends BaseController {
 		body: UserUpdateResponseDto;
 		user: UserResponseDto;
 	}>): Promise<APIHandlerResponse> {
-		const updatedUser = await this.userService.update(
-			(user as UserResponseDto).id,
-			body,
-		);
+		const updatedUser = await this.userService.update(user.id, body);
 
 		return {
 			payload: updatedUser,

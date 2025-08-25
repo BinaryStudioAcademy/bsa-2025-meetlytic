@@ -9,6 +9,7 @@ import {
 	type UserWithDetailsDto,
 } from "~/modules/users/users.js";
 
+import { type AvatarFileDto } from "../libs/types/types.js";
 import { name as sliceName } from "./users.slice.js";
 
 const getProfile = createAsyncThunk<
@@ -56,4 +57,44 @@ const updateProfile = createAsyncThunk<
 	},
 );
 
-export { getProfile, updateProfile };
+const uploadAvatar = createAsyncThunk<AvatarFileDto, File, AsyncThunkConfig>(
+	`${sliceName}/upload-avatar`,
+	async (file, { extra, rejectWithValue }) => {
+		try {
+			const { userApi } = extra;
+
+			return await userApi.uploadAvatar(file);
+		} catch (error) {
+			if (error instanceof HTTPError) {
+				return rejectWithValue({
+					message: error.message,
+					status: error.status,
+				});
+			}
+
+			return rejectWithValue({ message: "Something went wrong" });
+		}
+	},
+);
+
+const deleteAvatar = createAsyncThunk<undefined, undefined, AsyncThunkConfig>(
+	`${sliceName}/delete-avatar`,
+	async (_, { extra, rejectWithValue }) => {
+		try {
+			const { userApi } = extra;
+
+			await userApi.deleteAvatar();
+		} catch (error) {
+			if (error instanceof HTTPError) {
+				return rejectWithValue({
+					message: error.message,
+					status: error.status,
+				});
+			}
+
+			return rejectWithValue({ message: "Something went wrong" });
+		}
+	},
+);
+
+export { deleteAvatar, getProfile, updateProfile, uploadAvatar };

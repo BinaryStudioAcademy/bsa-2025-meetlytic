@@ -17,7 +17,11 @@ import {
 	NotificationMessage,
 	SocketEvent,
 } from "~/libs/enums/enums.js";
-import { formatDate, shareMeetingPublicUrl } from "~/libs/helpers/helpers.js";
+import {
+	formatDate,
+	getValidClassNames,
+	shareMeetingPublicUrl,
+} from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -111,11 +115,9 @@ const MeetingDetails: React.FC = () => {
 		);
 	}
 
-	const transcription = transcriptions.items.map((item) => {
-		return {
-			chunkText: item.chunkText,
-		};
-	});
+	const transcription = transcriptions.items
+		.map((item) => `• ${item.chunkText}`)
+		.join("\n");
 
 	const meetingPdfProperties: MeetingPdfProperties = {
 		actionItems: meeting.actionItems ?? "",
@@ -124,6 +126,8 @@ const MeetingDetails: React.FC = () => {
 		title: meeting.title ?? `Meeting #${String(meeting.id)}`,
 		transcription,
 	};
+
+	const isMeetingEnded = meeting.status === MeetingStatus.ENDED;
 
 	const pdfFileName = meeting.title
 		? `meeting-${meeting.title.replaceAll(/[^a-zA-Z0-9-]/g, "_").toLowerCase()}.pdf`
@@ -147,7 +151,7 @@ const MeetingDetails: React.FC = () => {
 								<span className="visually-hidden">Share meeting</span>
 							</button>
 						)}
-						{meeting.status === MeetingStatus.STARTED && user && (
+						{!isMeetingEnded && user && (
 							<Button
 								isDisabled={isStopRecordingInProgress}
 								label={
@@ -173,42 +177,50 @@ const MeetingDetails: React.FC = () => {
 				<div className={styles["meeting-details__content"]}>
 					<TranscriptionPanel />
 
-					<div className={styles["meeting-details__right-panel"]}>
-						<div>
-							<div className={styles["panel-header"]}>
-								<h3 className={styles["panel-header__text"]}>SUMMARY</h3>
-							</div>
-							<div className={styles["summary-area"]}>
-								<div className={styles["summary-text"]}>
-									<Markdown
-										rehypePlugins={[
-											[rehypeSanitize, { schema: sanitizeDefaultSchema }],
-										]}
-										remarkPlugins={[remarkGfm]}
-									>
-										{meeting.summary ||
-											MeetingErrorMessage.MEETING_SUMMARY_NOT_AVAILABLE}
-									</Markdown>
-								</div>
+					<div
+						className={getValidClassNames(
+							styles["summary"],
+							isMeetingEnded && styles["meeting-ended"],
+						)}
+					>
+						<div className={styles["panel-header"]}>
+							<h3 className={styles["panel-header__text"]}>SUMMARY</h3>
+						</div>
+						<div className={styles["summary-area"]}>
+							<div className={styles["summary-text"]}>
+								<Markdown
+									rehypePlugins={[
+										[rehypeSanitize, { schema: sanitizeDefaultSchema }],
+									]}
+									remarkPlugins={[remarkGfm]}
+								>
+									{meeting.summary ||
+										MeetingErrorMessage.MEETING_SUMMARY_NOT_AVAILABLE}
+								</Markdown>
 							</div>
 						</div>
+					</div>
 
-						<div>
-							<div className={styles["panel-header"]}>
-								<h3 className={styles["panel-header__text"]}>ACTION ITEMS</h3>
-							</div>
-							<div className={styles["action-items-area"]}>
-								<div className={styles["action-items-text"]}>
-									<Markdown
-										rehypePlugins={[
-											[rehypeSanitize, { schema: sanitizeDefaultSchema }],
-										]}
-										remarkPlugins={[remarkGfm]}
-									>
-										{meeting.actionItems ||
-											MeetingErrorMessage.MEETING_ACTION_ITEMS_NOT_AVAILABLE}
-									</Markdown>
-								</div>
+					<div
+						className={getValidClassNames(
+							styles["action-items"],
+							isMeetingEnded && styles["meeting-ended"],
+						)}
+					>
+						<div className={styles["panel-header"]}>
+							<h3 className={styles["panel-header__text"]}>ACTION ITEMS</h3>
+						</div>
+						<div className={styles["action-items-area"]}>
+							<div className={styles["action-items-text"]}>
+								<Markdown
+									rehypePlugins={[
+										[rehypeSanitize, { schema: sanitizeDefaultSchema }],
+									]}
+									remarkPlugins={[remarkGfm]}
+								>
+									{meeting.actionItems ||
+										MeetingErrorMessage.MEETING_ACTION_ITEMS_NOT_AVAILABLE}
+								</Markdown>
 							</div>
 						</div>
 					</div>

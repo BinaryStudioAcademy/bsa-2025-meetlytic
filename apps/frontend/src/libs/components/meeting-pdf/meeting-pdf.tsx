@@ -32,11 +32,7 @@ const MeetingPdf = ({
 
 				<View style={styles.section}>
 					<Text style={styles.title}>Transcript</Text>
-					{transcription.map((chunk, index) => (
-						<Text key={index} style={styles.text}>
-							• {chunk.chunkText}
-						</Text>
-					))}
+					<Text style={styles.text}>{transcription}</Text>
 				</View>
 			</Page>
 		</Document>

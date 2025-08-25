@@ -6,3 +6,4 @@ export { Extension } from "./extension.enum.js";
 export { KeyboardKey } from "./keyboard-key.enum.js";
 export { ServerErrorType } from "./server-error-type.enum.js";
 export { SortOrder } from "./sort-order.enum.js";
+export { ZoomPath } from "./zoom-path.enum.js";

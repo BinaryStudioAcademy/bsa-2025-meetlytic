@@ -4,6 +4,7 @@ import { type ValueOf } from "~/libs/types/types.js";
 type EnvironmentSchema = {
 	APP: {
 		ENVIRONMENT: ValueOf<typeof AppEnvironment>;
+		FRONTEND_ORIGIN: string;
 		HOST: string;
 		ORIGIN: string;
 		PORT: number;

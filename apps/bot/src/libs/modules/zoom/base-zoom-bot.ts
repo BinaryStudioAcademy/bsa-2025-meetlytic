@@ -297,11 +297,11 @@ class BaseZoomBot {
 		}
 
 		try {
-			await this.clickHelper(ZoomUILabel.CHAT_BUTTON, Timeout.TEN_SECONDS);
-			await this.clickHelper(ZoomUILabel.CHAT_BUTTON, Timeout.TEN_SECONDS);
+			await this.clickHelper(ZoomUILabel.CHAT_BUTTON, Timeout.FIFTEEN_SECONDS);
+			await this.clickHelper(ZoomUILabel.CHAT_BUTTON, Timeout.FIFTEEN_SECONDS);
 			await delay(Timeout.FIVE_SECONDS);
-			await this.clickHelper(ZoomUILabel.CHAT_INPUT, Timeout.TEN_SECONDS);
-			await this.clickHelper(ZoomUILabel.CHAT_INPUT, Timeout.TEN_SECONDS);
+			await this.clickHelper(ZoomUILabel.CHAT_INPUT, Timeout.FIFTEEN_SECONDS);
+			await this.clickHelper(ZoomUILabel.CHAT_INPUT, Timeout.FIFTEEN_SECONDS);
 			await delay(Timeout.FIVE_SECONDS);
 			await this.page.keyboard.type(
 				`${ZoomBotMessage.BOT_CHAT_MESSAGE} ${publicUrl}`,

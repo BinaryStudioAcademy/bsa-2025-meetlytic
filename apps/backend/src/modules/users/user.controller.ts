@@ -7,7 +7,6 @@ import {
 import { HTTPCode, HTTPError, HTTPMethod } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type FileService } from "~/modules/files/files.service.js";
-import { type UserAvatarService } from "~/modules/users/user-avatar.service.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
 import {
@@ -24,7 +23,6 @@ import {
 type Deps = {
 	fileService: FileService;
 	logger: Logger;
-	userAvatarService: UserAvatarService;
 	userService: UserService;
 };
 
@@ -119,19 +117,12 @@ type Deps = {
 
 class UserController extends BaseController {
 	private readonly fileService: FileService;
-	private readonly userAvatarService: UserAvatarService;
 	private readonly userService: UserService;
 
-	public constructor({
-		fileService,
-		logger,
-		userAvatarService,
-		userService,
-	}: Deps) {
+	public constructor({ fileService, logger, userService }: Deps) {
 		super(logger, APIPath.USERS);
 
 		this.userService = userService;
-		this.userAvatarService = userAvatarService;
 		this.fileService = fileService;
 
 		this.addRoute({
@@ -215,7 +206,7 @@ class UserController extends BaseController {
 			});
 		}
 
-		await this.userAvatarService.deleteAvatar(user.id);
+		await this.userService.deleteAvatar(user.id);
 
 		return {
 			payload: {
@@ -343,7 +334,7 @@ class UserController extends BaseController {
 
 		const { buffer, filename, mimetype } = file;
 
-		const { key, url } = await this.userAvatarService.uploadAvatar({
+		const { key, url } = await this.userService.uploadAvatar({
 			buffer,
 			filename,
 			mimetype,

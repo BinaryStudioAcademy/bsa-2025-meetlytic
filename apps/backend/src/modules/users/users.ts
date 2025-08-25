@@ -4,7 +4,6 @@ import { logger } from "~/libs/modules/logger/logger.js";
 import { FileModel } from "../files/file.model.js";
 import { FileRepository } from "../files/files.repository.js";
 import { FileService } from "../files/files.service.js";
-import { UserAvatarService } from "./user-avatar.service.js";
 import { UserDetailsModel } from "./user-details.model.js";
 import { UserDetailsRepository } from "./user-details.repository.js";
 import { UserController } from "./user.controller.js";
@@ -20,21 +19,16 @@ const fileService = new FileService({
 	userDetailsModel: UserDetailsModel,
 });
 
-const userService = new UserService(
-	userRepository,
+const userService = new UserService({
+	fileService,
+	s3: s3Instance,
 	userDetailsRepository,
-	fileService,
-);
-const userAvatarService = new UserAvatarService(
-	fileService,
-	userService,
-	s3Instance,
-);
+	userRepository,
+});
 
 const userController = new UserController({
 	fileService,
 	logger,
-	userAvatarService,
 	userService,
 });
 

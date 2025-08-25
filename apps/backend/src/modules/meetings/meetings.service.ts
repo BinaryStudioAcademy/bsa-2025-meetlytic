@@ -67,7 +67,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		this.sharedJwt = sharedJwt;
 	}
 
-	private checkZoomLink = async (link: string): Promise<boolean> => {
+	private checkIsValidZoomLink = async (link: string): Promise<boolean> => {
 		try {
 			const response = await fetch(convertToZoomWebClientUrl(link));
 
@@ -152,7 +152,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
-		const validLink = await this.checkZoomLink(meetingLink);
+		const validLink = await this.checkIsValidZoomLink(meetingLink);
 
 		if (!validLink) {
 			throw new MeetingError({

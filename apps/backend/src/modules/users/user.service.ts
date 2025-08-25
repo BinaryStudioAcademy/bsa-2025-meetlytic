@@ -9,6 +9,11 @@ import {
 } from "~/libs/types/types.js";
 import { type FileService } from "~/modules/files/files.service.js";
 import { type ContentType } from "~/modules/files/libs/enums/enums.js";
+import {
+	type FileRequestDto,
+	type FileResponseDto,
+} from "~/modules/files/libs/types/types.js";
+import { type UserDetailsModel } from "~/modules/users/user-details.model.js";
 
 import {
 	UserAvatarErrorMessage,
@@ -32,17 +37,20 @@ import { type UserRepository } from "./user.repository.js";
 class UserService implements Service {
 	private fileService: FileService;
 	private s3: BaseS3;
+	private userDetailsModel: typeof UserDetailsModel;
 	private userDetailsRepository: UserDetailsRepository;
 	private userRepository: UserRepository;
 
 	public constructor({
 		fileService,
 		s3,
+		userDetailsModel,
 		userDetailsRepository,
 		userRepository,
 	}: {
 		fileService: FileService;
 		s3: BaseS3;
+		userDetailsModel: typeof UserDetailsModel;
 		userDetailsRepository: UserDetailsRepository;
 		userRepository: UserRepository;
 	}) {
@@ -50,6 +58,17 @@ class UserService implements Service {
 		this.userDetailsRepository = userDetailsRepository;
 		this.fileService = fileService;
 		this.s3 = s3;
+		this.userDetailsModel = userDetailsModel;
+	}
+
+	private async getAvatarFileId(userDetailsId: number): Promise<null | number> {
+		const userDetails = await this.userDetailsModel
+			.query()
+			.findById(userDetailsId)
+			.select("avatarFileId")
+			.first();
+
+		return userDetails?.avatarFileId ?? null;
 	}
 
 	public async create(payload: UserSignUpRequestDto): Promise<UserResponseDto> {
@@ -84,7 +103,7 @@ class UserService implements Service {
 			throw new Error(UserErrorMessage.DETAILS_NOT_FOUND);
 		}
 
-		const avatarKey = await this.fileService.getAvatarKeyForDeletion(detailsId);
+		const avatarKey = await this.getAvatarKeyForDeletion(detailsId);
 
 		if (!avatarKey) {
 			throw new Error(UserAvatarErrorMessage.AVATAR_NOT_SET);
@@ -92,7 +111,7 @@ class UserService implements Service {
 
 		try {
 			await this.s3.deleteObject({ key: avatarKey });
-			await this.fileService.removeAvatarRecord(detailsId);
+			await this.removeAvatarRecord(detailsId);
 
 			return {
 				isDeleted: true,
@@ -116,6 +135,21 @@ class UserService implements Service {
 			items: items.map((item) => item.toObject()),
 		};
 	}
+
+	public async findAvatarByUserDetailsId(
+		userDetailsId: number,
+	): Promise<FileResponseDto | null> {
+		const fileId = await this.getAvatarFileId(userDetailsId);
+
+		if (!fileId) {
+			return null;
+		}
+
+		const entity = await this.fileService.find(fileId);
+
+		return entity;
+	}
+
 	public async findByEmail(email: string): Promise<null | UserResponseDto> {
 		const user = await this.userRepository.findByEmail(email);
 
@@ -162,6 +196,14 @@ class UserService implements Service {
 		};
 	}
 
+	public async getAvatarKeyForDeletion(
+		userDetailsId: number,
+	): Promise<null | string> {
+		const dto = await this.findAvatarByUserDetailsId(userDetailsId);
+
+		return dto?.key ?? null;
+	}
+
 	public async getCredentials(id: number): Promise<null | UserCredentials> {
 		const credentials = await this.userRepository.getCredentials(id);
 
@@ -179,6 +221,46 @@ class UserService implements Service {
 		}
 
 		return details.toObject().id;
+	}
+
+	public async removeAvatarRecord(userDetailsId: number): Promise<boolean> {
+		const fileId = await this.getAvatarFileId(userDetailsId);
+
+		if (!fileId) {
+			return false;
+		}
+
+		const isDeleted = await this.fileService.delete(fileId);
+		await this.userDetailsModel
+			.query()
+			.patch({ avatarFileId: null })
+			.where("id", userDetailsId);
+
+		return isDeleted;
+	}
+
+	public async replaceAvatarRecord(parameters: {
+		contentType: FileRequestDto["contentType"];
+		key: AvatarFileDto["key"];
+		url: AvatarFileDto["url"];
+		userDetailsId: number;
+	}): Promise<FileResponseDto> {
+		const { userDetailsId, ...fileData } = parameters;
+
+		const existingId = await this.getAvatarFileId(userDetailsId);
+
+		if (existingId) {
+			return await this.fileService.update(existingId, fileData);
+		}
+
+		const created = await this.fileService.create(fileData);
+
+		await this.userDetailsModel
+			.query()
+			.patch({ avatarFileId: created.id })
+			.where("id", userDetailsId);
+
+		return created;
 	}
 
 	public async update(
@@ -254,8 +336,7 @@ class UserService implements Service {
 			throw new Error(UserErrorMessage.DETAILS_NOT_FOUND);
 		}
 
-		const oldAvatarKey =
-			await this.fileService.getAvatarKeyForDeletion(detailsId);
+		const oldAvatarKey = await this.getAvatarKeyForDeletion(detailsId);
 
 		try {
 			const key = this.s3.buildKey("avatars", filename, userId);
@@ -266,7 +347,7 @@ class UserService implements Service {
 				key,
 			});
 
-			const fileRecord = await this.fileService.replaceAvatarRecord({
+			const fileRecord = await this.replaceAvatarRecord({
 				contentType: mimetype as ValueOf<typeof ContentType>,
 				key: savedKey,
 				url,

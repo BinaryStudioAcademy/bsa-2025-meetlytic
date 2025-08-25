@@ -22,6 +22,7 @@ const fileService = new FileService({
 const userService = new UserService({
 	fileService,
 	s3: s3Instance,
+	userDetailsModel: UserDetailsModel,
 	userDetailsRepository,
 	userRepository,
 });

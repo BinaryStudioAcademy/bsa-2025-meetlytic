@@ -21,13 +21,13 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type BaseSocketService } from "~/libs/modules/socket/socket.js";
 import { jwt } from "~/libs/modules/token/token.js";
 import { authorization } from "~/libs/plugins/authorization/authorization.plugin.js";
+import { methodGuard } from "~/libs/plugins/method-guard/method-guard.plugin.js";
 import {
 	type ServerCommonErrorResponse,
 	type ServerValidationErrorResponse,
 } from "~/libs/types/types.js";
 import { userService } from "~/modules/users/users.js";
 
-import { createNotFoundHandler } from "./libs/not-found-handler/not-found-handler.js";
 import {
 	type ServerApplication,
 	type ServerApplicationApi,
@@ -141,6 +141,17 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	private async initPlugins(): Promise<void> {
+		const allRoutes = this.apis.flatMap((api) =>
+			api.routes.map((route) => ({
+				method: route.method.toUpperCase(),
+				path: route.path,
+			})),
+		);
+
+		await this.app.register(methodGuard, {
+			allRoutes,
+		});
+
 		await this.app.register(authorization, {
 			routesWhiteList: WHITE_ROUTES,
 			services: {
@@ -163,7 +174,9 @@ class BaseServerApplication implements ServerApplication {
 			root: staticPath,
 		});
 
-		this.app.setNotFoundHandler(createNotFoundHandler(this.apis, staticPath));
+		this.app.setNotFoundHandler(async (_request, response) => {
+			await response.sendFile("index.html", staticPath);
+		});
 	}
 
 	private initSocket(): void {

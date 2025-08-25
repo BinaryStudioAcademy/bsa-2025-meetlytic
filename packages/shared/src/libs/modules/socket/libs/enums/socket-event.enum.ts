@@ -7,6 +7,7 @@ const SocketEvent = {
 	ERROR: "error",
 	FAILED_TO_JOIN_MEETING: "failedToJoinMeeting",
 	GENERATE_SUMMARY_ACTION_ITEMS: "generateSummaryActionItems",
+	GET_PUBLIC_URL: "getPublicUrl",
 	JOIN_ROOM: "joinRoom",
 	JOINING_TO_MEETING: "joiningToMeeting",
 	LEAVE_ROOM: "leaveRoom",

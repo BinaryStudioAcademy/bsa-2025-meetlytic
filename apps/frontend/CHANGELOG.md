@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.16.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.15.0...frontend-v1.16.0) (2025-08-25)
+
+
+### Features
+
+* bot sends message to the chat ml-144 ([#261](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/261)) ([48c1e5b](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/48c1e5bf7bc0348a47f6ba92fe19774154791fb0))
+
+
+### Bug Fixes
+
+* prevent react-pdf error when switching meeting cards ml-281 ([#294](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/294)) ([a30d10a](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/a30d10a8db7de3c1142eb218c8b7b8c055410e67))
+* prevent stale meeting error by clearing state on unmount ml-274 ([#290](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/290)) ([9657c1d](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/9657c1d9303c370c019fae6653a5dc849ee8952b))
+
+## [1.15.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.14.0...frontend-v1.15.0) (2025-08-24)
+
+
+### Features
+
+* feat seamless transcript updates with typing animation ml-243 ([#278](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/278)) ([125ab98](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/125ab98d7397a3bcf53c42a0a3f8a5f7ce79e9f5))
+
+
+### Bug Fixes
+
+* time formatting on meeting card ml-284 ([#291](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/291)) ([2de1486](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/2de1486765a6f50085b3268fd330f5d4e32b9689))
+
 ## [1.14.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.13.0...frontend-v1.14.0) (2025-08-22)
 
 

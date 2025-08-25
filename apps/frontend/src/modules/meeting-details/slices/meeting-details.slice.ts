@@ -35,10 +35,14 @@ const { actions, name, reducer } = createSlice({
 	initialState,
 	name: "meetingDetails",
 	reducers: {
+		clearMeetingDetails: (state) => {
+			state.meeting = null;
+			state.dataStatus = DataStatus.IDLE;
+		},
 		setStatus(state, action: { payload: MeetingStatusDto }) {
-			const { status } = action.payload;
+			const { meetingId, status } = action.payload;
 
-			if (state.meeting) {
+			if (state.meeting && state.meeting.id === meetingId) {
 				state.meeting.status = status;
 			}
 		},

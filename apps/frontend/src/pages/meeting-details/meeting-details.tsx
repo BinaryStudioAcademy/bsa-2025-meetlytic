@@ -16,8 +16,13 @@ import {
 	MeetingErrorMessage,
 	MeetingStatus,
 	NotificationMessage,
+	SocketEvent,
 } from "~/libs/enums/enums.js";
-import { formatDate, shareMeetingPublicUrl } from "~/libs/helpers/helpers.js";
+import {
+	formatDate,
+	getValidClassNames,
+	shareMeetingPublicUrl,
+} from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -34,13 +39,11 @@ import { type MeetingPdfProperties } from "~/libs/types/types.js";
 import {
 	actions as meetingDetailsActions,
 	type MeetingStatusDto,
+	type MeetingSummaryActionItemsResponseDto,
 	sanitizeDefaultSchema,
 } from "~/modules/meeting-details/meeting-details.js";
 import { actions as meetingActions } from "~/modules/meeting/meeting.js";
-import {
-	type MeetingTranscriptionResponseDto,
-	actions as transcriptionActions,
-} from "~/modules/transcription/transcription.js";
+import { actions as transcriptionActions } from "~/modules/transcription/transcription.js";
 
 import styles from "./styles.module.css";
 
@@ -50,6 +53,13 @@ const MeetingDetails: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const { id } = useParams<{ id: string }>();
 	const [searchParameters] = useSearchParams();
+
+	useEffect((): (() => void) => {
+		return () => {
+			dispatch(meetingDetailsActions.clearMeetingDetails());
+			dispatch(transcriptionActions.clearTranscription());
+		};
+	}, [dispatch, id]);
 
 	const { dataStatus, meeting } = useAppSelector(
 		(state) => state.meetingDetails,
@@ -61,18 +71,17 @@ const MeetingDetails: React.FC = () => {
 		setIsStopRecordingInProgress(true);
 	}, [dispatch, id]);
 
-	const handleTranscriptUpdate = useCallback(
-		(data: MeetingTranscriptionResponseDto) => {
-			dispatch(transcriptionActions.addTranscription(data));
-		},
-		[dispatch],
-	);
+	const handleMeetingStatusUpdate = useCallback(
+		({ meetingId: incomingId, status }: MeetingStatusDto) => {
+			if (Number(id) !== incomingId) {
+				return;
+			}
 
-	const handleStatusUpdate = useCallback(
-		(data: MeetingStatusDto) => {
-			dispatch(meetingDetailsActions.setStatus(data));
+			dispatch(
+				meetingDetailsActions.setStatus({ meetingId: incomingId, status }),
+			);
 		},
-		[dispatch],
+		[dispatch, id],
 	);
 
 	const handleSummaryActionItemsUpdate = useCallback(() => {
@@ -86,12 +95,14 @@ const MeetingDetails: React.FC = () => {
 		);
 	}, [dispatch, id, searchParameters]);
 
-	useMeetingSocket({
-		meetingId: Number(id),
-		meetingStatus: dataStatus,
-		onStatusUpdate: handleStatusUpdate,
-		onSummaryActionItemsUpdate: handleSummaryActionItemsUpdate,
-		onTranscriptUpdate: handleTranscriptUpdate,
+	useMeetingSocket<MeetingStatusDto>({
+		callback: handleMeetingStatusUpdate,
+		event: SocketEvent.UPDATE_MEETING_STATUS,
+	});
+
+	useMeetingSocket<MeetingSummaryActionItemsResponseDto>({
+		callback: handleSummaryActionItemsUpdate,
+		event: SocketEvent.UPDATE_MEETING_DETAILS,
 	});
 
 	useEffect(handleSummaryActionItemsUpdate, [handleSummaryActionItemsUpdate]);
@@ -124,11 +135,9 @@ const MeetingDetails: React.FC = () => {
 		);
 	}
 
-	const transcription = transcriptions.items.map((item) => {
-		return {
-			chunkText: item.chunkText,
-		};
-	});
+	const transcription = transcriptions.items
+		.map((item) => `• ${item.chunkText}`)
+		.join("\n");
 
 	const meetingPdfProperties: MeetingPdfProperties = {
 		actionItems: meeting.actionItems ?? "",
@@ -137,6 +146,8 @@ const MeetingDetails: React.FC = () => {
 		summary: meeting.summary ?? "",
 		transcription,
 	};
+
+	const isMeetingEnded = meeting.status === MeetingStatus.ENDED;
 
 	return (
 		<>
@@ -163,7 +174,7 @@ const MeetingDetails: React.FC = () => {
 								<span className="visually-hidden">Share meeting</span>
 							</button>
 						)}
-						{meeting.status !== MeetingStatus.ENDED && user && (
+						{!isMeetingEnded && user && (
 							<Button
 								isDisabled={isStopRecordingInProgress}
 								label={
@@ -187,47 +198,52 @@ const MeetingDetails: React.FC = () => {
 				</div>
 
 				<div className={styles["meeting-details__content"]}>
-					<TranscriptionPanel
-						meetingId={meeting.id}
-						meetingStatus={meeting.status}
-					/>
+					<TranscriptionPanel />
 
-					<div className={styles["meeting-details__right-panel"]}>
-						<div>
-							<div className={styles["panel-header"]}>
-								<h3 className={styles["panel-header__text"]}>SUMMARY</h3>
-							</div>
-							<div className={styles["summary-area"]}>
-								<div className={styles["summary-text"]}>
-									<Markdown
-										rehypePlugins={[
-											[rehypeSanitize, { schema: sanitizeDefaultSchema }],
-										]}
-										remarkPlugins={[remarkGfm]}
-									>
-										{meeting.summary ||
-											MeetingErrorMessage.MEETING_SUMMARY_NOT_AVAILABLE}
-									</Markdown>
-								</div>
+					<div
+						className={getValidClassNames(
+							styles["summary"],
+							isMeetingEnded && styles["meeting-ended"],
+						)}
+					>
+						<div className={styles["panel-header"]}>
+							<h3 className={styles["panel-header__text"]}>SUMMARY</h3>
+						</div>
+						<div className={styles["summary-area"]}>
+							<div className={styles["summary-text"]}>
+								<Markdown
+									rehypePlugins={[
+										[rehypeSanitize, { schema: sanitizeDefaultSchema }],
+									]}
+									remarkPlugins={[remarkGfm]}
+								>
+									{meeting.summary ||
+										MeetingErrorMessage.MEETING_SUMMARY_NOT_AVAILABLE}
+								</Markdown>
 							</div>
 						</div>
+					</div>
 
-						<div>
-							<div className={styles["panel-header"]}>
-								<h3 className={styles["panel-header__text"]}>ACTION ITEMS</h3>
-							</div>
-							<div className={styles["action-items-area"]}>
-								<div className={styles["action-items-text"]}>
-									<Markdown
-										rehypePlugins={[
-											[rehypeSanitize, { schema: sanitizeDefaultSchema }],
-										]}
-										remarkPlugins={[remarkGfm]}
-									>
-										{meeting.actionItems ||
-											MeetingErrorMessage.MEETING_ACTION_ITEMS_NOT_AVAILABLE}
-									</Markdown>
-								</div>
+					<div
+						className={getValidClassNames(
+							styles["action-items"],
+							isMeetingEnded && styles["meeting-ended"],
+						)}
+					>
+						<div className={styles["panel-header"]}>
+							<h3 className={styles["panel-header__text"]}>ACTION ITEMS</h3>
+						</div>
+						<div className={styles["action-items-area"]}>
+							<div className={styles["action-items-text"]}>
+								<Markdown
+									rehypePlugins={[
+										[rehypeSanitize, { schema: sanitizeDefaultSchema }],
+									]}
+									remarkPlugins={[remarkGfm]}
+								>
+									{meeting.actionItems ||
+										MeetingErrorMessage.MEETING_ACTION_ITEMS_NOT_AVAILABLE}
+								</Markdown>
 							</div>
 						</div>
 					</div>

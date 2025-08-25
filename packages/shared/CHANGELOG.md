@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.10.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.9.1...shared-v1.10.0) (2025-08-25)
+
+
+### Features
+
+* bot sends message to the chat ml-144 ([#261](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/261)) ([48c1e5b](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/48c1e5bf7bc0348a47f6ba92fe19774154791fb0))
+
+## [1.9.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.9.0...shared-v1.9.1) (2025-08-24)
+
+
+### Bug Fixes
+
+* time formatting on meeting card ml-284 ([#291](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/291)) ([2de1486](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/2de1486765a6f50085b3268fd330f5d4e32b9689))
+
 ## [1.9.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.8.0...shared-v1.9.0) (2025-08-21)
 
 

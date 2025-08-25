@@ -7,6 +7,7 @@ import {
 type ClientToServerEvents = {
 	audioSave: (data: MeetingAudioSaveDto) => void;
 	failedToJoinMeeting: (meetingId: string) => void;
+	getPublicUrl: (meetingId: string) => void;
 	joiningToMeeting: (meetingId: string) => void;
 	joinRoom: (meetingId: string) => void;
 	recording: (meetingId: string) => void;

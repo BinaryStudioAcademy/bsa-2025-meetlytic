@@ -27,6 +27,7 @@ import {
 } from "~/libs/types/types.js";
 import { userService } from "~/modules/users/users.js";
 
+import { createNotFoundHandler } from "./libs/not-found-handler/not-found-handler.js";
 import {
 	type ServerApplication,
 	type ServerApplicationApi,
@@ -162,9 +163,7 @@ class BaseServerApplication implements ServerApplication {
 			root: staticPath,
 		});
 
-		this.app.setNotFoundHandler(async (_request, response) => {
-			await response.sendFile("index.html", staticPath);
-		});
+		this.app.setNotFoundHandler(createNotFoundHandler(this.apis, staticPath));
 	}
 
 	private initSocket(): void {

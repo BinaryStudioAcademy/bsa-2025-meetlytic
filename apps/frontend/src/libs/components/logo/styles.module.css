@@ -10,6 +10,10 @@
 	object-fit: contain;
 }
 
+.logo__image--tiny {
+	height: 25px;
+}
+
 .logo__image--small {
 	height: 34px;
 }

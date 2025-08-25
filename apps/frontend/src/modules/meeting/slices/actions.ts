@@ -64,11 +64,22 @@ const stopRecording = createAsyncThunk<
 
 const deleteMeeting = createAsyncThunk<number, number, AsyncThunkConfig>(
 	`${sliceName}/delete-meeting`,
-	async (id, { extra }) => {
-		const { meetingApi } = extra;
-		await meetingApi.delete(id);
+	async (id, { extra, rejectWithValue }) => {
+		try {
+			const { meetingApi } = extra;
+			await meetingApi.delete(id);
 
-		return id;
+			return id;
+		} catch (error) {
+			if (error instanceof HTTPError) {
+				return rejectWithValue({
+					message: error.message,
+					status: error.status,
+				});
+			}
+
+			return rejectWithValue({ message: "Something went wrong" });
+		}
 	},
 );
 

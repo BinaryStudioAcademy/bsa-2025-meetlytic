@@ -18,4 +18,20 @@ const getTranscriptionsByMeetingId = createAsyncThunk<
 	},
 );
 
-export { getTranscriptionsByMeetingId };
+const getTranscriptionsBySignedUrl = createAsyncThunk<
+	MeetingTranscriptionGetAllResponseDto,
+	{ meetingId: string; token: string },
+	AsyncThunkConfig
+>(
+	`${sliceName}/get-transcriptions-by-signed-url`,
+	async ({ meetingId, token }, { extra }) => {
+		const { transcriptionApi } = extra;
+
+		return await transcriptionApi.getTranscriptionsBySignedUrl(
+			meetingId,
+			token,
+		);
+	},
+);
+
+export { getTranscriptionsByMeetingId, getTranscriptionsBySignedUrl };

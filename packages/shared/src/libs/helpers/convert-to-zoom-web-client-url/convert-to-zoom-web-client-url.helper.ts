@@ -6,11 +6,11 @@ const convertToZoomWebClientUrl = (url: string): string => {
 
 	if (
 		ZOOM_JOIN_PATH_REGEX.test(parsed.pathname) &&
-		!parsed.pathname.includes(ZoomPath.WebClient)
+		!parsed.pathname.includes(ZoomPath.WEB_CLIENT)
 	) {
 		parsed.pathname = parsed.pathname.replace(
-			ZoomPath.Join,
-			`${ZoomPath.WebClient}${ZoomPath.WebClientJoinSuffix}`,
+			ZoomPath.JOIN,
+			`${ZoomPath.WEB_CLIENT}${ZoomPath.WEB_CLIENT_JOIN_SUFFIX}`,
 		);
 	}
 

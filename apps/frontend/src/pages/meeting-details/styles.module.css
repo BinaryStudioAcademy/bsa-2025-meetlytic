@@ -149,10 +149,11 @@
 	.meeting-details__header {
 		flex-wrap: wrap;
 		row-gap: 0;
+		justify-content: center;
 	}
 
 	.meeting-details__actions {
-		width: 100%;
+		justify-content: center;
 		margin: 15px 0;
 	}
 }

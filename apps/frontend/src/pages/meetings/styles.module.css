@@ -13,6 +13,7 @@
 .meetings__header {
 	display: flex;
 	gap: 50px;
+	align-items: center;
 	justify-content: space-between;
 	padding: 20px 0;
 	margin-bottom: 50px;
@@ -62,17 +63,25 @@
 	display: block;
 }
 
-@media (width <= 480px) {
+@media (width <=480px) {
 	.meetings__header {
 		display: flex;
 		flex-direction: column;
+		gap: 20px;
 		align-items: center;
 		justify-content: center;
 		margin-bottom: 30px;
 	}
+
+	.meetings__avatar-wrapper {
+		grid-template-columns: 1fr;
+		gap: 10px;
+		justify-items: center;
+		text-align: center;
+	}
 }
 
-@media (width <= 768px) {
+@media (width <=768px) {
 	.desktop {
 		display: none;
 	}

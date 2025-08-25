@@ -70,7 +70,7 @@ const Meetings: React.FC = () => {
 								id={meeting.id}
 								key={meeting.id}
 								onDelete={handleDeleteMeeting}
-								title={`Meeting #${String(meeting.id)}`}
+								title={meeting.title ?? `Meeting #${String(meeting.id)}`}
 							/>
 						);
 					})}

@@ -37,6 +37,8 @@ class MeetingModel extends AbstractModel {
 
 	public summary!: null | string;
 
+	public title!: null | string;
+
 	public static get relationMappings(): RelationMappings {
 		return {
 			audioFile: {

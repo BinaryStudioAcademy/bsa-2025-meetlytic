@@ -326,7 +326,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		status: ValueOf<typeof MeetingStatus>,
 	): Promise<MeetingDetailedResponseDto> {
 		let meeting = await this.meetingRepository.update(id, {
-			status: status,
+			status,
 		});
 
 		if (status === MeetingStatus.FAILED) {

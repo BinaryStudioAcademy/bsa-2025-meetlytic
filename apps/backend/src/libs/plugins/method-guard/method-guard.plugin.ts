@@ -4,7 +4,7 @@ import fp from "fastify-plugin";
 import { ExceptionMessage, ServerErrorType } from "~/libs/enums/enums.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 
-import { matchRoute } from "./match-route.js";
+import { matchRoute } from "./libs/match-route.js";
 
 type Options = {
 	allRoutes: { method: string; path: string }[];

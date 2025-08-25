@@ -8,7 +8,7 @@ const ColumnName = {
 	STATUS: "status",
 } as const;
 
-const enumName = "meeting_status";
+const ENUM_NAME = "meeting_status";
 
 const MeetingStatus = {
 	ENDED: "ended",
@@ -28,14 +28,14 @@ async function down(knex: Knex): Promise<void> {
 			])
 			.update({ [ColumnName.STATUS]: MeetingStatus.STARTED });
 
-		const temporary = `${enumName}_old`;
+		const temporary = `${ENUM_NAME}_old`;
 
-		await trx.raw(`ALTER TYPE "${enumName}" RENAME TO "${temporary}";`);
+		await trx.raw(`ALTER TYPE "${ENUM_NAME}" RENAME TO "${temporary}";`);
 		await trx.raw(
-			`CREATE TYPE "${enumName}" AS ENUM ('${MeetingStatus.ENDED}', '${MeetingStatus.STARTED}');`,
+			`CREATE TYPE "${ENUM_NAME}" AS ENUM ('${MeetingStatus.ENDED}', '${MeetingStatus.STARTED}');`,
 		);
 		await trx.raw(
-			` ALTER TABLE "${TableName.MEETINGS}" ALTER COLUMN "${ColumnName.STATUS}" TYPE "${enumName}" USING "${ColumnName.STATUS}"::text::"${enumName}";`,
+			` ALTER TABLE "${TableName.MEETINGS}" ALTER COLUMN "${ColumnName.STATUS}" TYPE "${ENUM_NAME}" USING "${ColumnName.STATUS}"::text::"${ENUM_NAME}";`,
 		);
 		await trx.raw(`DROP TYPE "${temporary}";`);
 	});
@@ -43,13 +43,13 @@ async function down(knex: Knex): Promise<void> {
 
 async function up(knex: Knex): Promise<void> {
 	await knex.raw(
-		`ALTER TYPE "${enumName}" ADD VALUE IF NOT EXISTS '${MeetingStatus.FAILED}';`,
+		`ALTER TYPE "${ENUM_NAME}" ADD VALUE IF NOT EXISTS '${MeetingStatus.FAILED}';`,
 	);
 	await knex.raw(
-		`ALTER TYPE "${enumName}" ADD VALUE IF NOT EXISTS '${MeetingStatus.JOINING}';`,
+		`ALTER TYPE "${ENUM_NAME}" ADD VALUE IF NOT EXISTS '${MeetingStatus.JOINING}';`,
 	);
 	await knex.raw(
-		`ALTER TYPE "${enumName}" ADD VALUE IF NOT EXISTS '${MeetingStatus.RECORDING}';`,
+		`ALTER TYPE "${ENUM_NAME}" ADD VALUE IF NOT EXISTS '${MeetingStatus.RECORDING}';`,
 	);
 }
 

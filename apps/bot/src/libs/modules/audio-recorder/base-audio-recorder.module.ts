@@ -241,6 +241,7 @@ class BaseAudioRecorder implements AudioRecorder {
 
 			for (const line of lines) {
 				this.logVolume(line);
+				this.logger.info(`[CHUNK][STDERR] ${line}`);
 			}
 		});
 

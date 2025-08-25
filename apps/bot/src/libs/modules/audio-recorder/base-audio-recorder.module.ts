@@ -266,7 +266,7 @@ class BaseAudioRecorder implements AudioRecorder {
 		const extension = this.useMp3 ? Extension.MP3 : Extension.WAV;
 		this.fullPath = path.join(
 			this.outputDir,
-			`${meetingId}-audio.${extension}`,
+			`${meetingId}-${AudioFileType.FULL_RECORDING}.${extension}`,
 		);
 
 		const ffmpegArguments = [

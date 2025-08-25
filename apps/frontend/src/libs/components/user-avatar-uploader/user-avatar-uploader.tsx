@@ -56,7 +56,7 @@ const UserAvatarUploader: React.FC = () => {
 		<div className={styles["container"]}>
 			<Avatar
 				size={AvatarSize.LARGE}
-				src={avatarUrl ?? undefined}
+				src={avatarUrl ?? null}
 				type={AvatarType.MAIN}
 			/>
 			<input

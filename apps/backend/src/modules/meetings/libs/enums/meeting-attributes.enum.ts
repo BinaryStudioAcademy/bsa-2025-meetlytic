@@ -1,5 +1,6 @@
 const MeetingAttribute = {
 	AUDIO_FILE_ID: "audioFileId",
+	CREATED_AT: "createdAt",
 	HOST: "host",
 	ID: "id",
 	INSTANCE_ID: "instanceId",

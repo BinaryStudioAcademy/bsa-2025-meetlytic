@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.1.2...bot-v1.2.0) (2025-08-25)
+
+
+### Features
+
+* bot sends message to the chat ml-144 ([#261](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/261)) ([48c1e5b](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/48c1e5bf7bc0348a47f6ba92fe19774154791fb0))
+
 ## [1.1.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.1.1...bot-v1.1.2) (2025-08-21)
 
 

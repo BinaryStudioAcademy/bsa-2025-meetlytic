@@ -3,6 +3,6 @@ type MeetingPdfProperties = {
 	createdAt: string;
 	id: number;
 	summary: string;
-	transcription: { chunkText: string }[];
+	transcription: string;
 };
 export { type MeetingPdfProperties };

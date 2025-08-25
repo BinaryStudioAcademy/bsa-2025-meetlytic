@@ -10,6 +10,7 @@ import {
 	type CreateStack,
 } from "~/libs/modules/cloud-formation/cloud-formation.js";
 import template from "~/libs/modules/cloud-formation/libs/templates/ec2-instance-template.json" with { type: "json" };
+import { config } from "~/libs/modules/config/config.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import {
 	SocketEvent,
@@ -312,7 +313,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 		const token = await this.sharedJwt.sign({ meetingId: meeting.id });
 
 		return {
-			publicUrl: `${APIPath.PUBLIC_MEETINGS}/${String(id)}?token=${token}`,
+			publicUrl: `${config.ENV.APP.FRONTEND_ORIGIN}${APIPath.PUBLIC_MEETINGS}/${String(id)}?token=${token}`,
 		};
 	}
 

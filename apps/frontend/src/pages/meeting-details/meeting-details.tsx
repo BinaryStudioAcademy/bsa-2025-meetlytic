@@ -72,14 +72,12 @@ const MeetingDetails: React.FC = () => {
 	}, [dispatch, id]);
 
 	const handleMeetingStatusUpdate = useCallback(
-		({ meetingId: incomingId, status }: MeetingStatusDto) => {
-			if (Number(id) !== incomingId) {
+		({ meetingId, status }: MeetingStatusDto) => {
+			if (Number(id) !== meetingId) {
 				return;
 			}
 
-			dispatch(
-				meetingDetailsActions.setStatus({ meetingId: incomingId, status }),
-			);
+			dispatch(meetingDetailsActions.setStatus({ meetingId, status }));
 		},
 		[dispatch, id],
 	);

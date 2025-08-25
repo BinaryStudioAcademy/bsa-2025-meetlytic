@@ -11,68 +11,64 @@ type Properties = {
 	titleOverride?: string;
 };
 
-const LABEL: Record<ValueOf<typeof MeetingStatus>, string> = {
-	[MeetingStatus.ENDED]: "Ended",
-	[MeetingStatus.FAILED]: "Failed",
-	[MeetingStatus.JOINING]: "Joining",
-	[MeetingStatus.RECORDING]: "Recording",
-	[MeetingStatus.STARTED]: "Started",
-};
-
-const TITLE: Record<ValueOf<typeof MeetingStatus>, string> = {
-	[MeetingStatus.ENDED]: "Recording finished",
-	[MeetingStatus.FAILED]: "Bot failed to join",
-	[MeetingStatus.JOINING]: "Bot is joining the meeting…",
-	[MeetingStatus.RECORDING]: "Recording in progress",
-	[MeetingStatus.STARTED]: "Bot is in the meeting",
-};
-
+type StatusMeta = { label: string; title: string; tone: Tone };
 type Tone = "danger" | "info" | "neutral" | "success" | "warning";
 
-function toneFromStatus(status: ValueOf<typeof MeetingStatus>): Tone {
+const mapStatus = (status: ValueOf<typeof MeetingStatus>): StatusMeta => {
 	switch (status) {
 		case MeetingStatus.ENDED: {
-			return "neutral";
+			return { label: "Ended", title: "Recording finished", tone: "neutral" };
 		}
 
 		case MeetingStatus.FAILED: {
-			return "danger";
+			return { label: "Failed", title: "Bot failed to join", tone: "danger" };
 		}
 
 		case MeetingStatus.JOINING: {
-			return "info";
+			return {
+				label: "Joining",
+				title: "Bot is joining the meeting…",
+				tone: "info",
+			};
 		}
 
 		case MeetingStatus.RECORDING: {
-			return "warning";
+			return {
+				label: "Recording",
+				title: "Recording in progress",
+				tone: "warning",
+			};
 		}
 
 		case MeetingStatus.STARTED: {
-			return "success";
+			return {
+				label: "Started",
+				title: "Bot is in the meeting",
+				tone: "success",
+			};
 		}
 
 		default: {
-			return "neutral";
+			return { label: "", title: "", tone: "neutral" };
 		}
 	}
-}
+};
 
 const MeetingStatusBadge = ({
 	className,
 	status,
 	titleOverride,
 }: Properties): React.JSX.Element => {
-	const tone = toneFromStatus(status);
-	const label = LABEL[status];
-	const title = titleOverride ?? TITLE[status];
+	const { label, title: defaultTitle, tone } = mapStatus(status);
+	const title = titleOverride ?? defaultTitle;
 
 	return (
 		<span
 			aria-label={`${label}. ${title}`}
 			aria-live="polite"
 			className={getValidClassNames(
-				styles["msb"],
-				styles[`msb--${tone}`],
+				styles["meeting-status-badge"],
+				styles[`meeting-status-badge--${tone}`],
 				className,
 			)}
 			data-status={status}
@@ -82,14 +78,18 @@ const MeetingStatusBadge = ({
 			<span
 				aria-hidden="true"
 				className={getValidClassNames(
-					styles["msb__indicator"],
-					status === MeetingStatus.JOINING && styles["msb__indicator--spinner"],
-					status === MeetingStatus.RECORDING && styles["msb__indicator--pulse"],
-					status === MeetingStatus.FAILED && styles["msb__indicator--cross"],
-					status === MeetingStatus.ENDED && styles["msb__indicator--check"],
+					styles["meeting-status-badge__indicator"],
+					status === MeetingStatus.JOINING &&
+						styles["meeting-status-badge__indicator--spinner"],
+					status === MeetingStatus.RECORDING &&
+						styles["meeting-status-badge__indicator--pulse"],
+					status === MeetingStatus.FAILED &&
+						styles["meeting-status-badge__indicator--cross"],
+					status === MeetingStatus.ENDED &&
+						styles["meeting-status-badge__indicator--check"],
 				)}
 			/>
-			<span className={styles["msb__label"]}>{label}</span>
+			<span className={styles["meeting-status-badge__label"]}>{label}</span>
 		</span>
 	);
 };

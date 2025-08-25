@@ -1,5 +1,5 @@
 const ColumnName = {
-	AVATAR_FILE_ID: "avatar_file_id",
+	AVATAR_FILE_ID: "avatarFileId",
 	ID: "id",
 	USER_ID: "userId",
 } as const;

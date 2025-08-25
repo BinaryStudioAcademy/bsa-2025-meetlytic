@@ -199,6 +199,13 @@ class UserController extends BaseController {
 	): Promise<APIHandlerResponse> {
 		const { user } = options;
 
+		if (!user) {
+			throw new HTTPError({
+				message: UserErrorMessage.USER_REQUIRED,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const detailsId = await this.userService.getDetailsId(user.id);
 
 		if (!detailsId) {
@@ -265,6 +272,13 @@ class UserController extends BaseController {
 	}: APIHandlerOptions<{
 		user: UserResponseDto;
 	}>): Promise<APIHandlerResponse> {
+		if (!user) {
+			throw new HTTPError({
+				message: UserErrorMessage.USER_REQUIRED,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const fullUser = await this.userService.findProfileByEmail(user.email);
 
 		return {
@@ -375,6 +389,13 @@ class UserController extends BaseController {
 		body: UserUpdateResponseDto;
 		user: UserResponseDto;
 	}>): Promise<APIHandlerResponse> {
+		if (!user) {
+			throw new HTTPError({
+				message: UserErrorMessage.USER_REQUIRED,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const updatedUser = await this.userService.update(user.id, body);
 
 		return {

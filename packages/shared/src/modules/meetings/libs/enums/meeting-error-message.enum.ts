@@ -15,6 +15,8 @@ const MeetingErrorMessage = {
 	MEETING_SUMMARY_NOT_AVAILABLE: "Meeting summary not available.",
 	SEARCH_NOT_EMPTY: "Search input cannot be empty.",
 	UPDATE_FAILED: "Failed to update meeting",
+	USER_IS_REQUIRED_TO_CREATE_MEETING: "User is required to create a meeting",
+	USER_IS_REQUIRED_TO_FIND_MEETINGS: "User is required to create a meeting",
 } as const;
 
 export { MeetingErrorMessage };

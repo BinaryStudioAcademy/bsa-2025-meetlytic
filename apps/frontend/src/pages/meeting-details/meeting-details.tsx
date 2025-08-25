@@ -4,6 +4,7 @@ import {
 	Loader,
 	Markdown,
 	MeetingPdf,
+	MeetingStatusBadge,
 	Navigate,
 	PDFDownloadLink,
 	PlayerTrack,
@@ -32,6 +33,7 @@ import { rehypeSanitize, remarkGfm } from "~/libs/plugins/plugins.js";
 import { type MeetingPdfProperties } from "~/libs/types/types.js";
 import {
 	actions as meetingDetailsActions,
+	type MeetingStatusDto,
 	sanitizeDefaultSchema,
 } from "~/modules/meeting-details/meeting-details.js";
 import { actions as meetingActions } from "~/modules/meeting/meeting.js";
@@ -66,6 +68,13 @@ const MeetingDetails: React.FC = () => {
 		[dispatch],
 	);
 
+	const handleStatusUpdate = useCallback(
+		(data: MeetingStatusDto) => {
+			dispatch(meetingDetailsActions.setStatus(data));
+		},
+		[dispatch],
+	);
+
 	const handleSummaryActionItemsUpdate = useCallback(() => {
 		const sharedToken = searchParameters.get("token");
 
@@ -80,6 +89,7 @@ const MeetingDetails: React.FC = () => {
 	useMeetingSocket({
 		meetingId: Number(id),
 		meetingStatus: dataStatus,
+		onStatusUpdate: handleStatusUpdate,
 		onSummaryActionItemsUpdate: handleSummaryActionItemsUpdate,
 		onTranscriptUpdate: handleTranscriptUpdate,
 	});
@@ -133,8 +143,15 @@ const MeetingDetails: React.FC = () => {
 			<div className={styles["meeting-details"]}>
 				<div className={styles["meeting-details__header"]}>
 					<h1 className={styles["meeting-details__title"]}>
-						Meeting #{meeting.id} |{" "}
-						{formatDate(new Date(meeting.createdAt), "D MMMM hA")}
+						<span>Meeting #{meeting.id}</span>
+						<span className={styles["meeting-details__date"]}>
+							{formatDate(new Date(meeting.createdAt), "D MMMM hA")}
+						</span>
+
+						<MeetingStatusBadge
+							className={styles["meeting-details__status"] ?? ""}
+							status={meeting.status}
+						/>
 					</h1>
 					<div className={styles["meeting-details__actions"]}>
 						{user && (

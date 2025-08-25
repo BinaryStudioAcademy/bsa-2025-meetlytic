@@ -16,7 +16,7 @@ import {
 	type BaseToken,
 	type SharedJwtPayload,
 } from "~/libs/modules/token/token.js";
-import { type Service } from "~/libs/types/types.js";
+import { type Service, type ValueOf } from "~/libs/types/types.js";
 
 import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
@@ -318,6 +318,30 @@ class MeetingService implements Service<MeetingResponseDto> {
 		});
 
 		return transcription;
+	}
+
+	public async setStatus(
+		id: number,
+		status: ValueOf<typeof MeetingStatus>,
+	): Promise<MeetingDetailedResponseDto> {
+		let meeting = await this.meetingRepository.update(id, {
+			status: status,
+		});
+
+		if (status === MeetingStatus.FAILED) {
+			meeting = await this.meetingRepository.update(id, {
+				instanceId: null,
+			});
+		}
+
+		if (!meeting) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.MEETING_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return meeting.toDetailedObject();
 	}
 
 	public async stopRecording(id: number): Promise<void> {

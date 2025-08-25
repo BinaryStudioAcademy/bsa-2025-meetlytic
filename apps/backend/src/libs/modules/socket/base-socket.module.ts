@@ -9,6 +9,7 @@ import { type Logger } from "../logger/logger.js";
 import {
 	AllowedOrigin,
 	ContentType,
+	MeetingStatus,
 	SocketEvent,
 	SocketMessage,
 	SocketNamespace,
@@ -53,16 +54,86 @@ class BaseSocketService implements SocketService {
 				await meetingService.attachAudioFile(payload.meetingId, {
 					fileId: createdFile.id,
 				});
-
-				this.logger.info(SocketMessage.AUDIO_SAVE_RECEIVED);
 			} catch (error) {
 				this.logger.error(`${SocketMessage.AUDIO_SAVE_ERROR} ${String(error)}`);
+			}
+		});
+
+		socket.on(SocketEvent.FAILED_TO_JOIN_MEETING, async (meetingId) => {
+			try {
+				this.logger.info(SocketMessage.FAILED_TO_JOIN_MEETING_RECEIVED);
+				const meeting = await meetingService.setStatus(
+					Number(meetingId),
+					MeetingStatus.FAILED,
+				);
+				const payload = {
+					meetingId: meeting.id,
+					status: meeting.status,
+				};
+				this.emitTo({
+					event: SocketEvent.UPDATE_MEETING_STATUS,
+					namespace: SocketNamespace.USERS,
+					parameters: [payload],
+					room: String(payload.meetingId),
+				});
+			} catch (error) {
+				this.logger.error(
+					`${SocketMessage.FAILED_TO_JOIN_MEETING_ERROR} ${String(error)}`,
+				);
 			}
 		});
 
 		socket.on(SocketEvent.JOIN_ROOM, async (meetingId: string) => {
 			this.logger.info(`Client ${socket.id} joining room: ${meetingId}`);
 			await socket.join(meetingId);
+		});
+
+		socket.on(SocketEvent.JOINING_TO_MEETING, async (meetingId: string) => {
+			try {
+				this.logger.info(SocketMessage.JOINING_MEETING_RECEIVED);
+				const meeting = await meetingService.setStatus(
+					Number(meetingId),
+					MeetingStatus.JOINING,
+				);
+				const payload = {
+					meetingId: meeting.id,
+					status: meeting.status,
+				};
+				this.emitTo({
+					event: SocketEvent.UPDATE_MEETING_STATUS,
+					namespace: SocketNamespace.USERS,
+					parameters: [payload],
+					room: String(payload.meetingId),
+				});
+			} catch (error) {
+				this.logger.error(
+					`${SocketMessage.JOINING_TO_MEETING_ERROR} ${String(error)}`,
+				);
+			}
+		});
+
+		socket.on(SocketEvent.RECORDING, async (meetingId: string) => {
+			try {
+				this.logger.info(SocketMessage.JOINING_MEETING_RECEIVED);
+				const meeting = await meetingService.setStatus(
+					Number(meetingId),
+					MeetingStatus.RECORDING,
+				);
+				const payload = {
+					meetingId: meeting.id,
+					status: meeting.status,
+				};
+				this.emitTo({
+					event: SocketEvent.UPDATE_MEETING_STATUS,
+					namespace: SocketNamespace.USERS,
+					parameters: [payload],
+					room: String(payload.meetingId),
+				});
+			} catch (error) {
+				this.logger.error(
+					`${SocketMessage.JOINING_TO_MEETING_ERROR} ${String(error)}`,
+				);
+			}
 		});
 
 		socket.on(SocketEvent.RECORDING_STOPPED, async (meetingId: string) => {

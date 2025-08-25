@@ -1,0 +1,189 @@
+.msb {
+	--msb-fg: var(--color-text-2);
+	--msb-border: color-mix(in srgb, var(--msb-fg) 40%, transparent);
+	--msb-bg: color-mix(in srgb, var(--msb-fg) 12%, transparent);
+	--msb-glow: color-mix(in srgb, var(--msb-fg) 30%, transparent);
+
+	display: inline-flex;
+	gap: 8px;
+	align-items: center;
+	padding: 6px 12px;
+	font-family: var(--third-font-family);
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 1;
+	color: var(--msb-fg);
+	background: linear-gradient(
+		180deg,
+		color-mix(in srgb, var(--msb-bg) 100%, transparent) 0%,
+		color-mix(in srgb, var(--msb-bg) 60%, transparent) 100%
+	);
+	border: 1px solid var(--msb-border);
+	border-radius: var(--border-radius-md);
+	box-shadow:
+		0 0 0 1px color-mix(in srgb, var(--msb-fg) 10%, transparent) inset,
+		0 3px 14px -7px var(--msb-glow),
+		0 0 8px -2px var(--msb-glow);
+	backdrop-filter: blur(6px);
+	transition:
+		color 0.25s ease,
+		border-color 0.25s ease,
+		background-color 0.25s ease,
+		box-shadow 0.3s ease,
+		transform 0.2s ease;
+}
+
+.msb__indicator {
+	position: relative;
+	flex: 0 0 10px;
+	width: 10px;
+	height: 10px;
+	background-color: currentcolor;
+	border-radius: 50%;
+	box-shadow: 0 0 0 2px color-mix(in srgb, currentcolor 16%, transparent);
+}
+
+.msb__indicator--spinner {
+	width: 12px;
+	height: 12px;
+	aspect-ratio: 1/1;
+	background: transparent;
+	border: 2px solid currentcolor;
+	border-right-color: transparent;
+	border-radius: 50%;
+	box-shadow: none;
+	animation: msb-spin 1.5s linear infinite;
+}
+
+.msb__indicator--pulse::after {
+	position: absolute;
+	inset: -3px;
+	content: "";
+	border-radius: 50%;
+	box-shadow: 0 0 0 0 currentcolor;
+	opacity: 0.45;
+	animation: msb-pulse 1.2s ease-out infinite;
+}
+
+.msb__indicator--cross {
+	background: transparent;
+	box-shadow: none;
+}
+
+.msb__indicator--cross::before,
+.msb__indicator--cross::after {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 12px;
+	height: 2px;
+	content: "";
+	background: currentcolor;
+	border-radius: 2px;
+	transform-origin: center;
+}
+
+.msb__indicator--cross::before {
+	transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.msb__indicator--cross::after {
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.msb__indicator--check {
+	background: transparent;
+	box-shadow: none;
+}
+
+.msb__indicator--check::before,
+.msb__indicator--check::after {
+	position: absolute;
+	content: "";
+	background: currentcolor;
+	border-radius: 2px;
+}
+
+.msb__indicator--check::before {
+	top: 48%;
+	left: 22%;
+	width: 6px;
+	height: 2px;
+	transform: rotate(40deg);
+}
+
+.msb__indicator--check::after {
+	top: 44%;
+	left: 44%;
+	width: 10px;
+	height: 2px;
+	transform: rotate(-45deg);
+}
+
+.msb__label {
+	color: inherit;
+	letter-spacing: 0.2px;
+}
+
+.msb--info {
+	--msb-fg: var(--color-brand);
+}
+
+.msb--success {
+	--msb-fg: var(--color-accent-2);
+}
+
+.msb--warning {
+	--msb-fg: var(--color-accent-1);
+}
+
+.msb--danger {
+	--msb-fg: var(--color-accent-1);
+}
+
+.msb--neutral {
+	--msb-fg: var(--color-text-2);
+}
+
+.msb:focus-visible {
+	outline: none;
+	box-shadow:
+		0 0 0 3px color-mix(in srgb, var(--msb-fg) 30%, transparent),
+		0 0 0 1px var(--msb-border) inset;
+}
+
+@keyframes msb-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes msb-pulse {
+	0% {
+		box-shadow: 0 0 0 0 currentcolor;
+		opacity: 0.45;
+	}
+
+	70% {
+		box-shadow: 0 0 0 14px transparent;
+		opacity: 0.08;
+	}
+
+	100% {
+		box-shadow: 0 0 0 0 transparent;
+		opacity: 0;
+	}
+}
+
+@media (width <= 768px) {
+	.msb {
+		gap: 6px;
+		padding: 5px 10px;
+		font-size: 11px;
+	}
+
+	.msb__indicator--spinner {
+		width: 12px;
+		height: 12px;
+	}
+}

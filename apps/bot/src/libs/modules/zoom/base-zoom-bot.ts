@@ -282,6 +282,11 @@ class BaseZoomBot {
 		this.initSocket();
 
 		try {
+			this.socketClient.emit(
+				SocketEvent.JOINING_TO_MEETING,
+				String(this.config.ENV.ZOOM.MEETING_ID),
+			);
+
 			this.browser = await puppeteer.launch(this.config.getLaunchOptions());
 			this.page = await this.browser.newPage();
 			await this.page.setUserAgent(USER_AGENT);
@@ -301,6 +306,10 @@ class BaseZoomBot {
 			await this.handleInitialPopups();
 			await this.joinMeeting();
 			this.logger.info(ZoomBotMessage.JOINED_MEETING);
+			this.socketClient.emit(
+				SocketEvent.RECORDING,
+				String(this.config.ENV.ZOOM.MEETING_ID),
+			);
 			this.audioRecorder.start();
 			this.audioRecorder.startFullMeetingRecording(
 				String(this.config.ENV.ZOOM.MEETING_ID),
@@ -308,6 +317,10 @@ class BaseZoomBot {
 			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 			await delay(Timeout.ONE_SECOND);
 		} catch (error) {
+			this.socketClient.emit(
+				SocketEvent.FAILED_TO_JOIN_MEETING,
+				String(this.config.ENV.ZOOM.MEETING_ID),
+			);
 			this.logger.error(
 				`${ZoomBotMessage.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,
 			);

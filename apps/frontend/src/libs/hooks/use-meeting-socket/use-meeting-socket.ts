@@ -5,12 +5,16 @@ import {
 } from "~/libs/enums/enums.js";
 import { useEffect } from "~/libs/hooks/hooks.js";
 import { socketClient } from "~/libs/modules/socket/socket.js";
-import { type MeetingSummaryActionItemsResponseDto } from "~/modules/meeting-details/meeting-details.js";
+import {
+	type MeetingStatusDto,
+	type MeetingSummaryActionItemsResponseDto,
+} from "~/modules/meeting-details/meeting-details.js";
 import { type MeetingTranscriptionResponseDto } from "~/modules/transcription/transcription.js";
 
 type MeetingSocketParameters = {
 	meetingId: number;
 	meetingStatus: string;
+	onStatusUpdate: (data: MeetingStatusDto) => void;
 	onSummaryActionItemsUpdate: (
 		data: MeetingSummaryActionItemsResponseDto,
 	) => void;
@@ -20,6 +24,7 @@ type MeetingSocketParameters = {
 const useMeetingSocket = ({
 	meetingId,
 	meetingStatus,
+	onStatusUpdate,
 	onSummaryActionItemsUpdate,
 	onTranscriptUpdate,
 }: MeetingSocketParameters): void => {
@@ -36,6 +41,15 @@ const useMeetingSocket = ({
 
 		socket.on(SocketEvent.UPDATE_MEETING_DETAILS, onSummaryActionItemsUpdate);
 		socket.on(SocketEvent.TRANSCRIBE, onTranscriptUpdate);
+
+		const handleStatusUpdate = (payload: MeetingStatusDto): void => {
+			if (payload.meetingId === meetingId) {
+				onStatusUpdate(payload);
+			}
+		};
+
+		socket.on(SocketEvent.UPDATE_MEETING_STATUS, handleStatusUpdate);
+
 		socket.emit(SocketEvent.JOIN_ROOM, String(meetingId));
 
 		return (): void => {
@@ -45,6 +59,7 @@ const useMeetingSocket = ({
 				SocketEvent.UPDATE_MEETING_DETAILS,
 				onSummaryActionItemsUpdate,
 			);
+			socket.off(SocketEvent.UPDATE_MEETING_STATUS, handleStatusUpdate);
 		};
 	}, [
 		meetingId,

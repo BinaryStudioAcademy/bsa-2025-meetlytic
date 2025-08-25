@@ -16,7 +16,7 @@
 .meeting-details__title {
 	display: flex;
 	gap: 10px;
-	align-items: baseline;
+	align-items: center;
 	font-size: 24px;
 	font-weight: 700;
 	color: var(--color-text-1);

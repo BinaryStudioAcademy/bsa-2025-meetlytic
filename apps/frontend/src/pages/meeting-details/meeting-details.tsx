@@ -4,6 +4,7 @@ import {
 	Loader,
 	Markdown,
 	MeetingPdf,
+	MeetingStatusBadge,
 	Navigate,
 	PDFDownloadLink,
 	PlayerTrack,
@@ -37,6 +38,7 @@ import { rehypeSanitize, remarkGfm } from "~/libs/plugins/plugins.js";
 import { type MeetingPdfProperties } from "~/libs/types/types.js";
 import {
 	actions as meetingDetailsActions,
+	type MeetingStatusDto,
 	type MeetingSummaryActionItemsResponseDto,
 	sanitizeDefaultSchema,
 } from "~/modules/meeting-details/meeting-details.js";
@@ -69,6 +71,19 @@ const MeetingDetails: React.FC = () => {
 		setIsStopRecordingInProgress(true);
 	}, [dispatch, id]);
 
+	const handleMeetingStatusUpdate = useCallback(
+		({ meetingId: incomingId, status }: MeetingStatusDto) => {
+			if (Number(id) !== incomingId) {
+				return;
+			}
+
+			dispatch(
+				meetingDetailsActions.setStatus({ meetingId: incomingId, status }),
+			);
+		},
+		[dispatch, id],
+	);
+
 	const handleSummaryActionItemsUpdate = useCallback(() => {
 		const sharedToken = searchParameters.get("token");
 
@@ -79,6 +94,11 @@ const MeetingDetails: React.FC = () => {
 			}),
 		);
 	}, [dispatch, id, searchParameters]);
+
+	useMeetingSocket<MeetingStatusDto>({
+		callback: handleMeetingStatusUpdate,
+		event: SocketEvent.UPDATE_MEETING_STATUS,
+	});
 
 	useMeetingSocket<MeetingSummaryActionItemsResponseDto>({
 		callback: handleSummaryActionItemsUpdate,
@@ -134,8 +154,15 @@ const MeetingDetails: React.FC = () => {
 			<div className={styles["meeting-details"]}>
 				<div className={styles["meeting-details__header"]}>
 					<h1 className={styles["meeting-details__title"]}>
-						Meeting #{meeting.id} |{" "}
-						{formatDate(new Date(meeting.createdAt), "D MMMM hA")}
+						<span>Meeting #{meeting.id}</span>
+						<span className={styles["meeting-details__date"]}>
+							{formatDate(new Date(meeting.createdAt), "D MMMM hA")}
+						</span>
+
+						<MeetingStatusBadge
+							className={styles["meeting-details__status"] ?? ""}
+							status={meeting.status}
+						/>
 					</h1>
 					<div className={styles["meeting-details__actions"]}>
 						{user && (

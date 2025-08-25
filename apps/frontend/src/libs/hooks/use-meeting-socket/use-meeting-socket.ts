@@ -37,6 +37,7 @@ const useMeetingSocket = <T>({
 		}
 
 		socket.on(event, callback);
+
 		socket.emit(SocketEvent.JOIN_ROOM, String(meetingId));
 
 		return (): void => {

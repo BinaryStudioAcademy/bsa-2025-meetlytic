@@ -184,6 +184,11 @@ class BaseZoomBot {
 				SocketEvent.JOIN_ROOM,
 				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
+			this.logger.info(ZoomBotMessage.GETTING_PUBLIC_URL);
+			this.socketClient.emit(
+				SocketEvent.GET_PUBLIC_URL,
+				String(this.config.ENV.ZOOM.MEETING_ID),
+			);
 		});
 
 		this.socketClient.on(SocketEvent.DISCONNECT, (reason: string) => {
@@ -194,7 +199,7 @@ class BaseZoomBot {
 			const meetingId = String(this.config.ENV.ZOOM.MEETING_ID);
 
 			this.logger.info(
-				`Stopping recording of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
+				`${ZoomBotMessage.STOPPING_RECORDING} ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 			);
 			this.audioRecorder.stop();
 			await this.audioRecorder.stopFullMeetingRecording();
@@ -218,7 +223,7 @@ class BaseZoomBot {
 			SocketEvent.GENERATE_SUMMARY_ACTION_ITEMS,
 			async (transcript: string) => {
 				this.logger.info(
-					`Generating summary/action items of the meeting ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
+					`${ZoomBotMessage.GENERATING_SUMMARY_ACTION_ITEMS} ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 				);
 				const [actionItems, summary] = await Promise.all([
 					this.openAI.createActionItems(transcript),
@@ -233,8 +238,17 @@ class BaseZoomBot {
 				this.socketClient.disconnect();
 			},
 		);
-	}
 
+		this.socketClient.on(
+			SocketEvent.GET_PUBLIC_URL,
+			async (publicUrl: string) => {
+				this.logger.info(
+					`${ZoomBotMessage.SENDING_PUBLIC_URL} ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
+				);
+				await this.sendPublicUrlToChat(publicUrl);
+			},
+		);
+	}
 	private async joinMeeting(): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
@@ -264,6 +278,7 @@ class BaseZoomBot {
 		await this.enterMeetingPassword();
 		await this.clickHelper(ZoomUILabel.JOIN);
 	}
+
 	private async leaveMeeting(): Promise<void> {
 		await this.clickHelper(ZoomUILabel.LEAVE);
 		await this.clickHelper(ZoomUILabel.LEAVE);
@@ -277,10 +292,30 @@ class BaseZoomBot {
 			);
 		}
 	}
+	private async sendPublicUrlToChat(publicUrl: string): Promise<void> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
+		}
+
+		try {
+			await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
+			await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
+			await delay(Timeout.FIVE_SECONDS);
+			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
+			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
+			await delay(Timeout.FIVE_SECONDS);
+			await this.page.keyboard.type(
+				`${ZoomBotMessage.BOT_CHAT_MESSAGE} ${publicUrl}`,
+			);
+			await this.page.keyboard.press(KeyboardKey.ENTER);
+		} catch (error) {
+			this.logger.error(
+				`${ZoomBotMessage.FAILED_TO_SEND_MESSAGE_TO_CHAT} ${error instanceof Error ? error.message : String(error)}`,
+			);
+		}
+	}
 
 	public async run(): Promise<void> {
-		this.initSocket();
-
 		try {
 			this.browser = await puppeteer.launch(this.config.getLaunchOptions());
 			this.page = await this.browser.newPage();
@@ -289,7 +324,6 @@ class BaseZoomBot {
 			this.logger.info(
 				`${ZoomBotMessage.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
 			);
-
 			await this.page.goto(
 				this.convertToZoomWebClientUrl(this.config.ENV.ZOOM.MEETING_LINK),
 				{
@@ -297,16 +331,15 @@ class BaseZoomBot {
 					waitUntil: "networkidle2",
 				},
 			);
-
 			await this.handleInitialPopups();
 			await this.joinMeeting();
 			this.logger.info(ZoomBotMessage.JOINED_MEETING);
+			this.initSocket();
 			this.audioRecorder.start();
 			this.audioRecorder.startFullMeetingRecording(
 				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
 			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
-			await delay(Timeout.ONE_SECOND);
 		} catch (error) {
 			this.logger.error(
 				`${ZoomBotMessage.FAILED_TO_JOIN_MEETING} ${error instanceof Error ? error.message : String(error)}`,

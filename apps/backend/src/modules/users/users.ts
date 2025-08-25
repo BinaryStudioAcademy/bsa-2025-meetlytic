@@ -16,7 +16,6 @@ const userRepository = new UserRepository(UserModel);
 const userDetailsRepository = new UserDetailsRepository(UserDetailsModel);
 const fileService = new FileService({
 	fileRepository,
-	userDetailsModel: UserDetailsModel,
 });
 
 const userService = new UserService({

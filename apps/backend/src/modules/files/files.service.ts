@@ -1,6 +1,5 @@
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service } from "~/libs/types/types.js";
-import { type UserDetailsModel } from "~/modules/users/user-details.model.js";
 
 import { FileEntity } from "./files.entity.js";
 import { type FileRepository } from "./files.repository.js";
@@ -15,7 +14,6 @@ import {
 
 type Constructor = {
 	fileRepository: FileRepository;
-	userDetailsModel: typeof UserDetailsModel;
 };
 
 class FileService implements Service<FileResponseDto> {

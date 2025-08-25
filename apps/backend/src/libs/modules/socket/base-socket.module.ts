@@ -114,7 +114,7 @@ class BaseSocketService implements SocketService {
 
 		socket.on(SocketEvent.RECORDING, async (meetingId: string) => {
 			try {
-				this.logger.info(SocketMessage.JOINING_MEETING_RECEIVED);
+				this.logger.info(SocketMessage.RECORDING_RECEIVED);
 				const meeting = await meetingService.setStatus(
 					Number(meetingId),
 					MeetingStatus.RECORDING,
@@ -160,11 +160,24 @@ class BaseSocketService implements SocketService {
 				);
 				await meetingService.update(Number(meetingId), summaryActionItems);
 				this.logger.info(`Ending meeting ${meetingId}`);
-				await meetingService.endMeeting(Number(meetingId));
+				const meeting = await meetingService.endMeeting(Number(meetingId));
+
 				this.emitTo({
 					event: SocketEvent.UPDATE_MEETING_DETAILS,
 					namespace: SocketNamespace.USERS,
 					parameters: [payload],
+					room: String(payload.meetingId),
+				});
+
+				this.emitTo({
+					event: SocketEvent.UPDATE_MEETING_STATUS,
+					namespace: SocketNamespace.USERS,
+					parameters: [
+						{
+							meetingId: meeting.id,
+							status: meeting.status,
+						},
+					],
 					room: String(payload.meetingId),
 				});
 			},

@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.19.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.18.0...v1.19.0) (2025-08-25)
+
+
+### Features
+
+* bot sends message to the chat ml-144 ([#261](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/261)) ([48c1e5b](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/48c1e5bf7bc0348a47f6ba92fe19774154791fb0))
+
+
+### Bug Fixes
+
+* prevent react-pdf error when switching meeting cards ml-281 ([#294](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/294)) ([a30d10a](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/a30d10a8db7de3c1142eb218c8b7b8c055410e67))
+* prevent stale meeting error by clearing state on unmount ml-274 ([#290](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/290)) ([9657c1d](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/9657c1d9303c370c019fae6653a5dc849ee8952b))
+
 ## [1.18.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.17.0...v1.18.0) (2025-08-24)
 
 

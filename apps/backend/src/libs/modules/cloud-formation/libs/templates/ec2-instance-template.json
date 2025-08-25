@@ -62,6 +62,9 @@
 						"Ref": "MeetlyticSecurityGroup"
 					}
 				],
+				"CreditSpecification": {
+					"CPUCredits": "unlimited"
+				},
 				"UserData": {
 					"Fn::Base64": {
 						"Fn::Sub": [

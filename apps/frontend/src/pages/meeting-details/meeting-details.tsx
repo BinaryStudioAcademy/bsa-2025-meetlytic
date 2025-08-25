@@ -163,7 +163,7 @@ const MeetingDetails: React.FC = () => {
 								<span className="visually-hidden">Share meeting</span>
 							</button>
 						)}
-						{meeting.status === MeetingStatus.STARTED && user && (
+						{meeting.status !== MeetingStatus.ENDED && user && (
 							<Button
 								isDisabled={isStopRecordingInProgress}
 								label={

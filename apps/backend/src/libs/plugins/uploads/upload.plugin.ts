@@ -10,7 +10,7 @@ import {
 import { UploadError } from "~/libs/exceptions/exceptions.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 
-import { UploadErrorMessage } from "../../enums/enums.js";
+import { FastifyHook, UploadErrorMessage } from "../../enums/enums.js";
 import { type UploadPluginOptions } from "./libs/types/types.js";
 
 const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
@@ -26,7 +26,7 @@ const rawUploadPlugin: FastifyPluginCallback<UploadPluginOptions> = (
 
 	fastify.decorateRequest("uploadedFile", null);
 
-	fastify.addHook("preValidation", async (request) => {
+	fastify.addHook(FastifyHook.PRE_VALIDATION, async (request) => {
 		if (!request.isMultipart()) {
 			return;
 		}

@@ -274,9 +274,9 @@ class BaseZoomBot {
 
 		await this.clickHelper(ZoomUILabel.MUTE_LOGIN);
 		await this.clickHelper(ZoomUILabel.STOP_VIDEO_LOGIN);
-		await this.clickHelper(ZoomUILabel.JOIN, Timeout.FIFTEEN_SECONDS);
+		await this.clickHelper(ZoomUILabel.JOIN);
 		await this.enterMeetingPassword();
-		await this.clickHelper(ZoomUILabel.JOIN, Timeout.TEN_SECONDS);
+		await this.clickHelper(ZoomUILabel.JOIN);
 	}
 
 	private async leaveMeeting(): Promise<void> {
@@ -298,11 +298,11 @@ class BaseZoomBot {
 		}
 
 		try {
-			await this.clickHelper(ZoomUILabel.CHAT_BUTTON, Timeout.TEN_SECONDS);
-			await this.clickHelper(ZoomUILabel.CHAT_BUTTON, Timeout.TEN_SECONDS);
+			await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
+			await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
 			await delay(Timeout.FIVE_SECONDS);
-			await this.clickHelper(ZoomUILabel.CHAT_INPUT, Timeout.TEN_SECONDS);
-			await this.clickHelper(ZoomUILabel.CHAT_INPUT, Timeout.TEN_SECONDS);
+			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
+			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
 			await delay(Timeout.FIVE_SECONDS);
 			await this.page.keyboard.type(
 				`${ZoomBotMessage.BOT_CHAT_MESSAGE} ${publicUrl}`,

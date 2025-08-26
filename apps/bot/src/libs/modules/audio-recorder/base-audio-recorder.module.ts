@@ -216,7 +216,7 @@ class BaseAudioRecorder implements AudioRecorder {
 			"1",
 			"-strftime",
 			"1",
-			"-c",
+			"-acodec",
 			"copy",
 		];
 

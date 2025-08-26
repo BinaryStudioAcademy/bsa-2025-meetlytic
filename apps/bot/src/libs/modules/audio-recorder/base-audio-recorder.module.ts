@@ -200,6 +200,8 @@ class BaseAudioRecorder implements AudioRecorder {
 
 		const ffmpegArguments = [
 			"-hide_banner",
+			"-loglevel",
+			"verbose",
 			"-fflags",
 			"+genpts+igndts",
 			"-use_wallclock_as_timestamps",
@@ -234,12 +236,16 @@ class BaseAudioRecorder implements AudioRecorder {
 		this.currentFfmpegProcess = ffmpeg;
 
 		ffmpeg.stderr.on(AudioRecorderEvent.DATA, (data) => {
-			const lines = String(data)
-				.trim()
-				.split("\n")
-				.map((l) => l.trim());
+			const lines = String(data).trim().split("\n");
 
-			for (const line of lines) {
+			for (const raw of lines) {
+				const line = raw.trim();
+
+				if (!line) {
+					continue;
+				}
+
+				this.logger.debug(`[FFmpeg:Chunk] ${line}`);
 				this.logVolume(line);
 			}
 		});
@@ -272,7 +278,7 @@ class BaseAudioRecorder implements AudioRecorder {
 		const ffmpegArguments = [
 			"-hide_banner",
 			"-loglevel",
-			"info",
+			"verbose",
 			"-y",
 			"-fflags",
 			"+genpts+igndts",
@@ -316,7 +322,7 @@ class BaseAudioRecorder implements AudioRecorder {
 					continue;
 				}
 
-				this.logger.info(`[FFMPEG][full] ${line}`);
+				this.logger.debug(`[FFmpeg:Full] ${line}`);
 			}
 		});
 

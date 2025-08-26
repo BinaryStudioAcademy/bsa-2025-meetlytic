@@ -5,7 +5,7 @@ const CREATE_MEETING_FORM_DEFAULT_VALUES: MeetingCreateRequestDto = {
 	host: MeetingHost.ZOOM,
 	meetingLink: "",
 	meetingPassword: "",
-	title: null,
+	title: "",
 };
 
 export { CREATE_MEETING_FORM_DEFAULT_VALUES };

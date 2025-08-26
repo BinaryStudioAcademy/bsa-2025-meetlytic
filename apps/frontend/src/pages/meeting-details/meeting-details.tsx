@@ -119,27 +119,28 @@ const MeetingDetails: React.FC = () => {
 		.map((item) => `• ${item.chunkText}`)
 		.join("\n");
 
+	const title = meeting.title ?? `Meeting #${String(meeting.id)}`;
+
 	const meetingPdfProperties: MeetingPdfProperties = {
 		actionItems: meeting.actionItems ?? "",
 		createdAt: meeting.createdAt,
 		summary: meeting.summary ?? "",
-		title: meeting.title ?? `Meeting #${String(meeting.id)}`,
+		title,
 		transcription,
 	};
 
 	const isMeetingEnded = meeting.status === MeetingStatus.ENDED;
 
 	const pdfFileName = meeting.title
-		? `meeting-${meeting.title.replaceAll(/[^a-zA-Z0-9-]/g, "_").toLowerCase()}.pdf`
-		: `meeting-${meeting.id.toString()}.pdf`;
+		? `meeting-${title.replaceAll(/[^a-zA-Z0-9-]/g, "_").toLowerCase()}.pdf`
+		: `meeting-${String(meeting.id)}.pdf`;
 
 	return (
 		<>
 			<div className={styles["meeting-details"]}>
 				<div className={styles["meeting-details__header"]}>
 					<h1 className={styles["meeting-details__title"]}>
-						{meeting.title ?? `Meeting #${String(meeting.id)}`} |{" "}
-						{formatDate(new Date(meeting.createdAt), "D MMMM hA")}
+						{title} | {formatDate(new Date(meeting.createdAt), "D MMMM hA")}
 					</h1>
 					<div className={styles["meeting-details__actions"]}>
 						{user && (

@@ -62,22 +62,22 @@
 	display: block;
 }
 
-@media (width <= 480px) {
-	.meetings__header {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		margin-bottom: 30px;
-	}
-}
-
-@media (width <= 768px) {
+@media (width <=768px) {
 	.desktop {
 		display: none;
 	}
 
 	.mobile {
 		display: block;
+	}
+}
+
+@media (width <=576px) {
+	.meetings__header {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 30px;
 	}
 }

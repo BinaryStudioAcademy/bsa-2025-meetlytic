@@ -1,5 +1,6 @@
 import { Loader, SearchBar } from "~/libs/components/components.js";
 import { DataStatus, MeetingStatus, SocketEvent } from "~/libs/enums/enums.js";
+import { getValidClassNames } from "~/libs/helpers/get-valid-class-names.helper.js";
 import {
 	useAppSelector,
 	useAutoScroll,
@@ -44,8 +45,15 @@ const TranscriptionPanel: React.FC = () => {
 			.join(" ");
 	}, [transcriptions.items]);
 
+	const isMeetingEnded = meeting?.status === MeetingStatus.ENDED;
+
 	return (
-		<div className={styles["meeting-details__transcription-panel"]}>
+		<div
+			className={getValidClassNames(
+				styles["meeting-details__transcription-panel"],
+				isMeetingEnded && styles["meeting-ended"],
+			)}
+		>
 			<div className={styles["panel-header"]}>
 				<div className={styles["panel-header__text"]}>TRANSCRIPT</div>
 				<SearchBar onSearch={handleSearch} />

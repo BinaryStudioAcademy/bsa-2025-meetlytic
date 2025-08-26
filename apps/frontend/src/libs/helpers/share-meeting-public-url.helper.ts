@@ -1,16 +1,12 @@
 import { NotificationMessage } from "~/libs/enums/enums.js";
-import { config } from "~/libs/modules/config/config.js";
 import { notification } from "~/libs/modules/notifications/notifications.js";
 import { meetingDetailsApi } from "~/modules/meeting-details/meeting-details.js";
 
 const shareMeetingPublicUrl = async (meetingId: number): Promise<void> => {
 	try {
 		const { publicUrl } = await meetingDetailsApi.getPublicShareUrl(meetingId);
-		const host = config.ENV.APP.HOST;
-		const fullUrl = `${host}${publicUrl}`;
-
 		const textarea = document.createElement("textarea");
-		textarea.value = fullUrl;
+		textarea.value = publicUrl;
 		textarea.style.position = "absolute";
 		textarea.style.left = "-9999px";
 		textarea.style.opacity = "0";

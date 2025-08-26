@@ -12,7 +12,7 @@
 
 .meetings__header {
 	display: flex;
-	gap: 50px;
+	gap: 15px;
 	justify-content: space-between;
 	padding: 20px 0;
 	margin-bottom: 50px;
@@ -41,6 +41,7 @@
 .meetings__header-name {
 	font-size: clamp(14px, 1.5vw, 16px);
 	font-weight: 600;
+	word-break: break-all;
 }
 
 .meetings__header-library {
@@ -62,22 +63,22 @@
 	display: block;
 }
 
-@media (width <= 480px) {
-	.meetings__header {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		margin-bottom: 30px;
-	}
-}
-
-@media (width <= 768px) {
+@media (width <=768px) {
 	.desktop {
 		display: none;
 	}
 
 	.mobile {
 		display: block;
+	}
+}
+
+@media (width <=576px) {
+	.meetings__header {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 30px;
 	}
 }

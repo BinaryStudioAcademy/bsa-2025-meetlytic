@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.20.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.19.0...v1.20.0) (2025-08-26)
+
+
+### Features
+
+* auto scrolling on meeting detail page creates navigation issue after recording ml-287 ([#299](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/299)) ([b481a86](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/b481a862137dc75b6bf878301addd4a98bae6e75))
+
+
+### Bug Fixes
+
+* **backend:** add sort logic by created at sorted order desc ml-303 ([#315](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/315)) ([7ea688e](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/7ea688ed955b38b7c2057796ef8b72be77da96fe))
+* **bot:** add log for ffmpeg and cpu-memory ml-305 ([#323](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/323)) ([f52b3e3](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/f52b3e327558cbeeb4174ea3e2ffb0b8ab49a83b))
+
 ## [1.19.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.18.0...v1.19.0) (2025-08-25)
 
 

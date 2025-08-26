@@ -3,6 +3,7 @@ import fp from "fastify-plugin";
 
 import { ExceptionMessage, ServerErrorType } from "~/libs/enums/enums.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
+import { logger } from "~/libs/modules/logger/logger.js";
 
 import { matchRoute } from "./libs/match-route.js";
 
@@ -16,6 +17,17 @@ const methodGuardCallback: FastifyPluginCallback<Options> = (
 	done,
 ) => {
 	fastify.addHook("onRequest", (request, response, next) => {
+		const isWebSocket =
+			request.headers.upgrade &&
+			request.headers.upgrade.toLowerCase() === "websocket";
+		logger.info(isWebSocket as string);
+		const rawUrl = request.raw.url ?? "";
+		logger.info(request.raw.url as string);
+
+		if (rawUrl.startsWith("/socket.io")) {
+			next();
+		}
+
 		const { allRoutes } = options;
 		const method = request.method.toUpperCase();
 		const [url] = response.request.url.split("?");

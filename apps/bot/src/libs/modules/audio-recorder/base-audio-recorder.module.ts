@@ -218,6 +218,10 @@ class BaseAudioRecorder implements AudioRecorder {
 			"1",
 			"-acodec",
 			"copy",
+			"-ar",
+			"16000",
+			"-ac",
+			"1",
 		];
 
 		ffmpegArguments.push(chunkOutputPattern);

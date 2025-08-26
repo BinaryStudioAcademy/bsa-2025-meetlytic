@@ -1,1 +1,1 @@
-export { MeetingsApiPath } from "@meetlytic/shared";
+export { MeetingErrorMessage, MeetingsApiPath } from "@meetlytic/shared";

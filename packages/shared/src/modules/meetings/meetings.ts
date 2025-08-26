@@ -23,6 +23,7 @@ export {
 } from "./libs/types/types.js";
 export {
 	meetingCreate as meetingCreateValidationSchema,
+	meetingIdRouteParameter as meetingIdRouteParameterValidationSchema,
 	meetingId as meetingIdValidationSchema,
 	meetingUpdate as meetingUpdateValidationSchema,
 	searchInputValidationSchema,

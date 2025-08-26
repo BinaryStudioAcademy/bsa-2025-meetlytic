@@ -1,6 +1,12 @@
 const MeetingValidationMessage = {
 	HOST_REQUIRE: "Host is required.",
 	HOST_WRONG: "This host isn't allowed.",
+	MMETING_ID_MUST_BE_INTEGER: "Meeting ID must be an integer.",
+	MMETING_ID_MUST_BE_NUMBER:
+		"Invalid meeting ID format. Please enter a valid number.",
+	MMETING_ID_MUST_BE_POSITIVE: "Meeting ID must be a positive number.",
+	MMETING_ID_TOO_LARGE:
+		"The meeting ID entered is invalid. Please check the ID and try again.",
 	OWNER_REQUIRE: "Owner ID must be a positive number.",
 	STATUS_WRONG: "This status doesn't exist",
 	ZOOM_LINK_INVALID: "Zoom meeting link is invalid",

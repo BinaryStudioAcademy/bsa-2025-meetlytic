@@ -1,6 +1,8 @@
 import { LandingBgRingType, LandingBgSide } from "~/libs/enums/enums.js";
 import {
 	LandingBgInit,
+	LandingBgMobileRingSize,
+	LandingBgMobileRingSpeedScale,
 	LandingBgNumeric,
 	LandingBgPhysics,
 	LandingBgRingMinSpeed,
@@ -39,28 +41,10 @@ const initRings = ({
 	const containerWidth = root.clientWidth;
 	const isMobile = containerWidth <= LandingBgNumeric.MOBILE_BREAKPOINT;
 
-	const scaledRingSize = isMobile
-		? {
-				[LandingBgRingType.LARGE]:
-					LandingBgRingSize.LARGE / LandingBgInit.MOBILE_RING_SIZE_DIVISOR,
-				[LandingBgRingType.MIDDLE]:
-					LandingBgRingSize.MIDDLE / LandingBgInit.MOBILE_RING_SIZE_DIVISOR,
-				[LandingBgRingType.SMALL]:
-					LandingBgRingSize.SMALL / LandingBgInit.MOBILE_RING_SIZE_DIVISOR,
-			}
-		: LandingBgRingSize;
-
-	const MOBILE_SPEED_SCALE_MULTIPLIER = 1.5;
+	const scaledRingSize = isMobile ? LandingBgMobileRingSize : LandingBgRingSize;
 
 	const scaledSpeedScale = isMobile
-		? {
-				[LandingBgRingType.LARGE]:
-					LandingBgRingSpeedScale.LARGE * MOBILE_SPEED_SCALE_MULTIPLIER,
-				[LandingBgRingType.MIDDLE]:
-					LandingBgRingSpeedScale.MIDDLE * MOBILE_SPEED_SCALE_MULTIPLIER,
-				[LandingBgRingType.SMALL]:
-					LandingBgRingSpeedScale.SMALL * MOBILE_SPEED_SCALE_MULTIPLIER,
-			}
+		? LandingBgMobileRingSpeedScale
 		: LandingBgRingSpeedScale;
 
 	const seededInside: Record<RingType, boolean> = {

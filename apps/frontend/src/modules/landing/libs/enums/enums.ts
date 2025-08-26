@@ -1,3 +1,9 @@
+const LandingBgMobileRingSpeedScale = {
+	LARGE: 0.825,
+	MIDDLE: 1.5,
+	SMALL: 2,
+} as const;
+
 const LandingBgRingMinSpeed = {
 	LARGE: 10,
 	MIDDLE: 16,
@@ -8,6 +14,12 @@ const LandingBgRingSize = {
 	LARGE: 959,
 	MIDDLE: 293,
 	SMALL: 166,
+} as const;
+
+const LandingBgMobileRingSize = {
+	LARGE: 320,
+	MIDDLE: 98,
+	SMALL: 55,
 } as const;
 
 const LandingBgRingSpeedScale = {
@@ -32,7 +44,6 @@ const LandingBgInit = {
 	INITIAL_SPEED_HALF: 4,
 	INITIAL_SPEED_RANGE: 8,
 	INITIAL_VIEW_AMOUNT: 0,
-	MOBILE_RING_SIZE_DIVISOR: 3,
 	RINGS_PER_SIZE: 3,
 } as const;
 
@@ -51,6 +62,8 @@ const LandingBgNumeric = {
 export {
 	LandingBgCollision,
 	LandingBgInit,
+	LandingBgMobileRingSize,
+	LandingBgMobileRingSpeedScale,
 	LandingBgNumeric,
 	LandingBgPhysics,
 	LandingBgRingMinSpeed,

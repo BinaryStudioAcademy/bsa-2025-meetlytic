@@ -26,7 +26,7 @@ async function down(knex: Knex): Promise<void> {
 				MeetingStatus.JOINING,
 				MeetingStatus.RECORDING,
 			])
-			.update({ [ColumnName.STATUS]: MeetingStatus.STARTED });
+			.update({ [ColumnName.STATUS]: MeetingStatus.ENDED });
 
 		const temporary = `${ENUM_NAME}_old`;
 

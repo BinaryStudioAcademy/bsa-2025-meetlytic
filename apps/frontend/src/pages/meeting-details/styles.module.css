@@ -178,7 +178,7 @@
 	}
 }
 
-@media (width <=480px) {
+@media (width <= 576px) {
 	.meeting-details__actions {
 		position: relative;
 		flex-direction: column;

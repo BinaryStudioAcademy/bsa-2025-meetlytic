@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.16.0...frontend-v1.17.0) (2025-08-26)
+
+
+### Features
+
+* auto scrolling on meeting detail page creates navigation issue after recording ml-287 ([#299](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/299)) ([b481a86](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/b481a862137dc75b6bf878301addd4a98bae6e75))
+
 ## [1.16.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.15.0...frontend-v1.16.0) (2025-08-25)
 
 

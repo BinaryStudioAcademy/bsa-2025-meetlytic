@@ -13,6 +13,7 @@
 .meetings__header {
 	display: flex;
 	gap: 15px;
+	align-items: center;
 	justify-content: space-between;
 	padding: 20px 0;
 	margin-bottom: 50px;
@@ -80,5 +81,12 @@
 		align-items: center;
 		justify-content: center;
 		margin-bottom: 30px;
+	}
+
+	.meetings__avatar-wrapper {
+		grid-template-columns: 1fr;
+		gap: 10px;
+		justify-items: center;
+		text-align: center;
 	}
 }

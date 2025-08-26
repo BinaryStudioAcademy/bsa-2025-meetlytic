@@ -59,28 +59,12 @@ class BaseSocketService implements SocketService {
 			}
 		});
 
-		socket.on(SocketEvent.FAILED_TO_JOIN_MEETING, async (meetingId) => {
-			try {
-				this.logger.info(SocketMessage.FAILED_TO_JOIN_MEETING_RECEIVED);
-				const meeting = await meetingService.setStatus(
-					Number(meetingId),
-					MeetingStatus.FAILED,
-				);
-				const payload = {
-					meetingId: meeting.id,
-					status: meeting.status,
-				};
-				this.emitTo({
-					event: SocketEvent.UPDATE_MEETING_STATUS,
-					namespace: SocketNamespace.USERS,
-					parameters: [payload],
-					room: String(payload.meetingId),
-				});
-			} catch (error) {
-				this.logger.error(
-					`${SocketMessage.FAILED_TO_JOIN_MEETING_ERROR} ${String(error)}`,
-				);
-			}
+		socket.on(SocketEvent.FAILED_TO_JOIN_MEETING, async (meetingId: string) => {
+			await this.setMeetingStatus(
+				meetingId,
+				MeetingStatus.FAILED,
+				SocketMessage.FAILED_TO_JOIN_MEETING_RECEIVED,
+			);
 		});
 
 		socket.on(SocketEvent.JOIN_ROOM, async (meetingId: string) => {
@@ -89,51 +73,19 @@ class BaseSocketService implements SocketService {
 		});
 
 		socket.on(SocketEvent.JOINING_TO_MEETING, async (meetingId: string) => {
-			try {
-				this.logger.info(SocketMessage.JOINING_MEETING_RECEIVED);
-				const meeting = await meetingService.setStatus(
-					Number(meetingId),
-					MeetingStatus.JOINING,
-				);
-				const payload = {
-					meetingId: meeting.id,
-					status: meeting.status,
-				};
-				this.emitTo({
-					event: SocketEvent.UPDATE_MEETING_STATUS,
-					namespace: SocketNamespace.USERS,
-					parameters: [payload],
-					room: String(payload.meetingId),
-				});
-			} catch (error) {
-				this.logger.error(
-					`${SocketMessage.JOINING_TO_MEETING_ERROR} ${String(error)}`,
-				);
-			}
+			await this.setMeetingStatus(
+				meetingId,
+				MeetingStatus.JOINING,
+				SocketMessage.JOINING_MEETING_RECEIVED,
+			);
 		});
 
 		socket.on(SocketEvent.RECORDING, async (meetingId: string) => {
-			try {
-				this.logger.info(SocketMessage.RECORDING_RECEIVED);
-				const meeting = await meetingService.setStatus(
-					Number(meetingId),
-					MeetingStatus.RECORDING,
-				);
-				const payload = {
-					meetingId: meeting.id,
-					status: meeting.status,
-				};
-				this.emitTo({
-					event: SocketEvent.UPDATE_MEETING_STATUS,
-					namespace: SocketNamespace.USERS,
-					parameters: [payload],
-					room: String(payload.meetingId),
-				});
-			} catch (error) {
-				this.logger.error(
-					`${SocketMessage.JOINING_TO_MEETING_ERROR} ${String(error)}`,
-				);
-			}
+			await this.setMeetingStatus(
+				meetingId,
+				MeetingStatus.RECORDING,
+				SocketMessage.RECORDING_RECEIVED,
+			);
 		});
 
 		socket.on(SocketEvent.GET_PUBLIC_URL, async (meetingId: string) => {
@@ -171,7 +123,6 @@ class BaseSocketService implements SocketService {
 				);
 				await meetingService.update(Number(meetingId), summaryActionItems);
 				this.logger.info(`Ending meeting ${meetingId}`);
-				const meeting = await meetingService.endMeeting(Number(meetingId));
 
 				this.emitTo({
 					event: SocketEvent.UPDATE_MEETING_DETAILS,
@@ -180,17 +131,11 @@ class BaseSocketService implements SocketService {
 					room: String(payload.meetingId),
 				});
 
-				this.emitTo({
-					event: SocketEvent.UPDATE_MEETING_STATUS,
-					namespace: SocketNamespace.USERS,
-					parameters: [
-						{
-							meetingId: meeting.id,
-							status: meeting.status,
-						},
-					],
-					room: String(payload.meetingId),
-				});
+				await this.setMeetingStatus(
+					meetingId,
+					MeetingStatus.ENDED,
+					SocketMessage.ENDED_RECEIVED,
+				);
 			},
 		);
 
@@ -244,6 +189,34 @@ class BaseSocketService implements SocketService {
 		socket.on(SocketEvent.ERROR, (error) => {
 			this.logger.error(`${SocketMessage.CLIENT_ERROR} ${String(error)}`);
 		});
+	}
+	private async setMeetingStatus(
+		meetingId: number | string,
+		status: ValueOf<typeof MeetingStatus>,
+		log: string,
+	): Promise<void> {
+		const id = Number(meetingId);
+		this.logger.info(log);
+
+		try {
+			const meeting = await meetingService.setStatus(id, status);
+
+			const payload = {
+				meetingId: meeting.id,
+				status: meeting.status,
+			};
+
+			this.emitTo({
+				event: SocketEvent.UPDATE_MEETING_STATUS,
+				namespace: SocketNamespace.USERS,
+				parameters: [payload],
+				room: String(meeting.id),
+			});
+		} catch (error) {
+			this.logger.error(
+				`[STATUS ERROR] meeting ${String(id)} -> ${status}: ${String(error)}`,
+			);
+		}
 	}
 
 	public emitTo<K extends keyof ServerToClientEvents>(

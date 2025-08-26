@@ -219,24 +219,6 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return isDeleted;
 	}
 
-	public async endMeeting(id: number): Promise<MeetingDetailedResponseDto> {
-		const meeting = await this.meetingRepository.update(id, {
-			instanceId: null,
-			status: MeetingStatus.ENDED,
-		});
-
-		if (!meeting) {
-			throw new MeetingError({
-				message: MeetingErrorMessage.MEETING_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		void this.cloudFormation.delete(id);
-
-		return meeting.toDetailedObject();
-	}
-
 	public async find(id: number): Promise<MeetingDetailedResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
 
@@ -329,10 +311,12 @@ class MeetingService implements Service<MeetingResponseDto> {
 			status,
 		});
 
-		if (status === MeetingStatus.FAILED) {
+		if (status === MeetingStatus.FAILED || status === MeetingStatus.ENDED) {
 			meeting = await this.meetingRepository.update(id, {
 				instanceId: null,
 			});
+
+			void this.cloudFormation.delete(id);
 		}
 
 		if (!meeting) {

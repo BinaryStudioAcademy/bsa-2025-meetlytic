@@ -208,8 +208,6 @@ class BaseAudioRecorder implements AudioRecorder {
 			"pulse",
 			"-i",
 			"auto_null.monitor",
-			"-af",
-			"astats=metadata=1:reset=1",
 			"-f",
 			"segment",
 			"-segment_time",
@@ -218,13 +216,9 @@ class BaseAudioRecorder implements AudioRecorder {
 			"1",
 			"-strftime",
 			"1",
+			"-c",
+			"copy",
 		];
-
-		if (this.useMp3) {
-			ffmpegArguments.push("-acodec", "libmp3lame", "-b:a", "128k");
-		} else {
-			ffmpegArguments.push("-acodec", "pcm_s16le", "-ar", "16000", "-ac", "1");
-		}
 
 		ffmpegArguments.push(chunkOutputPattern);
 

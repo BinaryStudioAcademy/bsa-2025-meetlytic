@@ -52,6 +52,17 @@ const mapStatus = (status: ValueOf<typeof MeetingStatus>): StatusMeta => {
 	}
 };
 
+const statusToClassName: Record<ValueOf<typeof MeetingStatus>, string> = {
+	[MeetingStatus.ENDED]: styles["meeting-status-badge__indicator--check"] || "",
+	[MeetingStatus.FAILED]:
+		styles["meeting-status-badge__indicator--cross"] || "",
+	[MeetingStatus.JOINING]:
+		styles["meeting-status-badge__indicator--spinner"] || "",
+	[MeetingStatus.RECORDING]:
+		styles["meeting-status-badge__indicator--pulse"] || "",
+	[MeetingStatus.STARTED]: "",
+};
+
 const MeetingStatusBadge = ({
 	className,
 	status,
@@ -59,6 +70,7 @@ const MeetingStatusBadge = ({
 }: Properties): React.JSX.Element => {
 	const { label, title: defaultTitle, tone } = mapStatus(status);
 	const title = titleOverride ?? defaultTitle;
+	const indicatorClass = statusToClassName[status];
 
 	return (
 		<span
@@ -77,14 +89,7 @@ const MeetingStatusBadge = ({
 				aria-hidden="true"
 				className={getValidClassNames(
 					styles["meeting-status-badge__indicator"],
-					status === MeetingStatus.JOINING &&
-						styles["meeting-status-badge__indicator--spinner"],
-					status === MeetingStatus.RECORDING &&
-						styles["meeting-status-badge__indicator--pulse"],
-					status === MeetingStatus.FAILED &&
-						styles["meeting-status-badge__indicator--cross"],
-					status === MeetingStatus.ENDED &&
-						styles["meeting-status-badge__indicator--check"],
+					indicatorClass,
 				)}
 			/>
 			<span className={styles["meeting-status-badge__label"]}>{label}</span>

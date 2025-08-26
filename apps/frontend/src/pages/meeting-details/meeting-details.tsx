@@ -157,10 +157,7 @@ const MeetingDetails: React.FC = () => {
 							{formatDate(new Date(meeting.createdAt), "D MMMM hA")}
 						</span>
 
-						<MeetingStatusBadge
-							className={styles["meeting-details__status"] ?? ""}
-							status={meeting.status}
-						/>
+						<MeetingStatusBadge status={meeting.status} />
 					</h1>
 					<div className={styles["meeting-details__actions"]}>
 						{user && (

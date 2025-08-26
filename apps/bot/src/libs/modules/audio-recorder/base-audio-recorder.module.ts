@@ -40,7 +40,7 @@ class BaseAudioRecorder implements AudioRecorder {
 	private outputDir: string;
 	private s3: S3;
 	private socketClient: BaseSocketClient;
-	private useMp3 = true;
+	private useMp3 = false;
 	private VOLUME_RE = /mean[_ ]volume:\s*(-?\d+(?:\.\d+)?)\s*dB/i;
 
 	public constructor({

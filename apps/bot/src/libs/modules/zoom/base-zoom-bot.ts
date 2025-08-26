@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable sonarjs/unused-import */
+/* eslint-disable sonarjs/no-commented-code */
 import puppeteer, { type Browser, type Page } from "puppeteer";
 
 import { USER_AGENT } from "~/libs/constants/constants.js";
@@ -196,22 +199,22 @@ class BaseZoomBot {
 		});
 
 		this.socketClient.on(SocketEvent.STOP_RECORDING, async () => {
-			const meetingId = String(this.config.ENV.ZOOM.MEETING_ID);
+			//const meetingId = String(this.config.ENV.ZOOM.MEETING_ID);
 
 			this.logger.info(
 				`${ZoomBotMessage.STOPPING_RECORDING} ${String(this.config.ENV.ZOOM.MEETING_ID)}`,
 			);
 			this.audioRecorder.stop();
-			await this.audioRecorder.stopFullMeetingRecording();
+			// await this.audioRecorder.stopFullMeetingRecording();
 
-			const audioPrefix = this.config.ENV.S3.PREFIX_AUDIO;
-			const prefix = `${audioPrefix}/${meetingId}`;
-			const contentType = ContentType.AUDIO;
-			await this.audioRecorder.finalize({
-				contentType,
-				meetingId,
-				prefix,
-			});
+			// const audioPrefix = this.config.ENV.S3.PREFIX_AUDIO;
+			// const prefix = `${audioPrefix}/${meetingId}`;
+			// const contentType = ContentType.AUDIO;
+			// await this.audioRecorder.finalize({
+			// 	contentType,
+			// 	meetingId,
+			// 	prefix,
+			// });
 			await this.leaveMeeting();
 			this.socketClient.emit(
 				SocketEvent.RECORDING_STOPPED,

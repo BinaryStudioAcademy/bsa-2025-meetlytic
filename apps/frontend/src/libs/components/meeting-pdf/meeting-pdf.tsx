@@ -1,42 +1,38 @@
+import React from "react";
+
 import { Document, Page, Text, View } from "~/libs/components/components.js";
 import { formatDate } from "~/libs/helpers/helpers.js";
 import { type MeetingPdfProperties } from "~/libs/types/types.js";
 
-import { styles } from "./meeting-pdf.styles.js";
+import { styles } from "./libs/meeting-pdf.styles.js";
+import { renderMarkdown } from "./libs/render-markdown.js";
 
-const MeetingPdf = ({
+const MeetingPdf: React.FC<MeetingPdfProperties> = ({
 	actionItems,
 	createdAt,
 	id,
 	summary,
 	transcription,
-}: MeetingPdfProperties): React.ReactElement => {
-	return (
-		<Document>
-			<Page size="A4" style={styles.page}>
-				<View style={styles.section}>
-					<Text style={styles.title}>Meeting #{id}</Text>
-					<Text style={styles.text}>
-						Date: {formatDate(new Date(createdAt), "D MMMM hA")}
-					</Text>
-				</View>
-				<View style={styles.section}>
-					<Text style={styles.title}>Summary</Text>
-					<Text style={styles.text}>{summary}</Text>
-				</View>
+}) => (
+	<Document>
+		<Page size="A4" style={styles.page}>
+			<View style={styles.section}>
+				<Text style={styles.title}>Meeting #{id}</Text>
+				<Text style={styles.text}>
+					Date: {formatDate(new Date(createdAt), "D MMMM hA")}
+				</Text>
+			</View>
 
-				<View style={styles.section}>
-					<Text style={styles.title}>Action Items</Text>
-					<Text style={styles.text}>{actionItems}</Text>
-				</View>
+			<View style={styles.section}>{renderMarkdown(summary)}</View>
 
-				<View style={styles.section}>
-					<Text style={styles.title}>Transcript</Text>
-					<Text style={styles.text}>{transcription}</Text>
-				</View>
-			</Page>
-		</Document>
-	);
-};
+			<View style={styles.section}>{renderMarkdown(actionItems)}</View>
+
+			<View style={styles.section}>
+				<Text style={styles.heading1}>Transcript</Text>
+				{renderMarkdown(transcription)}
+			</View>
+		</Page>
+	</Document>
+);
 
 export { MeetingPdf };

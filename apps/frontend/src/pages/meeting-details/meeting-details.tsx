@@ -162,9 +162,13 @@ const MeetingDetails: React.FC = () => {
 						<PDFDownloadLink
 							document={<MeetingPdf {...meetingPdfProperties} />}
 							fileName={`meeting-${meeting.id.toString()}.pdf`}
+							key={isMeetingEnded ? "pdf-ready" : "pdf-pending"}
 						>
 							{({ loading }) => (
-								<Button label={loading ? "Generating PDF..." : "Export"} />
+								<Button
+									isDisabled={!isMeetingEnded}
+									label={loading ? "Generating PDF..." : "Export"}
+								/>
 							)}
 						</PDFDownloadLink>
 					</div>

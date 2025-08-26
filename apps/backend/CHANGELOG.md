@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.12.0...backend-v1.12.1) (2025-08-26)
+
+
+### Bug Fixes
+
+* **backend:** add sort logic by created at sorted order desc ml-303 ([#315](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/315)) ([7ea688e](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/7ea688ed955b38b7c2057796ef8b72be77da96fe))
+
 ## [1.12.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.11.0...backend-v1.12.0) (2025-08-25)
 
 

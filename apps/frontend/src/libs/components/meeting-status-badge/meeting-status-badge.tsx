@@ -2,6 +2,7 @@ import { MeetingStatus } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/helpers.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
+import { type StatusMeta } from "./libs/types/types.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -10,9 +11,6 @@ type Properties = {
 	status: ValueOf<typeof MeetingStatus>;
 	titleOverride?: string;
 };
-
-type StatusMeta = { label: string; title: string; tone: Tone };
-type Tone = "danger" | "info" | "neutral" | "success" | "warning";
 
 const mapStatus = (status: ValueOf<typeof MeetingStatus>): StatusMeta => {
 	switch (status) {

@@ -14,6 +14,8 @@ Generate a list of actionable tasks. Each task should be clearly defined. The ac
 Guidelines:
 - Use a verb-first structure to clearly state what needs to be done (e.g., "Develop," "Research," "Finalize").
 - Each task should only include a title and a brief description.
+- Items should be organized using ordered list. The title of of each item should be bold and description should be a paragraph without any lists.
+- Action items should not have a starting or closing paragraph. They should only contain a list of items.
 - Ensure each action point directly corresponds to a decision or insight from the meeting summary.
 `;
 

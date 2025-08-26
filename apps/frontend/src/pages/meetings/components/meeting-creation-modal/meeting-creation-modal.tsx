@@ -17,7 +17,11 @@ const MeetingCreationModal: React.FC = () => {
 	return (
 		<>
 			<div className={styles["start-meeting"]}>
-				<Button label="Start a meeting" onClick={handleOpenModal} />
+				<Button
+					className={styles["start-meeting__button"]}
+					label="Connect AI Assistant"
+					onClick={handleOpenModal}
+				/>
 			</div>
 
 			<Modal isOpen={isModalOpen} onClose={handleCloseModal}>

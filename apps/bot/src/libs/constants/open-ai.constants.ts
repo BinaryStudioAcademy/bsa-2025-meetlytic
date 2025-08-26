@@ -10,11 +10,12 @@ Guidelines:
 
 const ACTION_ITEMS_PROMPT = `
 We will share with you a full transcript of a meeting. Generate an action points using this transcript according to the following requirements.
-Generate a list of actionable tasks. Each task should be clearly defined, assigned to a specific person, and have a concrete deadline. The action points should directly reflect the decisions and next steps outlined in the summary, ensuring a clear path forward.
+Generate a list of actionable tasks. Each task should be clearly defined. The action points should directly reflect the decisions and next steps outlined in the summary, ensuring a clear path forward.
 Guidelines:
 - Use a verb-first structure to clearly state what needs to be done (e.g., "Develop," "Research," "Finalize").
-- Assign each task to a single individual to ensure accountability.
-- Specify a realistic and clear deadline for each action item.
+- Each task should only include a title and a brief description.
+- Items should be organized using ordered list. The title of of each item should be bold and description should be a paragraph without any lists.
+- Action items should not have a starting or closing paragraph. They should only contain a list of items.
 - Ensure each action point directly corresponds to a decision or insight from the meeting summary.
 `;
 

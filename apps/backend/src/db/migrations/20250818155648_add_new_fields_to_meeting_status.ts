@@ -21,12 +21,15 @@ const MeetingStatus = {
 async function down(knex: Knex): Promise<void> {
 	await knex.transaction(async (trx) => {
 		await trx(TableName.MEETINGS)
+			.where(ColumnName.STATUS, MeetingStatus.FAILED)
+			.update({ [ColumnName.STATUS]: MeetingStatus.ENDED });
+
+		await trx(TableName.MEETINGS)
 			.whereIn(ColumnName.STATUS, [
-				MeetingStatus.FAILED,
 				MeetingStatus.JOINING,
 				MeetingStatus.RECORDING,
 			])
-			.update({ [ColumnName.STATUS]: MeetingStatus.ENDED });
+			.update({ [ColumnName.STATUS]: MeetingStatus.STARTED });
 
 		const temporary = `${ENUM_NAME}_old`;
 

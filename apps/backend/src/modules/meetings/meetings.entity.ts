@@ -28,6 +28,8 @@ class MeetingEntity implements Entity {
 
 	private summary: null | string;
 
+	private title: null | string;
+
 	private constructor({
 		actionItems,
 		audioFile,
@@ -41,6 +43,7 @@ class MeetingEntity implements Entity {
 		ownerId,
 		status,
 		summary,
+		title,
 	}: {
 		actionItems: null | string;
 		audioFile: FilePublicDto | null;
@@ -54,6 +57,7 @@ class MeetingEntity implements Entity {
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 		summary: null | string;
+		title: null | string;
 	}) {
 		this.actionItems = actionItems;
 		this.audioFile = audioFile;
@@ -67,6 +71,7 @@ class MeetingEntity implements Entity {
 		this.ownerId = ownerId;
 		this.status = status;
 		this.summary = summary;
+		this.title = title;
 	}
 
 	public static initialize({
@@ -82,6 +87,7 @@ class MeetingEntity implements Entity {
 		ownerId,
 		status,
 		summary,
+		title,
 	}: {
 		actionItems: null | string;
 		audioFile: FilePublicDto | null;
@@ -95,6 +101,7 @@ class MeetingEntity implements Entity {
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 		summary: null | string;
+		title: null | string;
 	}): MeetingEntity {
 		return new MeetingEntity({
 			actionItems,
@@ -109,6 +116,7 @@ class MeetingEntity implements Entity {
 			ownerId,
 			status,
 			summary,
+			title,
 		});
 	}
 
@@ -118,12 +126,14 @@ class MeetingEntity implements Entity {
 		meetingId,
 		meetingPassword,
 		ownerId,
+		title,
 	}: {
 		host: ValueOf<typeof MeetingHost>;
 		instanceId: null | string;
 		meetingId: string;
 		meetingPassword: null | string;
 		ownerId: number;
+		title: null | string;
 	}): MeetingEntity {
 		return new MeetingEntity({
 			actionItems: null,
@@ -138,6 +148,7 @@ class MeetingEntity implements Entity {
 			ownerId,
 			status: MeetingStatus.STARTED,
 			summary: null,
+			title,
 		});
 	}
 
@@ -151,6 +162,7 @@ class MeetingEntity implements Entity {
 		meetingPassword: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
+		title: null | string;
 	} {
 		return {
 			audioFile: this.audioFile,
@@ -162,6 +174,7 @@ class MeetingEntity implements Entity {
 			meetingPassword: this.meetingPassword,
 			ownerId: this.ownerId,
 			status: this.status,
+			title: this.title,
 		};
 	}
 
@@ -177,6 +190,7 @@ class MeetingEntity implements Entity {
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
 		summary: null | string;
+		title: null | string;
 	} {
 		return {
 			actionItems: this.actionItems as string,
@@ -190,6 +204,7 @@ class MeetingEntity implements Entity {
 			ownerId: this.ownerId,
 			status: this.status,
 			summary: this.summary as string,
+			title: this.title,
 		};
 	}
 
@@ -200,6 +215,7 @@ class MeetingEntity implements Entity {
 		meetingPassword: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
+		title: null | string;
 	} {
 		return {
 			host: this.host,
@@ -208,6 +224,7 @@ class MeetingEntity implements Entity {
 			meetingPassword: this.meetingPassword,
 			ownerId: this.ownerId,
 			status: this.status,
+			title: this.title,
 		};
 	}
 
@@ -221,6 +238,7 @@ class MeetingEntity implements Entity {
 		meetingPassword: null | string;
 		ownerId: number;
 		status: ValueOf<typeof MeetingStatus>;
+		title: null | string;
 	} {
 		return {
 			audioFileId: this.audioFileId,
@@ -232,6 +250,7 @@ class MeetingEntity implements Entity {
 			meetingPassword: this.meetingPassword,
 			ownerId: this.ownerId,
 			status: this.status,
+			title: this.title,
 		};
 	}
 }

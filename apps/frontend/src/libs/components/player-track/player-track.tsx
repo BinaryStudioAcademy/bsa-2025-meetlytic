@@ -1,10 +1,6 @@
-import {
-	MILLISECONDS_IN_SECOND,
-	PERCENT_MULTIPLIER,
-	START_TIME,
-} from "~/libs/constants/constants.js";
+import { PERCENT_MULTIPLIER, START_TIME } from "~/libs/constants/constants.js";
 import { AudioEvent, KeyboardKey } from "~/libs/enums/enums.js";
-import { formatDate, getValidClassNames } from "~/libs/helpers/helpers.js";
+import { formatDuration, getValidClassNames } from "~/libs/helpers/helpers.js";
 import {
 	useCallback,
 	useEffect,
@@ -148,8 +144,7 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 				<span className="visually-hidden">Set playback position</span>
 			</button>
 			<div className={styles["time"]}>
-				{formatDate(new Date(currentTime * MILLISECONDS_IN_SECOND), "mm:ss")} /{" "}
-				{formatDate(new Date(duration * MILLISECONDS_IN_SECOND), "mm:ss")}
+				{formatDuration(currentTime)} / {formatDuration(duration)}
 			</div>
 			{/* We will not have captions file for this */}
 			{/* eslint-disable-next-line jsx-a11y/media-has-caption */}

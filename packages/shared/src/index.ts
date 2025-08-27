@@ -1,6 +1,5 @@
 export {
 	EMPTY_ARRAY_LENGTH,
-	MILLISECONDS_IN_SECOND,
 	PERCENT_MULTIPLIER,
 	START_TIME,
 } from "./libs/constants/constants.js";

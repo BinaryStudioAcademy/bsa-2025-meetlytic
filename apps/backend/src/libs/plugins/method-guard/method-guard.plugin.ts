@@ -16,6 +16,18 @@ const methodGuardCallback: FastifyPluginCallback<Options> = (
 	done,
 ) => {
 	fastify.addHook(FastifyHook.ON_REQUEST, (request, response, next) => {
+		const { url } = request;
+
+		if (/^\/api\/v\d+\/documentation/.test(url)) {
+			return;
+		}
+
+		const apiPrefixRegex = /^\/api\/v\d+(?:\/|$)/;
+
+		if (!apiPrefixRegex.test(url)) {
+			return;
+		}
+
 		const rawUrl = request.raw.url ?? "";
 		const upgradeHeader = request.headers.upgrade?.toLowerCase();
 
@@ -28,9 +40,9 @@ const methodGuardCallback: FastifyPluginCallback<Options> = (
 
 		const { allRoutes } = options;
 		const method = request.method.toUpperCase();
-		const [url] = response.request.url.split("?");
+		const [urlWithoutParameters] = response.request.url.split("?");
 
-		if (!url) {
+		if (!urlWithoutParameters) {
 			throw new HTTPError({
 				message: ExceptionMessage.ROUTE_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
@@ -38,7 +50,7 @@ const methodGuardCallback: FastifyPluginCallback<Options> = (
 		}
 
 		const { isMethodAllowed, isRouteFound } = matchRoute(
-			url,
+			urlWithoutParameters,
 			method,
 			allRoutes,
 		);

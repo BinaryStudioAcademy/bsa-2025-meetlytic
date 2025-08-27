@@ -1,8 +1,6 @@
 import {
 	DeleteObjectCommand,
-	type DeleteObjectCommandInput,
 	PutObjectCommand,
-	type PutObjectCommandInput,
 	S3Client,
 } from "@aws-sdk/client-s3";
 
@@ -12,6 +10,8 @@ import { S3Error } from "~/libs/exceptions/exceptions.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
+import { type DeleteOptions, type UploadOptions } from "./libs/types/types.js";
+
 type Constructor = {
 	bucketName?: string;
 	credentials: {
@@ -20,19 +20,6 @@ type Constructor = {
 	};
 	logger: Logger;
 	region: string;
-};
-
-type DeleteOptions = {
-	bucket?: string;
-	key: string;
-};
-
-type UploadOptions = {
-	body: NonNullable<PutObjectCommandInput["Body"]>;
-	bucket?: string;
-	contentType: string;
-	key: string;
-	metadata?: Record<string, string>;
 };
 
 class BaseS3 {
@@ -72,12 +59,12 @@ class BaseS3 {
 			});
 		}
 
-		const input: DeleteObjectCommandInput = {
-			Bucket: bucketName,
-			Key: key,
-		};
-
-		await this.client.send(new DeleteObjectCommand(input));
+		await this.client.send(
+			new DeleteObjectCommand({
+				Bucket: bucketName,
+				Key: key,
+			}),
+		);
 		this.logger.info(`[S3] Deleted s3://${bucketName}/${key}`);
 	}
 
@@ -103,7 +90,6 @@ class BaseS3 {
 		bucket,
 		contentType,
 		key,
-		metadata,
 	}: UploadOptions): Promise<{ key: string; url: string }> {
 		const bucketName = bucket ?? this.bucketName;
 
@@ -114,15 +100,14 @@ class BaseS3 {
 			});
 		}
 
-		const input: PutObjectCommandInput = {
-			Body: body,
-			Bucket: bucketName,
-			ContentType: contentType,
-			Key: key,
-			...(metadata ? { Metadata: metadata } : {}),
-		};
-
-		await this.client.send(new PutObjectCommand(input));
+		await this.client.send(
+			new PutObjectCommand({
+				Body: body,
+				Bucket: bucketName,
+				ContentType: contentType,
+				Key: key,
+			}),
+		);
 
 		const url = this.getPublicUrl(key, bucketName);
 		this.logger.info(`[S3] Uploaded -> ${url}`);

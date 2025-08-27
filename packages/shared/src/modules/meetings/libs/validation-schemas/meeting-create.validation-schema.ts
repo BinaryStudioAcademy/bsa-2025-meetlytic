@@ -32,6 +32,14 @@ const meetingCreate = z
 				message: MeetingValidationMessage.ZOOM_LINK_INVALID,
 			}),
 		meetingPassword: z.string().nullable().optional(),
+		title: z
+			.string()
+			.max(MeetingValidationRule.MEETING_TITLE_MAXIMUM_LENGTH, {
+				message: MeetingValidationMessage.MEETING_TITLE_MAXIMUM_LENGTH,
+			})
+			.nullable()
+			.optional()
+			.transform((title) => (title === "" ? null : title)),
 	})
 	.required();
 

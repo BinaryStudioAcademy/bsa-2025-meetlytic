@@ -1,6 +1,7 @@
 export { clamp } from "./clamp.helper.js";
 export { debounce } from "./debounce.helper.js";
 export { extractErrorMessage } from "./extract-error-message.helper.js";
+export { formatDuration } from "./format-duration.helper.js";
 export { getRandomInRange } from "./get-random-in-range.helper.js";
 export { getSafeRandomValue } from "./get-safe-random-value.helper.js";
 export { getValidClassNames } from "./get-valid-class-names.helper.js";

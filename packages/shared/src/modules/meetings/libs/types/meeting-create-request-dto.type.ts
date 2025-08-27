@@ -5,6 +5,7 @@ type MeetingCreateRequestDto = {
 	host: ValueOf<typeof MeetingHost>;
 	meetingLink: string;
 	meetingPassword: null | string;
+	title: null | string;
 };
 
 export { type MeetingCreateRequestDto };

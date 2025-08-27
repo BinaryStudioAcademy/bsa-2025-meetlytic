@@ -301,17 +301,10 @@ class UserController extends BaseController {
 	 *       500:
 	 *         description: Server error
 	 */
-	private async uploadAvatar({
-		request,
-	}: UploadAvatarOptions): Promise<APIHandlerResponse> {
-		if (!request.isMultipart()) {
-			throw new HTTPError({
-				message: FileErrorMessage.CONTENT_TYPE,
-				status: HTTPCode.BAD_REQUEST,
-			});
-		}
-
-		const { uploadedFile: file } = request;
+	private async uploadAvatar(
+		options: UploadAvatarOptions,
+	): Promise<APIHandlerResponse> {
+		const { uploadedFile: file } = options;
 
 		if (!file) {
 			throw new HTTPError({
@@ -320,7 +313,7 @@ class UserController extends BaseController {
 			});
 		}
 
-		const { user } = request;
+		const { user } = options;
 
 		if (!user) {
 			throw new HTTPError({

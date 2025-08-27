@@ -1,16 +1,12 @@
-import { type FastifyRequest } from "fastify";
-
+import { type APIHandlerOptions } from "~/libs/modules/controller/controller.js";
 import { type UploadedFile } from "~/libs/plugins/uploads/libs/types/types.js";
-import { type UserResponseDto } from "~/modules/users/user.service.js";
 
-type RequestWithFile = FastifyRequest & {
-	uploadedFile?: null | UploadedFile;
-	user?: null | UserResponseDto;
-};
+import { type UserResponseDto } from "../../libs/types/types.js";
 
-type UploadAvatarOptions = {
-	request: RequestWithFile;
-};
+type UploadAvatarOptions = APIHandlerOptions<{
+	uploadedFile: null | UploadedFile;
+	user: null | UserResponseDto;
+}>;
 
 type UploadAvatarRequestDto = {
 	buffer: Buffer;

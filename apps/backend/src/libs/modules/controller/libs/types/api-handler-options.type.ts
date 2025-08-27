@@ -4,7 +4,7 @@ type APIHandlerOptions<
 	body: T["body"];
 	params: T["params"];
 	query: T["query"];
-	request: T["request"];
+	uploadedFile?: T["uploadedFile"];
 	user?: T["user"];
 };
 
@@ -12,7 +12,7 @@ type DefaultApiHandlerOptions = {
 	body?: unknown;
 	params?: unknown;
 	query?: unknown;
-	request?: unknown;
+	uploadedFile?: unknown;
 	user?: unknown;
 };
 

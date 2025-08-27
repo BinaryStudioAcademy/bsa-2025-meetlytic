@@ -145,9 +145,9 @@ class UserService implements Service {
 			return null;
 		}
 
-		const entity = await this.fileService.find(fileId);
+		const avatar = await this.fileService.find(fileId);
 
-		return entity;
+		return avatar;
 	}
 
 	public async findByEmail(email: string): Promise<null | UserResponseDto> {

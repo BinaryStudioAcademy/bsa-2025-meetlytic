@@ -1,5 +1,4 @@
 export {
-	UserAvatarErrorMessage,
 	UserErrorMessage,
 	UsersApiPath,
 	UserValidationRule,

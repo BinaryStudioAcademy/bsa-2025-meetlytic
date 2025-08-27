@@ -9,11 +9,7 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type FileService } from "~/modules/files/files.service.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
-import {
-	UserAvatarErrorMessage,
-	UserErrorMessage,
-	UsersApiPath,
-} from "./libs/enums/enums.js";
+import { UserErrorMessage, UsersApiPath } from "./libs/enums/enums.js";
 import {
 	type UploadAvatarHandlerOptions,
 	type UserResponseDto,
@@ -211,7 +207,7 @@ class UserController extends BaseController {
 		return {
 			payload: {
 				isSuccessful: true,
-				message: UserAvatarErrorMessage.AVATAR_DELETED_SUCCESSFULLY,
+				message: UserErrorMessage.AVATAR_DELETED_SUCCESSFULLY,
 			},
 			status: HTTPCode.OK,
 		};

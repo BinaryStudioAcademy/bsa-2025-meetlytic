@@ -15,10 +15,7 @@ import {
 } from "~/modules/files/libs/types/types.js";
 import { type UserDetailsModel } from "~/modules/users/user-details.model.js";
 
-import {
-	UserAvatarErrorMessage,
-	UserErrorMessage,
-} from "./libs/enums/enums.js";
+import { UserErrorMessage } from "./libs/enums/enums.js";
 import { UserError } from "./libs/exceptions/exceptions.js";
 import {
 	type UploadAvatarOptions,
@@ -100,13 +97,19 @@ class UserService implements Service {
 		const detailsId = await this.getDetailsId(userId);
 
 		if (!detailsId) {
-			throw new Error(UserErrorMessage.DETAILS_NOT_FOUND);
+			throw new UserError({
+				message: UserErrorMessage.DETAILS_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
 		}
 
 		const avatarKey = await this.getAvatarKeyForDeletion(detailsId);
 
 		if (!avatarKey) {
-			throw new Error(UserAvatarErrorMessage.AVATAR_NOT_SET);
+			throw new UserError({
+				message: UserErrorMessage.AVATAR_NOT_SET,
+				status: HTTPCode.NOT_FOUND,
+			});
 		}
 
 		try {
@@ -115,10 +118,13 @@ class UserService implements Service {
 
 			return {
 				isDeleted: true,
-				message: UserAvatarErrorMessage.AVATAR_DELETED_SUCCESSFULLY,
+				message: UserErrorMessage.AVATAR_DELETED_SUCCESSFULLY,
 			};
 		} catch {
-			throw new Error(UserAvatarErrorMessage.AVATAR_DELETION_FAILED);
+			throw new UserError({
+				message: UserErrorMessage.AVATAR_DELETION_FAILED,
+				status: HTTPCode.INTERNAL_SERVER_ERROR,
+			});
 		}
 	}
 
@@ -333,7 +339,10 @@ class UserService implements Service {
 		const detailsId = await this.getDetailsId(userId);
 
 		if (!detailsId) {
-			throw new Error(UserErrorMessage.DETAILS_NOT_FOUND);
+			throw new UserError({
+				message: UserErrorMessage.DETAILS_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
 		}
 
 		const oldAvatarKey = await this.getAvatarKeyForDeletion(detailsId);
@@ -355,7 +364,10 @@ class UserService implements Service {
 			});
 
 			if (!fileRecord.id) {
-				throw new Error(UserAvatarErrorMessage.FILE_RECORD_CREATION_FAILED);
+				throw new UserError({
+					message: UserErrorMessage.FILE_RECORD_CREATION_FAILED,
+					status: HTTPCode.INTERNAL_SERVER_ERROR,
+				});
 			}
 
 			await this.updateUserDetailsFileId(detailsId, fileRecord.id);
@@ -366,7 +378,10 @@ class UserService implements Service {
 
 			return { key: savedKey, url };
 		} catch {
-			throw new Error(UserAvatarErrorMessage.AVATAR_UPLOAD_FAILED);
+			throw new UserError({
+				message: UserErrorMessage.AVATAR_UPLOAD_FAILED,
+				status: HTTPCode.INTERNAL_SERVER_ERROR,
+			});
 		}
 	}
 }

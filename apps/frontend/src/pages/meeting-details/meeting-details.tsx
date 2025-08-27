@@ -46,6 +46,7 @@ import { actions as transcriptionActions } from "~/modules/transcription/transcr
 import styles from "./styles.module.css";
 
 const MeetingDetails: React.FC = () => {
+	const EMPTY = 0;
 	const [isStopRecordingInProgress, setIsStopRecordingInProgress] =
 		useState<boolean>(false);
 	const dispatch = useAppDispatch();
@@ -130,6 +131,14 @@ const MeetingDetails: React.FC = () => {
 	};
 
 	const isMeetingEnded = meeting.status === MeetingStatus.ENDED;
+	const hasTranscript = transcriptions.items.length > EMPTY;
+	const hasSummary = Boolean(meeting.summary && meeting.summary.trim());
+	const hasActionItems = Boolean(
+		meeting.actionItems && meeting.actionItems.trim(),
+	);
+
+	const canExport =
+		isMeetingEnded && hasTranscript && hasSummary && hasActionItems;
 
 	const pdfFileName = meeting.title
 		? `meeting-${title.replaceAll(/[^a-zA-Z0-9-]/g, "_").toLowerCase()}.pdf`
@@ -169,7 +178,10 @@ const MeetingDetails: React.FC = () => {
 							fileName={pdfFileName}
 						>
 							{({ loading }) => (
-								<Button label={loading ? "Generating PDF..." : "Export"} />
+								<Button
+									isDisabled={!canExport}
+									label={loading ? "Generating PDF..." : "Export"}
+								/>
 							)}
 						</PDFDownloadLink>
 					</div>

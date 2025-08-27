@@ -179,6 +179,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			meetingId,
 			meetingPassword: payload.meetingPassword ?? null,
 			ownerId: payload.ownerId,
+			title: payload.title ?? null,
 		});
 
 		let newMeeting;
@@ -386,6 +387,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			ownerId: meetingEntity.toObject().ownerId,
 			status: payload.status ?? meetingEntity.toObject().status,
 			summary: payload.summary ?? meetingEntity.toDetailedObject().summary,
+			title: meetingEntity.toObject().title,
 		});
 
 		const updatedMeeting = await this.meetingRepository.update(

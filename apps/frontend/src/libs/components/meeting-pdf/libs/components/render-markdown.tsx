@@ -23,11 +23,11 @@ function renderMarkdown(markdown: string): React.ReactElement {
 					return <View key={key} style={styles.paragraph} />;
 				}
 
-				const astLine = parseMarkdown(line);
+				const parsedLine = parseMarkdown(line);
 
 				return (
 					<View key={`line-${index.toString()}`} style={styles.paragraph}>
-						{astLine.children.map((node, nodeIndex) =>
+						{parsedLine.children.map((node, nodeIndex) =>
 							renderNode(
 								node as MdNode,
 								`line-${index.toString()}-${nodeIndex.toString()}`,

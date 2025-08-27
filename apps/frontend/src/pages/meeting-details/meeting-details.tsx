@@ -120,23 +120,28 @@ const MeetingDetails: React.FC = () => {
 		.map((item) => `• ${item.chunkText}`)
 		.join("\n");
 
+	const title = meeting.title ?? `Meeting #${String(meeting.id)}`;
+
 	const meetingPdfProperties: MeetingPdfProperties = {
 		actionItems: meeting.actionItems ?? "",
 		createdAt: meeting.createdAt,
-		id: meeting.id,
 		summary: meeting.summary ?? "",
+		title,
 		transcription,
 	};
 
 	const isMeetingEnded = meeting.status === MeetingStatus.ENDED;
+
+	const pdfFileName = meeting.title
+		? `meeting-${title.replaceAll(/[^a-zA-Z0-9-]/g, "_").toLowerCase()}.pdf`
+		: `meeting-${String(meeting.id)}.pdf`;
 
 	return (
 		<>
 			<div className={styles["meeting-details"]}>
 				<div className={styles["meeting-details__header"]}>
 					<h1 className={styles["meeting-details__title"]}>
-						Meeting #{meeting.id} |{" "}
-						{formatDate(new Date(meeting.createdAt), DateTimeFormat.MEETING)}
+						{title} | {formatDate(new Date(meeting.createdAt), DateTimeFormat.MEETING)}
 					</h1>
 					<div className={styles["meeting-details__actions"]}>
 						{user && (
@@ -162,7 +167,7 @@ const MeetingDetails: React.FC = () => {
 
 						<PDFDownloadLink
 							document={<MeetingPdf {...meetingPdfProperties} />}
-							fileName={`meeting-${meeting.id.toString()}.pdf`}
+							fileName={pdfFileName}
 						>
 							{({ loading }) => (
 								<Button label={loading ? "Generating PDF..." : "Export"} />

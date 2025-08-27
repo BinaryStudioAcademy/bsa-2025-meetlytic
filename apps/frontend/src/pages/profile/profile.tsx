@@ -41,7 +41,7 @@ const Profile: React.FC = () => {
 
 	if (!user) {
 		return status === DataStatus.PENDING || status === DataStatus.IDLE ? (
-			<Loader isLoading />
+			<Loader hasOverlay isLoading />
 		) : (
 			<Navigate replace to={AppRoute.SIGN_IN} />
 		);

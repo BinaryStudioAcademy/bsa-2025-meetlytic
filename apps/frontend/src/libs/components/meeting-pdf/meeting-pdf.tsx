@@ -8,15 +8,15 @@ import { styles } from "./meeting-pdf.styles.js";
 const MeetingPdf = ({
 	actionItems,
 	createdAt,
-	id,
 	summary,
+	title,
 	transcription,
 }: MeetingPdfProperties): React.ReactElement => {
 	return (
 		<Document>
 			<Page size="A4" style={styles.page}>
 				<View style={styles.section}>
-					<Text style={styles.title}>Meeting #{id}</Text>
+					<Text style={styles.title}>{title}</Text>
 					<Text style={styles.text}>
 						Date: {formatDate(new Date(createdAt), DateTimeFormat.MEETING)}
 					</Text>

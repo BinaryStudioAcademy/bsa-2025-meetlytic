@@ -56,7 +56,7 @@
 
 .summary {
 	grid-row: 1;
-	grid-column: 2 / 2;
+	grid-column: 2;
 }
 
 .summary.meeting-ended {
@@ -71,7 +71,7 @@
 
 .action-items {
 	grid-row: 2;
-	grid-column: 2 / 2;
+	grid-column: 2;
 }
 
 .summary-area,
@@ -147,12 +147,13 @@
 	}
 
 	.meeting-details__header {
-		flex-wrap: wrap;
+		flex-flow: column wrap;
 		row-gap: 0;
+		justify-content: center;
 	}
 
 	.meeting-details__actions {
-		width: 100%;
+		justify-content: center;
 		margin: 15px 0;
 	}
 }
@@ -178,7 +179,7 @@
 	}
 }
 
-@media (width <=480px) {
+@media (width <=576px) {
 	.meeting-details__actions {
 		position: relative;
 		flex-direction: column;

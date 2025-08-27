@@ -4,6 +4,7 @@ import {
 	Loader,
 	Markdown,
 	MeetingPdf,
+	MeetingStatusBadge,
 	Navigate,
 	PDFDownloadLink,
 	PlayerTrack,
@@ -37,6 +38,7 @@ import { rehypeSanitize, remarkGfm } from "~/libs/plugins/plugins.js";
 import { type MeetingPdfProperties } from "~/libs/types/types.js";
 import {
 	actions as meetingDetailsActions,
+	type MeetingStatusDto,
 	type MeetingSummaryActionItemsResponseDto,
 	sanitizeDefaultSchema,
 } from "~/modules/meeting-details/meeting-details.js";
@@ -69,6 +71,17 @@ const MeetingDetails: React.FC = () => {
 		setIsStopRecordingInProgress(true);
 	}, [dispatch, id]);
 
+	const handleMeetingStatusUpdate = useCallback(
+		({ meetingId, status }: MeetingStatusDto) => {
+			if (Number(id) !== meetingId) {
+				return;
+			}
+
+			dispatch(meetingDetailsActions.setStatus({ meetingId, status }));
+		},
+		[dispatch, id],
+	);
+
 	const handleSummaryActionItemsUpdate = useCallback(() => {
 		const sharedToken = searchParameters.get("token");
 
@@ -79,6 +92,11 @@ const MeetingDetails: React.FC = () => {
 			}),
 		);
 	}, [dispatch, id, searchParameters]);
+
+	useMeetingSocket<MeetingStatusDto>({
+		callback: handleMeetingStatusUpdate,
+		event: SocketEvent.UPDATE_MEETING_STATUS,
+	});
 
 	useMeetingSocket<MeetingSummaryActionItemsResponseDto>({
 		callback: handleSummaryActionItemsUpdate,
@@ -119,23 +137,29 @@ const MeetingDetails: React.FC = () => {
 		.map((item) => `• ${item.chunkText}`)
 		.join("\n");
 
+	const title = meeting.title ?? `Meeting #${String(meeting.id)}`;
+
 	const meetingPdfProperties: MeetingPdfProperties = {
 		actionItems: meeting.actionItems ?? "",
 		createdAt: meeting.createdAt,
-		id: meeting.id,
 		summary: meeting.summary ?? "",
+		title,
 		transcription,
 	};
 
 	const isMeetingEnded = meeting.status === MeetingStatus.ENDED;
+
+	const pdfFileName = meeting.title
+		? `meeting-${title.replaceAll(/[^a-zA-Z0-9-]/g, "_").toLowerCase()}.pdf`
+		: `meeting-${String(meeting.id)}.pdf`;
 
 	return (
 		<>
 			<div className={styles["meeting-details"]}>
 				<div className={styles["meeting-details__header"]}>
 					<h1 className={styles["meeting-details__title"]}>
-						Meeting #{meeting.id} |{" "}
-						{formatDate(new Date(meeting.createdAt), "D MMMM hA")}
+						{title} | {formatDate(new Date(meeting.createdAt), "D MMMM hA")}
+						<MeetingStatusBadge status={meeting.status} />
 					</h1>
 					<div className={styles["meeting-details__actions"]}>
 						{user && (
@@ -161,7 +185,7 @@ const MeetingDetails: React.FC = () => {
 
 						<PDFDownloadLink
 							document={<MeetingPdf {...meetingPdfProperties} />}
-							fileName={`meeting-${meeting.id.toString()}.pdf`}
+							fileName={pdfFileName}
 						>
 							{({ loading }) => (
 								<Button label={loading ? "Generating PDF..." : "Export"} />

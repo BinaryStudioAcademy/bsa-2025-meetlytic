@@ -9,6 +9,7 @@ import {
 	PlayerTrack,
 	TranscriptionPanel,
 } from "~/libs/components/components.js";
+import { EMPTY_ARRAY_LENGTH } from "~/libs/constants/constants.js";
 import {
 	AppRoute,
 	DataStatus,
@@ -46,7 +47,6 @@ import { actions as transcriptionActions } from "~/modules/transcription/transcr
 import styles from "./styles.module.css";
 
 const MeetingDetails: React.FC = () => {
-	const EMPTY = 0;
 	const [isStopRecordingInProgress, setIsStopRecordingInProgress] =
 		useState<boolean>(false);
 	const dispatch = useAppDispatch();
@@ -131,7 +131,7 @@ const MeetingDetails: React.FC = () => {
 	};
 
 	const isMeetingEnded = meeting.status === MeetingStatus.ENDED;
-	const hasTranscript = transcriptions.items.length > EMPTY;
+	const hasTranscript = transcriptions.items.length > EMPTY_ARRAY_LENGTH;
 	const hasSummary = Boolean(meeting.summary && meeting.summary.trim());
 	const hasActionItems = Boolean(
 		meeting.actionItems && meeting.actionItems.trim(),

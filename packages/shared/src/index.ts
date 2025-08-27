@@ -25,8 +25,10 @@ export {
 } from "./libs/exceptions/exceptions.js";
 export {
 	configureString,
+	convertToZoomWebClientUrl,
 	extractZoomMeetingId,
 	formatDate,
+	isZoomLinkValid,
 } from "./libs/helpers/helpers.js";
 export { type Config } from "./libs/modules/config/config.js";
 export {
@@ -68,6 +70,7 @@ export {
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingStatusDto,
 	type MeetingSummaryActionItemsResponseDto,
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,

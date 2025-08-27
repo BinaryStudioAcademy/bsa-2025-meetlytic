@@ -4,6 +4,7 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 import { type MeetingDetailedResponseDto } from "~/modules/meeting-details/meeting-details.js";
 
+import { type MeetingStatusDto } from "../libs/types/types.js";
 import { getMeetingDetailsById } from "./actions.js";
 
 type State = {
@@ -37,6 +38,13 @@ const { actions, name, reducer } = createSlice({
 		clearMeetingDetails: (state) => {
 			state.meeting = null;
 			state.dataStatus = DataStatus.IDLE;
+		},
+		setStatus(state, action: { payload: MeetingStatusDto }) {
+			const { meetingId, status } = action.payload;
+
+			if (state.meeting && state.meeting.id === meetingId) {
+				state.meeting.status = status;
+			}
 		},
 	},
 });

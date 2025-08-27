@@ -21,7 +21,7 @@ import {
 	type BaseToken,
 	type SharedJwtPayload,
 } from "~/libs/modules/token/token.js";
-import { type Service } from "~/libs/types/types.js";
+import { type Service, type ValueOf } from "~/libs/types/types.js";
 
 import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
@@ -249,24 +249,6 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return isDeleted;
 	}
 
-	public async endMeeting(id: number): Promise<MeetingDetailedResponseDto> {
-		const meeting = await this.meetingRepository.update(id, {
-			instanceId: null,
-			status: MeetingStatus.ENDED,
-		});
-
-		if (!meeting) {
-			throw new MeetingError({
-				message: MeetingErrorMessage.MEETING_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		void this.cloudFormation.delete(id);
-
-		return meeting.toDetailedObject();
-	}
-
 	public async find(id: number): Promise<MeetingDetailedResponseDto> {
 		const meeting = await this.meetingRepository.find(id);
 
@@ -349,6 +331,32 @@ class MeetingService implements Service<MeetingResponseDto> {
 		});
 
 		return transcription;
+	}
+
+	public async setStatus(
+		id: number,
+		status: ValueOf<typeof MeetingStatus>,
+	): Promise<MeetingDetailedResponseDto> {
+		let meeting = await this.meetingRepository.update(id, {
+			status,
+		});
+
+		if (status === MeetingStatus.FAILED || status === MeetingStatus.ENDED) {
+			meeting = await this.meetingRepository.update(id, {
+				instanceId: null,
+			});
+
+			void this.cloudFormation.delete(id);
+		}
+
+		if (!meeting) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.MEETING_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return meeting.toDetailedObject();
 	}
 
 	public async stopRecording(id: number): Promise<void> {

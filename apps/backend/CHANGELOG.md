@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.13.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.12.1...backend-v1.13.0) (2025-08-27)
+
+
+### Features
+
+* add meeting card naming ml-206 ([#288](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/288)) ([1976c35](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/1976c35ce5a6f33d36de6c4b5beaf8dac42e0bef))
+* add status indicators in meeting details page ml-282 ([#310](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/310)) ([67cf53f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/67cf53f438fbdeaa6c4dcf8a8f748858b8305c31))
+
+
+### Bug Fixes
+
+* add 405 response for unsupported methods ml-182 ([#316](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/316)) ([65dcb48](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/65dcb4856d2763f46c347e96b10d2b7c1bd5a231))
+* no validation for zoom link when adding bot to meeting ml-263 ([#298](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/298)) ([52fd35e](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/52fd35e654490db386f5c7acaa958d8b14d64abb))
+
 ## [1.12.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.12.0...backend-v1.12.1) (2025-08-26)
 
 

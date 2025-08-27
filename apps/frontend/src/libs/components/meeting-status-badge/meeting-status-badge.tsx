@@ -7,7 +7,6 @@ import styles from "./styles.module.css";
 
 type Properties = {
 	className?: string;
-	compact?: boolean;
 	status: ValueOf<typeof MeetingStatus>;
 	titleOverride?: string;
 };

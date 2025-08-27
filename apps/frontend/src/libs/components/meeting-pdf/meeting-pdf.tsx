@@ -1,4 +1,5 @@
 import { Document, Page, Text, View } from "~/libs/components/components.js";
+import { DateTimeFormat } from "~/libs/enums/enums.js";
 import { formatDate } from "~/libs/helpers/helpers.js";
 import { type MeetingPdfProperties } from "~/libs/types/types.js";
 
@@ -17,7 +18,7 @@ const MeetingPdf = ({
 				<View style={styles.section}>
 					<Text style={styles.title}>Meeting #{id}</Text>
 					<Text style={styles.text}>
-						Date: {formatDate(new Date(createdAt), "D MMMM hA")}
+						Date: {formatDate(new Date(createdAt), DateTimeFormat.MEETING)}
 					</Text>
 				</View>
 				<View style={styles.section}>

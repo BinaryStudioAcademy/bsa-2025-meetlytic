@@ -12,6 +12,7 @@ import {
 import {
 	AppRoute,
 	DataStatus,
+	DateTimeFormat,
 	MeetingErrorMessage,
 	MeetingStatus,
 	NotificationMessage,
@@ -135,7 +136,7 @@ const MeetingDetails: React.FC = () => {
 				<div className={styles["meeting-details__header"]}>
 					<h1 className={styles["meeting-details__title"]}>
 						Meeting #{meeting.id} |{" "}
-						{formatDate(new Date(meeting.createdAt), "D MMMM hA")}
+						{formatDate(new Date(meeting.createdAt), DateTimeFormat.MEETING)}
 					</h1>
 					<div className={styles["meeting-details__actions"]}>
 						{user && (

@@ -3,7 +3,7 @@ import {
 	PERCENT_MULTIPLIER,
 	START_TIME,
 } from "~/libs/constants/constants.js";
-import { AudioEvent, KeyboardKey } from "~/libs/enums/enums.js";
+import { AudioEvent, DateTimeFormat, KeyboardKey } from "~/libs/enums/enums.js";
 import { formatDate, getValidClassNames } from "~/libs/helpers/helpers.js";
 import {
 	useCallback,
@@ -148,8 +148,15 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 				<span className="visually-hidden">Set playback position</span>
 			</button>
 			<div className={styles["time"]}>
-				{formatDate(new Date(currentTime * MILLISECONDS_IN_SECOND), "mm:ss")} /{" "}
-				{formatDate(new Date(duration * MILLISECONDS_IN_SECOND), "mm:ss")}
+				{formatDate(
+					new Date(currentTime * MILLISECONDS_IN_SECOND),
+					DateTimeFormat.AUDIO_PLAYER,
+				)}{" "}
+				/{" "}
+				{formatDate(
+					new Date(duration * MILLISECONDS_IN_SECOND),
+					DateTimeFormat.AUDIO_PLAYER,
+				)}
 			</div>
 			{/* We will not have captions file for this */}
 			{/* eslint-disable-next-line jsx-a11y/media-has-caption */}

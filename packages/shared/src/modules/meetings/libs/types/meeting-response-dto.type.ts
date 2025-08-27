@@ -9,6 +9,7 @@ type MeetingResponseDto = {
 	meetingId: string;
 	ownerId: number;
 	status: ValueOf<typeof MeetingStatus>;
+	title: null | string;
 };
 
 export { type MeetingResponseDto };

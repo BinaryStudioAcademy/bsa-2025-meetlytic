@@ -8,6 +8,8 @@ export {
 export {
 	LandingBgCollision,
 	LandingBgInit,
+	LandingBgMobileRingSize,
+	LandingBgMobileRingSpeedScale,
 	LandingBgNumeric,
 	LandingBgPhysics,
 	LandingBgRingMinSpeed,

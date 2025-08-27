@@ -5,8 +5,8 @@ import {
 	type PhrasingContent,
 } from "~/libs/types/types.js";
 
-import { styles } from "./meeting-pdf.styles.js";
-import { parseMarkdown } from "./parse-markdown.js";
+import { styles } from "../helpers/meeting-pdf.styles.js";
+import { parseMarkdown } from "../helpers/parse-markdown.js";
 import { renderNode } from "./render-node.js";
 
 type MdNode = BlockContent | ListItem | PhrasingContent;

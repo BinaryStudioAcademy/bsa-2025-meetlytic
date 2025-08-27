@@ -6,7 +6,7 @@ import {
 	type PhrasingContent,
 } from "~/libs/types/types.js";
 
-import { styles } from "./meeting-pdf.styles.js";
+import { styles } from "../helpers/meeting-pdf.styles.js";
 
 type MdNode = BlockContent | ListItem | PhrasingContent;
 

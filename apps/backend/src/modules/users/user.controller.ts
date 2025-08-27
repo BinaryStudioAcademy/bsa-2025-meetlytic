@@ -1,4 +1,4 @@
-import { APIPath, FileErrorMessage } from "~/libs/enums/enums.js";
+import { APIPath } from "~/libs/enums/enums.js";
 import {
 	type APIHandlerOptions,
 	type APIHandlerResponse,
@@ -6,6 +6,7 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode, HTTPError, HTTPMethod } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type UploadedFile } from "~/libs/plugins/uploads/libs/types/types.js";
 import { type FileService } from "~/modules/files/files.service.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
@@ -184,28 +185,13 @@ class UserController extends BaseController {
 	 *       500:
 	 *         description: Server error
 	 */
-	private async deleteAvatar(
-		options: DeleteAvatarOptions,
-	): Promise<APIHandlerResponse> {
-		const { user } = options;
+	private async deleteAvatar({
+		user,
+	}: DeleteAvatarOptions): Promise<APIHandlerResponse> {
+		const { id } = user as UserResponseDto;
 
-		if (!user) {
-			throw new HTTPError({
-				message: UserErrorMessage.USER_REQUIRED,
-				status: HTTPCode.BAD_REQUEST,
-			});
-		}
-
-		const detailsId = await this.userService.getDetailsId(user.id);
-
-		if (!detailsId) {
-			throw new HTTPError({
-				message: UserErrorMessage.DETAILS_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		await this.userService.deleteAvatar(user.id);
+		await this.userService.getDetailsId(id);
+		await this.userService.deleteAvatar(id);
 
 		return {
 			payload: {
@@ -260,14 +246,9 @@ class UserController extends BaseController {
 	private async getCurrentUser({
 		user,
 	}: GetCurrentUserOptions): Promise<APIHandlerResponse> {
-		if (!user) {
-			throw new HTTPError({
-				message: UserErrorMessage.USER_REQUIRED,
-				status: HTTPCode.BAD_REQUEST,
-			});
-		}
+		const { email } = user as UserResponseDto;
 
-		const fullUser = await this.userService.findProfileByEmail(user.email);
+		const fullUser = await this.userService.findProfileByEmail(email);
 
 		return {
 			payload: fullUser,
@@ -301,34 +282,18 @@ class UserController extends BaseController {
 	 *       500:
 	 *         description: Server error
 	 */
-	private async uploadAvatar(
-		options: UploadAvatarOptions,
-	): Promise<APIHandlerResponse> {
-		const { uploadedFile: file } = options;
-
-		if (!file) {
-			throw new HTTPError({
-				message: FileErrorMessage.REQUIRED,
-				status: HTTPCode.BAD_REQUEST,
-			});
-		}
-
-		const { user } = options;
-
-		if (!user) {
-			throw new HTTPError({
-				message: UserErrorMessage.USER_REQUIRED,
-				status: HTTPCode.BAD_REQUEST,
-			});
-		}
-
-		const { buffer, filename, mimetype } = file;
+	private async uploadAvatar({
+		uploadedFile,
+		user,
+	}: UploadAvatarOptions): Promise<APIHandlerResponse> {
+		const { buffer, filename, mimetype } = uploadedFile as UploadedFile;
+		const { id } = user as UserResponseDto;
 
 		const { key, url } = await this.userService.uploadAvatar({
 			buffer,
 			filename,
 			mimetype,
-			userId: user.id,
+			userId: id,
 		});
 
 		return {

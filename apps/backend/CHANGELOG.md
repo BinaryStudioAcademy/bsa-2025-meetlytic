@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.13.0...backend-v1.13.1) (2025-08-27)
+
+
+### Bug Fixes
+
+* **backend:** ignore non-API and documentation routes ml-339 ([#341](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/341)) ([afdaf52](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/afdaf52606306830a14b8b9f1d22f426163b8e08))
+
 ## [1.13.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.12.1...backend-v1.13.0) (2025-08-27)
 
 

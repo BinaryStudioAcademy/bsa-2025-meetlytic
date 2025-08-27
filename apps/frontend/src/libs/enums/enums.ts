@@ -24,6 +24,8 @@ export { LogoTheme } from "./logo-theme.enum.js";
 export { LogoType } from "./logo-type.enum.js";
 export { NotificationMessage } from "./notification-massage.enum.js";
 export { SearchDebounceDelay } from "./search-debounce-delay.enum.js";
+export { TrackDuration } from "./track-duration.enum.js";
+export { TrackStringPadding } from "./track-string-padding.enum.js";
 export {
 	APIPath,
 	AppEnvironment,

@@ -4,6 +4,7 @@ import {
 	Loader,
 	Markdown,
 	MeetingPdf,
+	MeetingStatusBadge,
 	Navigate,
 	PDFDownloadLink,
 	PlayerTrack,
@@ -37,6 +38,7 @@ import { rehypeSanitize, remarkGfm } from "~/libs/plugins/plugins.js";
 import { type MeetingPdfProperties } from "~/libs/types/types.js";
 import {
 	actions as meetingDetailsActions,
+	type MeetingStatusDto,
 	type MeetingSummaryActionItemsResponseDto,
 	sanitizeDefaultSchema,
 } from "~/modules/meeting-details/meeting-details.js";
@@ -69,6 +71,17 @@ const MeetingDetails: React.FC = () => {
 		setIsStopRecordingInProgress(true);
 	}, [dispatch, id]);
 
+	const handleMeetingStatusUpdate = useCallback(
+		({ meetingId, status }: MeetingStatusDto) => {
+			if (Number(id) !== meetingId) {
+				return;
+			}
+
+			dispatch(meetingDetailsActions.setStatus({ meetingId, status }));
+		},
+		[dispatch, id],
+	);
+
 	const handleSummaryActionItemsUpdate = useCallback(() => {
 		const sharedToken = searchParameters.get("token");
 
@@ -79,6 +92,11 @@ const MeetingDetails: React.FC = () => {
 			}),
 		);
 	}, [dispatch, id, searchParameters]);
+
+	useMeetingSocket<MeetingStatusDto>({
+		callback: handleMeetingStatusUpdate,
+		event: SocketEvent.UPDATE_MEETING_STATUS,
+	});
 
 	useMeetingSocket<MeetingSummaryActionItemsResponseDto>({
 		callback: handleSummaryActionItemsUpdate,
@@ -141,6 +159,7 @@ const MeetingDetails: React.FC = () => {
 				<div className={styles["meeting-details__header"]}>
 					<h1 className={styles["meeting-details__title"]}>
 						{title} | {formatDate(new Date(meeting.createdAt), "D MMMM hA")}
+						<MeetingStatusBadge status={meeting.status} />
 					</h1>
 					<div className={styles["meeting-details__actions"]}>
 						{user && (

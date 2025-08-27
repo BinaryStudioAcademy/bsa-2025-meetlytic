@@ -18,7 +18,7 @@ import { type UserDetailsModel } from "~/modules/users/user-details.model.js";
 import { UserErrorMessage } from "./libs/enums/enums.js";
 import { UserError } from "./libs/exceptions/exceptions.js";
 import {
-	type UploadAvatarOptions,
+	type UploadAvatarRequestDto,
 	type UserCredentials,
 	type UserGetAllResponseDto,
 	type UserResponseDto,
@@ -332,7 +332,7 @@ class UserService implements Service {
 	}
 
 	public async uploadAvatar(
-		options: UploadAvatarOptions,
+		options: UploadAvatarRequestDto,
 	): Promise<AvatarFileDto> {
 		const { buffer, filename, mimetype, userId } = options;
 

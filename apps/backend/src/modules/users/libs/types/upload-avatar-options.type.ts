@@ -4,19 +4,19 @@ import { type UploadedFile } from "~/libs/plugins/uploads/libs/types/types.js";
 import { type UserResponseDto } from "~/modules/users/user.service.js";
 
 type RequestWithFile = FastifyRequest & {
-	ploadedFile?: null | UploadedFile;
+	uploadedFile?: null | UploadedFile;
 	user?: null | UserResponseDto;
 };
 
-type UploadAvatarHandlerOptions = {
+type UploadAvatarOptions = {
 	request: RequestWithFile;
 };
 
-type UploadAvatarOptions = {
+type UploadAvatarRequestDto = {
 	buffer: Buffer;
 	filename: string;
 	mimetype: string;
 	userId: number;
 };
 
-export { type UploadAvatarHandlerOptions, type UploadAvatarOptions };
+export { type UploadAvatarOptions, type UploadAvatarRequestDto };

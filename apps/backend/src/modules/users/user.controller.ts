@@ -11,16 +11,12 @@ import { type UserService } from "~/modules/users/user.service.js";
 
 import { UserErrorMessage, UsersApiPath } from "./libs/enums/enums.js";
 import {
-	type UploadAvatarHandlerOptions,
+	type DeleteAvatarOptions,
+	type GetCurrentUserOptions,
+	type UpdateProfileOptions,
+	type UploadAvatarOptions,
 	type UserResponseDto,
-	type UserUpdateResponseDto,
 } from "./libs/types/types.js";
-
-type Deps = {
-	fileService: FileService;
-	logger: Logger;
-	userService: UserService;
-};
 
 /**
  * @swagger
@@ -115,7 +111,15 @@ class UserController extends BaseController {
 	private readonly fileService: FileService;
 	private readonly userService: UserService;
 
-	public constructor({ fileService, logger, userService }: Deps) {
+	public constructor({
+		fileService,
+		logger,
+		userService,
+	}: {
+		fileService: FileService;
+		logger: Logger;
+		userService: UserService;
+	}) {
 		super(logger, APIPath.USERS);
 
 		this.userService = userService;
@@ -128,8 +132,7 @@ class UserController extends BaseController {
 		});
 
 		this.addRoute({
-			handler: (options) =>
-				this.uploadAvatar(options as UploadAvatarHandlerOptions),
+			handler: (options) => this.uploadAvatar(options as UploadAvatarOptions),
 			method: HTTPMethod.POST,
 			path: UsersApiPath.AVATAR,
 		});
@@ -182,7 +185,7 @@ class UserController extends BaseController {
 	 *         description: Server error
 	 */
 	private async deleteAvatar(
-		options: APIHandlerOptions<{ user: UserResponseDto }>,
+		options: DeleteAvatarOptions,
 	): Promise<APIHandlerResponse> {
 		const { user } = options;
 
@@ -256,9 +259,7 @@ class UserController extends BaseController {
 	 */
 	private async getCurrentUser({
 		user,
-	}: APIHandlerOptions<{
-		user: UserResponseDto;
-	}>): Promise<APIHandlerResponse> {
+	}: GetCurrentUserOptions): Promise<APIHandlerResponse> {
 		if (!user) {
 			throw new HTTPError({
 				message: UserErrorMessage.USER_REQUIRED,
@@ -302,7 +303,7 @@ class UserController extends BaseController {
 	 */
 	private async uploadAvatar({
 		request,
-	}: UploadAvatarHandlerOptions): Promise<APIHandlerResponse> {
+	}: UploadAvatarOptions): Promise<APIHandlerResponse> {
 		if (!request.isMultipart()) {
 			throw new HTTPError({
 				message: FileErrorMessage.CONTENT_TYPE,
@@ -372,10 +373,7 @@ class UserController extends BaseController {
 	public async updateProfile({
 		body,
 		user,
-	}: APIHandlerOptions<{
-		body: UserUpdateResponseDto;
-		user: UserResponseDto;
-	}>): Promise<APIHandlerResponse> {
+	}: UpdateProfileOptions): Promise<APIHandlerResponse> {
 		if (!user) {
 			throw new HTTPError({
 				message: UserErrorMessage.USER_REQUIRED,

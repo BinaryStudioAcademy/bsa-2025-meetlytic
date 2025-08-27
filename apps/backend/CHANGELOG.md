@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.13.1...backend-v1.13.2) (2025-08-27)
+
+
+### Bug Fixes
+
+* **backend:** disable methodGuard ml-339 ([#340](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/340)) ([b9de89d](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/b9de89d1dfdfef0c2992de59fbc88a7ba3d64c7e))
+
 ## [1.13.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.13.0...backend-v1.13.1) (2025-08-27)
 
 

@@ -2,11 +2,33 @@
 	display: flex;
 	flex-direction: column;
 	gap: 36px;
-	width: 476px;
+	width: 100%;
+	max-width: 420px;
 }
 
 .profile-form__buttons {
 	display: flex;
 	gap: 18px;
-	padding: 0 41px;
+	justify-content: center;
+	margin-top: 20px;
+}
+
+.profile-form__button {
+	max-width: 160px;
+}
+
+@media (width <= 992px) {
+	.profile-form__button {
+		min-width: 100px;
+	}
+}
+
+@media (width <= 480px) {
+	.profile-form__buttons {
+		flex-direction: column;
+	}
+
+	.profile-form__button {
+		max-width: 100%;
+	}
 }

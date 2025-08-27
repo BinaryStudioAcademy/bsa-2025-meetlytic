@@ -26,7 +26,6 @@ const MeetingItem: React.FC<Properties> = ({
 	title,
 }: Properties) => {
 	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-	const [isHovered, setIsHovered] = useState<boolean>(false);
 	const to = configureString(AppRoute.MEETINGS_$ID, {
 		id: String(id),
 	});
@@ -40,22 +39,12 @@ const MeetingItem: React.FC<Properties> = ({
 	const handleDeleteClick = useCallback(
 		(event: React.MouseEvent) => {
 			event.preventDefault();
-
+			event.stopPropagation();
 			setIsMenuOpen(false);
-
 			onDelete(id);
 		},
 		[id, onDelete],
 	);
-
-	const handleMouseEnter = useCallback(() => {
-		setIsHovered(true);
-	}, []);
-
-	const handleMouseLeave = useCallback(() => {
-		setIsHovered(false);
-		setIsMenuOpen(false);
-	}, []);
 
 	const handleShareClick = useCallback<
 		React.MouseEventHandler<HTMLButtonElement>
@@ -71,54 +60,48 @@ const MeetingItem: React.FC<Properties> = ({
 	return (
 		<>
 			<Link to={to as ValueOf<typeof AppRoute>}>
-				<div
-					className={styles["meeting"]}
-					onMouseEnter={handleMouseEnter}
-					onMouseLeave={handleMouseLeave}
-				>
+				<div className={styles["meeting"]}>
 					<div className={styles["meeting__image"]}>
 						<img
 							alt="meeting"
 							className={styles["meeting__image-placeholder"]}
 							src={src ?? placeholderSource}
 						/>
-						{isHovered && (
-							<div className={styles["menu__container"]}>
-								<button
-									aria-label="Copy meeting share link"
-									className={styles["meeting__share"]}
-									onClick={handleShareClick}
-									title="Copy share link"
-									type="button"
-								>
-									<Icon
-										className={styles["meeting__share-icon"]}
-										name="copyLink"
-									/>
-								</button>
-								<button
-									className={styles["menu__button"]}
-									onClick={handleMenuToggle}
-								>
-									<div className={styles["menu__dots-wrapper"]}>
-										<span className={styles["menu__dot"]} />
-										<span className={styles["menu__dot"]} />
-										<span className={styles["menu__dot"]} />
-									</div>
-									<span className="visually-hidden">Card menu</span>
-								</button>
-								{isMenuOpen && (
-									<div className={styles["menu__dropdown"]}>
-										<button
-											className={styles["menu__dropdown-item"]}
-											onClick={handleDeleteClick}
-										>
-											<span>Delete</span>
-										</button>
-									</div>
-								)}
-							</div>
-						)}
+						<div className={styles["menu__container"]}>
+							<button
+								aria-label="Copy meeting share link"
+								className={styles["meeting__share"]}
+								onClick={handleShareClick}
+								title="Copy share link"
+								type="button"
+							>
+								<Icon
+									className={styles["meeting__share-icon"]}
+									name="copyLink"
+								/>
+							</button>
+							<button
+								className={styles["menu__button"]}
+								onClick={handleMenuToggle}
+							>
+								<div className={styles["menu__dots-wrapper"]}>
+									<span className={styles["menu__dot"]} />
+									<span className={styles["menu__dot"]} />
+									<span className={styles["menu__dot"]} />
+								</div>
+								<span className="visually-hidden">Card menu</span>
+							</button>
+							{isMenuOpen && (
+								<div className={styles["menu__dropdown"]}>
+									<button
+										className={styles["menu__dropdown-item"]}
+										onClick={handleDeleteClick}
+									>
+										<span>Delete</span>
+									</button>
+								</div>
+							)}
+						</div>
 					</div>
 
 					<div className={styles["meeting__info-wrapper"]}>

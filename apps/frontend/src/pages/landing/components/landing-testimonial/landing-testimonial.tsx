@@ -17,6 +17,7 @@ const LandingTestimonial: React.FC<Properties> = ({
 	items = TESTIMONIALS,
 }: Properties) => {
 	const [isPaused, setIsPaused] = useState<boolean>(false);
+	const [touchStart, setTouchStart] = useState<null | number>(null);
 
 	const { index, setIndex } = useCarousel({
 		delayMs: autoplayDelayMs,
@@ -48,6 +49,51 @@ const LandingTestimonial: React.FC<Properties> = ({
 		[handleDotClick],
 	);
 
+	const handleTouchStart = useCallback(
+		(event: React.TouchEvent<HTMLElement>) => {
+			const firstTouch =
+				event.touches[LandingTestimonialConfig.INITIAL_TOUCH_INDEX];
+
+			if (firstTouch) {
+				setTouchStart(firstTouch.clientX);
+			}
+		},
+		[],
+	);
+
+	const handleTouchEnd = useCallback(
+		(event: React.TouchEvent<HTMLElement>) => {
+			const firstChangedTouch =
+				event.changedTouches[LandingTestimonialConfig.INITIAL_TOUCH_INDEX];
+
+			if (touchStart === null || !firstChangedTouch) {
+				return;
+			}
+
+			const touchEnd = firstChangedTouch.clientX;
+			const swipeDistance = touchEnd - touchStart;
+
+			if (swipeDistance > LandingTestimonialConfig.TOUCH_SWIPE_THRESHOLD) {
+				const previousIndex =
+					(index +
+						LandingTestimonialConfig.PREVIOUS_INDEX_INCREMENT +
+						items.length) %
+					items.length;
+				setIndex(previousIndex);
+			} else if (
+				swipeDistance < -LandingTestimonialConfig.TOUCH_SWIPE_THRESHOLD
+			) {
+				const nextIndex =
+					(index + LandingTestimonialConfig.NEXT_INDEX_INCREMENT) %
+					items.length;
+				setIndex(nextIndex);
+			}
+
+			setTouchStart(null);
+		},
+		[index, items.length, setIndex, touchStart],
+	);
+
 	return (
 		<section
 			aria-live="polite"
@@ -55,6 +101,8 @@ const LandingTestimonial: React.FC<Properties> = ({
 			className={styles["testimonials"]}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
+			onTouchEnd={handleTouchEnd}
+			onTouchStart={handleTouchStart}
 		>
 			<div className={styles["testimonials__inner"]}>
 				<div aria-hidden="true" className={styles["testimonials__quote"]} />

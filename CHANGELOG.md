@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.21.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.20.0...v1.21.0) (2025-08-27)
+
+
+### Features
+
+* add meeting card naming ml-206 ([#288](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/288)) ([1976c35](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/1976c35ce5a6f33d36de6c4b5beaf8dac42e0bef))
+* add mobile responsiveness for the profile page ml-286 ([#326](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/326)) ([4726cfa](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/4726cfad76ba82c7124508b2d54c6958e4861010))
+* add status indicators in meeting details page ml-282 ([#310](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/310)) ([67cf53f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/67cf53f438fbdeaa6c4dcf8a8f748858b8305c31))
+* added hasOverlay to Loader to profile ml-202 ([#324](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/324)) ([d4a9992](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/d4a9992b0649bb563c1239ec0bfdccf8771ee1f6))
+* changed text of button ml-314 ([#320](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/320)) ([d211ca8](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/d211ca82983b50e23fa4539c8dc1d9e697a477e7))
+* simplify action items ml-300 ([#322](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/322)) ([820663e](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/820663e8ddc7b451ed2841bafa3ec739b27638de))
+* start mobile responsiveness improvements ml-285 ([#318](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/318)) ([1a8f9a1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/1a8f9a1f72d99c1421e6047ee55cfb88b0409183))
+
+
+### Bug Fixes
+
+* add 405 response for unsupported methods ml-182 ([#316](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/316)) ([65dcb48](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/65dcb4856d2763f46c347e96b10d2b7c1bd5a231))
+* audio duration label ml-313 ([#337](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/337)) ([50c4d02](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/50c4d02ccc2abfbba1c16b840fa940aa166dbf25))
+* changed rings animation and add swipe for testimonials on mobile ml-293 ([#296](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/296)) ([b510b58](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/b510b58533aefe95f61091a39bf0c0d12d5c11f1))
+* fixed mobile meeting-cards-menu ml-304 ([#332](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/332)) ([11572b2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/11572b2a738f672f0d562ee725e0f156f7544ec1))
+* no validation for zoom link when adding bot to meeting ml-263 ([#298](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/298)) ([52fd35e](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/52fd35e654490db386f5c7acaa958d8b14d64abb))
+* updated email meetings refresh ml-302 ([#331](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/331)) ([fe9583a](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/fe9583a8e6d9be019f859d7ba0a473a5270632dd))
+
 ## [1.20.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.19.0...v1.20.0) (2025-08-26)
 
 

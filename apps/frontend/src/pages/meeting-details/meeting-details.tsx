@@ -164,12 +164,7 @@ const MeetingDetails: React.FC = () => {
 							fileName={`meeting-${meeting.id.toString()}.pdf`}
 							key={isMeetingEnded ? "pdf-ready" : "pdf-pending"}
 						>
-							{({ loading }) => (
-								<Button
-									isDisabled={!isMeetingEnded}
-									label={loading ? "Generating PDF..." : "Export"}
-								/>
-							)}
+							<Button isDisabled={!isMeetingEnded} label="Export" />
 						</PDFDownloadLink>
 					</div>
 				</div>

@@ -150,10 +150,8 @@ const MeetingDetails: React.FC = () => {
 
 	const isMeetingEnded = meeting.status === MeetingStatus.ENDED;
 	const hasTranscript = transcriptions.items.length > EMPTY_ARRAY_LENGTH;
-	const hasSummary = Boolean(meeting.summary && meeting.summary.trim());
-	const hasActionItems = Boolean(
-		meeting.actionItems && meeting.actionItems.trim(),
-	);
+	const hasSummary = Boolean(meeting.summary?.trim());
+	const hasActionItems = Boolean(meeting.actionItems?.trim());
 
 	const canExport =
 		isMeetingEnded && hasTranscript && hasSummary && hasActionItems;

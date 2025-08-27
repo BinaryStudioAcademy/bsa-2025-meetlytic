@@ -19,10 +19,6 @@
 	background-color: var(--color-background-2);
 }
 
-/* .active {
-	background-color: var(--color-background-3);
-} */
-
 .hide-on-mobile {
 	display: block;
 	margin-left: auto;
@@ -30,15 +26,7 @@
 
 .navigation-link-icon-arrow {
 	display: flex;
-
-	/* opacity: 0;
-	transition: opacity 0.3s ease-in-out; */
 }
-
-/* .navigation-link.active .navigation-link-icon-arrow,
-.navigation-link:hover .navigation-link-icon-arrow {
-	opacity: 1;
-} */
 
 @media (width <=768px) {
 	.hide-on-mobile {

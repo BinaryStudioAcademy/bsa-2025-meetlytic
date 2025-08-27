@@ -18,7 +18,6 @@ export {
 	type MeetingSummaryActionItemsResponseDto,
 } from "./libs/types/types.js";
 export {
-	meetingIdRouteParameterValidationSchema,
 	sanitizeDefaultSchema,
 	searchInputValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";

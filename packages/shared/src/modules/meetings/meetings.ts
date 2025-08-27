@@ -24,7 +24,6 @@ export {
 export {
 	meetingCreate as meetingCreateValidationSchema,
 	meetingIdRouteParameter as meetingIdRouteParameterValidationSchema,
-	meetingId as meetingIdValidationSchema,
 	meetingUpdate as meetingUpdateValidationSchema,
 	searchInputValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";

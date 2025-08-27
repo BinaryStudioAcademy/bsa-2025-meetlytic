@@ -1,8 +1,8 @@
 import { type FastifyPluginCallback } from "fastify";
 import fp from "fastify-plugin";
 
-import { ExceptionMessage, ServerErrorType } from "~/libs/enums/enums.js";
-import { HTTPCode } from "~/libs/modules/http/http.js";
+import { ExceptionMessage, FastifyHook } from "~/libs/enums/enums.js";
+import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 
 import { matchRoute } from "./libs/match-route.js";
 
@@ -15,7 +15,7 @@ const methodGuardCallback: FastifyPluginCallback<Options> = (
 	options,
 	done,
 ) => {
-	fastify.addHook("onRequest", (request, response, next) => {
+	fastify.addHook(FastifyHook.ON_REQUEST, (request, response, next) => {
 		const rawUrl = request.raw.url ?? "";
 		const upgradeHeader = request.headers.upgrade?.toLowerCase();
 
@@ -31,9 +31,9 @@ const methodGuardCallback: FastifyPluginCallback<Options> = (
 		const [url] = response.request.url.split("?");
 
 		if (!url) {
-			return response.status(HTTPCode.NOT_FOUND).send({
-				errorType: ServerErrorType.COMMON,
+			throw new HTTPError({
 				message: ExceptionMessage.ROUTE_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
@@ -44,16 +44,16 @@ const methodGuardCallback: FastifyPluginCallback<Options> = (
 		);
 
 		if (!isRouteFound) {
-			return response.status(HTTPCode.NOT_FOUND).send({
-				errorType: ServerErrorType.COMMON,
+			throw new HTTPError({
 				message: ExceptionMessage.ROUTE_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
 		if (!isMethodAllowed) {
-			return response.status(HTTPCode.METHOD_NOT_ALLOWED).send({
-				errorType: ServerErrorType.COMMON,
+			throw new HTTPError({
 				message: ExceptionMessage.METHOD_NOT_ALLOWED,
+				status: HTTPCode.METHOD_NOT_ALLOWED,
 			});
 		}
 

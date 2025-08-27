@@ -2,6 +2,10 @@ import { EMPTY_ARRAY_LENGTH } from "~/libs/constants/constants.js";
 import { APIPath } from "~/libs/enums/enums.js";
 import { AuthError } from "~/libs/exceptions/exceptions.js";
 import {
+	convertToZoomWebClientUrl,
+	isZoomLinkValid,
+} from "~/libs/helpers/helpers.js";
+import {
 	type CloudFormation,
 	type CreateStack,
 } from "~/libs/modules/cloud-formation/cloud-formation.js";
@@ -17,7 +21,7 @@ import {
 	type BaseToken,
 	type SharedJwtPayload,
 } from "~/libs/modules/token/token.js";
-import { type Service } from "~/libs/types/types.js";
+import { type Service, type ValueOf } from "~/libs/types/types.js";
 
 import { MeetingErrorMessage, MeetingStatus } from "./libs/enums/enums.js";
 import { MeetingError } from "./libs/exceptions/exceptions.js";
@@ -62,6 +66,22 @@ class MeetingService implements Service<MeetingResponseDto> {
 		this.meetingTranscriptionService = meetingTranscriptionService;
 		this.sharedJwt = sharedJwt;
 	}
+
+	private checkIfZoomLinkIsValid = async (link: string): Promise<boolean> => {
+		try {
+			const response = await fetch(convertToZoomWebClientUrl(link));
+
+			if (!response.ok) {
+				return false;
+			}
+
+			const html = await response.text();
+
+			return isZoomLinkValid(html);
+		} catch {
+			return false;
+		}
+	};
 
 	private async createInstance(
 		payload: Omit<CreateStack, "template">,
@@ -132,6 +152,15 @@ class MeetingService implements Service<MeetingResponseDto> {
 			});
 		}
 
+		const validLink = await this.checkIfZoomLinkIsValid(meetingLink);
+
+		if (!validLink) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.NO_MEETING_FOR_LINK,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const existing = await this.meetingRepository.findAll({
 			meetingId: meetingId,
 			status: MeetingStatus.STARTED,
@@ -150,6 +179,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			meetingId,
 			meetingPassword: payload.meetingPassword ?? null,
 			ownerId: payload.ownerId,
+			title: payload.title ?? null,
 		});
 
 		let newMeeting;
@@ -217,24 +247,6 @@ class MeetingService implements Service<MeetingResponseDto> {
 		}
 
 		return isDeleted;
-	}
-
-	public async endMeeting(id: number): Promise<MeetingDetailedResponseDto> {
-		const meeting = await this.meetingRepository.update(id, {
-			instanceId: null,
-			status: MeetingStatus.ENDED,
-		});
-
-		if (!meeting) {
-			throw new MeetingError({
-				message: MeetingErrorMessage.MEETING_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		void this.cloudFormation.delete(id);
-
-		return meeting.toDetailedObject();
 	}
 
 	public async find(id: number): Promise<MeetingDetailedResponseDto> {
@@ -321,6 +333,32 @@ class MeetingService implements Service<MeetingResponseDto> {
 		return transcription;
 	}
 
+	public async setStatus(
+		id: number,
+		status: ValueOf<typeof MeetingStatus>,
+	): Promise<MeetingDetailedResponseDto> {
+		let meeting = await this.meetingRepository.update(id, {
+			status,
+		});
+
+		if (status === MeetingStatus.FAILED || status === MeetingStatus.ENDED) {
+			meeting = await this.meetingRepository.update(id, {
+				instanceId: null,
+			});
+
+			void this.cloudFormation.delete(id);
+		}
+
+		if (!meeting) {
+			throw new MeetingError({
+				message: MeetingErrorMessage.MEETING_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return meeting.toDetailedObject();
+	}
+
 	public async stopRecording(id: number): Promise<void> {
 		const meeting = await this.find(id);
 		socketService.emitTo({
@@ -357,6 +395,7 @@ class MeetingService implements Service<MeetingResponseDto> {
 			ownerId: meetingEntity.toObject().ownerId,
 			status: payload.status ?? meetingEntity.toObject().status,
 			summary: payload.summary ?? meetingEntity.toDetailedObject().summary,
+			title: meetingEntity.toObject().title,
 		});
 
 		const updatedMeeting = await this.meetingRepository.update(

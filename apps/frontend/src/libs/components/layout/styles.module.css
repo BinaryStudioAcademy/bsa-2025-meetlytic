@@ -4,14 +4,16 @@
 		"header header" 74px
 		"sidebar main" 1fr
 		/ 263px 1fr;
-	width: 100%;
-	max-width: 1440px;
-	height: 100%;
-	margin: 0 auto;
+	height: 100vh;
 }
 
 .layout__header {
 	grid-area: header;
+}
+
+.main-container {
+	max-width: 1440px;
+	margin: 0 auto;
 }
 
 .layout__sidebar {

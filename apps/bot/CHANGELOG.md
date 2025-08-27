@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.2.1...bot-v1.3.0) (2025-08-27)
+
+
+### Features
+
+* add status indicators in meeting details page ml-282 ([#310](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/310)) ([67cf53f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/67cf53f438fbdeaa6c4dcf8a8f748858b8305c31))
+* simplify action items ml-300 ([#322](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/322)) ([820663e](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/820663e8ddc7b451ed2841bafa3ec739b27638de))
+
 ## [1.2.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.2.0...bot-v1.2.1) (2025-08-26)
 
 

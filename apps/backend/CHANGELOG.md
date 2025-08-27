@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.13.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.13.1...backend-v1.13.2) (2025-08-27)
+
+
+### Bug Fixes
+
+* **backend:** disable methodGuard ml-339 ([#340](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/340)) ([b9de89d](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/b9de89d1dfdfef0c2992de59fbc88a7ba3d64c7e))
+
+## [1.13.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.13.0...backend-v1.13.1) (2025-08-27)
+
+
+### Bug Fixes
+
+* **backend:** ignore non-API and documentation routes ml-339 ([#341](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/341)) ([afdaf52](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/afdaf52606306830a14b8b9f1d22f426163b8e08))
+
+## [1.13.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.12.1...backend-v1.13.0) (2025-08-27)
+
+
+### Features
+
+* add meeting card naming ml-206 ([#288](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/288)) ([1976c35](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/1976c35ce5a6f33d36de6c4b5beaf8dac42e0bef))
+* add status indicators in meeting details page ml-282 ([#310](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/310)) ([67cf53f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/67cf53f438fbdeaa6c4dcf8a8f748858b8305c31))
+
+
+### Bug Fixes
+
+* add 405 response for unsupported methods ml-182 ([#316](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/316)) ([65dcb48](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/65dcb4856d2763f46c347e96b10d2b7c1bd5a231))
+* no validation for zoom link when adding bot to meeting ml-263 ([#298](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/298)) ([52fd35e](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/52fd35e654490db386f5c7acaa958d8b14d64abb))
+
 ## [1.12.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.12.0...backend-v1.12.1) (2025-08-26)
 
 

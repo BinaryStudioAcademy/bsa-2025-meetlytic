@@ -6,17 +6,17 @@ function matchRoute(
 	url: string,
 	method: string,
 	allRoutes: { method: string; path: string }[],
-): { found: boolean; methodAllowed: boolean } {
+): { isMethodAllowed: boolean; isRouteFound: boolean } {
 	const matchingRoutes = allRoutes.filter((route) =>
 		match(route.path, { decode: decodeURIComponent })(url),
 	);
 
-	const found = matchingRoutes.length > EMPTY_ARRAY_LENGTH;
-	const methodAllowed = matchingRoutes.some(
+	const isRouteFound = matchingRoutes.length > EMPTY_ARRAY_LENGTH;
+	const isMethodAllowed = matchingRoutes.some(
 		(route) => route.method.toUpperCase() === method.toUpperCase(),
 	);
 
-	return { found, methodAllowed };
+	return { isMethodAllowed, isRouteFound };
 }
 
 export { matchRoute };

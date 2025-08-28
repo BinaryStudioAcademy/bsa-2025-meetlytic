@@ -1,4 +1,4 @@
-export { FileErrorMessage } from "./libs/enums/enums.js";
+export { FileErrorMessage, UploadErrorMessage } from "./libs/enums/enums.js";
 export {
 	type FileGetAllResponseDto,
 	type FilePublicDto,

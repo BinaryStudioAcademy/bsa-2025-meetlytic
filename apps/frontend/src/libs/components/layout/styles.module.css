@@ -1,7 +1,7 @@
 .layout {
 	display: grid;
 	grid-template:
-		"header header" 74px
+		"header header" var(--header-height-app-lg)
 		"sidebar main" 1fr
 		/ 263px 1fr;
 	height: 100vh;
@@ -23,14 +23,14 @@
 .layout__main {
 	grid-area: main;
 	padding: 30px 40px;
-	overflow-y: scroll;
+	overflow-y: auto;
 	background-color: var(--color-background-2);
 }
 
 @media (width <= 768px) {
 	.layout {
 		grid-template:
-			"header" 54px
+			"header" var(--header-height-app-md)
 			"main" 1fr
 			/ 1fr;
 	}

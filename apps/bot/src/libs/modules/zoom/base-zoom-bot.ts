@@ -293,9 +293,11 @@ class BaseZoomBot {
 		}
 
 		try {
+			this.logger.info("clicking to chat button");
 			await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
 			await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
 			await delay(Timeout.FIVE_SECONDS);
+			this.logger.info("clicking to chat input");
 			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
 			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
 			await delay(Timeout.FIVE_SECONDS);
@@ -337,17 +339,17 @@ class BaseZoomBot {
 				SocketEvent.RECORDING,
 				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
-			this.audioRecorder.start();
-			this.audioRecorder.startFullMeetingRecording(
-				String(this.config.ENV.ZOOM.MEETING_ID),
-			);
-			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
-
 			this.logger.info(ZoomBotMessage.GETTING_PUBLIC_URL);
 			this.socketClient.emit(
 				SocketEvent.GET_PUBLIC_URL,
 				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
+			await this.sendPublicUrlToChat("example");
+			this.audioRecorder.start();
+			this.audioRecorder.startFullMeetingRecording(
+				String(this.config.ENV.ZOOM.MEETING_ID),
+			);
+			this.logger.info(ZoomBotMessage.AUDIO_RECORDING_STARTED);
 		} catch (error) {
 			this.socketClient.emit(
 				SocketEvent.FAILED_TO_JOIN_MEETING,

@@ -1,0 +1,3 @@
+const HEADING_LEVEL_PRIMARY = 1;
+
+export { HEADING_LEVEL_PRIMARY };

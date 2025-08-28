@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.19.0...frontend-v1.19.1) (2025-08-28)
+
+
+### Bug Fixes
+
+* update header.tsx ml-363 ([#369](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/369)) ([f428b5e](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/f428b5e5c870a80c160dc7fdf65615aac33529df))
+
 ## [1.19.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.18.0...frontend-v1.19.0) (2025-08-28)
 
 

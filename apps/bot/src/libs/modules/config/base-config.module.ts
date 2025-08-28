@@ -144,12 +144,7 @@ class BaseConfig implements Config {
 			"--disable-setuid-sandbox",
 			"--autoplay-policy=no-user-gesture-required",
 			"--use-fake-ui-for-media-stream",
-			"--disable-gpu",
-			"--disable-extensions",
-			"--disable-backgrounding-occluded-windows",
-			"--disable-renderer-backgrounding",
-			"--disable-dev-shm-usage",
-			"--headless=new",
+			"--headless=true",
 		];
 
 		return {

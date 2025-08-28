@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.22.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.22.0...v1.22.1) (2025-08-28)
+
+
+### Bug Fixes
+
+* bot not sending public link in chat ml-356 ([#360](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/360)) ([395302f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/395302f650102850adbb3a50506168918742a32b))
+
+## [1.22.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.21.2...v1.22.0) (2025-08-28)
+
+
+### Features
+
+* add user avatar uploader ml-65 ([#126](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/126)) ([5ef2e25](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/5ef2e256fa1de30db73294815a96b2f186055a2d))
+* export button should be disabled during live transcription ml-330 ([#336](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/336)) ([89ab0cc](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/89ab0cce801063756ab86cc9fc069dffedd9e3a1))
+* update navigation item icons visibility and font loading ml-188 ([#327](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/327)) ([cc73c88](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/cc73c882baab97b89108f724638735fe33e59ff4))
+
+
+### Bug Fixes
+
+* **bot:** move init after browser init ml-353 ([#354](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/354)) ([dcb9aa6](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/dcb9aa601cd474c128b7bc049ca871cf0730d4d9))
+* convert markdown to styles for pdf export ml-301 ([#328](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/328)) ([44b3869](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/44b38690762d757b0732e94e903b31c261dca2b5))
+* fixed header elements ml-345 ([#346](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/346)) ([4fe3874](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/4fe3874c40de36ac2f0f0f4c7d346d67d939adb1))
+* **frontend:** put a new card on the begining ml-329 ([#352](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/352)) ([d1950eb](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/d1950eb1306da9958fe9638c2e5caa68286db65f))
+* meeting details transcription refresh to start transcription ml-307 ([#344](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/344)) ([0527002](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/0527002825fb27738647300c82dc438231da214e))
+* rollback layout changes ml-347 ([#348](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/348)) ([0623d8f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/0623d8fc5098d7f5a28d17d221d9f5ef590c9608))
+
 ## [1.21.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.21.1...v1.21.2) (2025-08-27)
 
 

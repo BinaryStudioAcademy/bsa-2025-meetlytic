@@ -1,7 +1,7 @@
 {
 	"name": "@meetlytic/frontend",
 	"private": true,
-	"version": "1.18.0",
+	"version": "1.19.0",
 	"type": "module",
 	"engines": {
 		"node": "22.x.x",
@@ -34,7 +34,9 @@
 		"react-toastify": "11.0.5",
 		"rehype-sanitize": "6.0.0",
 		"remark-gfm": "4.0.1",
-		"socket.io-client": "4.8.1"
+		"remark-parse": "11.0.0",
+		"socket.io-client": "4.8.1",
+		"unified": "11.0.5"
 	},
 	"devDependencies": {
 		"@types/react": "19.1.8",
@@ -44,6 +46,7 @@
 		"eslint-plugin-jsx-a11y": "6.10.2",
 		"eslint-plugin-react": "7.37.5",
 		"eslint-plugin-react-hooks": "5.2.0",
+		"mdast": "2.3.2",
 		"vite": "7.0.3",
 		"vite-plugin-svgr": "4.3.0"
 	}

@@ -6,7 +6,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 15px 40px;
+	height: var(--header-height-app-lg);
+	padding: 0 40px;
 }
 
 .header__logo {
@@ -42,13 +43,14 @@
 	width: 100%;
 }
 
-@media (width <= 768px) {
+@media (width <=768px) {
 	.header__inner {
 		display: grid;
 		grid-template-columns: auto 1fr auto;
 		align-items: center;
 		justify-content: center;
-		padding: 15px 10px;
+		height: var(--header-height-app-md);
+		padding: 0 10px;
 	}
 
 	.header__burger {

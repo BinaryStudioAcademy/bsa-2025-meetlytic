@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.12.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.11.0...shared-v1.12.0) (2025-08-28)
+
+
+### Features
+
+* add user avatar uploader ml-65 ([#126](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/126)) ([5ef2e25](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/5ef2e256fa1de30db73294815a96b2f186055a2d))
+
+## [1.11.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.10.0...shared-v1.11.0) (2025-08-27)
+
+
+### Features
+
+* add meeting card naming ml-206 ([#288](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/288)) ([1976c35](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/1976c35ce5a6f33d36de6c4b5beaf8dac42e0bef))
+* add status indicators in meeting details page ml-282 ([#310](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/310)) ([67cf53f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/67cf53f438fbdeaa6c4dcf8a8f748858b8305c31))
+
+
+### Bug Fixes
+
+* add 405 response for unsupported methods ml-182 ([#316](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/316)) ([65dcb48](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/65dcb4856d2763f46c347e96b10d2b7c1bd5a231))
+* audio duration label ml-313 ([#337](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/337)) ([50c4d02](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/50c4d02ccc2abfbba1c16b840fa940aa166dbf25))
+* no validation for zoom link when adding bot to meeting ml-263 ([#298](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/298)) ([52fd35e](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/52fd35e654490db386f5c7acaa958d8b14d64abb))
+
 ## [1.10.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.9.1...shared-v1.10.0) (2025-08-25)
 
 

@@ -93,7 +93,7 @@ echo "[+] Starting PulseAudio (root user)…"
 export HOME=/root
 export XDG_RUNTIME_DIR=/run/user/0
 mkdir -p "$XDG_RUNTIME_DIR"
-pulseaudio --daemonize=yes --exit-idle-time=-1
+pulseaudio --daemonize=yes --exit-idle-time=-1 --disallow-exit --disable-shm
 echo "[+] PulseAudio daemon started."
 
 # ─── Application setup ───────────────────────────────────────────────────────

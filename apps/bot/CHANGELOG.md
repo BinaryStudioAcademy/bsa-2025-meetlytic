@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.3.0...bot-v1.3.1) (2025-08-28)
+
+
+### Bug Fixes
+
+* **bot:** move init after browser init ml-353 ([#354](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/354)) ([dcb9aa6](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/dcb9aa601cd474c128b7bc049ca871cf0730d4d9))
+
 ## [1.3.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.2.1...bot-v1.3.0) (2025-08-27)
 
 

@@ -16,6 +16,7 @@ export {
 	USER_SIGN_UP_DEFAULT_VALUES,
 } from "./libs/constants/constants.js";
 export {
+	type AvatarUploadResponseDto,
 	type UserResponseDto,
 	type UserSignInRequestDto,
 	type UserSignUpRequestDto,

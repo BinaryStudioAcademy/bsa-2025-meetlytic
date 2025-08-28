@@ -19,6 +19,8 @@ export {
 	HTTPError,
 	MeetingError,
 	MeetingTranscriptionError,
+	S3Error,
+	UploadError,
 	UserError,
 	ValidationError,
 } from "./libs/exceptions/exceptions.js";
@@ -52,6 +54,7 @@ export {
 	type ValueOf,
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthStatusMessage } from "./modules/auth/auth.js";
+export { S3ErrorMessage } from "./modules/aws/aws.js";
 export {
 	type FileGetAllResponseDto,
 	type FilePublicDto,
@@ -59,6 +62,7 @@ export {
 	type FileResponseDto,
 	type FileUpdateRequestDto,
 	FileErrorMessage,
+	UploadErrorMessage,
 } from "./modules/files/files.js";
 export {
 	type MeetingAttachAudioRequestDto,
@@ -88,6 +92,9 @@ export {
 } from "./modules/meetings/meetings.js";
 export {
 	type AuthResponseDto,
+	type AvatarFileDto,
+	type AvatarUploadResponseDto,
+	type DeleteAvatarResult,
 	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
 	type UserResponseDto,

@@ -1,0 +1,3 @@
+const MEMORY_UNIT_SIZE = 1024;
+
+export { MEMORY_UNIT_SIZE };

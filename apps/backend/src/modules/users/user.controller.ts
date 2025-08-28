@@ -4,14 +4,19 @@ import {
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
-import { HTTPCode, HTTPMethod } from "~/libs/modules/http/http.js";
+import { HTTPCode, HTTPError, HTTPMethod } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type UploadedFile } from "~/libs/plugins/uploads/libs/types/types.js";
+import { type FileService } from "~/modules/files/files.service.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
-import { UsersApiPath } from "./libs/enums/enums.js";
+import { UserErrorMessage, UsersApiPath } from "./libs/enums/enums.js";
 import {
+	type DeleteAvatarOptions,
+	type GetCurrentUserOptions,
+	type UpdateProfileOptions,
+	type UploadAvatarOptions,
 	type UserResponseDto,
-	type UserUpdateResponseDto,
 } from "./libs/types/types.js";
 
 /**
@@ -22,7 +27,8 @@ import {
  *       type: object
  *       properties:
  *         id:
- *           type: number
+ *           type: integer
+ *           format: int32
  *         firstName:
  *           type: string
  *           nullable: true
@@ -30,28 +36,64 @@ import {
  *           type: string
  *           nullable: true
  *         userId:
- *           type: number
+ *           type: integer
+ *           format: int32
  *       required:
  *         - id
  *         - userId
+ *
  *     User:
  *       type: object
  *       properties:
  *         id:
- *           type: number
+ *           type: integer
+ *           format: int32
+ *           minimum: 1
  *         email:
  *           type: string
  *           format: email
  *       required:
  *         - id
  *         - email
+ *
+ *     AvatarUploadResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           example: true
+ *         data:
+ *           type: object
+ *           properties:
+ *             key:
+ *               type: string
+ *             url:
+ *               type: string
+ *       required:
+ *         - success
+ *         - data
+ *
+ *     AvatarDeleteResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           example: true
+ *         message:
+ *           type: string
+ *           example: Avatar deleted successfully
+ *       required:
+ *         - success
+ *         - message
+ *
  *     UserWithDetails:
  *       allOf:
- *         - $ref: "#/components/schemas/User"
+ *         - $ref: '#/components/schemas/User'
  *         - type: object
  *           properties:
  *             details:
- *               $ref: "#/components/schemas/UserDetails"
+ *               $ref: '#/components/schemas/UserDetails'
+ *
  *     UserUpdateRequest:
  *       type: object
  *       properties:
@@ -62,19 +104,47 @@ import {
  *           type: string
  *         lastName:
  *           type: string
+ *       required:
+ *         - email
  */
-class UserController extends BaseController {
-	private userService: UserService;
 
-	public constructor(logger: Logger, userService: UserService) {
+class UserController extends BaseController {
+	private readonly fileService: FileService;
+	private readonly userService: UserService;
+
+	public constructor({
+		fileService,
+		logger,
+		userService,
+	}: {
+		fileService: FileService;
+		logger: Logger;
+		userService: UserService;
+	}) {
 		super(logger, APIPath.USERS);
 
 		this.userService = userService;
+		this.fileService = fileService;
 
 		this.addRoute({
 			handler: () => this.findAll(),
 			method: HTTPMethod.GET,
 			path: UsersApiPath.ROOT,
+		});
+
+		this.addRoute({
+			handler: (options) => this.uploadAvatar(options as UploadAvatarOptions),
+			method: HTTPMethod.POST,
+			path: UsersApiPath.AVATAR,
+		});
+
+		this.addRoute({
+			handler: (options) =>
+				this.deleteAvatar(
+					options as APIHandlerOptions<{ user: UserResponseDto }>,
+				),
+			method: HTTPMethod.DELETE,
+			path: UsersApiPath.AVATAR,
 		});
 
 		this.addRoute({
@@ -101,6 +171,39 @@ class UserController extends BaseController {
 
 	/**
 	 * @swagger
+	 * /users/avatar:
+	 *   delete:
+	 *     tags: [Users]
+	 *     summary: Delete user avatar
+	 *     security:
+	 *       - bearerAuth: []
+	 *     responses:
+	 *       200:
+	 *         description: Avatar deleted
+	 *       404:
+	 *         description: Not found
+	 *       500:
+	 *         description: Server error
+	 */
+	private async deleteAvatar({
+		user,
+	}: DeleteAvatarOptions): Promise<APIHandlerResponse> {
+		const { id } = user as UserResponseDto;
+
+		await this.userService.getDetailsId(id);
+		await this.userService.deleteAvatar(id);
+
+		return {
+			payload: {
+				isSuccessful: true,
+				message: UserErrorMessage.AVATAR_DELETED_SUCCESSFULLY,
+			},
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
 	 * /users:
 	 *   get:
 	 *     summary: Get all users
@@ -114,7 +217,7 @@ class UserController extends BaseController {
 	 *             schema:
 	 *               type: array
 	 *               items:
-	 *                 $ref: "#/components/schemas/User"
+	 *                 $ref: '#/components/schemas/User'
 	 */
 	private async findAll(): Promise<APIHandlerResponse> {
 		return {
@@ -136,22 +239,66 @@ class UserController extends BaseController {
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: "#/components/schemas/UserWithDetails"
+	 *               $ref: '#/components/schemas/UserWithDetails'
 	 *       401:
 	 *         description: Unauthorized
 	 */
 	private async getCurrentUser({
 		user,
-	}: APIHandlerOptions<{
-		user: UserResponseDto;
-	}>): Promise<APIHandlerResponse> {
-		const fullUser = await this.userService.findProfileByEmail(
-			(user as UserResponseDto).email,
-		);
+	}: GetCurrentUserOptions): Promise<APIHandlerResponse> {
+		const { email } = user as UserResponseDto;
+
+		const fullUser = await this.userService.findProfileByEmail(email);
 
 		return {
 			payload: fullUser,
 			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /users/avatar:
+	 *   post:
+	 *     tags: [Users]
+	 *     summary: Upload user avatar
+	 *     security:
+	 *       - bearerAuth: []
+	 *     requestBody:
+	 *       content:
+	 *         multipart/form-data:
+	 *           schema:
+	 *             type: object
+	 *             properties:
+	 *               file:
+	 *                 type: string
+	 *                 format: binary
+	 *                 description: Avatar file
+	 *     responses:
+	 *       201:
+	 *         description: Avatar uploaded
+	 *       400:
+	 *         description: Bad request
+	 *       500:
+	 *         description: Server error
+	 */
+	private async uploadAvatar({
+		uploadedFile,
+		user,
+	}: UploadAvatarOptions): Promise<APIHandlerResponse> {
+		const { buffer, filename, mimetype } = uploadedFile as UploadedFile;
+		const { id } = user as UserResponseDto;
+
+		const { key, url } = await this.userService.uploadAvatar({
+			buffer,
+			filename,
+			mimetype,
+			userId: id,
+		});
+
+		return {
+			payload: { data: { key, url }, success: true },
+			status: HTTPCode.CREATED,
 		};
 	}
 
@@ -167,14 +314,14 @@ class UserController extends BaseController {
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             $ref: "#/components/schemas/UserUpdateRequest"
+	 *             $ref: '#/components/schemas/UserUpdateRequest'
 	 *     responses:
 	 *       200:
 	 *         description: Updated user data
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: "#/components/schemas/UserWithDetails"
+	 *               $ref: '#/components/schemas/UserWithDetails'
 	 *       400:
 	 *         description: Bad request
 	 *       422:
@@ -184,14 +331,15 @@ class UserController extends BaseController {
 	public async updateProfile({
 		body,
 		user,
-	}: APIHandlerOptions<{
-		body: UserUpdateResponseDto;
-		user: UserResponseDto;
-	}>): Promise<APIHandlerResponse> {
-		const updatedUser = await this.userService.update(
-			(user as UserResponseDto).id,
-			body,
-		);
+	}: UpdateProfileOptions): Promise<APIHandlerResponse> {
+		if (!user) {
+			throw new HTTPError({
+				message: UserErrorMessage.USER_REQUIRED,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
+		const updatedUser = await this.userService.update(user.id, body);
 
 		return {
 			payload: updatedUser,

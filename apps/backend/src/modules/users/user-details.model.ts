@@ -4,11 +4,14 @@ import {
 	AbstractModel,
 	DatabaseTableName,
 } from "~/libs/modules/database/database.js";
+import { FileModel } from "~/modules/files/file.model.js";
 
 import { ColumnName } from "./libs/enums/enums.js";
 import { UserModel } from "./user.model.js";
 
 class UserDetailsModel extends AbstractModel {
+	public avatarFileId!: null | number;
+
 	public firstName!: string;
 
 	public lastName!: string;
@@ -17,6 +20,14 @@ class UserDetailsModel extends AbstractModel {
 
 	public static get relationMappings(): RelationMappings {
 		return {
+			avatar: {
+				join: {
+					from: `${DatabaseTableName.USER_DETAILS}.${ColumnName.AVATAR_FILE_ID}`,
+					to: `${DatabaseTableName.FILES}.id`,
+				},
+				modelClass: FileModel,
+				relation: this.HasOneRelation,
+			},
 			user: {
 				join: {
 					from: `${this.tableName}.${ColumnName.USER_ID}`,

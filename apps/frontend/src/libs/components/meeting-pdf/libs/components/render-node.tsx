@@ -1,11 +1,11 @@
 import { Text, View } from "~/libs/components/components.js";
-import { HEADING_LEVEL_PRIMARY } from "~/libs/constants/constants.js";
 import {
 	type BlockContent,
 	type ListItem,
 	type PhrasingContent,
 } from "~/libs/types/types.js";
 
+import { getHeadingStyle } from "../helpers/get-heading-style.js";
 import { styles } from "../styles/meeting-pdf.styles.js";
 
 type MdNode = BlockContent | ListItem | PhrasingContent;
@@ -42,10 +42,7 @@ const renderNode = (node: MdNode, key: string): React.ReactElement => {
 
 	switch (node.type) {
 		case "heading": {
-			const style =
-				node.depth === HEADING_LEVEL_PRIMARY
-					? styles.heading1
-					: styles.heading2;
+			const style = getHeadingStyle(node.depth);
 
 			return (
 				<Text key={key} style={style}>

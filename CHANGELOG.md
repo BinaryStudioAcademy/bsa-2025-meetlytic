@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.22.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.22.0...v1.22.1) (2025-08-28)
+
+
+### Bug Fixes
+
+* bot not sending public link in chat ml-356 ([#360](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/360)) ([395302f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/395302f650102850adbb3a50506168918742a32b))
+
 ## [1.22.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.21.2...v1.22.0) (2025-08-28)
 
 

@@ -15,24 +15,25 @@ const MeetingPdf: React.FC<MeetingPdfProperties> = ({
 }: MeetingPdfProperties): React.ReactElement => {
 	return (
 		<Document>
-		<Page size="A4" style={styles.page}>
-			<View style={styles.section}>
-				<Text style={styles.title}>{title}</Text>
-				<Text style={styles.text}>
-					Date: {formatDate(new Date(createdAt), DateTimeFormat.MEETING)}
-				</Text>
-			</View>
+			<Page size="A4" style={styles.page}>
+				<View style={styles.section}>
+					<Text style={styles.title}>{title}</Text>
+					<Text style={styles.text}>
+						Date: {formatDate(new Date(createdAt), DateTimeFormat.MEETING)}
+					</Text>
+				</View>
 
-			<View style={styles.section}>{renderMarkdown(summary)}</View>
+				<View style={styles.section}>{renderMarkdown(summary)}</View>
 
-			<View style={styles.section}>{renderMarkdown(actionItems)}</View>
+				<View style={styles.section}>{renderMarkdown(actionItems)}</View>
 
-			<View style={styles.section}>
-				<Text style={styles.heading1}>Transcript</Text>
-				{renderMarkdown(transcription)}
-			</View>
-		</Page>
-	</Document>
-);
+				<View style={styles.section}>
+					<Text style={styles.heading1}>Transcript</Text>
+					{renderMarkdown(transcription)}
+				</View>
+			</Page>
+		</Document>
+	);
+};
 
 export { MeetingPdf };

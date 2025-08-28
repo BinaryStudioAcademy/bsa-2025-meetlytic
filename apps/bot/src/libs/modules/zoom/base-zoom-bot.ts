@@ -344,7 +344,6 @@ class BaseZoomBot {
 				SocketEvent.GET_PUBLIC_URL,
 				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
-			await this.sendPublicUrlToChat("example");
 			this.audioRecorder.start();
 			this.audioRecorder.startFullMeetingRecording(
 				String(this.config.ENV.ZOOM.MEETING_ID),

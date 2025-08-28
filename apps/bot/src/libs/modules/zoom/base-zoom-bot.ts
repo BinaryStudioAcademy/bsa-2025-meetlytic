@@ -244,6 +244,7 @@ class BaseZoomBot {
 			},
 		);
 	}
+
 	private async joinMeeting(): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
@@ -287,6 +288,7 @@ class BaseZoomBot {
 			);
 		}
 	}
+
 	private async sendPublicUrlToChat(publicUrl: string): Promise<void> {
 		if (!this.page) {
 			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
@@ -310,16 +312,58 @@ class BaseZoomBot {
 		}
 	}
 
+	public async restart(): Promise<void> {
+		if (!this.page) {
+			throw new Error(ZoomBotMessage.PAGE_NOT_INITIALIZED);
+		}
+
+		await this.page.reload({ waitUntil: "networkidle0" });
+	}
+
 	public async run(): Promise<void> {
 		try {
 			this.browser = await puppeteer.launch(this.config.getLaunchOptions());
 			this.page = await this.browser.newPage();
 			await this.page.setUserAgent(USER_AGENT);
+
+			this.page.on("console", (message) => {
+				const type = message.type();
+				const text = message.text();
+
+				if (type === "error") {
+					this.logger.error(`[chrome console error] ${text}`);
+				} else {
+					this.logger.info(`[chrome console ${type}] ${text}`);
+				}
+			});
+
+			this.page.on("pageerror", (error) => {
+				this.logger.error(`[chrome page error] ${error.message}`);
+			});
+
+			this.page.on("requestfailed", (request) => {
+				this.logger.warn(
+					`[chrome request failed] ${request.url()} ${String(request.failure()?.errorText)}`,
+				);
+			});
+
+			const process = this.browser.process();
+
+			if (process) {
+				process.stderr?.on("data", (data: Buffer) => {
+					this.logger.error(`[chrome stderr] ${data.toString()}`);
+				});
+				process.stdout?.on("data", (data: Buffer) => {
+					this.logger.info(`[chrome stdout] ${data.toString()}`);
+				});
+			}
+
 			this.initSocket();
 			this.socketClient.emit(
 				SocketEvent.JOINING_TO_MEETING,
 				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
+
 			this.logger.info(
 				`${ZoomBotMessage.NAVIGATION_TO_ZOOM} ${this.config.ENV.ZOOM.MEETING_LINK}`,
 			);
@@ -330,18 +374,22 @@ class BaseZoomBot {
 					waitUntil: "networkidle2",
 				},
 			);
+
 			await this.handleInitialPopups();
 			await this.joinMeeting();
+
 			this.logger.info(ZoomBotMessage.JOINED_MEETING);
 			this.socketClient.emit(
 				SocketEvent.RECORDING,
 				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
+
 			this.logger.info(ZoomBotMessage.GETTING_PUBLIC_URL);
 			this.socketClient.emit(
 				SocketEvent.GET_PUBLIC_URL,
 				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
+
 			this.audioRecorder.start();
 			this.audioRecorder.startFullMeetingRecording(
 				String(this.config.ENV.ZOOM.MEETING_ID),

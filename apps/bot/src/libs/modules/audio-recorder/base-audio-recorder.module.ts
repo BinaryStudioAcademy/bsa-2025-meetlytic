@@ -26,7 +26,12 @@ import {
 	type MeetingAudioSaveDto,
 } from "./libs/types/types.js";
 
+import { zoomBot } from "../zoom/zoom-bot.js";
+
 class BaseAudioRecorder implements AudioRecorder {
+	private static readonly DEFAULT_SILENCE_LIMIT = 3;
+	private static readonly DEFAULT_SILENCE_THRESHOLD_DB = -50;
+	private static readonly INITIAL_SILENCE_COUNT = 0;
 	private chunkDuration: number;
 	private config: BaseConfig;
 	private currentFfmpegProcess: null | ReturnType<typeof spawn> = null;
@@ -39,6 +44,9 @@ class BaseAudioRecorder implements AudioRecorder {
 	private openAI: OpenAI;
 	private outputDir: string;
 	private s3: S3;
+	private silenceCount = BaseAudioRecorder.INITIAL_SILENCE_COUNT;
+	private silenceLimit = BaseAudioRecorder.DEFAULT_SILENCE_LIMIT;
+	private silenceThreshold = BaseAudioRecorder.DEFAULT_SILENCE_THRESHOLD_DB;
 	private socketClient: BaseSocketClient;
 	private useMp3 = true;
 	private VOLUME_RE = /mean[_ ]volume:\s*(-?\d+(?:\.\d+)?)\s*dB/i;
@@ -70,12 +78,40 @@ class BaseAudioRecorder implements AudioRecorder {
 		}
 	}
 
-	private logVolume(line: string): void {
+	private async logVolume(line: string): Promise<void> {
 		const message = this.VOLUME_RE.exec(line);
 		const ONE = 1;
 
 		if (message) {
-			this.logger.info(`[VOL] ${String(message[ONE])} dB`);
+			const volume = Number.parseFloat(String(message[ONE]));
+			this.logger.info(`[VOL] ${String(volume)} dB`);
+
+			if (volume < this.silenceThreshold) {
+				this.silenceCount++;
+				this.logger.warn(
+					`[SILENCE] Detected (${String(this.silenceCount)}/${String(this.silenceLimit)})`,
+				);
+
+				if (this.silenceCount >= this.silenceLimit) {
+					this.logger.error(
+						`[SILENCE] Triggered after ${String(this.silenceLimit)} detections`,
+					);
+
+					this.silenceCount = 0;
+
+					await zoomBot.restart();
+
+					// OR: stop & restart browser/recording
+					// await this.stopFullMeetingRecording();
+					// await browser.reload();
+				}
+			} else {
+				if (this.silenceCount > 0) {
+					this.logger.info("[SILENCE] Reset counter (voice detected)");
+				}
+
+				this.silenceCount = 0;
+			}
 		}
 	}
 

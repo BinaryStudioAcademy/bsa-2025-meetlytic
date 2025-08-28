@@ -10,6 +10,7 @@ import {
 	PlayerTrack,
 	TranscriptionPanel,
 } from "~/libs/components/components.js";
+import { EMPTY_ARRAY_LENGTH } from "~/libs/constants/constants.js";
 import {
 	AppRoute,
 	DataStatus,
@@ -148,6 +149,12 @@ const MeetingDetails: React.FC = () => {
 	};
 
 	const isMeetingEnded = meeting.status === MeetingStatus.ENDED;
+	const hasTranscript = transcriptions.items.length > EMPTY_ARRAY_LENGTH;
+	const hasSummary = Boolean(meeting.summary?.trim());
+	const hasActionItems = Boolean(meeting.actionItems?.trim());
+
+	const canExport =
+		isMeetingEnded && hasTranscript && hasSummary && hasActionItems;
 
 	const pdfFileName = meeting.title
 		? `meeting-${title.replaceAll(/[^a-zA-Z0-9-]/g, "_").toLowerCase()}.pdf`
@@ -188,7 +195,12 @@ const MeetingDetails: React.FC = () => {
 							fileName={pdfFileName}
 							key={isMeetingEnded ? "pdf-ready" : "pdf-pending"}
 						>
-							<Button isDisabled={!isMeetingEnded} label="Export" />
+							{({ loading }) => (
+								<Button
+									isDisabled={!canExport}
+									label={loading ? "Generating PDF..." : "Export"}
+								/>
+							)}
 						</PDFDownloadLink>
 					</div>
 				</div>

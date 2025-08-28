@@ -7,7 +7,7 @@ import styles from "./styles.module.css";
 
 type Properties = {
 	size?: ValueOf<typeof AvatarSize>;
-	src?: string;
+	src?: null | string;
 	type?: ValueOf<typeof AvatarType>;
 };
 

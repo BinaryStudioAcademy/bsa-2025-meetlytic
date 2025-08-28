@@ -11,8 +11,11 @@ import {
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { WHITE_ROUTES } from "~/libs/constants/constants.js";
-import { ServerErrorType } from "~/libs/enums/enums.js";
+import {
+	DEFAULT_ALLOWED_IMAGE_MIME_TYPES,
+	WHITE_ROUTES,
+} from "~/libs/constants/constants.js";
+import { DefaultMaxFileSize, ServerErrorType } from "~/libs/enums/enums.js";
 import { type ValidationError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Database } from "~/libs/modules/database/database.js";
@@ -20,7 +23,8 @@ import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type BaseSocketService } from "~/libs/modules/socket/socket.js";
 import { jwt } from "~/libs/modules/token/token.js";
-import { authorization, methodGuard } from "~/libs/plugins/plugins.js";
+import { authorization } from "~/libs/plugins/plugins.js";
+import { uploadPlugin } from "~/libs/plugins/uploads/upload.plugin.js";
 import {
 	type ServerCommonErrorResponse,
 	type ServerValidationErrorResponse,
@@ -140,16 +144,15 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	private async initPlugins(): Promise<void> {
-		const allRoutes = this.apis.flatMap((api) =>
-			api.routes.map((route) => ({
-				method: route.method.toUpperCase(),
-				path: route.path,
-			})),
-		);
-
-		await this.app.register(methodGuard, {
-			allRoutes,
+		await this.app.register(uploadPlugin, {
+			allowedMimeTypes: [...DEFAULT_ALLOWED_IMAGE_MIME_TYPES],
+			fieldName: "file",
+			maxFiles: DefaultMaxFileSize.MAX_FILES,
+			maxFileSize: DefaultMaxFileSize.MAX_FILE_SIZE_BYTES,
 		});
+		this.logger.info(
+			`multipart parser: ${String(this.app.hasContentTypeParser("multipart"))}`,
+		);
 
 		await this.app.register(authorization, {
 			routesWhiteList: WHITE_ROUTES,

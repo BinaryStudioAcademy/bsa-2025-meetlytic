@@ -1,6 +1,6 @@
 {
 	"name": "meetlytic",
-	"version": "1.21.0",
+	"version": "1.21.2",
 	"type": "module",
 	"workspaces": [
 		"apps/backend",
@@ -67,5 +67,8 @@
 	"simple-git-hooks": {
 		"pre-commit": "npm run lint:type && npm run git:hook:precommit",
 		"commit-msg": "npm run git:hook:commit"
+	},
+	"optionalDependencies": {
+		"@rollup/rollup-linux-x64-gnu": "4.48.1"
 	}
 }

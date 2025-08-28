@@ -1,10 +1,9 @@
-import { Avatar, Loader, Navigate } from "~/libs/components/components.js";
 import {
-	AppRoute,
-	AvatarSize,
-	AvatarType,
-	DataStatus,
-} from "~/libs/enums/enums.js";
+	Loader,
+	Navigate,
+	UserAvatarUploader,
+} from "~/libs/components/components.js";
+import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -52,7 +51,7 @@ const Profile: React.FC = () => {
 			<h5 className={styles["profile__title"]}>My Profile</h5>
 			<div className={styles["profile__content"]}>
 				<div className={styles["profile__header"]}>
-					<Avatar size={AvatarSize.LARGE} type={AvatarType.MAIN} />
+					<UserAvatarUploader />
 				</div>
 				<ProfileForm onSubmit={handleSubmit} user={user} />
 			</div>

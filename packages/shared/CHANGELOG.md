@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.11.0...shared-v1.12.0) (2025-08-28)
+
+
+### Features
+
+* add user avatar uploader ml-65 ([#126](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/126)) ([5ef2e25](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/5ef2e256fa1de30db73294815a96b2f186055a2d))
+
 ## [1.11.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.10.0...shared-v1.11.0) (2025-08-27)
 
 

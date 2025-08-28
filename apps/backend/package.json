@@ -1,7 +1,7 @@
 {
 	"name": "@meetlytic/backend",
 	"type": "module",
-	"version": "1.13.2",
+	"version": "1.14.0",
 	"scripts": {
 		"lint:type": "npx tsc --noEmit",
 		"lint:js": "npx eslint . --max-warnings=0",

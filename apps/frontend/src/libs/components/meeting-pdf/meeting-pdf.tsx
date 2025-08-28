@@ -1,11 +1,9 @@
-import React from "react";
-
 import { Document, Page, Text, View } from "~/libs/components/components.js";
 import { formatDate } from "~/libs/helpers/helpers.js";
 import { type MeetingPdfProperties } from "~/libs/types/types.js";
 
 import { renderMarkdown } from "./libs/components/render-markdown.js";
-import { styles } from "./libs/helpers/meeting-pdf.styles.js";
+import { styles } from "./libs/styles/meeting-pdf.styles.js";
 
 const MeetingPdf: React.FC<MeetingPdfProperties> = ({
 	actionItems,

@@ -10,7 +10,7 @@ import { styles } from "../styles/meeting-pdf.styles.js";
 
 type MdNode = BlockContent | ListItem | PhrasingContent;
 
-function renderNode(node: MdNode, key: string): React.ReactElement {
+const renderNode = (node: MdNode, key: string): React.ReactElement => {
 	if (node.type === "text") {
 		return <Text key={key}>{node.value}</Text>;
 	}
@@ -80,6 +80,6 @@ function renderNode(node: MdNode, key: string): React.ReactElement {
 			return <View key={key} style={styles.paragraph} />;
 		}
 	}
-}
+};
 
 export { renderNode };

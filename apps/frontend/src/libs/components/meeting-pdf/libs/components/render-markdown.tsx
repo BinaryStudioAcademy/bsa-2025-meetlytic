@@ -11,7 +11,7 @@ import { renderNode } from "./render-node.js";
 
 type MdNode = BlockContent | ListItem | PhrasingContent;
 
-function renderMarkdown(markdown: string): React.ReactElement {
+const renderMarkdown = (markdown: string): React.ReactElement => {
 	const lines = markdown.split(/\r?\n/);
 
 	return (
@@ -38,6 +38,6 @@ function renderMarkdown(markdown: string): React.ReactElement {
 			})}
 		</View>
 	);
-}
+};
 
 export { renderMarkdown };

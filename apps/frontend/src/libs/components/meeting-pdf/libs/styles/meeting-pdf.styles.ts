@@ -9,12 +9,12 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 	},
 	heading2: {
-		fontSize: 20,
+		fontSize: 18,
 		fontWeight: "bold",
 		marginBottom: 8,
 	},
 	heading3: {
-		fontSize: 18,
+		fontSize: 16,
 		fontWeight: "600",
 		marginBottom: 7,
 	},

@@ -6,6 +6,7 @@ Guidelines:
 - Keep the the summary brief and clear, capturing the essence of the meeting in under 2 minutes of reading.
 - Use a visual structure, such as bullet points or clearly defined sections, to improve readability.
 - Incorporate relevant data discussed during the meeting to support analyses, decisions and next steps.
+- The summary MUST begin with the title SUMMARY.
 `;
 
 const ACTION_ITEMS_PROMPT = `
@@ -17,6 +18,7 @@ Guidelines:
 - Items MUST be organized using ordered list. The title of each item MUST be bold and description MUST be a paragraph without any lists.
 - Action items MUST not have a starting or closing paragraph. They MUST only contain a list of items.
 - Ensure each action point directly corresponds to a decision or insight from the meeting summary.
+- The action points MUST begin with the title ACTION ITEMS.
 `;
 
 export { ACTION_ITEMS_PROMPT, SUMMARY_PROMPT };

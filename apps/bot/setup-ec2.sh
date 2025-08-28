@@ -214,16 +214,16 @@ echo "[\\0_0/] Setup complete. Bot is running with xvfb-run + Chromium:headless.
 echo "[i] Script finished at $(date)"
 # ──────────────────────────────────────────────────────────────────────────────
 
-# --- Add swap file (2GB) ---
-echo "[+] Adding 2GB swap file..."
+# --- Add swap file (4GB) ---
+echo "[+] Adding 4GB swap file..."
 SWAPFILE=/swapfile
 if [ ! -f $SWAPFILE ]; then
-	fallocate -l 2G $SWAPFILE
-	chmod 600 $SWAPFILE
-	mkswap $SWAPFILE
-	swapon $SWAPFILE
-	echo "$SWAPFILE none swap sw 0 0" | tee -a /etc/fstab
-	echo "[+] Swap file created and activated."
+		fallocate -l 4G $SWAPFILE
+		chmod 600 $SWAPFILE
+		mkswap $SWAPFILE
+		swapon $SWAPFILE
+		echo "$SWAPFILE none swap sw 0 0" | tee -a /etc/fstab
+		echo "[+] Swap file created and activated."
 else
-	echo "[✓] Swap file already exists."
+		echo "[✓] Swap file already exists."
 fi

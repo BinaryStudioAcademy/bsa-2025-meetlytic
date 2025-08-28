@@ -23,7 +23,7 @@ import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type BaseSocketService } from "~/libs/modules/socket/socket.js";
 import { jwt } from "~/libs/modules/token/token.js";
-import { authorization } from "~/libs/plugins/authorization/authorization.plugin.js";
+import { authorization } from "~/libs/plugins/plugins.js";
 import { uploadPlugin } from "~/libs/plugins/uploads/upload.plugin.js";
 import {
 	type ServerCommonErrorResponse,

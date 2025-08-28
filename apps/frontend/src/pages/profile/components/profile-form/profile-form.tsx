@@ -61,11 +61,16 @@ const ProfileForm: React.FC<Properties> = ({ onSubmit, user }: Properties) => {
 			/>
 			<div className={styles["profile-form__buttons"]}>
 				<Button
+					className={styles["profile-form__button"]}
 					label="Cancel"
 					onClick={handleCancelClick}
 					variant={ButtonVariant.OUTLINED}
 				/>
-				<Button label="Save changes" type="submit" />
+				<Button
+					className={styles["profile-form__button"]}
+					label="Save changes"
+					type="submit"
+				/>
 			</div>
 		</form>
 	);

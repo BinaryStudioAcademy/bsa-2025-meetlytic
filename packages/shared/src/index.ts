@@ -1,6 +1,5 @@
 export {
 	EMPTY_ARRAY_LENGTH,
-	MILLISECONDS_IN_SECOND,
 	PERCENT_MULTIPLIER,
 	START_TIME,
 } from "./libs/constants/constants.js";
@@ -27,8 +26,10 @@ export {
 } from "./libs/exceptions/exceptions.js";
 export {
 	configureString,
+	convertToZoomWebClientUrl,
 	extractZoomMeetingId,
 	formatDate,
+	isZoomLinkValid,
 } from "./libs/helpers/helpers.js";
 export { type Config } from "./libs/modules/config/config.js";
 export {
@@ -72,6 +73,7 @@ export {
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingStatusDto,
 	type MeetingSummaryActionItemsResponseDto,
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,

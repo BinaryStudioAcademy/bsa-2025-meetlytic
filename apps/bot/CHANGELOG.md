@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.3.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.3.1...bot-v1.3.2) (2025-08-28)
+
+
+### Bug Fixes
+
+* bot not sending public link in chat ml-356 ([#360](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/360)) ([395302f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/395302f650102850adbb3a50506168918742a32b))
+
+## [1.3.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.3.0...bot-v1.3.1) (2025-08-28)
+
+
+### Bug Fixes
+
+* **bot:** move init after browser init ml-353 ([#354](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/354)) ([dcb9aa6](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/dcb9aa601cd474c128b7bc049ca871cf0730d4d9))
+
+## [1.3.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.2.1...bot-v1.3.0) (2025-08-27)
+
+
+### Features
+
+* add status indicators in meeting details page ml-282 ([#310](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/310)) ([67cf53f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/67cf53f438fbdeaa6c4dcf8a8f748858b8305c31))
+* simplify action items ml-300 ([#322](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/322)) ([820663e](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/820663e8ddc7b451ed2841bafa3ec739b27638de))
+
 ## [1.2.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.2.0...bot-v1.2.1) (2025-08-26)
 
 

@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.19.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.18.0...frontend-v1.19.0) (2025-08-28)
+
+
+### Features
+
+* add user avatar uploader ml-65 ([#126](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/126)) ([5ef2e25](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/5ef2e256fa1de30db73294815a96b2f186055a2d))
+* export button should be disabled during live transcription ml-330 ([#336](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/336)) ([89ab0cc](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/89ab0cce801063756ab86cc9fc069dffedd9e3a1))
+* update navigation item icons visibility and font loading ml-188 ([#327](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/327)) ([cc73c88](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/cc73c882baab97b89108f724638735fe33e59ff4))
+
+
+### Bug Fixes
+
+* convert markdown to styles for pdf export ml-301 ([#328](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/328)) ([44b3869](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/44b38690762d757b0732e94e903b31c261dca2b5))
+* fixed header elements ml-345 ([#346](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/346)) ([4fe3874](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/4fe3874c40de36ac2f0f0f4c7d346d67d939adb1))
+* **frontend:** put a new card on the begining ml-329 ([#352](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/352)) ([d1950eb](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/d1950eb1306da9958fe9638c2e5caa68286db65f))
+* meeting details transcription refresh to start transcription ml-307 ([#344](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/344)) ([0527002](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/0527002825fb27738647300c82dc438231da214e))
+* rollback layout changes ml-347 ([#348](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/348)) ([0623d8f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/0623d8fc5098d7f5a28d17d221d9f5ef590c9608))
+
+## [1.18.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.17.0...frontend-v1.18.0) (2025-08-27)
+
+
+### Features
+
+* add meeting card naming ml-206 ([#288](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/288)) ([1976c35](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/1976c35ce5a6f33d36de6c4b5beaf8dac42e0bef))
+* add mobile responsiveness for the profile page ml-286 ([#326](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/326)) ([4726cfa](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/4726cfad76ba82c7124508b2d54c6958e4861010))
+* add status indicators in meeting details page ml-282 ([#310](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/310)) ([67cf53f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/67cf53f438fbdeaa6c4dcf8a8f748858b8305c31))
+* added hasOverlay to Loader to profile ml-202 ([#324](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/324)) ([d4a9992](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/d4a9992b0649bb563c1239ec0bfdccf8771ee1f6))
+* changed text of button ml-314 ([#320](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/320)) ([d211ca8](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/d211ca82983b50e23fa4539c8dc1d9e697a477e7))
+* start mobile responsiveness improvements ml-285 ([#318](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/318)) ([1a8f9a1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/1a8f9a1f72d99c1421e6047ee55cfb88b0409183))
+
+
+### Bug Fixes
+
+* audio duration label ml-313 ([#337](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/337)) ([50c4d02](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/50c4d02ccc2abfbba1c16b840fa940aa166dbf25))
+* changed rings animation and add swipe for testimonials on mobile ml-293 ([#296](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/296)) ([b510b58](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/b510b58533aefe95f61091a39bf0c0d12d5c11f1))
+* fixed mobile meeting-cards-menu ml-304 ([#332](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/332)) ([11572b2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/11572b2a738f672f0d562ee725e0f156f7544ec1))
+* updated email meetings refresh ml-302 ([#331](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/331)) ([fe9583a](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/fe9583a8e6d9be019f859d7ba0a473a5270632dd))
+
 ## [1.17.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.16.0...frontend-v1.17.0) (2025-08-26)
 
 

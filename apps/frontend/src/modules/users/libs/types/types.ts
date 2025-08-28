@@ -1,4 +1,6 @@
 export {
+	type AvatarFileDto,
+	type AvatarUploadResponseDto,
 	type UserResponseDto,
 	type UserSignInRequestDto,
 	type UserSignUpRequestDto,

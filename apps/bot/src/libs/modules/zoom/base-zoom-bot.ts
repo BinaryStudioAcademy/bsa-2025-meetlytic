@@ -184,11 +184,6 @@ class BaseZoomBot {
 				SocketEvent.JOIN_ROOM,
 				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
-			this.logger.info(ZoomBotMessage.GETTING_PUBLIC_URL);
-			this.socketClient.emit(
-				SocketEvent.GET_PUBLIC_URL,
-				String(this.config.ENV.ZOOM.MEETING_ID),
-			);
 		});
 
 		this.socketClient.on(SocketEvent.DISCONNECT, (reason: string) => {
@@ -316,13 +311,12 @@ class BaseZoomBot {
 	}
 
 	public async run(): Promise<void> {
-		this.initSocket();
-
 		try {
 			this.browser = await puppeteer.launch(this.config.getLaunchOptions());
 			this.logger.info("emmiting joining to meeting");
 			this.page = await this.browser.newPage();
 			await this.page.setUserAgent(USER_AGENT);
+			this.initSocket();
 			this.socketClient.emit(
 				SocketEvent.JOINING_TO_MEETING,
 				String(this.config.ENV.ZOOM.MEETING_ID),
@@ -342,6 +336,11 @@ class BaseZoomBot {
 			this.logger.info(ZoomBotMessage.JOINED_MEETING);
 			this.socketClient.emit(
 				SocketEvent.RECORDING,
+				String(this.config.ENV.ZOOM.MEETING_ID),
+			);
+			this.logger.info(ZoomBotMessage.GETTING_PUBLIC_URL);
+			this.socketClient.emit(
+				SocketEvent.GET_PUBLIC_URL,
 				String(this.config.ENV.ZOOM.MEETING_ID),
 			);
 			this.audioRecorder.start();

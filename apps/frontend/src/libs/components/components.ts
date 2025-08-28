@@ -23,6 +23,7 @@ export { Sidebar } from "./sidebar/sidebar.js";
 export { ToastProvider } from "./toast-provider/toast-provider.js";
 export { TranscriptionPanel } from "./transcription-panel/transcription-panel.js";
 export { TypingIndicator } from "./typing-indicator/typing-indicator.js";
+export { UserAvatarUploader } from "./user-avatar-uploader/user-avatar-uploader.js";
 export {
 	Document,
 	Page,

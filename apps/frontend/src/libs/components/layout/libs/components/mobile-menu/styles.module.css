@@ -10,16 +10,17 @@
 @media (width <= 768px) {
 	.mobile-menu {
 		position: absolute;
-		top: 64px;
+		top: var(--header-height-app-md);
 		left: 0;
 		z-index: var(--z-index-medium);
 		display: flex;
 		visibility: hidden;
 		flex-direction: column;
 		width: 360px;
-		height: calc(100dvh - 64px);
+		height: calc(100dvh - var(--header-height-app-md));
 		padding: 20px;
 		overflow-y: auto;
+		pointer-events: none;
 		background-color: var(--color-background-4);
 		opacity: 0;
 		transform: translateX(-360px);
@@ -31,6 +32,7 @@
 
 	.mobile-menu--open {
 		visibility: visible;
+		pointer-events: auto;
 		opacity: 1;
 		transform: translateX(0);
 		transition:
@@ -49,11 +51,11 @@
 	.mobile-menu__backdrop {
 		all: unset;
 		position: absolute;
-		top: 64px;
+		top: var(--header-height-app-md);
 		left: 0;
 		z-index: var(--z-index-low);
 		width: 100%;
-		height: calc(100dvh - 64px);
+		height: calc(100dvh - var(--header-height-app-md));
 		background-color: rgb(0 0 0 / 40%);
 	}
 }

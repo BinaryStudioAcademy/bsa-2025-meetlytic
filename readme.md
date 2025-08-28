@@ -37,6 +37,7 @@ erDiagram
       string first_name
       string last_name
       int user_id FK
+      int avatar_file_id FK "nullable"
       dateTime created_at
       dateTime updated_at
    }
@@ -73,6 +74,7 @@ erDiagram
    users ||--o{ meetings: owner_id
    meetings }o--|| files: audio_file_id
    meetings ||--o{ meeting_transcriptions: meeting_id
+   user_details }o--|| files : avatar_file_id
 ```
 
 ## 5. Architecture

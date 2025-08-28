@@ -1,5 +1,7 @@
 const NotificationMessage = {
 	AUTH_FAILED: "Authentication failed. Please log in again.",
+	AVATAR_DELETE_FAILED: "Failed to delete avatar. Please try again.",
+	AVATAR_UPLOAD_FAILED: "Failed to upload avatar. Please try again.",
 	EDIT_PROFILE_SUCCESS: "Profile was edited successfully",
 	MEETING_DATA_IS_NOT_AVAILABLE: "Meeting data is not available for sharing.",
 	MEETING_DETAILS_FETCH_FAILED: "Failed to load meeting details.",

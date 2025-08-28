@@ -69,16 +69,21 @@ apt install -y \
 	build-essential
 echo "[+] Core libraries and tools installed."
 
-# --- Install Chromium if not present ---
-echo "[i] Checking for Chromium..."
-if ! command -v chromium-browser &> /dev/null && ! command -v chromium &> /dev/null; then
-	echo "[+] Chromium not found. Installing..."
+# --- Install Google Chrome if not present ---
+echo "[i] Checking for Google Chrome..."
+if ! command -v google-chrome &> /dev/null; then
+	echo "[+] Google Chrome not found. Installing..."
+	apt install -y wget gnupg
+	wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-linux-signing-key.gpg
+	echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-key.gpg] http://dl.google.com/linux/chrome/deb/ stable main" \
+		> /etc/apt/sources.list.d/google-chrome.list
 	apt update -y
-	apt install -y chromium-browser || apt install -y chromium
-	echo "[+] Chromium installed successfully."
+	apt install -y google-chrome-stable
+	echo "[+] Google Chrome installed successfully."
 else
-	echo "[✓] Chromium already installed."
+	echo "[✓] Google Chrome already installed."
 fi
+
 
 # ─── PulseAudio ─────────────────────────────────────────────────────────
 # We run PulseAudio as *root* in system-style “per-user” mode so that it
@@ -200,7 +205,7 @@ EOF
 echo "[+] .env file created."
 
 # Launch the bot inside Xvfb (headless virtual display) and detach
-echo "[+] Starting ZoomBot with run..."
+echo "[+] Starting ZoomBot with xvfb-run..."
 npm run start:dev > /home/ubuntu/bot.log 2>&1 &
 echo "[+] ZoomBot launched (PID $!). Logs at /home/ubuntu/bot.log"
 
@@ -208,3 +213,17 @@ echo "[+] ZoomBot launched (PID $!). Logs at /home/ubuntu/bot.log"
 echo "[\\0_0/] Setup complete. Bot is running with xvfb-run + Chromium:headless."
 echo "[i] Script finished at $(date)"
 # ──────────────────────────────────────────────────────────────────────────────
+
+# --- Add swap file (2GB) ---
+echo "[+] Adding 2GB swap file..."
+SWAPFILE=/swapfile
+if [ ! -f $SWAPFILE ]; then
+	fallocate -l 2G $SWAPFILE
+	chmod 600 $SWAPFILE
+	mkswap $SWAPFILE
+	swapon $SWAPFILE
+	echo "$SWAPFILE none swap sw 0 0" | tee -a /etc/fstab
+	echo "[+] Swap file created and activated."
+else
+	echo "[✓] Swap file already exists."
+fi

@@ -13,6 +13,7 @@ import {
 import { type MeetingTranscriptionResponseDto } from "~/modules/transcription/transcription.js";
 
 import { LiveTranscription } from "./components/live-transcription/live-transcription.js";
+import { FIRST_ITEM, LAST_ITEM } from "./libs/constants/constants.js";
 import styles from "./transcription-panel.module.css";
 
 const EMPTY_TRANSCRIPT_CHUNKS = 0;
@@ -41,6 +42,7 @@ const TranscriptionPanel: React.FC = () => {
 
 	const staticTranscript = useMemo(() => {
 		return transcriptions.items
+			.slice(FIRST_ITEM, LAST_ITEM)
 			.map((transcription) => transcription.chunkText)
 			.join(" ");
 	}, [transcriptions.items]);

@@ -293,11 +293,9 @@ class BaseZoomBot {
 		}
 
 		try {
-			this.logger.info("clicking to chat button");
 			await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
 			await this.clickHelper(ZoomUILabel.CHAT_BUTTON);
 			await delay(Timeout.FIVE_SECONDS);
-			this.logger.info("clicking to chat input");
 			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
 			await this.clickHelper(ZoomUILabel.CHAT_INPUT);
 			await delay(Timeout.FIVE_SECONDS);

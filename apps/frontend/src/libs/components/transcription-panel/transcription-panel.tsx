@@ -58,7 +58,7 @@ const TranscriptionPanel: React.FC = () => {
 				<div className={styles["panel-header__text"]}>TRANSCRIPT</div>
 				<SearchBar onSearch={handleSearch} />
 			</div>
-			{dataStatus === DataStatus.PENDING && <Loader isLoading />}
+			{dataStatus === DataStatus.PENDING && <Loader hasOverlay isLoading />}
 
 			{transcriptions.items.length > EMPTY_TRANSCRIPT_CHUNKS ? (
 				<div className={styles["transcription-area"]} ref={containerReference}>

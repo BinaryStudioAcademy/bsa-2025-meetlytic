@@ -31,5 +31,7 @@
 	--container-gutter-sm: 16px;
 	--container-gutter-md: 32px;
 	--container-gutter-lg: 92px;
+	--header-height-app-md: 64px;
+	--header-height-app-lg: 74px;
 	--header-height: 110px;
 }

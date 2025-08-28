@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.22.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.22.1...v1.22.2) (2025-08-28)
+
+
+### Bug Fixes
+
+* **bot:** add swap file 4 gb, add launch options ml-305 ([#366](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/366)) ([059753c](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/059753cfbddacd104ac45cc12006df6b456b81ea))
+* revert last chenges ml-305 ([#368](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/368)) ([ed70c38](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/ed70c38299391449aeb9ccc99820c1830ccff75d))
+* update header.tsx ml-363 ([#369](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/369)) ([f428b5e](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/f428b5e5c870a80c160dc7fdf65615aac33529df))
+
 ## [1.22.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.22.0...v1.22.1) (2025-08-28)
 
 

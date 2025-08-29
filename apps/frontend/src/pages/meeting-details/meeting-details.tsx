@@ -14,6 +14,7 @@ import { EMPTY_ARRAY_LENGTH } from "~/libs/constants/constants.js";
 import {
 	AppRoute,
 	DataStatus,
+	DateTimeFormat,
 	MeetingErrorMessage,
 	MeetingStatus,
 	NotificationMessage,
@@ -169,7 +170,8 @@ const MeetingDetails: React.FC = () => {
 			<div className={styles["meeting-details"]}>
 				<div className={styles["meeting-details__header"]}>
 					<h1 className={styles["meeting-details__title"]}>
-						{title} | {formatDate(new Date(meeting.createdAt), "D MMMM hA")}
+						{title} |{" "}
+						{formatDate(new Date(meeting.createdAt), DateTimeFormat.MEETING)}
 						<MeetingStatusBadge status={meeting.status} />
 					</h1>
 					<div className={styles["meeting-details__actions"]}>

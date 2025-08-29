@@ -37,20 +37,20 @@
 	align-items: center;
 	justify-content: center;
 	height: auto;
-	min-height: min-content;
-	max-height: 80%;
+	min-height: 70vh;
 	padding-inline: 24px;
+	overflow: auto;
 	background-color: var(--color-background-4);
 	border-radius: var(--border-radius-lg);
 }
 
-@media screen and (768px <= width) {
+@media screen and (768px <=width) {
 	.auth-form-wrapper {
-		height: max(70%, 80%);
+		min-height: 80vh;
 	}
 }
 
-@media screen and (990px <= width) {
+@media screen and (990px <=width) {
 	.auth {
 		flex-direction: row;
 	}
@@ -68,8 +68,8 @@
 
 	.auth-form-wrapper {
 		flex-basis: 700px;
-		height: 95vh;
-		max-height: unset;
+		min-height: 90vh;
+		max-height: 95vh;
 		padding-inline: 0;
 	}
 }

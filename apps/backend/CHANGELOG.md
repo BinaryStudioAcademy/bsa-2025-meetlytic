@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.14.1...backend-v1.14.2) (2025-08-29)
+
+
+### Bug Fixes
+
+* error toasts for invalid meeting ids ml-275 ([#319](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/319)) ([9fde184](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/9fde1842f06355e08d77cca3e432306a70f9d1ec))
+
 ## [1.14.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.14.0...backend-v1.14.1) (2025-08-29)
 
 

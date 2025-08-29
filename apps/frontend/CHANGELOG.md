@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.21.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.20.0...frontend-v1.21.0) (2025-08-29)
+
+
+### Features
+
+* contact scroll and vertical align element ml-383 ([#386](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/386)) ([4a600ac](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/4a600ac86f3d55aefcd1f74f527c46721b5c791f))
+* use consistent datetime format ml-308 ([#338](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/338)) ([ab6044a](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/ab6044aa50d938eb9f7d0608eb604f28d896a44e))
+
+
+### Bug Fixes
+
+* **frontend:** export disabled during meeting, active after meeting ends ml-382 ([#389](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/389)) ([37545e2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/37545e2e233b86ef0746f7217e7200004d0cc20a))
+* **frontend:** meeting buttons overlap ml-390 ([#391](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/391)) ([1ec8c3b](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/1ec8c3b9a063eb15d4fccf27c235c54d3bacea8f))
+* limit public layout width ml-351 ([#388](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/388)) ([cdc9760](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/cdc9760ac513acf3828825273dda9c76acf0cfc1))
+* no automatic logout and redirect when token invalid ml-174 ([#335](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/335)) ([a2ad2b7](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/a2ad2b75da252217db1b7e2d5caef56abc93a745))
+
 ## [1.20.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/frontend-v1.19.2...frontend-v1.20.0) (2025-08-29)
 
 

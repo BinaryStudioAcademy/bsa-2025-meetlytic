@@ -87,6 +87,12 @@ class BaseConfig implements Config {
 					env: "REGION",
 					format: String,
 				},
+				S3_BUCKET_NAME: {
+					default: null,
+					doc: "AWS Bucket",
+					env: "S3_BUCKET_NAME",
+					format: String,
+				},
 				SECRET_ACCESS_KEY: {
 					default: null,
 					doc: "AWS Secret Access Key",

@@ -37,12 +37,13 @@ class BaseController implements Controller {
 	}
 
 	private mapRequest(request: FastifyRequest): APIHandlerOptions {
-		const { body, params, query, user } = request;
+		const { body, params, query, uploadedFile, user } = request;
 
 		return {
 			body,
 			params,
 			query,
+			uploadedFile,
 			user,
 		};
 	}
@@ -55,7 +56,7 @@ class BaseController implements Controller {
 			...options,
 			handler: (request, reply) => this.mapHandler(handler, request, reply),
 			path: fullPath,
-			preHandlers: preHandlers,
+			preHandlers: preHandlers ?? [],
 		});
 	}
 }

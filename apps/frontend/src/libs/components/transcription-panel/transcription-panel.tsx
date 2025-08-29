@@ -1,10 +1,9 @@
-import { Loader, SearchBar } from "~/libs/components/components.js";
+import { Loader } from "~/libs/components/components.js";
 import { DataStatus, MeetingStatus, SocketEvent } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/get-valid-class-names.helper.js";
 import {
 	useAppSelector,
 	useAutoScroll,
-	useCallback,
 	useFetchTranscriptions,
 	useMeetingSocket,
 	useMemo,
@@ -13,6 +12,7 @@ import {
 import { type MeetingTranscriptionResponseDto } from "~/modules/transcription/transcription.js";
 
 import { LiveTranscription } from "./components/live-transcription/live-transcription.js";
+import { FIRST_ITEM, LAST_ITEM } from "./libs/constants/constants.js";
 import styles from "./transcription-panel.module.css";
 
 const EMPTY_TRANSCRIPT_CHUNKS = 0;
@@ -26,7 +26,7 @@ const TranscriptionPanel: React.FC = () => {
 		({ meetingDetails }) => meetingDetails.meeting,
 	);
 	const containerReference = useAutoScroll<HTMLDivElement>(
-		meeting?.status === MeetingStatus.STARTED ? [typedText] : [],
+		!!meeting && meeting.status !== MeetingStatus.ENDED ? [typedText] : [],
 	);
 	useFetchTranscriptions();
 
@@ -35,12 +35,9 @@ const TranscriptionPanel: React.FC = () => {
 		event: SocketEvent.TRANSCRIBE,
 	});
 
-	const handleSearch = useCallback(() => {
-		// TODO: implement handleSearch logic
-	}, []);
-
 	const staticTranscript = useMemo(() => {
 		return transcriptions.items
+			.slice(FIRST_ITEM, LAST_ITEM)
 			.map((transcription) => transcription.chunkText)
 			.join(" ");
 	}, [transcriptions.items]);
@@ -56,15 +53,14 @@ const TranscriptionPanel: React.FC = () => {
 		>
 			<div className={styles["panel-header"]}>
 				<div className={styles["panel-header__text"]}>TRANSCRIPT</div>
-				<SearchBar onSearch={handleSearch} />
 			</div>
-			{dataStatus === DataStatus.PENDING && <Loader isLoading />}
+			{dataStatus === DataStatus.PENDING && <Loader hasOverlay isLoading />}
 
 			{transcriptions.items.length > EMPTY_TRANSCRIPT_CHUNKS ? (
-				<div className={styles["transcription-area"]} ref={containerReference}>
+				<div className={styles["transcription-area"]}>
 					<p className={styles["transcription-text"]}>
 						{staticTranscript}
-						{meeting?.status === MeetingStatus.STARTED && (
+						{meeting?.status !== MeetingStatus.ENDED && (
 							<LiveTranscription isTyping={isTyping} typedText={typedText} />
 						)}
 					</p>
@@ -74,6 +70,10 @@ const TranscriptionPanel: React.FC = () => {
 					<p>No transcriptions</p>
 				</div>
 			)}
+			<div
+				className={styles["transcription-bottom-spacer"]}
+				ref={containerReference}
+			/>
 		</div>
 	);
 };

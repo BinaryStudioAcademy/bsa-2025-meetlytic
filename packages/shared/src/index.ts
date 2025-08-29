@@ -1,6 +1,5 @@
 export {
 	EMPTY_ARRAY_LENGTH,
-	MILLISECONDS_IN_SECOND,
 	PERCENT_MULTIPLIER,
 	START_TIME,
 } from "./libs/constants/constants.js";
@@ -20,13 +19,17 @@ export {
 	HTTPError,
 	MeetingError,
 	MeetingTranscriptionError,
+	S3Error,
+	UploadError,
 	UserError,
 	ValidationError,
 } from "./libs/exceptions/exceptions.js";
 export {
 	configureString,
+	convertToZoomWebClientUrl,
 	extractZoomMeetingId,
 	formatDate,
+	isZoomLinkValid,
 } from "./libs/helpers/helpers.js";
 export { type Config } from "./libs/modules/config/config.js";
 export {
@@ -51,6 +54,7 @@ export {
 	type ValueOf,
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthStatusMessage } from "./modules/auth/auth.js";
+export { S3ErrorMessage } from "./modules/aws/aws.js";
 export {
 	type FileGetAllResponseDto,
 	type FilePublicDto,
@@ -58,6 +62,7 @@ export {
 	type FileResponseDto,
 	type FileUpdateRequestDto,
 	FileErrorMessage,
+	UploadErrorMessage,
 } from "./modules/files/files.js";
 export {
 	type MeetingAttachAudioRequestDto,
@@ -68,6 +73,7 @@ export {
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingStatusDto,
 	type MeetingSummaryActionItemsResponseDto,
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,
@@ -82,10 +88,12 @@ export {
 	MeetingStatus,
 	MeetingTranscriptionErrorMessage,
 	meetingUpdateValidationSchema,
-	searchInputValidationSchema,
 } from "./modules/meetings/meetings.js";
 export {
 	type AuthResponseDto,
+	type AvatarFileDto,
+	type AvatarUploadResponseDto,
+	type DeleteAvatarResult,
 	type UserGetAllItemResponseDto,
 	type UserGetAllResponseDto,
 	type UserResponseDto,

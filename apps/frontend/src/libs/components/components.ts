@@ -10,18 +10,19 @@ export { Loader } from "./loader/loader.js";
 export { Logo } from "./logo/logo.js";
 export { MeetingForm } from "./meeting-form/meeting-form.js";
 export { MeetingPdf } from "./meeting-pdf/meeting-pdf.js";
+export { MeetingStatusBadge } from "./meeting-status-badge/meeting-status-badge.js";
 export { Modal } from "./modal/modal.js";
 export { Navigation } from "./navigation/navigation.js";
 export { PlayerTrack } from "./player-track/player-track.js";
 export { PublicLayout } from "./public-layout/public-layout.js";
 export { ProtectedRoute } from "./router-provider/protected-route.js";
 export { RouterProvider } from "./router-provider/router-provider.js";
-export { SearchBar } from "./search-bar/search-bar.js";
 export { SearchInput } from "./search-input/search-input.js";
 export { Sidebar } from "./sidebar/sidebar.js";
 export { ToastProvider } from "./toast-provider/toast-provider.js";
 export { TranscriptionPanel } from "./transcription-panel/transcription-panel.js";
 export { TypingIndicator } from "./typing-indicator/typing-indicator.js";
+export { UserAvatarUploader } from "./user-avatar-uploader/user-avatar-uploader.js";
 export {
 	Document,
 	Page,

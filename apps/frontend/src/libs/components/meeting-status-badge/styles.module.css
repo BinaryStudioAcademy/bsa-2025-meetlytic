@@ -1,0 +1,228 @@
+.meeting-status-badge {
+	--meeting-status-badge-foreground: var(--color-text-2);
+	--meeting-status-badge-border: color-mix(
+		in srgb,
+		var(--meeting-status-badge-foreground) 40%,
+		transparent
+	);
+	--meeting-status-badge-background: color-mix(
+		in srgb,
+		var(--meeting-status-badge-foreground) 12%,
+		transparent
+	);
+	--meeting-status-badge-glow: color-mix(
+		in srgb,
+		var(--meeting-status-badge-foreground) 30%,
+		transparent
+	);
+
+	display: inline-flex;
+	gap: 8px;
+	align-items: center;
+	padding: 6px 12px;
+	font-family: var(--third-font-family);
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 1;
+	color: var(--meeting-status-badge-foreground);
+	background: linear-gradient(
+		180deg,
+		color-mix(in srgb, var(--meeting-status-badge-background) 100%, transparent)
+			0%,
+		color-mix(in srgb, var(--meeting-status-badge-background) 60%, transparent)
+			100%
+	);
+	border: 1px solid var(--meeting-status-badge-border);
+	border-radius: var(--border-radius-md);
+	box-shadow:
+		0 0 0 1px
+			color-mix(
+				in srgb,
+				var(--meeting-status-badge-foreground) 10%,
+				transparent
+			)
+			inset,
+		0 3px 14px -7px var(--meeting-status-badge-glow),
+		0 0 8px -2px var(--meeting-status-badge-glow);
+	backdrop-filter: blur(6px);
+	transition:
+		color 0.25s ease,
+		border-color 0.25s ease,
+		background-color 0.25s ease,
+		box-shadow 0.3s ease,
+		transform 0.2s ease;
+}
+
+.meeting-status-badge__indicator {
+	position: relative;
+	flex: 0 0 10px;
+	width: 10px;
+	height: 10px;
+	background-color: currentcolor;
+	border-radius: 50%;
+	box-shadow: 0 0 0 2px color-mix(in srgb, currentcolor 16%, transparent);
+}
+
+.meeting-status-badge__indicator--spinner {
+	width: 12px;
+	height: 12px;
+	aspect-ratio: 1/1;
+	background: transparent;
+	border: 2px solid currentcolor;
+	border-right-color: transparent;
+	border-radius: 50%;
+	box-shadow: none;
+	animation: meeting-status-badge-spin 1.5s linear infinite;
+}
+
+.meeting-status-badge__indicator--pulse::after {
+	position: absolute;
+	inset: -3px;
+	content: "";
+	border-radius: 50%;
+	box-shadow: 0 0 0 0 currentcolor;
+	opacity: 0.45;
+	animation: meeting-status-badge-pulse 1.2s ease-out infinite;
+}
+
+.meeting-status-badge__indicator--cross {
+	background: transparent;
+	box-shadow: none;
+}
+
+.meeting-status-badge__indicator--cross::before,
+.meeting-status-badge__indicator--cross::after {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 12px;
+	height: 2px;
+	content: "";
+	background: currentcolor;
+	border-radius: 2px;
+	transform-origin: center;
+}
+
+.meeting-status-badge__indicator--cross::before {
+	transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.meeting-status-badge__indicator--cross::after {
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.meeting-status-badge__indicator--check {
+	background: transparent;
+	box-shadow: none;
+}
+
+.meeting-status-badge__indicator--check::before,
+.meeting-status-badge__indicator--check::after {
+	position: absolute;
+	content: "";
+	background: currentcolor;
+	border-radius: 2px;
+}
+
+.meeting-status-badge__indicator--check::before {
+	top: 48%;
+	left: 22%;
+	width: 6px;
+	height: 2px;
+	transform: rotate(40deg);
+}
+
+.meeting-status-badge__indicator--check::after {
+	top: 44%;
+	left: 44%;
+	width: 10px;
+	height: 2px;
+	transform: rotate(-45deg);
+}
+
+.meeting-status-badge__label {
+	color: inherit;
+	letter-spacing: 0.2px;
+}
+
+.meeting-status-badge--info {
+	--meeting-status-badge-foreground: var(--color-brand);
+}
+
+.meeting-status-badge--success {
+	--meeting-status-badge-foreground: var(--color-accent-3);
+}
+
+.meeting-status-badge--warning {
+	--meeting-status-badge-foreground: var(--color-accent-1);
+}
+
+.meeting-status-badge--danger {
+	--meeting-status-badge-foreground: var(--color-accent-1);
+}
+
+.meeting-status-badge--neutral {
+	--meeting-status-badge-foreground: var(--color-text-2);
+}
+
+.meeting-status-badge:focus-visible {
+	outline: none;
+	box-shadow:
+		0 0 0 3px
+			color-mix(
+				in srgb,
+				var(--meeting-status-badge-foreground) 30%,
+				transparent
+			),
+		0 0 0 1px var(--meeting-status-badge-border) inset;
+}
+
+@keyframes meeting-status-badge-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes meeting-status-badge-pulse {
+	0% {
+		box-shadow: 0 0 0 0 currentcolor;
+		opacity: 0.45;
+	}
+
+	70% {
+		box-shadow: 0 0 0 14px transparent;
+		opacity: 0.08;
+	}
+
+	100% {
+		box-shadow: 0 0 0 0 transparent;
+		opacity: 0;
+	}
+}
+
+@media (width <= 768px) {
+	.meeting-status-badge {
+		gap: 6px;
+		padding: 5px 10px;
+		font-size: 11px;
+	}
+
+	.meeting-status-badge__indicator--spinner {
+		width: 12px;
+		height: 12px;
+	}
+}
+
+@media (width <= 576px) {
+	.meeting-status-badge {
+		gap: 0;
+		padding: 0;
+		background: none;
+		border: none;
+		box-shadow: none;
+	}
+
+	.meeting-status-badge__label {
+		display: none;
+	}
+}

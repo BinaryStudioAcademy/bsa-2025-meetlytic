@@ -1,6 +1,14 @@
 import { TYPING_SPEED } from "~/libs/constants/type-speed.constant.js";
-import { useCallback, useRef, useState } from "~/libs/hooks/hooks.js";
-import { type MeetingTranscriptionResponseDto } from "~/modules/transcription/transcription.js";
+import {
+	useAppDispatch,
+	useCallback,
+	useRef,
+	useState,
+} from "~/libs/hooks/hooks.js";
+import {
+	type MeetingTranscriptionResponseDto,
+	actions as transcriptionActions,
+} from "~/modules/transcription/transcription.js";
 
 type UseTypingQueueReturn = {
 	handleAddChunk: (chunk: MeetingTranscriptionResponseDto) => void;
@@ -9,7 +17,7 @@ type UseTypingQueueReturn = {
 };
 
 const useTypingQueue = (typingSpeed = TYPING_SPEED): UseTypingQueueReturn => {
-	const ONE = 1;
+	const dispatch = useAppDispatch();
 	const [typedText, setTypedText] = useState<string>("");
 	const queueReference = useRef<MeetingTranscriptionResponseDto[]>([]);
 	const [isTyping, setIsTyping] = useState<boolean>(false);
@@ -29,11 +37,10 @@ const useTypingQueue = (typingSpeed = TYPING_SPEED): UseTypingQueueReturn => {
 		const text = next.chunkText;
 		isTypingReference.current = true;
 		setIsTyping(true);
+		setTypedText("");
 		let index = 0;
 
-		setTypedText((previous) => {
-			return previous + " " + text.charAt(index - ONE);
-		});
+		setTypedText(` ${text.charAt(index)}`);
 
 		const typeNextChar = (): void => {
 			setTypedText((previous) => {
@@ -41,7 +48,7 @@ const useTypingQueue = (typingSpeed = TYPING_SPEED): UseTypingQueueReturn => {
 			});
 			index++;
 
-			if (index > text.length) {
+			if (index >= text.length) {
 				isTypingReference.current = false;
 				setIsTyping(false);
 				processQueue();
@@ -61,8 +68,14 @@ const useTypingQueue = (typingSpeed = TYPING_SPEED): UseTypingQueueReturn => {
 				return;
 			}
 
-			queueReference.current.push(chunk);
+			if (document.hidden) {
+				dispatch(transcriptionActions.addTranscription(chunk));
 
+				return;
+			}
+
+			dispatch(transcriptionActions.addTranscription(chunk));
+			queueReference.current.push(chunk);
 			processQueue();
 		},
 		[processQueue],

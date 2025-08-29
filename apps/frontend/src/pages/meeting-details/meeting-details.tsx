@@ -4,11 +4,13 @@ import {
 	Loader,
 	Markdown,
 	MeetingPdf,
+	MeetingStatusBadge,
 	Navigate,
 	PDFDownloadLink,
 	PlayerTrack,
 	TranscriptionPanel,
 } from "~/libs/components/components.js";
+import { EMPTY_ARRAY_LENGTH } from "~/libs/constants/constants.js";
 import {
 	AppRoute,
 	DataStatus,
@@ -37,6 +39,7 @@ import { rehypeSanitize, remarkGfm } from "~/libs/plugins/plugins.js";
 import { type MeetingPdfProperties } from "~/libs/types/types.js";
 import {
 	actions as meetingDetailsActions,
+	type MeetingStatusDto,
 	type MeetingSummaryActionItemsResponseDto,
 	sanitizeDefaultSchema,
 } from "~/modules/meeting-details/meeting-details.js";
@@ -69,6 +72,17 @@ const MeetingDetails: React.FC = () => {
 		setIsStopRecordingInProgress(true);
 	}, [dispatch, id]);
 
+	const handleMeetingStatusUpdate = useCallback(
+		({ meetingId, status }: MeetingStatusDto) => {
+			if (Number(id) !== meetingId) {
+				return;
+			}
+
+			dispatch(meetingDetailsActions.setStatus({ meetingId, status }));
+		},
+		[dispatch, id],
+	);
+
 	const handleSummaryActionItemsUpdate = useCallback(() => {
 		const sharedToken = searchParameters.get("token");
 
@@ -79,6 +93,11 @@ const MeetingDetails: React.FC = () => {
 			}),
 		);
 	}, [dispatch, id, searchParameters]);
+
+	useMeetingSocket<MeetingStatusDto>({
+		callback: handleMeetingStatusUpdate,
+		event: SocketEvent.UPDATE_MEETING_STATUS,
+	});
 
 	useMeetingSocket<MeetingSummaryActionItemsResponseDto>({
 		callback: handleSummaryActionItemsUpdate,
@@ -130,6 +149,12 @@ const MeetingDetails: React.FC = () => {
 	};
 
 	const isMeetingEnded = meeting.status === MeetingStatus.ENDED;
+	const hasTranscript = transcriptions.items.length > EMPTY_ARRAY_LENGTH;
+	const hasSummary = Boolean(meeting.summary?.trim());
+	const hasActionItems = Boolean(meeting.actionItems?.trim());
+
+	const canExport =
+		isMeetingEnded && hasTranscript && hasSummary && hasActionItems;
 
 	const pdfFileName = meeting.title
 		? `meeting-${title.replaceAll(/[^a-zA-Z0-9-]/g, "_").toLowerCase()}.pdf`
@@ -141,6 +166,7 @@ const MeetingDetails: React.FC = () => {
 				<div className={styles["meeting-details__header"]}>
 					<h1 className={styles["meeting-details__title"]}>
 						{title} | {formatDate(new Date(meeting.createdAt), "D MMMM hA")}
+						<MeetingStatusBadge status={meeting.status} />
 					</h1>
 					<div className={styles["meeting-details__actions"]}>
 						{user && (
@@ -167,9 +193,13 @@ const MeetingDetails: React.FC = () => {
 						<PDFDownloadLink
 							document={<MeetingPdf {...meetingPdfProperties} />}
 							fileName={pdfFileName}
+							key={isMeetingEnded ? "pdf-ready" : "pdf-pending"}
 						>
 							{({ loading }) => (
-								<Button label={loading ? "Generating PDF..." : "Export"} />
+								<Button
+									isDisabled={!canExport}
+									label={loading ? "Generating PDF..." : "Export"}
+								/>
 							)}
 						</PDFDownloadLink>
 					</div>

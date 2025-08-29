@@ -13,3 +13,9 @@ export {
 	type ValidationSchema,
 	type ValueOf,
 } from "@meetlytic/shared";
+export {
+	type BlockContent,
+	type ListItem,
+	type PhrasingContent,
+	type Root,
+} from "mdast";

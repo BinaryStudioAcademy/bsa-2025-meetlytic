@@ -49,8 +49,19 @@
 	right: 9px;
 	z-index: var(--z-index-high);
 	display: flex;
+	visibility: hidden;
 	gap: 9px;
 	align-items: center;
+	opacity: 0;
+	transition:
+		visibility 0s 0.2s,
+		opacity 0.2s linear;
+}
+
+.meeting:hover .menu__container {
+	visibility: visible;
+	opacity: 1;
+	transition: opacity 0.2s linear;
 }
 
 .meeting__share,
@@ -117,7 +128,14 @@
 	background-color: var(--color-background-2);
 }
 
-@media (width <=768px) {
+@media (width <= 992px) {
+	.menu__container {
+		visibility: visible;
+		opacity: 1;
+	}
+}
+
+@media (width <= 768px) {
 	.meeting {
 		max-width: 320px;
 		padding: 16px;

@@ -9,6 +9,7 @@ import { type Logger } from "../logger/logger.js";
 import {
 	AllowedOrigin,
 	ContentType,
+	MeetingStatus,
 	SocketEvent,
 	SocketMessage,
 	SocketNamespace,
@@ -53,16 +54,38 @@ class BaseSocketService implements SocketService {
 				await meetingService.attachAudioFile(payload.meetingId, {
 					fileId: createdFile.id,
 				});
-
-				this.logger.info(SocketMessage.AUDIO_SAVE_RECEIVED);
 			} catch (error) {
 				this.logger.error(`${SocketMessage.AUDIO_SAVE_ERROR} ${String(error)}`);
 			}
 		});
 
+		socket.on(SocketEvent.FAILED_TO_JOIN_MEETING, async (meetingId: string) => {
+			await this.setMeetingStatus(
+				meetingId,
+				MeetingStatus.FAILED,
+				SocketMessage.FAILED_TO_JOIN_MEETING_RECEIVED,
+			);
+		});
+
 		socket.on(SocketEvent.JOIN_ROOM, async (meetingId: string) => {
 			this.logger.info(`Client ${socket.id} joining room: ${meetingId}`);
 			await socket.join(meetingId);
+		});
+
+		socket.on(SocketEvent.JOINING_TO_MEETING, async (meetingId: string) => {
+			await this.setMeetingStatus(
+				meetingId,
+				MeetingStatus.JOINING,
+				SocketMessage.JOINING_MEETING_RECEIVED,
+			);
+		});
+
+		socket.on(SocketEvent.RECORDING, async (meetingId: string) => {
+			await this.setMeetingStatus(
+				meetingId,
+				MeetingStatus.RECORDING,
+				SocketMessage.RECORDING_RECEIVED,
+			);
 		});
 
 		socket.on(SocketEvent.GET_PUBLIC_URL, async (meetingId: string) => {
@@ -100,13 +123,19 @@ class BaseSocketService implements SocketService {
 				);
 				await meetingService.update(Number(meetingId), summaryActionItems);
 				this.logger.info(`Ending meeting ${meetingId}`);
-				await meetingService.endMeeting(Number(meetingId));
+
 				this.emitTo({
 					event: SocketEvent.UPDATE_MEETING_DETAILS,
 					namespace: SocketNamespace.USERS,
 					parameters: [payload],
 					room: String(payload.meetingId),
 				});
+
+				await this.setMeetingStatus(
+					meetingId,
+					MeetingStatus.ENDED,
+					SocketMessage.ENDED_RECEIVED,
+				);
 			},
 		);
 
@@ -160,6 +189,34 @@ class BaseSocketService implements SocketService {
 		socket.on(SocketEvent.ERROR, (error) => {
 			this.logger.error(`${SocketMessage.CLIENT_ERROR} ${String(error)}`);
 		});
+	}
+	private async setMeetingStatus(
+		meetingId: number | string,
+		status: ValueOf<typeof MeetingStatus>,
+		log: string,
+	): Promise<void> {
+		const id = Number(meetingId);
+		this.logger.info(log);
+
+		try {
+			const meeting = await meetingService.setStatus(id, status);
+
+			const payload = {
+				meetingId: meeting.id,
+				status: meeting.status,
+			};
+
+			this.emitTo({
+				event: SocketEvent.UPDATE_MEETING_STATUS,
+				namespace: SocketNamespace.USERS,
+				parameters: [payload],
+				room: String(meeting.id),
+			});
+		} catch (error) {
+			this.logger.error(
+				`[STATUS ERROR] meeting ${String(id)} -> ${status}: ${String(error)}`,
+			);
+		}
 	}
 
 	public emitTo<K extends keyof ServerToClientEvents>(

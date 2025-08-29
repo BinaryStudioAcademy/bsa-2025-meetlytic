@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.3.4...bot-v1.4.0) (2025-08-29)
+
+
+### Features
+
+* add mobile responsive for meeting status indicator ml-282 ([#379](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/379)) ([d5a0480](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/d5a0480500421200d0b2616321f41b7578fb7f39))
+
 ## [1.3.4](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.3.3...bot-v1.3.4) (2025-08-29)
 
 

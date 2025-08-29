@@ -1,3 +1,6 @@
-type DateFormat = "D MMMM hA" | "MMM D, YYYY, h:mm A";
+import { type DateTimeFormat } from "../enums/enums.js";
+import { type ValueOf } from "./types.js";
+
+type DateFormat = ValueOf<typeof DateTimeFormat>;
 
 export { type DateFormat };

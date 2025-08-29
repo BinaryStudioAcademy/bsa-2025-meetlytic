@@ -27,7 +27,7 @@ const TranscriptionPanel: React.FC = () => {
 		({ meetingDetails }) => meetingDetails.meeting,
 	);
 	const containerReference = useAutoScroll<HTMLDivElement>(
-		meeting?.status === MeetingStatus.STARTED ? [typedText] : [],
+		!!meeting && meeting.status !== MeetingStatus.ENDED ? [typedText] : [],
 	);
 	useFetchTranscriptions();
 
@@ -63,10 +63,10 @@ const TranscriptionPanel: React.FC = () => {
 			{dataStatus === DataStatus.PENDING && <Loader hasOverlay isLoading />}
 
 			{transcriptions.items.length > EMPTY_TRANSCRIPT_CHUNKS ? (
-				<div className={styles["transcription-area"]} ref={containerReference}>
+				<div className={styles["transcription-area"]}>
 					<p className={styles["transcription-text"]}>
 						{staticTranscript}
-						{meeting?.status === MeetingStatus.STARTED && (
+						{meeting?.status !== MeetingStatus.ENDED && (
 							<LiveTranscription isTyping={isTyping} typedText={typedText} />
 						)}
 					</p>
@@ -76,6 +76,10 @@ const TranscriptionPanel: React.FC = () => {
 					<p>No transcriptions</p>
 				</div>
 			)}
+			<div
+				className={styles["transcription-bottom-spacer"]}
+				ref={containerReference}
+			/>
 		</div>
 	);
 };

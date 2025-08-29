@@ -130,6 +130,7 @@
 
 @media (width <= 992px) {
 	.menu__container {
+		z-index: 0;
 		visibility: visible;
 		opacity: 1;
 	}

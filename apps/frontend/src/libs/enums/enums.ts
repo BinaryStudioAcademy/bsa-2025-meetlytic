@@ -10,6 +10,7 @@ export { ContactInfo } from "./contact-info.enum.js";
 export { DataStatus } from "./data-status.enum.js";
 export { DOMEvent } from "./dom-event.enum.js";
 export { FeatureAnimation } from "./feature-animation.enum.js";
+export { HeadingLevel } from "./heading-level.enum.js";
 export { InputPasswordType } from "./input-password-type.enum.js";
 export {
 	LandingBgRingType,

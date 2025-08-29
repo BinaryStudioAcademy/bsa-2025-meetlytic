@@ -50,7 +50,7 @@ const { actions, name, reducer } = createSlice({
 			state.dataStatus = DataStatus.PENDING;
 		});
 		builder.addCase(updateProfile.fulfilled, (state, { payload }) => {
-			state.user = payload;
+			state.user = { ...state.user, ...payload };
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(updateProfile.rejected, (state) => {

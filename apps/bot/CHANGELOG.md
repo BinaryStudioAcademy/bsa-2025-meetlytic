@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.4](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.3.3...bot-v1.3.4) (2025-08-29)
+
+
+### Bug Fixes
+
+* add swap file 4gb and optimize puppeteer launch options ml-305 ([#370](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/370)) ([75c7747](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/75c7747275fb8f39f1e54324387ccc601cf4b7ba))
+
+## [1.3.3](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.3.2...bot-v1.3.3) (2025-08-28)
+
+
+### Bug Fixes
+
+* **bot:** add swap file 4 gb, add launch options ml-305 ([#366](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/366)) ([059753c](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/059753cfbddacd104ac45cc12006df6b456b81ea))
+* revert last chenges ml-305 ([#368](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/368)) ([ed70c38](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/ed70c38299391449aeb9ccc99820c1830ccff75d))
+
 ## [1.3.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.3.1...bot-v1.3.2) (2025-08-28)
 
 

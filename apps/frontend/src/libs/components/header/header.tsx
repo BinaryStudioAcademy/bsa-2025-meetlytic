@@ -45,8 +45,12 @@ const Header: React.FC<Properties> = ({
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
+		if (!user?.id) {
+			return;
+		}
+
 		void dispatch(userActions.getProfile());
-	}, [dispatch]);
+	}, [dispatch, user?.id]);
 
 	return (
 		<header className={styles["header"]}>

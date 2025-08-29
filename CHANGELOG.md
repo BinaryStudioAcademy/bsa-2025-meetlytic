@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.22.3](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.22.2...v1.22.3) (2025-08-29)
+
+
+### Bug Fixes
+
+* add swap file 4gb and optimize puppeteer launch options ml-305 ([#370](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/370)) ([75c7747](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/75c7747275fb8f39f1e54324387ccc601cf4b7ba))
+* removed searchbar ml-350 ([#372](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/372)) ([c027cba](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/c027cba0172f7d855e14c4ab003ff6585d0cc08c))
+* repaire pdf titles ml-364 ([#373](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/373)) ([e006bdd](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/e006bdd143cfc9d5759e5937969511ad64af2150))
+* signup-mobile-firefpx ml-374 ([#375](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/375)) ([2a525e0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/2a525e0c760e6ca318f0c2e09f3ff2e9f5da7e90))
+
+## [1.22.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.22.1...v1.22.2) (2025-08-28)
+
+
+### Bug Fixes
+
+* **bot:** add swap file 4 gb, add launch options ml-305 ([#366](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/366)) ([059753c](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/059753cfbddacd104ac45cc12006df6b456b81ea))
+* revert last chenges ml-305 ([#368](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/368)) ([ed70c38](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/ed70c38299391449aeb9ccc99820c1830ccff75d))
+* update header.tsx ml-363 ([#369](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/369)) ([f428b5e](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/f428b5e5c870a80c160dc7fdf65615aac33529df))
+
 ## [1.22.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.22.0...v1.22.1) (2025-08-28)
 
 

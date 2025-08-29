@@ -23,17 +23,22 @@ const MeetingPdf: React.FC<MeetingPdfProperties> = ({
 					</Text>
 				</View>
 
-				<View style={styles.section}>{renderMarkdown(summary)}</View>
+			<Text style={styles.sectionHeader}>SUMMARY SECTION</Text>
+			<View style={styles.line} />
+			<View style={styles.section}>{renderMarkdown(summary)}</View>
 
-				<View style={styles.section}>{renderMarkdown(actionItems)}</View>
+			<Text style={styles.sectionHeader}>ACTION POINTS</Text>
+			<View style={styles.line} />
+			<View style={styles.section}>{renderMarkdown(actionItems)}</View>
 
-				<View style={styles.section}>
-					<Text style={styles.heading1}>Transcript</Text>
-					{renderMarkdown(transcription)}
-				</View>
-			</Page>
-		</Document>
-	);
+			<View style={styles.section}>
+				<Text style={styles.sectionHeader}>TRANSCRIPTION</Text>
+				<View style={styles.line} />
+				{renderMarkdown(transcription)}
+			</View>
+		</Page>
+	</Document>
+  );
 };
 
 export { MeetingPdf };

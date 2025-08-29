@@ -1,6 +1,6 @@
 {
 	"name": "meetlytic",
-	"version": "1.22.1",
+	"version": "1.22.3",
 	"type": "module",
 	"workspaces": [
 		"apps/backend",

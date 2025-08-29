@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.22.3](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.22.2...v1.22.3) (2025-08-29)
+
+
+### Bug Fixes
+
+* add swap file 4gb and optimize puppeteer launch options ml-305 ([#370](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/370)) ([75c7747](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/75c7747275fb8f39f1e54324387ccc601cf4b7ba))
+* removed searchbar ml-350 ([#372](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/372)) ([c027cba](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/c027cba0172f7d855e14c4ab003ff6585d0cc08c))
+* repaire pdf titles ml-364 ([#373](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/373)) ([e006bdd](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/e006bdd143cfc9d5759e5937969511ad64af2150))
+* signup-mobile-firefpx ml-374 ([#375](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/375)) ([2a525e0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/2a525e0c760e6ca318f0c2e09f3ff2e9f5da7e90))
+
 ## [1.22.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.22.1...v1.22.2) (2025-08-28)
 
 

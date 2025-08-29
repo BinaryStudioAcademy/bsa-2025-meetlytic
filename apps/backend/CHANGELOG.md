@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.14.0...backend-v1.14.1) (2025-08-29)
+
+
+### Bug Fixes
+
+* add swap file 4gb and optimize puppeteer launch options ml-305 ([#370](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/370)) ([75c7747](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/75c7747275fb8f39f1e54324387ccc601cf4b7ba))
+
 ## [1.14.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/backend-v1.13.2...backend-v1.14.0) (2025-08-28)
 
 

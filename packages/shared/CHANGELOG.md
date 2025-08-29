@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.12.0...shared-v1.12.1) (2025-08-29)
+
+
+### Bug Fixes
+
+* removed searchbar ml-350 ([#372](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/372)) ([c027cba](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/c027cba0172f7d855e14c4ab003ff6585d0cc08c))
+
 ## [1.12.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.11.0...shared-v1.12.0) (2025-08-28)
 
 

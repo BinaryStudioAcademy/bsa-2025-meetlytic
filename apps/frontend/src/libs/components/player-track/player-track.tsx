@@ -18,6 +18,7 @@ type Properties = {
 const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 	const audioReference = useRef<HTMLAudioElement>(null);
 	const progressReference = useRef<HTMLButtonElement>(null);
+	const playButtonReference = useRef<HTMLButtonElement>(null);
 
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
 	const [currentTime, setCurrentTime] = useState<number>(START_TIME);
@@ -91,6 +92,7 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 
 				audioReference.current.currentTime = newTime;
 				setCurrentTime(newTime);
+				playButtonReference.current?.focus();
 			}
 		},
 		[duration],
@@ -122,7 +124,11 @@ const PlayerTrack: React.FC<Properties> = ({ audioUrl }: Properties) => {
 
 	return (
 		<div className={styles["root"]}>
-			<button className={styles["button"]} onClick={handleClick}>
+			<button
+				className={styles["button"]}
+				onClick={handleClick}
+				ref={playButtonReference}
+			>
 				<Icon className={styles["icon"]} name={isPlaying ? "play" : "pause"} />
 				<span className="visually-hidden">
 					{isPlaying ? "Pause audio" : "Play audio"}

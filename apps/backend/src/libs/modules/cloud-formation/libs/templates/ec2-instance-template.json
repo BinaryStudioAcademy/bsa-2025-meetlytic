@@ -62,6 +62,16 @@
 						"Ref": "MeetlyticSecurityGroup"
 					}
 				],
+				"BlockDeviceMappings": [
+					{
+						"DeviceName": "/dev/sda1",
+						"Ebs": {
+							"VolumeSize": 20,
+							"VolumeType": "gp3",
+							"DeleteOnTermination": true
+						}
+					}
+				],
 				"UserData": {
 					"Fn::Base64": {
 						"Fn::Sub": [

@@ -155,7 +155,6 @@ class BaseConfig implements Config {
 		return {
 			args: sharedArguments,
 			defaultViewport: { height: 700, width: 1200 },
-			enableExtensions: true,
 			executablePath: "/usr/bin/google-chrome",
 			headless: false,
 		};

@@ -1,3 +1,3 @@
-const TYPING_SPEED = 40;
+const TYPING_SPEED = 20;
 
 export { TYPING_SPEED };

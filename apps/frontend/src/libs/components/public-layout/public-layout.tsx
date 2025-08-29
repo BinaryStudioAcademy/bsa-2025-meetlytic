@@ -16,7 +16,9 @@ const PublicLayout: React.FC = () => {
 				<Header isMenuOpen={isMenuOpen} onToggleMenu={handleToggleMenu} />
 			</div>
 			<main className={styles["public__main"]}>
-				<RouterOutlet />
+				<div className={styles["main-container"]}>
+					<RouterOutlet />
+				</div>
 			</main>
 		</div>
 	);

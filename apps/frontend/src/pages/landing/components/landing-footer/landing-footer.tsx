@@ -14,7 +14,10 @@ const LandingFooter: React.FC<Properties> = ({ className }: Properties) => {
 	const year = new Date().getFullYear();
 
 	return (
-		<footer className={getValidClassNames(styles["landing-footer"], className)}>
+		<footer
+			className={getValidClassNames(styles["landing-footer"], className)}
+			id="contacts"
+		>
 			<div className={styles["landing-footer__inner"]}>
 				<div aria-label="Brand" className={styles["landing-footer__brand"]}>
 					<Logo hasLink size={LogoSize.SMALL} theme={LogoTheme.LIGHT} />

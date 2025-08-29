@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type UserResponseDto, type ValueOf } from "~/libs/types/types.js";
+import { actions as userActions } from "~/modules/users/users.js";
 
 import { getAuthenticatedUser, signIn, signUp } from "./actions.js";
 
@@ -48,6 +49,12 @@ const { actions, name, reducer } = createSlice({
 			state.dataStatus = DataStatus.REJECTED;
 			state.user = null;
 		});
+		builder.addCase(
+			userActions.updateProfile.fulfilled,
+			(state, { payload }) => {
+				state.user = payload;
+			},
+		);
 	},
 	initialState,
 	name: "auth",

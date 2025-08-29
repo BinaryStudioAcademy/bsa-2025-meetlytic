@@ -4,11 +4,10 @@ import {
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
-import { HTTPCode, HTTPMethod } from "~/libs/modules/http/http.js";
+import { HTTPCode, HTTPError, HTTPMethod } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import { type UserResponseDto } from "~/modules/users/users.js";
 
-import { MeetingsApiPath } from "./libs/enums/enums.js";
+import { MeetingErrorMessage, MeetingsApiPath } from "./libs/enums/enums.js";
 import {
 	type CreateMeetingOptions,
 	type DeleteMeetingOptions,
@@ -213,9 +212,18 @@ class MeetingsController extends BaseController {
 	private async create(
 		options: CreateMeetingOptions,
 	): Promise<APIHandlerResponse> {
+		const { body, user } = options;
+
+		if (!user) {
+			throw new HTTPError({
+				message: MeetingErrorMessage.USER_IS_REQUIRED_TO_CREATE_MEETING,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const created = await this.meetingService.create({
-			...options.body,
-			ownerId: (options.user as UserResponseDto).id,
+			...body,
+			ownerId: user.id,
 		});
 
 		return { payload: created, status: HTTPCode.CREATED };
@@ -306,8 +314,17 @@ class MeetingsController extends BaseController {
 	private async findAll(
 		options: FindAllMeetingOptions,
 	): Promise<APIHandlerResponse> {
+		const { user } = options;
+
+		if (!user) {
+			throw new HTTPError({
+				message: MeetingErrorMessage.USER_IS_REQUIRED_TO_FIND_MEETINGS,
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const meetings = await this.meetingService.findAll({
-			ownerId: (options.user as UserResponseDto).id,
+			ownerId: user.id,
 		});
 
 		return { payload: meetings, status: HTTPCode.OK };

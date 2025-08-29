@@ -23,7 +23,7 @@ const { actions, name, reducer } = createSlice({
 		});
 		builder.addCase(createMeeting.fulfilled, (state, action) => {
 			state.dataStatus = DataStatus.FULFILLED;
-			state.meetings.push(action.payload);
+			state.meetings.unshift(action.payload);
 		});
 		builder.addCase(createMeeting.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;

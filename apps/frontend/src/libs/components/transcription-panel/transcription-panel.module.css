@@ -53,6 +53,10 @@
 	border-radius: var(--border-radius-lg);
 }
 
+.transcription-bottom-spacer {
+	scroll-margin-bottom: 46px;
+}
+
 @media (width <=1024px) {
 	.meeting-details__transcription-panel {
 		grid-row: 1;

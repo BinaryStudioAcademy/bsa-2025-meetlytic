@@ -14,6 +14,7 @@ export {
 	type MeetingGetAllResponseDto,
 	type MeetingGetPublicUrlResponseDto,
 	type MeetingResponseDto,
+	type MeetingStatusDto,
 	type MeetingSummaryActionItemsResponseDto,
 	type MeetingTranscriptionGetAllResponseDto,
 	type MeetingTranscriptionRequestDto,
@@ -25,5 +26,4 @@ export {
 	meetingCreate as meetingCreateValidationSchema,
 	meetingIdRouteParameter as meetingIdRouteParameterValidationSchema,
 	meetingUpdate as meetingUpdateValidationSchema,
-	searchInputValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";

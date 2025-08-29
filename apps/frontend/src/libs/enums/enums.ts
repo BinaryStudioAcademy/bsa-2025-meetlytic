@@ -10,6 +10,7 @@ export { ContactInfo } from "./contact-info.enum.js";
 export { DataStatus } from "./data-status.enum.js";
 export { DOMEvent } from "./dom-event.enum.js";
 export { FeatureAnimation } from "./feature-animation.enum.js";
+export { HeadingLevel } from "./heading-level.enum.js";
 export { InputPasswordType } from "./input-password-type.enum.js";
 export {
 	LandingBgRingType,
@@ -24,6 +25,8 @@ export { LogoTheme } from "./logo-theme.enum.js";
 export { LogoType } from "./logo-type.enum.js";
 export { NotificationMessage } from "./notification-massage.enum.js";
 export { SearchDebounceDelay } from "./search-debounce-delay.enum.js";
+export { TrackDuration } from "./track-duration.enum.js";
+export { TrackStringPadding } from "./track-string-padding.enum.js";
 export {
 	APIPath,
 	AppEnvironment,

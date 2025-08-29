@@ -1,5 +1,49 @@
 # Changelog
 
+## [1.4.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.3.4...bot-v1.4.0) (2025-08-29)
+
+
+### Features
+
+* add mobile responsive for meeting status indicator ml-282 ([#379](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/379)) ([d5a0480](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/d5a0480500421200d0b2616321f41b7578fb7f39))
+
+## [1.3.4](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.3.3...bot-v1.3.4) (2025-08-29)
+
+
+### Bug Fixes
+
+* add swap file 4gb and optimize puppeteer launch options ml-305 ([#370](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/370)) ([75c7747](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/75c7747275fb8f39f1e54324387ccc601cf4b7ba))
+
+## [1.3.3](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.3.2...bot-v1.3.3) (2025-08-28)
+
+
+### Bug Fixes
+
+* **bot:** add swap file 4 gb, add launch options ml-305 ([#366](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/366)) ([059753c](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/059753cfbddacd104ac45cc12006df6b456b81ea))
+* revert last chenges ml-305 ([#368](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/368)) ([ed70c38](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/ed70c38299391449aeb9ccc99820c1830ccff75d))
+
+## [1.3.2](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.3.1...bot-v1.3.2) (2025-08-28)
+
+
+### Bug Fixes
+
+* bot not sending public link in chat ml-356 ([#360](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/360)) ([395302f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/395302f650102850adbb3a50506168918742a32b))
+
+## [1.3.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.3.0...bot-v1.3.1) (2025-08-28)
+
+
+### Bug Fixes
+
+* **bot:** move init after browser init ml-353 ([#354](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/354)) ([dcb9aa6](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/dcb9aa601cd474c128b7bc049ca871cf0730d4d9))
+
+## [1.3.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.2.1...bot-v1.3.0) (2025-08-27)
+
+
+### Features
+
+* add status indicators in meeting details page ml-282 ([#310](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/310)) ([67cf53f](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/67cf53f438fbdeaa6c4dcf8a8f748858b8305c31))
+* simplify action items ml-300 ([#322](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/322)) ([820663e](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/820663e8ddc7b451ed2841bafa3ec739b27638de))
+
 ## [1.2.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/bot-v1.2.0...bot-v1.2.1) (2025-08-26)
 
 

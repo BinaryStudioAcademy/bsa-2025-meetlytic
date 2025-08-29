@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.13.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.12.1...shared-v1.13.0) (2025-08-29)
+
+
+### Features
+
+* use consistent datetime format ml-308 ([#338](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/338)) ([ab6044a](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/ab6044aa50d938eb9f7d0608eb604f28d896a44e))
+
+
+### Bug Fixes
+
+* error toasts for invalid meeting ids ml-275 ([#319](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/319)) ([9fde184](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/9fde1842f06355e08d77cca3e432306a70f9d1ec))
+
 ## [1.12.1](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/shared-v1.12.0...shared-v1.12.1) (2025-08-29)
 
 

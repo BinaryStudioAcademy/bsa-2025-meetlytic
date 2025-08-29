@@ -68,6 +68,12 @@ const useTypingQueue = (typingSpeed = TYPING_SPEED): UseTypingQueueReturn => {
 				return;
 			}
 
+			if (document.hidden) {
+				dispatch(transcriptionActions.addTranscription(chunk));
+
+				return;
+			}
+
 			dispatch(transcriptionActions.addTranscription(chunk));
 			queueReference.current.push(chunk);
 			processQueue();

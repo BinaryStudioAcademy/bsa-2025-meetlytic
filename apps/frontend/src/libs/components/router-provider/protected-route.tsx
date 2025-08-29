@@ -26,7 +26,11 @@ const ProtectedRoute: React.FC<Properties> = ({
 
 	if (shouldRedirect) {
 		return (
-			<Navigate replace state={{ from: location.pathname }} to={redirectTo} />
+			<Navigate
+				replace
+				state={{ from: location.pathname, showNotification: true }}
+				to={redirectTo}
+			/>
 		);
 	}
 

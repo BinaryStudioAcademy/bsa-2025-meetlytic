@@ -18,10 +18,10 @@ errorListenerMiddleware.startListening({
 		const payload = action.payload as RejectPayload | undefined;
 
 		if (payload?.status === HTTPCode.UNAUTHORIZED) {
-			notification.error(
-				payload.message ?? "Session expired. Please log in again.",
-			);
 			await listenerApi.dispatch(authActions.logout());
+			notification.error("Session expired. Please log in again.");
+
+			return;
 		}
 
 		const errorMessage =

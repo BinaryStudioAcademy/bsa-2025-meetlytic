@@ -4,8 +4,10 @@ import {
 	useAppDispatch,
 	useAppSelector,
 	useCallback,
+	useEffect,
 	useLocation,
 } from "~/libs/hooks/hooks.js";
+import { notification } from "~/libs/modules/notifications/notifications.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import {
 	type UserSignInRequestDto,
@@ -14,11 +16,24 @@ import {
 
 import { SignInForm, SignUpForm } from "./components/components.js";
 
+type LocationState = null | {
+	from?: string;
+	showNotification?: boolean;
+};
+
 const Auth: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const { dataStatus, user } = useAppSelector((state) => state.auth);
 	const { pathname } = useLocation();
 	const hasUser = Boolean(user);
+	const location = useLocation() as { state: LocationState };
+
+	useEffect(() => {
+		if (location.state?.showNotification) {
+			notification.error("Session expired. Please log in again.");
+			location.state.showNotification = false;
+		}
+	}, [location.state]);
 
 	const handleSignInSubmit = useCallback(
 		(payload: UserSignInRequestDto): void => {

@@ -14,6 +14,7 @@ import { EMPTY_ARRAY_LENGTH } from "~/libs/constants/constants.js";
 import {
 	AppRoute,
 	DataStatus,
+	DateTimeFormat,
 	MeetingErrorMessage,
 	MeetingStatus,
 	NotificationMessage,
@@ -116,7 +117,11 @@ const MeetingDetails: React.FC = () => {
 		void shareMeetingPublicUrl(meeting.id);
 	}, [meeting]);
 
-	const { transcriptions } = useAppSelector((state) => state.transcription);
+	const transcriptions = useAppSelector((state) =>
+		meeting?.status === MeetingStatus.ENDED
+			? state.transcription.transcriptions.items
+			: [],
+	);
 
 	if (!id || dataStatus === DataStatus.REJECTED) {
 		return <Navigate replace to={AppRoute.NOT_FOUND} />;
@@ -134,7 +139,7 @@ const MeetingDetails: React.FC = () => {
 		);
 	}
 
-	const transcription = transcriptions.items
+	const transcription = transcriptions
 		.map((item) => `• ${item.chunkText}`)
 		.join("\n");
 
@@ -149,7 +154,7 @@ const MeetingDetails: React.FC = () => {
 	};
 
 	const isMeetingEnded = meeting.status === MeetingStatus.ENDED;
-	const hasTranscript = transcriptions.items.length > EMPTY_ARRAY_LENGTH;
+	const hasTranscript = transcriptions.length > EMPTY_ARRAY_LENGTH;
 	const hasSummary = Boolean(meeting.summary?.trim());
 	const hasActionItems = Boolean(meeting.actionItems?.trim());
 
@@ -165,7 +170,8 @@ const MeetingDetails: React.FC = () => {
 			<div className={styles["meeting-details"]}>
 				<div className={styles["meeting-details__header"]}>
 					<h1 className={styles["meeting-details__title"]}>
-						{title} | {formatDate(new Date(meeting.createdAt), "D MMMM hA")}
+						{title} |{" "}
+						{formatDate(new Date(meeting.createdAt), DateTimeFormat.MEETING)}
 						<MeetingStatusBadge status={meeting.status} />
 					</h1>
 					<div className={styles["meeting-details__actions"]}>
@@ -190,18 +196,22 @@ const MeetingDetails: React.FC = () => {
 							/>
 						)}
 
-						<PDFDownloadLink
-							document={<MeetingPdf {...meetingPdfProperties} />}
-							fileName={pdfFileName}
-							key={isMeetingEnded ? "pdf-ready" : "pdf-pending"}
-						>
-							{({ loading }) => (
-								<Button
-									isDisabled={!canExport}
-									label={loading ? "Generating PDF..." : "Export"}
-								/>
-							)}
-						</PDFDownloadLink>
+						{isMeetingEnded ? (
+							<PDFDownloadLink
+								document={<MeetingPdf {...meetingPdfProperties} />}
+								fileName={pdfFileName}
+								key="pdf-ready"
+							>
+								{({ loading }) => (
+									<Button
+										isDisabled={!canExport}
+										label={loading ? "Generating PDF..." : "Export"}
+									/>
+								)}
+							</PDFDownloadLink>
+						) : (
+							<Button isDisabled label="Export" />
+						)}
 					</div>
 				</div>
 

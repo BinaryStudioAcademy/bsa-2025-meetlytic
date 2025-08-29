@@ -20,7 +20,7 @@ import {
 } from "./libs/types/types.js";
 import {
 	meetingCreateValidationSchema,
-	meetingIdValidationSchema,
+	meetingIdRouteParameterValidationSchema,
 	meetingUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 import { type MeetingService } from "./meetings.service.js";
@@ -107,7 +107,10 @@ class MeetingsController extends BaseController {
 			method: HTTPMethod.PATCH,
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
-			validation: { body: meetingUpdateValidationSchema },
+			validation: {
+				body: meetingUpdateValidationSchema,
+				params: meetingIdRouteParameterValidationSchema,
+			},
 		});
 
 		this.addRoute({
@@ -116,7 +119,7 @@ class MeetingsController extends BaseController {
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 			validation: {
-				params: meetingIdValidationSchema,
+				params: meetingIdRouteParameterValidationSchema,
 			},
 		});
 
@@ -126,7 +129,7 @@ class MeetingsController extends BaseController {
 			path: MeetingsApiPath.$ID,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
 			validation: {
-				params: meetingIdValidationSchema,
+				params: meetingIdRouteParameterValidationSchema,
 			},
 		});
 
@@ -140,18 +143,27 @@ class MeetingsController extends BaseController {
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID_URL,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+			validation: {
+				params: meetingIdRouteParameterValidationSchema,
+			},
 		});
 		this.addRoute({
 			handler: (options) =>
 				this.findBySignedUrl(options as FindBySignedUrlOptions),
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID_PUBLIC,
+			validation: {
+				params: meetingIdRouteParameterValidationSchema,
+			},
 		});
 		this.addRoute({
 			handler: (options) => this.stopRecording(options as StopRecordingOptions),
 			method: HTTPMethod.DELETE,
 			path: MeetingsApiPath.$ID_STOP_RECORDING,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+			validation: {
+				params: meetingIdRouteParameterValidationSchema,
+			},
 		});
 		this.addRoute({
 			handler: (options) =>
@@ -161,12 +173,18 @@ class MeetingsController extends BaseController {
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID_MEETING_TRANSCRIPTIONS,
 			preHandlers: [checkIfMeetingOwner(this.meetingService)],
+			validation: {
+				params: meetingIdRouteParameterValidationSchema,
+			},
 		});
 		this.addRoute({
 			handler: (options) =>
 				this.getTranscriptionsBySignedUrl(options as FindBySignedUrlOptions),
 			method: HTTPMethod.GET,
 			path: MeetingsApiPath.$ID_MEETING_TRANSCRIPTIONS_PUBLIC,
+			validation: {
+				params: meetingIdRouteParameterValidationSchema,
+			},
 		});
 	}
 

@@ -88,7 +88,6 @@ export {
 	MeetingStatus,
 	MeetingTranscriptionErrorMessage,
 	meetingUpdateValidationSchema,
-	searchInputValidationSchema,
 } from "./modules/meetings/meetings.js";
 export {
 	type AuthResponseDto,

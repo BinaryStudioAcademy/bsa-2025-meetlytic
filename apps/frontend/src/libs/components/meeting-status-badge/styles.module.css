@@ -150,7 +150,7 @@
 }
 
 .meeting-status-badge--success {
-	--meeting-status-badge-foreground: var(--color-accent-2);
+	--meeting-status-badge-foreground: var(--color-accent-3);
 }
 
 .meeting-status-badge--warning {
@@ -210,5 +210,19 @@
 	.meeting-status-badge__indicator--spinner {
 		width: 12px;
 		height: 12px;
+	}
+}
+
+@media (width <= 576px) {
+	.meeting-status-badge {
+		gap: 0;
+		padding: 0;
+		background: none;
+		border: none;
+		box-shadow: none;
+	}
+
+	.meeting-status-badge__label {
+		display: none;
 	}
 }

@@ -313,6 +313,7 @@ class BaseZoomBot {
 	public async run(): Promise<void> {
 		try {
 			this.browser = await puppeteer.launch(this.config.getLaunchOptions());
+			this.logger.info("emmiting joining to meeting");
 			this.page = await this.browser.newPage();
 			await this.page.setUserAgent(USER_AGENT);
 			this.initSocket();

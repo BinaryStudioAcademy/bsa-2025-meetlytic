@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.23.0](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.22.3...v1.23.0) (2025-08-29)
+
+
+### Features
+
+* add mobile responsive for meeting status indicator ml-282 ([#379](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/379)) ([d5a0480](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/d5a0480500421200d0b2616321f41b7578fb7f39))
+
+
+### Bug Fixes
+
+* **frontend:** add focus to play button after seek ml-362 ([#381](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/381)) ([4b31b81](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/4b31b81e6cb7a1ef463a6a5f1246baa855e78275))
+* transcription animation not working ml-357 ([#377](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/377)) ([9559be5](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/9559be58036cadf552d0536f94c52ff975b8c777))
+* uploaded avatars appear stretched or distorted ml-371 ([#380](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/issues/380)) ([aa6dd3c](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/commit/aa6dd3c5fe2f8d904c5b19fc87cc55f795777602))
+
 ## [1.22.3](https://github.com/BinaryStudioAcademy/bsa-2025-meetlytic/compare/v1.22.2...v1.22.3) (2025-08-29)
 
 

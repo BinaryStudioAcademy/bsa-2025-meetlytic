@@ -93,7 +93,7 @@ echo "[+] Starting PulseAudio (root user)…"
 export HOME=/root
 export XDG_RUNTIME_DIR=/run/user/0
 mkdir -p "$XDG_RUNTIME_DIR"
-pulseaudio --daemonize=yes --exit-idle-time=-1
+pulseaudio --daemonize=yes --exit-idle-time=-1 --disallow-exit --disable-shm
 echo "[+] PulseAudio daemon started."
 
 # ─── Application setup ───────────────────────────────────────────────────────
@@ -214,3 +214,17 @@ echo "[+] ZoomBot launched (PID $!). Logs at /home/ubuntu/bot.log"
 echo "[\\0_0/] Setup complete. Bot is running with xvfb-run + Chromium:headless."
 echo "[i] Script finished at $(date)"
 # ──────────────────────────────────────────────────────────────────────────────
+
+# --- Add swap file (4GB) ---
+echo "[+] Adding 4GB swap file..."
+SWAPFILE=/swapfile
+if [ ! -f $SWAPFILE ]; then
+		fallocate -l 4G $SWAPFILE
+		chmod 600 $SWAPFILE
+		mkswap $SWAPFILE
+		swapon $SWAPFILE
+		echo "$SWAPFILE none swap sw 0 0" | tee -a /etc/fstab
+		echo "[+] Swap file created and activated."
+else
+		echo "[✓] Swap file already exists."
+fi

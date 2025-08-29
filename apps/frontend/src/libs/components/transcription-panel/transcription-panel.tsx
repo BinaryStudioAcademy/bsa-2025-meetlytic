@@ -1,10 +1,9 @@
-import { Loader, SearchBar } from "~/libs/components/components.js";
+import { Loader } from "~/libs/components/components.js";
 import { DataStatus, MeetingStatus, SocketEvent } from "~/libs/enums/enums.js";
 import { getValidClassNames } from "~/libs/helpers/get-valid-class-names.helper.js";
 import {
 	useAppSelector,
 	useAutoScroll,
-	useCallback,
 	useFetchTranscriptions,
 	useMeetingSocket,
 	useMemo,
@@ -36,10 +35,6 @@ const TranscriptionPanel: React.FC = () => {
 		event: SocketEvent.TRANSCRIBE,
 	});
 
-	const handleSearch = useCallback(() => {
-		// TODO: implement handleSearch logic
-	}, []);
-
 	const staticTranscript = useMemo(() => {
 		return transcriptions.items
 			.slice(FIRST_ITEM, LAST_ITEM)
@@ -58,7 +53,6 @@ const TranscriptionPanel: React.FC = () => {
 		>
 			<div className={styles["panel-header"]}>
 				<div className={styles["panel-header__text"]}>TRANSCRIPT</div>
-				<SearchBar onSearch={handleSearch} />
 			</div>
 			{dataStatus === DataStatus.PENDING && <Loader hasOverlay isLoading />}
 

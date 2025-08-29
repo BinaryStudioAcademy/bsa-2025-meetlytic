@@ -1,5 +1,5 @@
 export {
 	meetingCreateValidationSchema,
-	meetingIdValidationSchema,
+	meetingIdRouteParameterValidationSchema,
 	meetingUpdateValidationSchema,
 } from "@meetlytic/shared";
